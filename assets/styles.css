@@ -30,4 +30,7 @@ a{color:#0645ad}
 .suggestion:hover {
   background: #f0f0f0;
 }
+.suggestion.active {
+  background: #e0e0ff;
+}
 
