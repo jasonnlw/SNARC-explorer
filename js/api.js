@@ -47,6 +47,32 @@ async function searchEntities(search, language = Utils.getLang()) {
     limit: 20
   });
   const results = data.search || [];
+  if (!results.length) return [];
+
+  // --- Fetch full entities ---
+  const qids = results.map(r => r.id);
+  const entities = await getEntities(qids, language);
+
+  // --- Build quick-lookup sets ---
+  const personSet = new Set(CONFIG.TYPE_SETS.people.map(String));
+
+  // --- Filter ---
+  const filtered = results.filter(r => {
+    const ent = entities[r.id];
+    if (!ent || !ent.claims) return false;
+
+    // instance-of values
+    const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
+    const place = Utils.hasCoordinates(ent);
+
+    // true if any instance-of in pre-defined list or has coordinates
+    return place || inst.some(i => personSet.has(i));
+  });
+
+  return filtered;
+}
+
+  const results = data.search || [];
 
   // fetch full entities for filtering
   const qids = results.map(r => r.id);
