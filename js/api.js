@@ -53,12 +53,16 @@ async function searchEntities(search, language = Utils.getLang()) {
   const entities = await getEntities(qids, language);
 
   // filter to people, places, or organisations
-  const filtered = results.filter(r => {
-    const ent = entities[r.id];
-    if (!ent) return false;
-    const type = Utils.matchEntityType(ent);
-    return ["person", "place", "organisation"].includes(type);
-  });
+const personSet = new Set(CONFIG.TYPE_SETS.people);
+
+const filtered = results.filter(r => {
+  const ent = entities[r.id];
+  if (!ent) return false;
+  const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
+  const place = Utils.hasCoordinates(ent);
+  return place || inst.some(i => personSet.has(i));
+});
+
 
   return filtered;
 }
