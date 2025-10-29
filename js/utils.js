@@ -56,5 +56,5 @@ window.Utils = (() => {
     return null; // not recognised
   }
 
-  return { getLang, setLang, isQid, uniq, firstValue, formatTime, collectLinkedQids };
+    return { getLang, setLang, isQid, uniq, firstValue, formatTime, collectLinkedQids, matchEntityType };
 })();
