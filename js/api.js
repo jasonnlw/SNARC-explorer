@@ -37,17 +37,31 @@ window.API = (() => {
     return data.entities || {};
   }
 
-  async function searchEntities(search, language = Utils.getLang()) {
-    const data = await apiGet({
-      action: "wbsearchentities",
-      search,
-      language,
-      uselang: language,
-      type: "item",
-      limit: 10
-    });
-    return data.search || [];
-  }
+async function searchEntities(search, language = Utils.getLang()) {
+  const data = await apiGet({
+    action: "wbsearchentities",
+    search,
+    language,
+    uselang: language,
+    type: "item",
+    limit: 20
+  });
+  const results = data.search || [];
+
+  // fetch full entities for filtering
+  const qids = results.map(r => r.id);
+  const entities = await getEntities(qids, language);
+
+  // filter to people, places, or organisations
+  const filtered = results.filter(r => {
+    const ent = entities[r.id];
+    if (!ent) return false;
+    const type = Utils.matchEntityType(ent);
+    return ["person", "place", "organisation"].includes(type);
+  });
+
+  return filtered;
+}
 
   async function getLabels(qids, language = Utils.getLang()) {
     if (!qids.length) return {};
