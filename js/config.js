@@ -18,6 +18,21 @@ window.CONFIG = {
       subclassOf: ["Q10448", "Q10298", "Q10456"]
     }
   }
+
+  window.CONFIG = {
+  BASE: "https://snarc-llgc.wikibase.cloud",
+  ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php",
+  SPARQL: "https://snarc-llgc.wikibase.cloud/query/sparql",
+  DEFAULT_LANG: "en",
+
+  // Property IDs used for filtering
+  PIDS: {
+    instanceOf: "P7",
+    subclassOf: "P45",
+    coordinates: "P26"
+  }
+};
+
 };
 // --- Static instance-of type list (generated from CSV + human Q947) ---
 window.CONFIG.TYPE_SETS = {
