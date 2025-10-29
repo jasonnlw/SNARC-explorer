@@ -135,6 +135,7 @@ function initLiveSearch() {
     if (!localStorage.getItem("lang")) Utils.setLang(CONFIG.DEFAULT_LANG);
     setActiveLangButton();
     initEvents();
+    initLiveSearch();
     initRoutes();
   }
 
