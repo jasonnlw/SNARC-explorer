@@ -65,7 +65,65 @@ window.App = (() => {
       Router.go(`#/search?q=${encodeURIComponent(q)}`);
     });
   }
+// --- Live dropdown search ---
+function initLiveSearch() {
+  const input = document.getElementById("search-input");
+  const suggestionsBox = document.getElementById("search-suggestions");
 
+  let timer = null;
+  let latestQuery = "";
+
+  input.addEventListener("input", () => {
+    const q = input.value.trim();
+    latestQuery = q;
+    clearTimeout(timer);
+    if (!q) {
+      suggestionsBox.innerHTML = "";
+      suggestionsBox.style.display = "none";
+      return;
+    }
+    timer = setTimeout(async () => {
+      try {
+        const results = await API.searchEntities(q);
+        if (q !== latestQuery) return; // ignore stale responses
+
+        if (!results.length) {
+          suggestionsBox.innerHTML = "<div class='suggestion'><em>No results</em></div>";
+          suggestionsBox.style.display = "block";
+          return;
+        }
+
+        suggestionsBox.innerHTML = results
+          .map(r => `<div class="suggestion" data-id="${r.id}">
+                       <strong>${r.label || r.id}</strong><br>
+                       <small>${r.description || ""}</small>
+                     </div>`)
+          .join("");
+        suggestionsBox.style.display = "block";
+      } catch (err) {
+        console.error("Live search error:", err);
+      }
+    }, 350); // debounce delay
+  });
+
+  // When user clicks a suggestion
+  suggestionsBox.addEventListener("click", (e) => {
+    const item = e.target.closest(".suggestion[data-id]");
+    if (!item) return;
+    const qid = item.dataset.id;
+    input.value = item.querySelector("strong").textContent;
+    suggestionsBox.innerHTML = "";
+    suggestionsBox.style.display = "none";
+    Router.go(`#/item/${qid}`);
+  });
+
+  // Hide suggestions when clicking elsewhere
+  document.addEventListener("click", (e) => {
+    if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+      suggestionsBox.style.display = "none";
+    }
+  });
+}
   function initRoutes() {
   Router.add(/^\/$/, renderHome);
   Router.add(/^\/search(?:\?.*)?$/, renderSearch);  // ← accept ?q=...
