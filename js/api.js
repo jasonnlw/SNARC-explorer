@@ -64,54 +64,61 @@ window.API = (() => {
   }
 
   // --- Search entities and filter by configured rules ---
-  async function searchEntities(search, language = Utils.getLang()) {
-    if (!search) return [];
+ async function searchEntities(search, language = Utils.getLang()) {
+  if (!search) return [];
 
-    let data;
-    try {
-      data = await apiGet({
-        action: "wbsearchentities",
-        search,
-        language,
-        uselang: language,
-        type: "item",
-        limit: 20
-      });
-    } catch (err) {
-      console.error("Search API error:", err);
-      return [];
-    }
-
-    const results = data.search || [];
-    if (!results.length) return [];
-
-    // Fetch all corresponding entities
-    const qids = results.map(r => r.id);
-    let entities = {};
-    try {
-      entities = await getEntities(qids, language);
-    } catch (err) {
-      console.error("Entity fetch error:", err);
-      return [];
-    }
-
-    // Build lookup sets
-    const personSet = new Set((CONFIG.TYPE_SETS?.people || []).map(String));
-
-    // Filter results
-    const filtered = results.filter(r => {
-      const ent = entities[r.id];
-      if (!ent || !ent.claims) return false;
-
-      const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
-      const place = Utils.hasCoordinates(ent);
-
-      // Match: coordinates or instance-of a listed class
-      return place || inst.some(i => personSet.has(i));
+  let data;
+  try {
+    data = await apiGet({
+      action: "wbsearchentities",
+      search,
+      language,
+      uselang: language,
+      type: "item",
+      limit: 20
     });
-
-    return filtered;
+  } catch (err) {
+    console.error("Search API error:", err);
+    return [];
   }
+
+  const results = data.search || [];
+  if (!results.length) return [];
+
+  // Fetch entities (to inspect claims)
+  const qids = results.map(r => r.id);
+  let entities = {};
+  try {
+    entities = await getEntities(qids, language);
+  } catch (err) {
+    console.error("Entity fetch error:", err);
+    return [];
+  }
+
+  // Lookup sets
+  const personSet = new Set((CONFIG.TYPE_SETS?.people || []).map(String));
+
+  const filtered = results.filter(r => {
+    const ent = entities[r.id];
+    if (!ent || !ent.claims) return false;
+
+    const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf)
+      .map(x => String(x).trim()); // force string form like "Q12345"
+
+    const place = Utils.hasCoordinates(ent);
+    const match = place || inst.some(i => personSet.has(i));
+
+    // Debug: log anything not matching to see why
+    if (!match) {
+      console.log(`Filtered out ${r.id}: instance-of =`, inst);
+    }
+
+    return match;
+  });
+
+  console.log("Search returned:", results.length, "Filtered in:", filtered.length);
+  return filtered;
+}
 
   // --- Get labels for a batch of QIDs ---
   async function getLabels(qids, language = Utils.getLang()) {
