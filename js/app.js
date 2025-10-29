@@ -19,18 +19,21 @@ window.App = (() => {
     searchInput().focus();
   }
 
-  async function renderSearch() {
-    const q = decodeURIComponent((location.hash.split("?")[1] || "").replace(/^q=/,""));
-    if (!q) return renderHome();
-    const results = await API.searchEntities(q);
-    const items = results.map(r => `
-      <a class="card" href="#/item/${r.id}">
-        <strong>${r.label || r.id}</strong><br>
-        <small>${r.description || ""}</small>
-      </a>
-    `);
-    $app().innerHTML = `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
-  }
+  async function renderSearch(_match, queryStr = "") {
+  const qp = new URLSearchParams(queryStr);
+  const q = (qp.get("q") || "").trim();
+  if (!q) return renderHome();
+
+  const results = await API.searchEntities(q);
+  const items = results.map(r => `
+    <a class="card" href="#/item/${r.id}">
+      <strong>${r.label || r.id}</strong><br>
+      <small>${r.description || ""}</small>
+    </a>
+  `);
+  document.getElementById("app").innerHTML =
+    `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
+}
 
   async function renderItem(match) {
     const qid = match[1];
