@@ -1,25 +1,34 @@
 window.Utils = (() => {
+  // --- Basic helpers ---
   const getLang = () => localStorage.getItem("lang") || CONFIG.DEFAULT_LANG;
   const setLang = (lang) => localStorage.setItem("lang", lang);
   const isQid = (s) => /^Q\d+$/.test(s);
   const uniq = (arr) => [...new Set(arr)];
 
+  // --- Extract first usable value from a claim ---
   function firstValue(claim) {
     if (!claim || !claim.mainsnak) return undefined;
     const snak = claim.mainsnak;
-    if (snak.datavalue == null) return undefined;
+    if (!snak.datavalue) return undefined;
     const { type, value } = snak.datavalue;
-    if (type === "wikibase-entityid") return "Q" + value["numeric-id"];
-    if (type === "time") return value.time;
-    if (type === "monolingualtext") return value.text;
-    if (["string", "url", "external-id"].includes(type)) return value;
-    if (type === "quantity") return value.amount;
-    if (type === "globecoordinate") return `${value.lat},${value.lon}`;
-    return undefined;
+    switch (type) {
+      case "wikibase-entityid": return "Q" + value["numeric-id"];
+      case "time": return value.time;
+      case "monolingualtext": return value.text;
+      case "string":
+      case "url":
+      case "external-id": return value;
+      case "quantity": return value.amount;
+      case "globecoordinate": return `${value.lat},${value.lon}`;
+      default: return undefined;
+    }
   }
 
-  const formatTime = (t) => (typeof t === "string" && t.startsWith("+")) ? t.slice(1, 11) : t;
+  // --- Format time string (e.g., +1953-05-12T00:00:00Z → 1953-05-12) ---
+  const formatTime = (t) =>
+    typeof t === "string" && t.startsWith("+") ? t.slice(1, 11) : t;
 
+  // --- Collect all QIDs referenced anywhere in claims ---
   function collectLinkedQids(entity) {
     const qids = [];
     for (const pid in (entity.claims || {})) {
@@ -30,31 +39,30 @@ window.Utils = (() => {
     }
     return uniq(qids);
   }
-  // --- Type matching helper ---
-  function matchEntityType(entity) {
-    const claims = entity.claims || {};
-    const p7 = claims["P7"] || [];   // instance of
-    const p45 = claims["P45"] || []; // subclass of
-    const p26 = claims["P26"] || []; // coordinates
 
-    // gather IDs
-    const inst = p7.map(c => firstValue(c));
-    const subc = p45.map(c => firstValue(c));
-    const coords = p26.length > 0;
-
-    // PEOPLE: instance/subclass of Q947
-    if (inst.includes("Q947") || subc.includes("Q947")) return "person";
-
-    // PLACES: has coordinates
-    if (coords) return "place";
-
-    // ORGANISATIONS / GROUPS / EVENTS
-    const orgTargets = ["Q10448", "Q10298", "Q10456"];
-    if (inst.some(v => orgTargets.includes(v)) || subc.some(v => orgTargets.includes(v)))
-      return "organisation";
-
-    return null; // not recognised
+  // --- Return array of QIDs from a specific property ---
+  function getClaimQids(entity, pid) {
+    if (!entity || !entity.claims || !entity.claims[pid]) return [];
+    return entity.claims[pid]
+      .map(firstValue)
+      .filter(isQid);
   }
 
-    return { getLang, setLang, isQid, uniq, firstValue, formatTime, collectLinkedQids, matchEntityType };
+  // --- Check if entity has coordinates (P26) ---
+  function hasCoordinates(entity) {
+    return !!(entity?.claims?.[CONFIG.PIDS.coordinates]?.length);
+  }
+
+  // --- Export ---
+  return {
+    getLang,
+    setLang,
+    isQid,
+    uniq,
+    firstValue,
+    formatTime,
+    collectLinkedQids,
+    getClaimQids,
+    hasCoordinates
+  };
 })();
