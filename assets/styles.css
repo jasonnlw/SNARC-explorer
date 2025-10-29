@@ -10,3 +10,24 @@ main{max-width:1000px;margin:1rem auto;padding:0 1rem}
 .card{border:1px solid #e5e5e5;border-radius:12px;padding:1rem;margin:.75rem 0}
 a{color:#0645ad}
 .list{display:grid;gap:.5rem}
+.suggestions {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.suggestion {
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+}
+
+.suggestion:hover {
+  background: #f0f0f0;
+}
+
