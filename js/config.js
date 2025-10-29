@@ -4,39 +4,16 @@ window.CONFIG = {
   SPARQL: "https://snarc-llgc.wikibase.cloud/query/sparql",
   DEFAULT_LANG: "en",
 
-  // Define logical categories and their rules
-  TYPES: {
-    person: {
-      instanceOf: ["Q947"], // human
-      subclassOf: ["Q947"]
-    },
-    place: {
-      coordinates: ["P26"] // any entity with coordinates statement
-    },
-    organisation: {
-      instanceOf: ["Q10448", "Q10298", "Q10456"], // event, organisation, group of humans
-      subclassOf: ["Q10448", "Q10298", "Q10456"]
-    }
-  }
-
-  window.CONFIG = {
-  BASE: "https://snarc-llgc.wikibase.cloud",
-  ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php",
-  SPARQL: "https://snarc-llgc.wikibase.cloud/query/sparql",
-  DEFAULT_LANG: "en",
-
   // Property IDs used for filtering
   PIDS: {
     instanceOf: "P7",
     subclassOf: "P45",
     coordinates: "P26"
-  }
-};
+  },
 
-};
-// --- Static instance-of type list (generated from CSV + human Q947) ---
-window.CONFIG.TYPE_SETS = {
-  people: [
+  // --- Static instance-of type list (from CSV + human) ---
+  TYPE_SETS: {
+    people: [
     "Q947",
     "Q140124","Q133656","Q140077","Q140148","Q53","Q10363","Q46","Q133618",
     "Q133689","Q133681","Q133599","Q133659","Q140087","Q140176","Q140078",
@@ -106,6 +83,7 @@ window.CONFIG.TYPE_SETS = {
     "Q134104","Q134105","Q134106","Q134107","Q134108","Q134109","Q134110",
     "Q134111","Q134112","Q134113","Q134114","Q134115","Q134116","Q134117",
     "Q134118","Q134119","Q134120","Q134121","Q134122","Q134123"
-  ]
+ ]
+  }
 };
 
