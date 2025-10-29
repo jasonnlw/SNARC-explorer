@@ -1,33 +1,59 @@
 window.API = (() => {
-  // Base parameters for API requests
+
+  // --- Base parameters for API requests ---
   const baseParams = { format: "json" };
 
-  // --- JSONP fallback ---
+  // ============================================================
+  // JSONP TRANSPORT (used because SNARC Wikibase is not CORS-enabled)
+  // ============================================================
   async function apiGet(params) {
     const u = new URL(CONFIG.ACTION_API);
-
-    // Always use JSONP because your Wikibase isn't CORS-enabled
     const callbackName = "jsonp_cb_" + Math.random().toString(36).slice(2);
+
     return new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+
+      // Timeout safeguard (10s)
+      const timeout = setTimeout(() => {
+        cleanup();
+        reject(new Error("JSONP request timed out"));
+      }, 10000);
+
+      function cleanup() {
+        clearTimeout(timeout);
+        if (window[callbackName]) delete window[callbackName];
+        if (script.parentNode) script.parentNode.removeChild(script);
+      }
+
+      // Define the callback that JSONP will call
       window[callbackName] = (data) => {
-        delete window[callbackName];
-        document.body.removeChild(script);
-        if (data.error) reject(data.error.info);
-        else resolve(data);
+        cleanup();
+        if (!data) return reject(new Error("Empty response"));
+        if (data.error) return reject(new Error(data.error.info || "API error"));
+        resolve(data);
       };
 
+      // Build query string
       Object.entries({ ...baseParams, ...params, callback: callbackName })
         .forEach(([k, v]) => u.searchParams.set(k, v));
 
-      const script = document.createElement("script");
+      // Attach <script> to start the JSONP request
       script.src = u.toString();
-      script.onerror = () => reject(new Error("JSONP request failed"));
+      script.onerror = () => {
+        cleanup();
+        reject(new Error("JSONP request failed"));
+      };
       document.body.appendChild(script);
     });
   }
 
-  // --- API functions using the same JSONP transport ---
+  // ============================================================
+  // CORE API FUNCTIONS
+  // ============================================================
+
+  // --- Get full entities by QID(s) ---
   async function getEntities(ids, languages = Utils.getLang()) {
+    if (!ids || (Array.isArray(ids) && !ids.length)) return {};
     const data = await apiGet({
       action: "wbgetentities",
       ids: Array.isArray(ids) ? ids.join("|") : ids,
@@ -37,72 +63,74 @@ window.API = (() => {
     return data.entities || {};
   }
 
-async function searchEntities(search, language = Utils.getLang()) {
-  const data = await apiGet({
-    action: "wbsearchentities",
-    search,
-    language,
-    uselang: language,
-    type: "item",
-    limit: 20
-  });
-  const results = data.search || [];
-  if (!results.length) return [];
+  // --- Search entities and filter by configured rules ---
+  async function searchEntities(search, language = Utils.getLang()) {
+    if (!search) return [];
 
-  // --- Fetch full entities ---
-  const qids = results.map(r => r.id);
-  const entities = await getEntities(qids, language);
+    let data;
+    try {
+      data = await apiGet({
+        action: "wbsearchentities",
+        search,
+        language,
+        uselang: language,
+        type: "item",
+        limit: 20
+      });
+    } catch (err) {
+      console.error("Search API error:", err);
+      return [];
+    }
 
-  // --- Build quick-lookup sets ---
-  const personSet = new Set(CONFIG.TYPE_SETS.people.map(String));
+    const results = data.search || [];
+    if (!results.length) return [];
 
-  // --- Filter ---
-  const filtered = results.filter(r => {
-    const ent = entities[r.id];
-    if (!ent || !ent.claims) return false;
+    // Fetch all corresponding entities
+    const qids = results.map(r => r.id);
+    let entities = {};
+    try {
+      entities = await getEntities(qids, language);
+    } catch (err) {
+      console.error("Entity fetch error:", err);
+      return [];
+    }
 
-    // instance-of values
-    const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
-    const place = Utils.hasCoordinates(ent);
+    // Build lookup sets
+    const personSet = new Set((CONFIG.TYPE_SETS?.people || []).map(String));
 
-    // true if any instance-of in pre-defined list or has coordinates
-    return place || inst.some(i => personSet.has(i));
-  });
+    // Filter results
+    const filtered = results.filter(r => {
+      const ent = entities[r.id];
+      if (!ent || !ent.claims) return false;
 
-  return filtered;
-}
+      const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
+      const place = Utils.hasCoordinates(ent);
 
-  const results = data.search || [];
+      // Match: coordinates or instance-of a listed class
+      return place || inst.some(i => personSet.has(i));
+    });
 
-  // fetch full entities for filtering
-  const qids = results.map(r => r.id);
-  const entities = await getEntities(qids, language);
+    return filtered;
+  }
 
-  // filter to people, places, or organisations
-const personSet = new Set(CONFIG.TYPE_SETS.people);
-
-const filtered = results.filter(r => {
-  const ent = entities[r.id];
-  if (!ent) return false;
-  const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf);
-  const place = Utils.hasCoordinates(ent);
-  return place || inst.some(i => personSet.has(i));
-});
-
-
-  return filtered;
-}
-
+  // --- Get labels for a batch of QIDs ---
   async function getLabels(qids, language = Utils.getLang()) {
-    if (!qids.length) return {};
-    const ent = await getEntities(qids, language);
+    if (!qids || !qids.length) return {};
+    const entities = await getEntities(qids, language);
     const out = {};
-    for (const q in ent) {
-      out[q] = ent[q].labels?.[language]?.value || q;
+    for (const q in entities) {
+      out[q] = entities[q].labels?.[language]?.value || q;
     }
     return out;
   }
 
-  return { getEntities, searchEntities, getLabels };
-})();
+  // ============================================================
+  // PUBLIC API
+  // ============================================================
+  return {
+    getEntities,
+    searchEntities,
+    getLabels
+  };
 
+})();
