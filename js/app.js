@@ -64,11 +64,11 @@ window.App = (() => {
   }
 
   function initRoutes() {
-    Router.add(/^\/$/, renderHome);
-    Router.add(/^\/search$/, renderSearch);
-    Router.add(/^\/item\/(Q\d+)$/, renderItem);
-    Router.parse();
-  }
+  Router.add(/^\/$/, renderHome);
+  Router.add(/^\/search(?:\?.*)?$/, renderSearch);  // ← accept ?q=...
+  Router.add(/^\/item\/(Q\d+)$/, renderItem);
+  Router.parse();
+}
 
   function start() {
     if (!localStorage.getItem("lang")) Utils.setLang(CONFIG.DEFAULT_LANG);
