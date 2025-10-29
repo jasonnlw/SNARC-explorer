@@ -1,15 +1,23 @@
 window.Router = (() => {
   const routes = [];
+
   function add(pattern, handler) { routes.push({ pattern, handler }); }
+
   function parse() {
-    const hash = location.hash.slice(1) || "/";
+    const raw = location.hash.slice(1) || "/";
+    const [path, query = ""] = raw.split("?");
+    const hashForMatch = path + (query ? "?" + query : "");
+
     for (const { pattern, handler } of routes) {
-      const m = hash.match(pattern);
-      if (m) return handler(m);
+      const m = hashForMatch.match(pattern);
+      if (m) return handler(m, query);
     }
     App.renderHome();
   }
+
   function go(path) { location.hash = path; }
+
   window.addEventListener("hashchange", parse);
+
   return { add, parse, go };
 })();
