@@ -30,6 +30,31 @@ window.Utils = (() => {
     }
     return uniq(qids);
   }
+  // --- Type matching helper ---
+  function matchEntityType(entity) {
+    const claims = entity.claims || {};
+    const p7 = claims["P7"] || [];   // instance of
+    const p45 = claims["P45"] || []; // subclass of
+    const p26 = claims["P26"] || []; // coordinates
+
+    // gather IDs
+    const inst = p7.map(c => firstValue(c));
+    const subc = p45.map(c => firstValue(c));
+    const coords = p26.length > 0;
+
+    // PEOPLE: instance/subclass of Q947
+    if (inst.includes("Q947") || subc.includes("Q947")) return "person";
+
+    // PLACES: has coordinates
+    if (coords) return "place";
+
+    // ORGANISATIONS / GROUPS / EVENTS
+    const orgTargets = ["Q10448", "Q10298", "Q10456"];
+    if (inst.some(v => orgTargets.includes(v)) || subc.some(v => orgTargets.includes(v)))
+      return "organisation";
+
+    return null; // not recognised
+  }
 
   return { getLang, setLang, isQid, uniq, firstValue, formatTime, collectLinkedQids };
 })();
