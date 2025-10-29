@@ -1,16 +1,32 @@
 window.API = (() => {
-  const baseParams = { format: "json", origin: "*" };
+  // Base parameters for API requests
+  const baseParams = { format: "json" };
 
+  // --- JSONP fallback ---
   async function apiGet(params) {
     const u = new URL(CONFIG.ACTION_API);
-    Object.entries({ ...baseParams, ...params }).forEach(([k, v]) => u.searchParams.set(k, v));
-    const res = await fetch(u.toString());
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    if (data.error) throw new Error(data.error.info || "API error");
-    return data;
+
+    // Always use JSONP because your Wikibase isn't CORS-enabled
+    const callbackName = "jsonp_cb_" + Math.random().toString(36).slice(2);
+    return new Promise((resolve, reject) => {
+      window[callbackName] = (data) => {
+        delete window[callbackName];
+        document.body.removeChild(script);
+        if (data.error) reject(data.error.info);
+        else resolve(data);
+      };
+
+      Object.entries({ ...baseParams, ...params, callback: callbackName })
+        .forEach(([k, v]) => u.searchParams.set(k, v));
+
+      const script = document.createElement("script");
+      script.src = u.toString();
+      script.onerror = () => reject(new Error("JSONP request failed"));
+      document.body.appendChild(script);
+    });
   }
 
+  // --- API functions using the same JSONP transport ---
   async function getEntities(ids, languages = Utils.getLang()) {
     const data = await apiGet({
       action: "wbgetentities",
@@ -37,9 +53,12 @@ window.API = (() => {
     if (!qids.length) return {};
     const ent = await getEntities(qids, language);
     const out = {};
-    for (const q in ent) out[q] = ent[q].labels?.[language]?.value || q;
+    for (const q in ent) {
+      out[q] = ent[q].labels?.[language]?.value || q;
+    }
     return out;
   }
 
   return { getEntities, searchEntities, getLabels };
 })();
+
