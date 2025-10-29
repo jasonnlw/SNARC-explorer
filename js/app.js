@@ -72,26 +72,106 @@ function initLiveSearch() {
 
   let timer = null;
   let latestQuery = "";
+  let activeIndex = -1; // track highlighted item
 
+  // Debounced input listener
   input.addEventListener("input", () => {
     const q = input.value.trim();
     latestQuery = q;
+    activeIndex = -1;
     clearTimeout(timer);
     if (!q) {
       suggestionsBox.innerHTML = "";
       suggestionsBox.style.display = "none";
       return;
     }
+
     timer = setTimeout(async () => {
       try {
         const results = await API.searchEntities(q);
-        if (q !== latestQuery) return; // ignore stale responses
+        if (q !== latestQuery) return;
 
         if (!results.length) {
           suggestionsBox.innerHTML = "<div class='suggestion'><em>No results</em></div>";
           suggestionsBox.style.display = "block";
           return;
         }
+
+        suggestionsBox.innerHTML = results
+          .map(r => `<div class="suggestion" data-id="${r.id}">
+                       <strong>${r.label || r.id}</strong><br>
+                       <small>${r.description || ""}</small>
+                     </div>`)
+          .join("");
+        suggestionsBox.style.display = "block";
+      } catch (err) {
+        console.error("Live search error:", err);
+      }
+    }, 350);
+  });
+
+  // Click selection
+  suggestionsBox.addEventListener("click", (e) => {
+    const item = e.target.closest(".suggestion[data-id]");
+    if (!item) return;
+    const qid = item.dataset.id;
+    input.value = item.querySelector("strong").textContent;
+    hideSuggestions();
+    Router.go(`#/item/${qid}`);
+  });
+
+  // Keyboard navigation
+  input.addEventListener("keydown", (e) => {
+    const items = Array.from(suggestionsBox.querySelectorAll(".suggestion[data-id]"));
+    if (!items.length || suggestionsBox.style.display === "none") return;
+
+    switch (e.key) {
+      case "ArrowDown":
+        e.preventDefault();
+        activeIndex = (activeIndex + 1) % items.length;
+        updateHighlight(items);
+        break;
+      case "ArrowUp":
+        e.preventDefault();
+        activeIndex = (activeIndex - 1 + items.length) % items.length;
+        updateHighlight(items);
+        break;
+      case "Enter":
+        if (activeIndex >= 0 && activeIndex < items.length) {
+          e.preventDefault();
+          const selected = items[activeIndex];
+          const qid = selected.dataset.id;
+          input.value = selected.querySelector("strong").textContent;
+          hideSuggestions();
+          Router.go(`#/item/${qid}`);
+        }
+        break;
+      case "Escape":
+        hideSuggestions();
+        break;
+    }
+  });
+
+  // Hide suggestions when clicking outside
+  document.addEventListener("click", (e) => {
+    if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+      hideSuggestions();
+    }
+  });
+
+  // Helpers
+  function updateHighlight(items) {
+    items.forEach((el, i) => el.classList.toggle("active", i === activeIndex));
+    const active = items[activeIndex];
+    if (active) active.scrollIntoView({ block: "nearest" });
+  }
+
+  function hideSuggestions() {
+    suggestionsBox.innerHTML = "";
+    suggestionsBox.style.display = "none";
+    activeIndex = -1;
+  }
+}
 
         suggestionsBox.innerHTML = results
           .map(r => `<div class="suggestion" data-id="${r.id}">
