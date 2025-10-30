@@ -1,38 +1,41 @@
 window.Templates = (() => {
 
   // ---------------------------------------------------------------------------
+  // Helper: Normalize a QID from any format
+  // ---------------------------------------------------------------------------
+  function normalizeQid(value) {
+    if (!value) return null;
+    const match = String(value).match(/Q\d+/i);
+    return match ? match[0].toUpperCase() : null;
+  }
+
+  // ---------------------------------------------------------------------------
   // Helper: Render value according to its datatype
   // ---------------------------------------------------------------------------
   function renderValue(datatype, value, labelMap, lang) {
     if (!value) return "";
 
-    switch (datatype) {
-  case "wikibase-item":
-  return labelMap[value]
-    ? `<a href="#/item/${value}">${labelMap[value]}</a>`
-    : `<a href="#/item/${value}">${value}</a>`;
+    if (datatype === "wikibase-item") {
+      const qid = normalizeQid(value);
+      if (!qid) return value;
 
-
-      case "external-id":
-        // Try to detect known identifier types and link to resolvers
-        if (/^Q\d+$/.test(value)) return `<a href="#/item/${value}">${value}</a>`;
-        if (/^\d+$/.test(value)) return value;
-        return `<code>${value}</code>`;
-
-      case "url":
-        return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
-
-      case "time":
-        return Utils.formatTime(value);
-
-      case "quantity":
-        return value.startsWith("+") ? value.slice(1) : value;
-
-      case "monolingualtext":
-      case "string":
-      default:
-        return value;
+      const label = labelMap[qid] || qid;
+      return `<a href="#/item/${qid}">${label}</a>`;
     }
+
+    if (datatype === "external-id") {
+      return `<code>${value}</code>`;
+    }
+
+    if (datatype === "url") {
+      return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+    }
+
+    if (datatype === "time") {
+      return Utils.formatTime(value);
+    }
+
+    return value;
   }
 
   // ---------------------------------------------------------------------------
@@ -83,9 +86,6 @@ window.Templates = (() => {
     `;
   }
 
-  // ---------------------------------------------------------------------------
-  // Export
-  // ---------------------------------------------------------------------------
   return { renderGeneric };
 
 })();
