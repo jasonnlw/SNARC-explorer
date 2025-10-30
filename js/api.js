@@ -95,29 +95,34 @@ window.API = (() => {
     return [];
   }
 
-  // Lookup sets
-  const personSet = new Set((CONFIG.TYPE_SETS?.people || []).map(String));
+  
+// --- Build quick-lookup set (normalize everything) ---
+const personSet = new Set(
+  (CONFIG.TYPE_SETS?.people || [])
+    .map(q => String(q).trim().toUpperCase())
+);
 
-  const filtered = results.filter(r => {
-    const ent = entities[r.id];
-    if (!ent || !ent.claims) return false;
+// --- Filter ---
+const filtered = results.filter(r => {
+  const ent = entities[r.id];
+  if (!ent || !ent.claims) return false;
 
-    const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf)
-      .map(x => String(x).trim()); // force string form like "Q12345"
+  // Get instance-of values and normalize
+  const inst = Utils.getClaimQids(ent, CONFIG.PIDS.instanceOf)
+    .map(i => String(i).trim().toUpperCase());
 
-    const place = Utils.hasCoordinates(ent);
-    const match = place || inst.some(i => personSet.has(i));
+  const place = Utils.hasCoordinates(ent);
+  const match = place || inst.some(i => personSet.has(i));
 
-    // Debug: log anything not matching to see why
-    if (!match) {
-      console.log(`Filtered out ${r.id}: instance-of =`, inst);
-    }
+  if (!match) {
+    console.log(`Filtered out ${r.id}: instance-of =`, inst, 
+                "=> Checking against", [...personSet].slice(0,10), "...");
+  }
 
-    return match;
-  });
+  return match;
+});
 
-  console.log("Search returned:", results.length, "Filtered in:", filtered.length);
-  return filtered;
+console.log("Search returned:", results.length, "Filtered in:", filtered.length);
 }
 
   // --- Get labels for a batch of QIDs ---
