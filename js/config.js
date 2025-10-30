@@ -14,6 +14,7 @@ window.CONFIG = {
   // --- Static instance-of type list (from CSV + human) ---
   TYPE_SETS: {
     people: [
+      "Q947",
     "Q140124",
 "Q133656",
 "Q140077",
