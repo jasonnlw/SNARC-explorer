@@ -95,7 +95,7 @@ else if (/^P97$/.test(pid)) url = `https://discovery.nationalarchives.gov.uk/det
     const values = statements
       .map(stmt => Utils.firstValue(stmt))
       .filter(v => v !== undefined)
-      .map(v => renderValue(datatype, v, labelMap, lang))
+      .map(v => renderValue(datatype, v, labelMap, lang, pid))
       .join(", ");
 
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
