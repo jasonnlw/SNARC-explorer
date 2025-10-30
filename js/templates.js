@@ -1,35 +1,91 @@
 window.Templates = (() => {
-  function renderGeneric(entity, lang, labelMap) {
-    const label = entity.labels?.[lang]?.value || Object.values(entity.labels||{})[0]?.value || entity.id;
-    const desc  = entity.descriptions?.[lang]?.value || "";
+
+  // ---------------------------------------------------------------------------
+  // Helper: Render value according to its datatype
+  // ---------------------------------------------------------------------------
+  function renderValue(datatype, value, labelMap, lang) {
+    if (!value) return "";
+
+    switch (datatype) {
+      case "wikibase-item":
+        // Linked item (use label if available)
+        return labelMap[value]
+          ? `<a href="#/item/${value}">${labelMap[value]}</a>`
+          : `<a href="#/item/${value}">${value}</a>`;
+
+      case "external-id":
+        // Try to detect known identifier types and link to resolvers
+        if (/^Q\d+$/.test(value)) return `<a href="#/item/${value}">${value}</a>`;
+        if (/^\d+$/.test(value)) return value;
+        return `<code>${value}</code>`;
+
+      case "url":
+        return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+
+      case "time":
+        return Utils.formatTime(value);
+
+      case "quantity":
+        return value.startsWith("+") ? value.slice(1) : value;
+
+      case "monolingualtext":
+      case "string":
+      default:
+        return value;
+    }
+  }
+
+  // ---------------------------------------------------------------------------
+  // Helper: Render a table row for each property
+  // ---------------------------------------------------------------------------
+  function renderClaimRow(pid, statements, labelMap, lang) {
+    const propInfo = PROPERTY_INFO[pid];
+    const label = propInfo
+      ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
+      : pid;
+    const datatype = propInfo?.datatype || "string";
+
+    const values = statements
+      .map(stmt => Utils.firstValue(stmt))
+      .filter(v => v !== undefined)
+      .map(v => renderValue(datatype, v, labelMap, lang))
+      .join(", ");
+
+    return `<tr><th>${label}</th><td>${values}</td></tr>`;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Main renderer: generic entity page
+  // ---------------------------------------------------------------------------
+  function renderGeneric(entity, lang, labelMap = {}) {
+    if (!entity) return `<p>Entity not found.</p>`;
+
+    const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
+    const desc = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
+
+    const claims = entity.claims || {};
     const rows = [];
 
-    for (const pid of Object.keys(entity.claims || {}).sort()) {
-      const stmts = entity.claims[pid];
-      const values = stmts.map(s => {
-        const v = Utils.firstValue(s);
-        if (Utils.isQid(v)) {
-          const text = labelMap[v] || v;
-          return `<a href="#/item/${v}">${text}</a>`;
-        }
-        if (typeof v === "string" && v.startsWith("+")) return Utils.formatTime(v);
-        return (v ?? "").toString();
-      });
-      rows.push(`<tr><th>${pid}</th><td>${values.join("<br>")}</td></tr>`);
+    for (const pid in claims) {
+      rows.push(renderClaimRow(pid, claims[pid], labelMap, lang));
     }
 
     return `
-      <article class="card">
-        <h1>${label}</h1>
+      <section class="card">
+        <h2>${title}</h2>
         ${desc ? `<p>${desc}</p>` : ""}
-        <table><tbody>${rows.join("")}</tbody></table>
-      </article>
+        <table class="wikidata">
+          <tbody>
+            ${rows.join("")}
+          </tbody>
+        </table>
+      </section>
     `;
   }
 
-  const renderPerson = renderGeneric;
-  const renderPlace = renderGeneric;
-  const renderOrg = renderGeneric;
+  // ---------------------------------------------------------------------------
+  // Export
+  // ---------------------------------------------------------------------------
+  return { renderGeneric };
 
-  return { renderPerson, renderPlace, renderOrg, renderGeneric };
 })();
