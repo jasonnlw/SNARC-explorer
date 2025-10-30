@@ -36,18 +36,29 @@ window.App = (() => {
 }
 
   async function renderItem(match) {
-    const qid = match[1];
-    const lang = Utils.getLang();
-    const entities = await API.getEntities(qid, lang);
-    const entity = entities[qid];
-    if (!entity) { $app().innerHTML = `<p>Not found: ${qid}</p>`; return; }
+  const qid = match[1];
+  const lang = Utils.getLang();
 
-    const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid).slice(0, 50);
-    const labelMap = await API.getLabels(linked, lang);
-
-    const html = Templates.renderGeneric(entity, lang, labelMap);
-    $app().innerHTML = html;
+  // Fetch main entity
+  const entities = await API.getEntities(qid, lang);
+  const entity = entities[qid];
+  if (!entity) {
+    document.getElementById("app").innerHTML = `<p>Not found: ${qid}</p>`;
+    return;
   }
+
+  // --- Collect all QIDs referenced in statements ---
+  const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid);
+  // Limit to 200 to keep JSONP URLs safe
+  const limited = linked.slice(0, 200);
+
+  // --- Fetch their labels ---
+  const labelMap = await API.getLabels(limited, lang);
+
+  // --- Render page ---
+  const html = Templates.renderGeneric(entity, lang, labelMap);
+  document.getElementById("app").innerHTML = html;
+}
 
   function initEvents() {
     document.querySelector(".lang-switch").addEventListener("click", (e) => {
