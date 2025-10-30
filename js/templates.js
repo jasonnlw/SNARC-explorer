@@ -8,80 +8,60 @@ window.Templates = (() => {
   }
 
   // Render a single value with best-effort label resolution
-    function renderValue(datatype, value, labelMap, lang, pid) {
+  function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-    // Normalize QID-like values
+    // 1) If the value looks like a QID, resolve via labelMap (fallback to QID)
     const qid = normalizeQid(value);
     if (qid) {
       const label = labelMap[qid] || qid;
       return `<a href="#/item/${qid}">${label}</a>`;
     }
 
-    // ---- External IDs ----
-    if (datatype === "external-id" || (pid && PROPERTY_INFO[pid]?.datatype === "external-id")) {
-      const propInfo = PROPERTY_INFO[pid];
+    // 2) External IDs → hyperlink using url_pattern from PROPERTY_INFO, or fallbacks
+    if (datatype === "external-id" || (pid && window.PROPERTY_INFO?.[pid]?.datatype === "external-id")) {
+      const propInfo = window.PROPERTY_INFO?.[pid];
       const pattern = propInfo?.url_pattern;
+      const v = encodeURIComponent(String(value));
       let url = "";
 
       if (pattern) {
-        // Use the pattern from properties.js (replace $1)
-        url = pattern.replace("$1", encodeURIComponent(value));
+        url = pattern.replace("$1", v);
       } else {
-        // Fallbacks for common identifiers (if pattern missing)
-        const v = encodeURIComponent(value);
-        if (/^P10$/.test(pid)) url = `https://viaf.org/viaf/${v}`;/
-else if (/^P102$/.test(pid)) url = `https://id.library.wales/${v}`;
-else if (/^P107$/.test(pid)) url = `https://id.library.wales/${v}`;
-else if (/^P108$/.test(pid)) url = `https://snarc-llgc.wikibase.cloud/wiki/${v}`;
-else if (/^P11$/.test(pid)) url = `https://id.loc.gov/authorities/${v}`;
-else if (/^P12$/.test(pid)) url = `https://archives.library.wales/index.php/${v}`;
-else if (/^P5$/.test(pid)) url = `https://biography.wales/article/${v}`;
-else if (/^P6$/.test(pid)) url = `https://bywgraffiadur.cymru/article/${v}`;
-else if (/^P68$/.test(pid)) url = `https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=${v}`;
-else if (/^P69$/.test(pid)) url = `https://coflein.gov.uk/en/site/${v}`;
-else if (/^P69$/.test(pid)) url = `https://coflein.gov.uk/cy/safle/${v}`;
-else if (/^P8$/.test(pid)) url = `https://id.loc.gov/vocabulary/iso639-1/${v}`;
-else if (/^P83$/.test(pid)) url = `https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/${v}`;
-else if (/^P9$/.test(pid)) url = `https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A${v}`;
-else if (/^P91$/.test(pid)) url = `https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/${v}`;
-else if (/^P97$/.test(pid)) url = `https://discovery.nationalarchives.gov.uk/details/c/${v}`;
+        // Fallback resolvers (extend as needed)
+        if (/^P10$/.test(pid)) url = `https://viaf.org/viaf/${v}`;
+        else if (/^P102$/.test(pid)) url = `https://id.library.wales/${v}`;
+        else if (/^P107$/.test(pid)) url = `https://id.library.wales/${v}`;
+        else if (/^P108$/.test(pid)) url = `https://snarc-llgc.wikibase.cloud/wiki/${v}`;
+        else if (/^P11$/.test(pid)) url = `https://id.loc.gov/authorities/${v}`;
+        else if (/^P12$/.test(pid)) url = `https://archives.library.wales/index.php/${v}`;
+        else if (/^P5$/.test(pid))  url = `https://biography.wales/article/${v}`;
+        else if (/^P6$/.test(pid))  url = `https://bywgraffiadur.cymru/article/${v}`;
+        else if (/^P68$/.test(pid)) url = `https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=${v}`;
+        else if (/^P69$/.test(pid)) url = `https://coflein.gov.uk/en/site/${v}`;   // choose one variant
+        else if (/^P8$/.test(pid))  url = `https://id.loc.gov/vocabulary/iso639-1/${v}`;
+        else if (/^P83$/.test(pid)) url = `https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/${v}`;
+        else if (/^P9$/.test(pid))  url = `https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A${v}`;
+        else if (/^P91$/.test(pid)) url = `https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/${v}`;
+        else if (/^P97$/.test(pid)) url = `https://discovery.nationalarchives.gov.uk/details/c/${v}`;
       }
 
       return url
-        ? `<a href="${url}" target="_blank" rel="noopener">${value}</a>`
-        : `<code>${value}</code>`;
+        ? `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`
+        : `<code>${String(value)}</code>`;
     }
 
-    // ---- URLs ----
+    // 3) URLs
     if (datatype === "url") {
-      return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+      return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
     }
 
-    // ---- Times, quantities, text ----
+    // 4) Times, quantities, text
     if (datatype === "time") return Utils.formatTime(value);
     if (datatype === "quantity")
       return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
 
     return String(value);
-  }
-
-
-    // 2) Otherwise, handle by datatype
-    switch (datatype) {
-      case "url":
-        return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
-      case "time":
-        return Utils.formatTime(value);
-      case "quantity":
-        return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
-      case "external-id":
-        return `<code>${value}</code>`;
-      case "monolingualtext":
-      case "string":
-      default:
-        return String(value);
-    }
   }
 
   // Render a single property row
@@ -105,8 +85,8 @@ else if (/^P97$/.test(pid)) url = `https://discovery.nationalarchives.gov.uk/det
   function renderGeneric(entity, lang, labelMap = {}) {
     if (!entity) return `<p>Entity not found.</p>`;
 
-    const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
-    const desc = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
+    const title = entity.labels?.[lang]?.value || entity.labels?.[lang === "cy" ? "en" : "cy"]?.value || entity.id;
+    const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.[lang === "cy" ? "en" : "cy"]?.value || "";
 
     const claims = entity.claims || {};
     const rows = [];
