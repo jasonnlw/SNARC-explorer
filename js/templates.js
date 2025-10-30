@@ -1,48 +1,43 @@
 window.Templates = (() => {
 
-  // ---------------------------------------------------------------------------
-  // Helper: Normalize a QID from any format
-  // ---------------------------------------------------------------------------
+  // Normalize a QID from any format (URL, lowercase, etc.)
   function normalizeQid(value) {
     if (!value) return null;
-    const match = String(value).match(/Q\d+/i);
-    return match ? match[0].toUpperCase() : null;
+    const m = String(value).match(/Q\d+/i);
+    return m ? m[0].toUpperCase() : null;
   }
 
-  // ---------------------------------------------------------------------------
-  // Helper: Render value according to its datatype
-  // ---------------------------------------------------------------------------
+  // Render a single value with best-effort label resolution
   function renderValue(datatype, value, labelMap, lang) {
-    if (!value) return "";
+    if (value == null) return "";
 
-    if (datatype === "wikibase-item") {
-      const qid = normalizeQid(value);
-      if (!qid) return value;
-
+    // 1) If the value looks like a QID, always try to use labelMap
+    const qid = normalizeQid(value);
+    if (qid) {
       const label = labelMap[qid] || qid;
       return `<a href="#/item/${qid}">${label}</a>`;
     }
 
-    if (datatype === "external-id") {
-      return `<code>${value}</code>`;
+    // 2) Otherwise, handle by datatype
+    switch (datatype) {
+      case "url":
+        return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+      case "time":
+        return Utils.formatTime(value);
+      case "quantity":
+        return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
+      case "external-id":
+        return `<code>${value}</code>`;
+      case "monolingualtext":
+      case "string":
+      default:
+        return String(value);
     }
-
-    if (datatype === "url") {
-      return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
-    }
-
-    if (datatype === "time") {
-      return Utils.formatTime(value);
-    }
-
-    return value;
   }
 
-  // ---------------------------------------------------------------------------
-  // Helper: Render a table row for each property
-  // ---------------------------------------------------------------------------
+  // Render a single property row
   function renderClaimRow(pid, statements, labelMap, lang) {
-    const propInfo = PROPERTY_INFO[pid];
+    const propInfo = window.PROPERTY_INFO ? window.PROPERTY_INFO[pid] : undefined;
     const label = propInfo
       ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
       : pid;
@@ -57,9 +52,7 @@ window.Templates = (() => {
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
   }
 
-  // ---------------------------------------------------------------------------
-  // Main renderer: generic entity page
-  // ---------------------------------------------------------------------------
+  // Main generic renderer
   function renderGeneric(entity, lang, labelMap = {}) {
     if (!entity) return `<p>Entity not found.</p>`;
 
@@ -68,7 +61,6 @@ window.Templates = (() => {
 
     const claims = entity.claims || {};
     const rows = [];
-
     for (const pid in claims) {
       rows.push(renderClaimRow(pid, claims[pid], labelMap, lang));
     }
@@ -78,14 +70,11 @@ window.Templates = (() => {
         <h2>${title}</h2>
         ${desc ? `<p>${desc}</p>` : ""}
         <table class="wikidata">
-          <tbody>
-            ${rows.join("")}
-          </tbody>
+          <tbody>${rows.join("")}</tbody>
         </table>
       </section>
     `;
   }
 
   return { renderGeneric };
-
 })();
