@@ -42,7 +42,7 @@ window.App = (() => {
     const entity = entities[qid];
     if (!entity) { $app().innerHTML = `<p>Not found: ${qid}</p>`; return; }
 
-    const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid).slice(0, 200);
+    const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid).slice(0, 50);
     const labelMap = await API.getLabels(linked, lang);
 
     const html = Templates.renderGeneric(entity, lang, labelMap);
