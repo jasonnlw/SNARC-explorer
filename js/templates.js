@@ -8,15 +8,64 @@ window.Templates = (() => {
   }
 
   // Render a single value with best-effort label resolution
-  function renderValue(datatype, value, labelMap, lang) {
+    function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-    // 1) If the value looks like a QID, always try to use labelMap
+    // Normalize QID-like values
     const qid = normalizeQid(value);
     if (qid) {
       const label = labelMap[qid] || qid;
       return `<a href="#/item/${qid}">${label}</a>`;
     }
+
+    // ---- External IDs ----
+    if (datatype === "external-id" || (pid && PROPERTY_INFO[pid]?.datatype === "external-id")) {
+      const propInfo = PROPERTY_INFO[pid];
+      const pattern = propInfo?.url_pattern;
+      let url = "";
+
+      if (pattern) {
+        // Use the pattern from properties.js (replace $1)
+        url = pattern.replace("$1", encodeURIComponent(value));
+      } else {
+        // Fallbacks for common identifiers (if pattern missing)
+        const v = encodeURIComponent(value);
+        if (/^P10$/.test(pid)) url = `https://viaf.org/viaf/${v}`;/
+else if (/^P102$/.test(pid)) url = `https://id.library.wales/${v}`;
+else if (/^P107$/.test(pid)) url = `https://id.library.wales/${v}`;
+else if (/^P108$/.test(pid)) url = `https://snarc-llgc.wikibase.cloud/wiki/${v}`;
+else if (/^P11$/.test(pid)) url = `https://id.loc.gov/authorities/${v}`;
+else if (/^P12$/.test(pid)) url = `https://archives.library.wales/index.php/${v}`;
+else if (/^P5$/.test(pid)) url = `https://biography.wales/article/${v}`;
+else if (/^P6$/.test(pid)) url = `https://bywgraffiadur.cymru/article/${v}`;
+else if (/^P68$/.test(pid)) url = `https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=${v}`;
+else if (/^P69$/.test(pid)) url = `https://coflein.gov.uk/en/site/${v}`;
+else if (/^P69$/.test(pid)) url = `https://coflein.gov.uk/cy/safle/${v}`;
+else if (/^P8$/.test(pid)) url = `https://id.loc.gov/vocabulary/iso639-1/${v}`;
+else if (/^P83$/.test(pid)) url = `https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/${v}`;
+else if (/^P9$/.test(pid)) url = `https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A${v}`;
+else if (/^P91$/.test(pid)) url = `https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/${v}`;
+else if (/^P97$/.test(pid)) url = `https://discovery.nationalarchives.gov.uk/details/c/${v}`;
+      }
+
+      return url
+        ? `<a href="${url}" target="_blank" rel="noopener">${value}</a>`
+        : `<code>${value}</code>`;
+    }
+
+    // ---- URLs ----
+    if (datatype === "url") {
+      return `<a href="${value}" target="_blank" rel="noopener">${value}</a>`;
+    }
+
+    // ---- Times, quantities, text ----
+    if (datatype === "time") return Utils.formatTime(value);
+    if (datatype === "quantity")
+      return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
+
+    return String(value);
+  }
+
 
     // 2) Otherwise, handle by datatype
     switch (datatype) {
