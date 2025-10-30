@@ -123,6 +123,7 @@ const filtered = results.filter(r => {
 });
 
 console.log("Search returned:", results.length, "Filtered in:", filtered.length);
+   return filtered;
 }
 
   // --- Get labels for a batch of QIDs ---
