@@ -47,10 +47,59 @@ window.App = (() => {
   }
 
   // ----------------------------------------------------------
+  // Helpers for item page: strict QID collection + batched labels
+  // ----------------------------------------------------------
+  function collectQidsStrict(entity) {
+    // Robustly extract QIDs from all claims (handles .id or numeric-id)
+    const claims = entity?.claims || {};
+    const qids = [];
+
+    for (const pid in claims) {
+      for (const stmt of claims[pid]) {
+        const snak = stmt?.mainsnak;
+        if (!snak || !snak.datavalue) continue;
+        const dv = snak.datavalue;
+
+        if (dv.type === "wikibase-entityid") {
+          const v = dv.value;
+          const q = (v && (v.id || (v["entity-type"] === "item" && "Q" + v["numeric-id"]))) || null;
+          if (q) qids.push(q);
+        } else {
+          // Also allow Utils.firstValue (covers time/quantity/monolingualtext) -> QIDs too
+          const v2 = Utils.firstValue(stmt);
+          if (typeof v2 === "string" && /^Q\d+$/i.test(v2)) qids.push(v2.toUpperCase());
+        }
+      }
+    }
+
+    // de-dup + normalize
+    return [...new Set(qids.map(x => String(x).trim().toUpperCase()))];
+  }
+
+  async function fetchLabelMapBatched(qids, lang) {
+    const out = {};
+    const batchSize = 50;
+    for (let i = 0; i < qids.length; i += batchSize) {
+      const batch = qids.slice(i, i + batchSize);
+      try {
+        const ents = await API.getEntities(batch, lang);
+        for (const q in ents) {
+          const e = ents[q];
+          const lbl = e?.labels?.[lang]?.value || e?.labels?.en?.value || q;
+          out[q.toUpperCase()] = lbl;
+        }
+      } catch (err) {
+        console.warn("Label batch failed:", batch, err);
+      }
+    }
+    return out;
+  }
+
+  // ----------------------------------------------------------
   // Render single entity page
   // ----------------------------------------------------------
   async function renderItem(match) {
-    const qid = match[1];
+    const qid = match[1].toUpperCase();
     const lang = Utils.getLang();
 
     // Fetch main entity
@@ -61,23 +110,21 @@ window.App = (() => {
       return;
     }
 
-    // --- Collect all QIDs referenced in statements ---
-    const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid);
+    // Collect linked QIDs strictly and safely
+    const linkedAll = collectQidsStrict(entity).filter(id => id !== qid);
+    // JSONP-safe cap; adjust if needed
+    const linked = linkedAll.slice(0, 200);
 
-    // --- Batch fetch linked labels (safe for JSONP) ---
-    const labelMap = {};
-    const batchSize = 50;
-    for (let i = 0; i < linked.length; i += batchSize) {
-      const batch = linked.slice(i, i + batchSize);
-      try {
-        const partial = await API.getLabels(batch, lang);
-        Object.assign(labelMap, partial);
-      } catch (err) {
-        console.warn("Label fetch batch failed:", batch, err);
-      }
-    }
+    // Fetch labels in safe batches using entities (most reliable)
+    const labelMap = await fetchLabelMapBatched(linked, lang);
 
-    // --- Render page ---
+    // Debug hooks (visible in console)
+    window.lastLinked = linked;
+    window.lastLabelMap = labelMap;
+    console.log("Linked QIDs (capped):", linked.length, linked.slice(0, 25));
+    console.log("Label map keys:", Object.keys(labelMap).length);
+
+    // Render page
     const html = Templates.renderGeneric(entity, lang, labelMap);
     $app().innerHTML = html;
   }
@@ -113,7 +160,6 @@ window.App = (() => {
     let latestQuery = "";
     let activeIndex = -1;
 
-    // Debounced input listener
     input.addEventListener("input", () => {
       const q = input.value.trim();
       latestQuery = q;
@@ -127,7 +173,7 @@ window.App = (() => {
       timer = setTimeout(async () => {
         try {
           const results = await API.searchEntities(q);
-          if (q !== latestQuery) return; // ignore stale responses
+          if (q !== latestQuery) return;
 
           if (!results.length) {
             suggestionsBox.innerHTML = "<div class='suggestion'><em>No results</em></div>";
@@ -148,17 +194,15 @@ window.App = (() => {
       }, 350);
     });
 
-    // Click selection
     suggestionsBox.addEventListener("click", (e) => {
       const item = e.target.closest(".suggestion[data-id]");
       if (!item) return;
-      const qid = item.dataset.id;
+      const qid = item.dataset.id.toUpperCase();
       input.value = item.querySelector("strong").textContent;
       hideSuggestions();
       Router.go(`#/item/${qid}`);
     });
 
-    // Keyboard navigation
     input.addEventListener("keydown", (e) => {
       const items = Array.from(suggestionsBox.querySelectorAll(".suggestion[data-id]"));
       if (!items.length || suggestionsBox.style.display === "none") return;
@@ -178,7 +222,7 @@ window.App = (() => {
           if (activeIndex >= 0 && activeIndex < items.length) {
             e.preventDefault();
             const selected = items[activeIndex];
-            const qid = selected.dataset.id;
+            const qid = selected.dataset.id.toUpperCase();
             input.value = selected.querySelector("strong").textContent;
             hideSuggestions();
             Router.go(`#/item/${qid}`);
@@ -190,14 +234,12 @@ window.App = (() => {
       }
     });
 
-    // Hide when clicking elsewhere
     document.addEventListener("click", (e) => {
       if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
         hideSuggestions();
       }
     });
 
-    // Helpers
     function updateHighlight(items) {
       items.forEach((el, i) => el.classList.toggle("active", i === activeIndex));
       const active = items[activeIndex];
@@ -234,5 +276,4 @@ window.App = (() => {
 
   document.addEventListener("DOMContentLoaded", start);
   return { renderHome };
-
 })();
