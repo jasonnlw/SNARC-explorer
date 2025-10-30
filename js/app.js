@@ -4,62 +4,87 @@ window.App = (() => {
   const searchForm = () => document.getElementById("search-form");
   const searchInput = () => document.getElementById("search-input");
 
+  // ----------------------------------------------------------
+  // Language control
+  // ----------------------------------------------------------
   function setActiveLangButton() {
     const lang = Utils.getLang();
     langButtons().forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
   }
 
+  // ----------------------------------------------------------
+  // Home screen
+  // ----------------------------------------------------------
   async function renderHome() {
     $app().innerHTML = `
       <section class="card">
         <h2>${Utils.getLang() === "cy" ? "Chwilio" : "Search"}</h2>
-        <p>${Utils.getLang() === "cy" ? "Teipiwch ym mlwch chwilio uchod." : "Type in the search box above."}</p>
+        <p>${Utils.getLang() === "cy"
+          ? "Teipiwch ym mlwch chwilio uchod."
+          : "Type in the search box above."}</p>
       </section>
     `;
     searchInput().focus();
   }
 
+  // ----------------------------------------------------------
+  // Search results
+  // ----------------------------------------------------------
   async function renderSearch(_match, queryStr = "") {
-  const qp = new URLSearchParams(queryStr);
-  const q = (qp.get("q") || "").trim();
-  if (!q) return renderHome();
+    const qp = new URLSearchParams(queryStr);
+    const q = (qp.get("q") || "").trim();
+    if (!q) return renderHome();
 
-  const results = await API.searchEntities(q);
-  const items = results.map(r => `
-    <a class="card" href="#/item/${r.id}">
-      <strong>${r.label || r.id}</strong><br>
-      <small>${r.description || ""}</small>
-    </a>
-  `);
-  document.getElementById("app").innerHTML =
-    `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
-}
+    const results = await API.searchEntities(q);
+    const items = results.map(r => `
+      <a class="card" href="#/item/${r.id}">
+        <strong>${r.label || r.id}</strong><br>
+        <small>${r.description || ""}</small>
+      </a>
+    `);
 
-  async function renderItem(match) {
-  const qid = match[1];
-  const lang = Utils.getLang();
-
-  // Fetch main entity
-  const entities = await API.getEntities(qid, lang);
-  const entity = entities[qid];
-  if (!entity) {
-    document.getElementById("app").innerHTML = `<p>Not found: ${qid}</p>`;
-    return;
+    $app().innerHTML = `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
   }
 
-  // --- Collect all QIDs referenced in statements ---
-  const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid);
-  // Limit to 200 to keep JSONP URLs safe
-  const limited = linked.slice(0, 200);
+  // ----------------------------------------------------------
+  // Render single entity page
+  // ----------------------------------------------------------
+  async function renderItem(match) {
+    const qid = match[1];
+    const lang = Utils.getLang();
 
-  // --- Fetch their labels ---
-  const labelMap = await API.getLabels(limited, lang);
+    // Fetch main entity
+    const entities = await API.getEntities(qid, lang);
+    const entity = entities[qid];
+    if (!entity) {
+      $app().innerHTML = `<p>Not found: ${qid}</p>`;
+      return;
+    }
 
-  // --- Render page ---
-  const html = Templates.renderGeneric(entity, lang, labelMap);
-  document.getElementById("app").innerHTML = html;
-}
+    // --- Collect all QIDs referenced in statements ---
+    const linked = Utils.collectLinkedQids(entity).filter(id => id !== qid);
 
+    // --- Batch fetch linked labels (safe for JSONP) ---
+    const labelMap = {};
+    const batchSize = 50;
+    for (let i = 0; i < linked.length; i += batchSize) {
+      const batch = linked.slice(i, i + batchSize);
+      try {
+        const partial = await API.getLabels(batch, lang);
+        Object.assign(labelMap, partial);
+      } catch (err) {
+        console.warn("Label fetch batch failed:", batch, err);
+      }
+    }
+
+    // --- Render page ---
+    const html = Templates.renderGeneric(entity, lang, labelMap);
+    $app().innerHTML = html;
+  }
+
+  // ----------------------------------------------------------
+  // UI Event handlers
+  // ----------------------------------------------------------
   function initEvents() {
     document.querySelector(".lang-switch").addEventListener("click", (e) => {
       const btn = e.target.closest("button[data-lang]");
@@ -76,121 +101,129 @@ window.App = (() => {
       Router.go(`#/search?q=${encodeURIComponent(q)}`);
     });
   }
-// --- Live dropdown search with keyboard navigation ---
-function initLiveSearch() {
-  const input = document.getElementById("search-input");
-  const suggestionsBox = document.getElementById("search-suggestions");
 
-  let timer = null;
-  let latestQuery = "";
-  let activeIndex = -1; // track highlighted item
+  // ----------------------------------------------------------
+  // Live dropdown search with keyboard navigation
+  // ----------------------------------------------------------
+  function initLiveSearch() {
+    const input = document.getElementById("search-input");
+    const suggestionsBox = document.getElementById("search-suggestions");
 
-  // Debounced input listener
-  input.addEventListener("input", () => {
-    const q = input.value.trim();
-    latestQuery = q;
-    activeIndex = -1;
-    clearTimeout(timer);
-    if (!q) {
+    let timer = null;
+    let latestQuery = "";
+    let activeIndex = -1;
+
+    // Debounced input listener
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      latestQuery = q;
+      activeIndex = -1;
+      clearTimeout(timer);
+      if (!q) {
+        hideSuggestions();
+        return;
+      }
+
+      timer = setTimeout(async () => {
+        try {
+          const results = await API.searchEntities(q);
+          if (q !== latestQuery) return; // ignore stale responses
+
+          if (!results.length) {
+            suggestionsBox.innerHTML = "<div class='suggestion'><em>No results</em></div>";
+            suggestionsBox.style.display = "block";
+            return;
+          }
+
+          suggestionsBox.innerHTML = results
+            .map(r => `<div class="suggestion" data-id="${r.id}">
+                         <strong>${r.label || r.id}</strong><br>
+                         <small>${r.description || ""}</small>
+                       </div>`)
+            .join("");
+          suggestionsBox.style.display = "block";
+        } catch (err) {
+          console.error("Live search error:", err);
+        }
+      }, 350);
+    });
+
+    // Click selection
+    suggestionsBox.addEventListener("click", (e) => {
+      const item = e.target.closest(".suggestion[data-id]");
+      if (!item) return;
+      const qid = item.dataset.id;
+      input.value = item.querySelector("strong").textContent;
+      hideSuggestions();
+      Router.go(`#/item/${qid}`);
+    });
+
+    // Keyboard navigation
+    input.addEventListener("keydown", (e) => {
+      const items = Array.from(suggestionsBox.querySelectorAll(".suggestion[data-id]"));
+      if (!items.length || suggestionsBox.style.display === "none") return;
+
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          activeIndex = (activeIndex + 1) % items.length;
+          updateHighlight(items);
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          activeIndex = (activeIndex - 1 + items.length) % items.length;
+          updateHighlight(items);
+          break;
+        case "Enter":
+          if (activeIndex >= 0 && activeIndex < items.length) {
+            e.preventDefault();
+            const selected = items[activeIndex];
+            const qid = selected.dataset.id;
+            input.value = selected.querySelector("strong").textContent;
+            hideSuggestions();
+            Router.go(`#/item/${qid}`);
+          }
+          break;
+        case "Escape":
+          hideSuggestions();
+          break;
+      }
+    });
+
+    // Hide when clicking elsewhere
+    document.addEventListener("click", (e) => {
+      if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
+        hideSuggestions();
+      }
+    });
+
+    // Helpers
+    function updateHighlight(items) {
+      items.forEach((el, i) => el.classList.toggle("active", i === activeIndex));
+      const active = items[activeIndex];
+      if (active) active.scrollIntoView({ block: "nearest" });
+    }
+
+    function hideSuggestions() {
       suggestionsBox.innerHTML = "";
       suggestionsBox.style.display = "none";
-      return;
+      activeIndex = -1;
     }
-
-    timer = setTimeout(async () => {
-      try {
-        const results = await API.searchEntities(q);
-        if (q !== latestQuery) return; // ignore stale responses
-
-        if (!results.length) {
-          suggestionsBox.innerHTML = "<div class='suggestion'><em>No results</em></div>";
-          suggestionsBox.style.display = "block";
-          return;
-        }
-
-        suggestionsBox.innerHTML = results
-          .map(r => `<div class="suggestion" data-id="${r.id}">
-                       <strong>${r.label || r.id}</strong><br>
-                       <small>${r.description || ""}</small>
-                     </div>`)
-          .join("");
-        suggestionsBox.style.display = "block";
-      } catch (err) {
-        console.error("Live search error:", err);
-      }
-    }, 350); // debounce delay
-  });
-
-  // Click selection
-  suggestionsBox.addEventListener("click", (e) => {
-    const item = e.target.closest(".suggestion[data-id]");
-    if (!item) return;
-    const qid = item.dataset.id;
-    input.value = item.querySelector("strong").textContent;
-    hideSuggestions();
-    Router.go(`#/item/${qid}`);
-  });
-
-  // Keyboard navigation
-  input.addEventListener("keydown", (e) => {
-    const items = Array.from(suggestionsBox.querySelectorAll(".suggestion[data-id]"));
-    if (!items.length || suggestionsBox.style.display === "none") return;
-
-    switch (e.key) {
-      case "ArrowDown":
-        e.preventDefault();
-        activeIndex = (activeIndex + 1) % items.length;
-        updateHighlight(items);
-        break;
-      case "ArrowUp":
-        e.preventDefault();
-        activeIndex = (activeIndex - 1 + items.length) % items.length;
-        updateHighlight(items);
-        break;
-      case "Enter":
-        if (activeIndex >= 0 && activeIndex < items.length) {
-          e.preventDefault();
-          const selected = items[activeIndex];
-          const qid = selected.dataset.id;
-          input.value = selected.querySelector("strong").textContent;
-          hideSuggestions();
-          Router.go(`#/item/${qid}`);
-        }
-        break;
-      case "Escape":
-        hideSuggestions();
-        break;
-    }
-  });
-
-  // Hide when clicking elsewhere
-  document.addEventListener("click", (e) => {
-    if (!input.contains(e.target) && !suggestionsBox.contains(e.target)) {
-      hideSuggestions();
-    }
-  });
-
-  // Helpers
-  function updateHighlight(items) {
-    items.forEach((el, i) => el.classList.toggle("active", i === activeIndex));
-    const active = items[activeIndex];
-    if (active) active.scrollIntoView({ block: "nearest" });
   }
 
-  function hideSuggestions() {
-    suggestionsBox.innerHTML = "";
-    suggestionsBox.style.display = "none";
-    activeIndex = -1;
-  }
-}
-
+  // ----------------------------------------------------------
+  // Routing
+  // ----------------------------------------------------------
   function initRoutes() {
-  Router.add(/^\/$/, renderHome);
-  Router.add(/^\/search(?:\?.*)?$/, renderSearch);  // ← accept ?q=...
-  Router.add(/^\/item\/(Q\d+)$/, renderItem);
-  Router.parse();
-}
+    Router.add(/^\/$/, renderHome);
+    Router.add(/^\/search(?:\?.*)?$/, renderSearch);
+    Router.add(/^\/item\/(Q\d+)$/, renderItem);
+    Router.parse();
+  }
 
+  // ----------------------------------------------------------
+  // Startup
+  // ----------------------------------------------------------
   function start() {
     if (!localStorage.getItem("lang")) Utils.setLang(CONFIG.DEFAULT_LANG);
     setActiveLangButton();
@@ -200,6 +233,6 @@ function initLiveSearch() {
   }
 
   document.addEventListener("DOMContentLoaded", start);
-
   return { renderHome };
+
 })();
