@@ -7,11 +7,11 @@ window.Templates = (() => {
     if (!value) return "";
 
     switch (datatype) {
-      case "wikibase-item":
-        // Linked item (use label if available)
-        return labelMap[value]
-          ? `<a href="#/item/${value}">${labelMap[value]}</a>`
-          : `<a href="#/item/${value}">${value}</a>`;
+  case "wikibase-item":
+  return labelMap[value]
+    ? `<a href="#/item/${value}">${labelMap[value]}</a>`
+    : `<a href="#/item/${value}">${value}</a>`;
+
 
       case "external-id":
         // Try to detect known identifier types and link to resolvers
