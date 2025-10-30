@@ -7,45 +7,46 @@ window.API = (() => {
   // JSONP TRANSPORT (used because SNARC Wikibase is not CORS-enabled)
   // ============================================================
   async function apiGet(params) {
-    const u = new URL(CONFIG.ACTION_API);
-    const callbackName = "jsonp_cb_" + Math.random().toString(36).slice(2);
+  const u = new URL(CONFIG.ACTION_API);
+  const callbackName = "jsonp_cb_" + Math.random().toString(36).slice(2);
 
-    return new Promise((resolve, reject) => {
-      const script = document.createElement("script");
+  return new Promise((resolve, reject) => {
+    const script = document.createElement("script");
+    const timeout = setTimeout(() => {
+      cleanup();
+      reject(new Error("JSONP request timed out"));
+    }, 10000);
 
-      // Timeout safeguard (10s)
-      const timeout = setTimeout(() => {
-        cleanup();
-        reject(new Error("JSONP request timed out"));
-      }, 10000);
+    function cleanup() {
+      clearTimeout(timeout);
+      if (window[callbackName]) delete window[callbackName];
+      if (script.parentNode) script.parentNode.removeChild(script);
+    }
 
-      function cleanup() {
-        clearTimeout(timeout);
-        if (window[callbackName]) delete window[callbackName];
-        if (script.parentNode) script.parentNode.removeChild(script);
+    window[callbackName] = (data) => {
+      cleanup();
+      if (!data) return reject(new Error("Empty JSONP response"));
+      if (data.error) return reject(new Error(data.error.info || "API error"));
+      resolve(data);
+    };
+
+    // --- Build query string safely ---
+    for (const [k, v] of Object.entries({ ...baseParams, ...params })) {
+      if (v !== undefined && v !== null && v !== "") {
+        u.searchParams.set(k, v);
       }
+    }
+    u.searchParams.set("callback", callbackName);
 
-      // Define the callback that JSONP will call
-      window[callbackName] = (data) => {
-        cleanup();
-        if (!data) return reject(new Error("Empty response"));
-        if (data.error) return reject(new Error(data.error.info || "API error"));
-        resolve(data);
-      };
+    script.src = u.toString();
+    script.onerror = () => {
+      cleanup();
+      reject(new Error("JSONP request failed"));
+    };
 
-      // Build query string
-      Object.entries({ ...baseParams, ...params, callback: callbackName })
-        .forEach(([k, v]) => u.searchParams.set(k, v));
-
-      // Attach <script> to start the JSONP request
-      script.src = u.toString();
-      script.onerror = () => {
-        cleanup();
-        reject(new Error("JSONP request failed"));
-      };
-      document.body.appendChild(script);
-    });
-  }
+    document.body.appendChild(script);
+  });
+}
 
   // ============================================================
   // CORE API FUNCTIONS
