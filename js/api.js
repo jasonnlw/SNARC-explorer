@@ -54,12 +54,18 @@ window.API = (() => {
   // --- Get full entities by QID(s) ---
   async function getEntities(ids, languages = Utils.getLang()) {
     if (!ids || (Array.isArray(ids) && !ids.length)) return {};
-    const data = await apiGet({
-      action: "wbgetentities",
-      ids: Array.isArray(ids) ? ids.join("|") : ids,
-      props: "labels|descriptions|claims",
-      languages
-    });
+    try {
+  const data = await apiGet({
+    action: "wbgetentities",
+    ids: Array.isArray(ids) ? ids.join("|") : ids,
+    props: "labels|descriptions|claims",
+    languages
+  });
+  return data.entities || {};
+} catch (err) {
+  console.error("getEntities failed:", err);
+  return {};
+}
     return data.entities || {};
   }
 
