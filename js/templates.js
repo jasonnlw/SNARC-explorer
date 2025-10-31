@@ -1,6 +1,5 @@
 window.Templates = (() => {
-
-  // --- Helpers ---------------------------------------------------------------
+  // ---------- Helpers ----------
   function normalizeQid(value) {
     if (!value) return null;
     const m = String(value).match(/Q\d+/i);
@@ -11,23 +10,42 @@ window.Templates = (() => {
     return dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
   }
 
-  // --- Value renderer --------------------------------------------------------
+  // Try to find an existing PID→pattern map the project already defines in this file
+  function getUrlPattern(pid) {
+    const sources = [
+      // common names people use
+      window.URL_PATTERNS,
+      window.ID_URL,
+      window.ID_URLS,
+      window.PROPERTY_URLS,
+      window.ID_URL_PATTERNS,
+      window.EXTERNAL_ID_PATTERNS
+    ];
+    for (const src of sources) {
+      if (src && typeof src === "object" && src[pid]) return String(src[pid]);
+    }
+    return null;
+  }
+
+  // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-    // QID values → linked with label
+    // QID values → link to entity with label
     const qid = normalizeQid(value);
     if (qid) {
       const label = labelMap[qid] || qid;
       return `<a href="#/item/${qid}">${label}</a>`;
     }
 
+    // Use propInfo only for label/known datatype fallbacks; links are pattern-driven
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
-    // 📸 Commons image thumbnails (P31)
-    if (pid === "P31") {
+    // 📸 Wikimedia Commons image thumbnails (P50)
+    if (pid === "P50") {
       const filename = String(value).replace(/^File:/i, "").trim();
+      if (!filename) return "";
       const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
       const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
       return `
@@ -38,7 +56,7 @@ window.Templates = (() => {
       `;
     }
 
-    // 🗺️ Coordinates placeholders (P26)
+    // 🗺️ Coordinates placeholder (P26) → actual Leaflet map is created in postRender()
     if (pid === "P26") {
       const [latStr, lonStr] = String(value).split(",");
       const lat = Number(latStr), lon = Number(lonStr);
@@ -52,34 +70,33 @@ window.Templates = (() => {
       `;
     }
 
-    // 🔗 External identifiers → hyperlink using url_pattern or fallback
-    if (dtNorm === "externalid" || dtNorm === "external-id") {
-      const pattern = propInfo?.url_pattern?.trim();
+    // 🔗 External identifiers → hyperlink whenever a PID pattern exists (datatype not required)
+    const pattern = getUrlPattern(pid);
+    if (pattern) {
       const encoded = encodeURIComponent(String(value).trim());
-      if (pattern) {
-        const url = pattern.replace(/\$1/g, encoded);
-        return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
-      }
-      // No pattern → show as code (not link)
-      return `<code>${String(value)}</code>`;
+      const url = pattern.replace(/\$1/g, encoded);
+      return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
     }
 
-    // 🔗 URLs
+    // 🔗 URLs (native)
     if (dtNorm === "url") {
-      return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
+      const v = String(value).trim();
+      return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
     }
 
-    // ⏱ Times / Quantities / Default
+    // ⏱ Times / quantities / default
     if (dtNorm === "time") return Utils.formatTime(value);
-    if (dtNorm === "quantity")
-      return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
+    if (dtNorm === "quantity") {
+      const s = String(value);
+      return s.startsWith("+") ? s.slice(1) : s;
+    }
 
     return String(value);
   }
 
-  // --- Property rows ---------------------------------------------------------
+  // ---------- Property rows ----------
   function renderClaimRow(pid, statements, labelMap, lang) {
-    const cleanPid = pid.replace(/^.*[\/#]/, "");
+    const cleanPid = pid.replace(/^.*[\/#]/, ""); // ensure plain "P123"
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
     const label = propInfo
       ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
@@ -95,7 +112,7 @@ window.Templates = (() => {
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
   }
 
-  // --- Main render -----------------------------------------------------------
+  // ---------- Main render ----------
   function renderGeneric(entity, lang, labelMap = {}) {
     if (!entity) return `<p>Entity not found.</p>`;
 
@@ -118,10 +135,12 @@ window.Templates = (() => {
     `;
   }
 
-  // --- After-render hook: initialize Leaflet maps ----------------------------
+  // ---------- After-render: initialize Leaflet maps (safe, non-blocking) ----------
   function postRender() {
+    // Keep the app functional even if Leaflet wasn't loaded
     if (typeof L === "undefined") return;
 
+    // Modal container (once)
     let modal = document.getElementById("map-modal");
     if (!modal) {
       document.body.insertAdjacentHTML("beforeend", `
@@ -135,8 +154,13 @@ window.Templates = (() => {
       document.getElementById("map-close").onclick = () => {
         document.getElementById("map-modal").style.display = "none";
       };
+      // Click outside to close
+      document.getElementById("map-modal").addEventListener("click", (e) => {
+        if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
+      });
     }
 
+    // Initialize all thumbnails
     document.querySelectorAll(".map-thumb").forEach(el => {
       const lat = Number(el.dataset.lat);
       const lon = Number(el.dataset.lon);
@@ -144,6 +168,7 @@ window.Templates = (() => {
       const canvas = document.getElementById(id);
       if (!canvas) return;
 
+      // Thumb style (match image)
       canvas.style.width = "300px";
       canvas.style.height = "200px";
       canvas.style.borderRadius = "8px";
@@ -160,9 +185,11 @@ window.Templates = (() => {
         keyboard: false,
         tap: false
       }).setView([lat, lon], 9);
+
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
       L.marker([lat, lon]).addTo(map);
 
+      // Expand to modal on click
       el.addEventListener("click", () => {
         const modalEl = document.getElementById("map-modal");
         modalEl.style.display = "block";
