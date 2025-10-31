@@ -8,7 +8,7 @@ window.Templates = (() => {
   }
 
   function normalizeDatatype(dt) {
-    return dt ? String(dt).toLowerCase().replace(/_/g, "-") : "";
+    return dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
   }
 
   // --- Value renderer --------------------------------------------------------
@@ -38,15 +38,13 @@ window.Templates = (() => {
       `;
     }
 
-    // 🗺️ Coordinates placeholders (P26) → actual Leaflet map is created in postRender()
+    // 🗺️ Coordinates placeholders (P26)
     if (pid === "P26") {
-      // value format from Utils.firstValue is "lat,lon"
       const [latStr, lonStr] = String(value).split(",");
       const lat = Number(latStr), lon = Number(lonStr);
       if (!isFinite(lat) || !isFinite(lon)) return String(value);
 
       const id = `map-${Math.random().toString(36).slice(2)}`;
-      // data attributes are used by postRender to initialize Leaflet
       return `
         <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
           <div id="${id}" class="map-thumb-canvas"></div>
@@ -54,22 +52,24 @@ window.Templates = (() => {
       `;
     }
 
-    // External identifiers → hyperlink using pattern
+    // 🔗 External identifiers → hyperlink using url_pattern or fallback
     if (dtNorm === "externalid" || dtNorm === "external-id") {
-      const pattern = propInfo?.url_pattern;
+      const pattern = propInfo?.url_pattern?.trim();
+      const encoded = encodeURIComponent(String(value).trim());
       if (pattern) {
-        const url = pattern.replace("$1", encodeURIComponent(String(value)));
+        const url = pattern.replace(/\$1/g, encoded);
         return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
       }
+      // No pattern → show as code (not link)
       return `<code>${String(value)}</code>`;
     }
 
-    // URLs
+    // 🔗 URLs
     if (dtNorm === "url") {
       return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
     }
 
-    // Times / quantities / default
+    // ⏱ Times / Quantities / Default
     if (dtNorm === "time") return Utils.formatTime(value);
     if (dtNorm === "quantity")
       return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
@@ -79,7 +79,7 @@ window.Templates = (() => {
 
   // --- Property rows ---------------------------------------------------------
   function renderClaimRow(pid, statements, labelMap, lang) {
-    const cleanPid = pid.replace(/^.*[\/#]/, ""); // ensure "P123"
+    const cleanPid = pid.replace(/^.*[\/#]/, "");
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
     const label = propInfo
       ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
@@ -118,12 +118,10 @@ window.Templates = (() => {
     `;
   }
 
-  // --- After-render hook: initialize Leaflet maps & modal --------------------
+  // --- After-render hook: initialize Leaflet maps ----------------------------
   function postRender() {
-    // Bail out if Leaflet didn't load (keeps site working without maps)
     if (typeof L === "undefined") return;
 
-    // Create a single modal container if not present
     let modal = document.getElementById("map-modal");
     if (!modal) {
       document.body.insertAdjacentHTML("beforeend", `
@@ -139,7 +137,6 @@ window.Templates = (() => {
       };
     }
 
-    // Initialize all thumbnails
     document.querySelectorAll(".map-thumb").forEach(el => {
       const lat = Number(el.dataset.lat);
       const lon = Number(el.dataset.lon);
@@ -147,14 +144,12 @@ window.Templates = (() => {
       const canvas = document.getElementById(id);
       if (!canvas) return;
 
-      // Style (same footprint as image thumb)
       canvas.style.width = "300px";
       canvas.style.height = "200px";
       canvas.style.borderRadius = "8px";
       canvas.style.boxShadow = "0 2px 5px rgba(0,0,0,0.15)";
       canvas.style.margin = "4px";
 
-      // Create non-interactive thumb
       const map = L.map(id, {
         zoomControl: false,
         attributionControl: false,
@@ -168,15 +163,11 @@ window.Templates = (() => {
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
       L.marker([lat, lon]).addTo(map);
 
-      // Clicking the thumb opens a big, interactive map
       el.addEventListener("click", () => {
         const modalEl = document.getElementById("map-modal");
         modalEl.style.display = "block";
-        // Create or re-create large map fresh each time to avoid sizing bugs
         const largeContainer = document.getElementById("map-large");
         largeContainer.innerHTML = "";
-        largeContainer.style.width = "100%";
-        largeContainer.style.height = "500px";
         const bigMap = L.map("map-large").setView([lat, lon], 13);
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(bigMap);
         L.marker([lat, lon]).addTo(bigMap);
