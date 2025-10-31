@@ -4,42 +4,46 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SNARC Explorer</title>
-  <link rel="stylesheet" href="assets/styles.css">
-  
-  <!-- Leaflet for interactive maps -->
-<link
-  rel="stylesheet"
-  href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-  integrity="sha256-sA+4oGvFMh5nw4mTRafjGpBkNvLNz6wrxqm8q3Lmq3I="
-  crossorigin=""
-/>
-<script
-  src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-  integrity="sha256-o9N1jL1V9z9P5r7bZ9NjDljdDkT0y6p6YZIu5PwQ0vM="
-  crossorigin=""
-></script>
 
+  <!-- Site styles -->
+  <link rel="stylesheet" href="assets/styles.css">
+
+  <!-- ✅ Leaflet for interactive maps (integrity removed to avoid SRI blocking) -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    crossorigin="anonymous"
+  />
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    crossorigin="anonymous"
+  ></script>
 </head>
+
 <body>
   <header>
-  <a href="#/" class="brand">SNARC Explorer</a>
+    <a href="#/" class="brand">SNARC Explorer</a>
 
-  <!-- 🔍 Search form with dropdown container -->
-  <form id="search-form" role="search" autocomplete="off" style="position: relative;">
-    <input id="search-input" type="search" placeholder="Search…" />
-    <!-- ▼ Suggestions dropdown will appear here -->
-    <div id="search-suggestions" class="suggestions"></div>
-  </form>
+    <!-- 🔍 Search form with dropdown container -->
+    <form id="search-form" role="search" autocomplete="off" style="position: relative;">
+      <input id="search-input" type="search" placeholder="Search…" />
+      <!-- ▼ Suggestions dropdown will appear here -->
+      <div id="search-suggestions" class="suggestions"></div>
+    </form>
 
-  <!-- 🌐 Language switch -->
-  <div class="lang-switch">
-    <button data-lang="en">EN</button>
-    <button data-lang="cy">CY</button>
-  </div>
-</header>
+    <!-- 🌐 Language switch -->
+    <div class="lang-switch">
+      <button data-lang="en">EN</button>
+      <button data-lang="cy">CY</button>
+    </div>
+  </header>
+
   <main id="app" aria-live="polite"></main>
-  <footer><small>Static client on GitHub Pages · Data from SNARC Wikibase</small></footer>
+  <footer>
+    <small>Static client on GitHub Pages · Data from SNARC Wikibase</small>
+  </footer>
 
+  <!-- JS modules -->
   <script src="js/config.js"></script>
   <script src="js/properties.js"></script>
   <script src="js/utils.js"></script>
