@@ -264,19 +264,23 @@ if (qidMatch) {
       });
     });
   }
-// ---------- 🧬 Family tree generator ----------
+// ---------- 🧬 Family tree generator (fixed) ----------
 async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
   if (depth > maxDepth || visited.has(rootQid)) return null;
   visited.add(rootQid);
 
+  // ✅ FIX: API.getEntities already returns { [qid]: entity }, so no extra nesting
   const entities = await API.getEntities(rootQid, lang);
-  const entity = entities[rootQid];
-  if (!entity) return null;
+  const entity = entities ? entities[rootQid] : null;
+  if (!entity) {
+    console.warn("FamilyTree: entity not found for", rootQid);
+    return null;
+  }
 
-  const label = entity.labels?.[lang]?.value || entity.id;
+  const label = entity.labels?.[lang]?.value || entity.labels?.en?.value || rootQid;
   const claims = entity.claims || {};
 
-  // Extract birth & death years if present
+  // Extract birth & death years
   const birth = Utils.formatTime(Utils.firstValue(claims["P17"]?.[0])) || "";
   const death = Utils.formatTime(Utils.firstValue(claims["P18"]?.[0])) || "";
   const dates = birth || death ? `(${birth}–${death})` : "";
@@ -286,34 +290,34 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   const imgClaim = claims["P31"]?.[0] || claims["P50"]?.[0];
   if (imgClaim) {
     const v = Utils.firstValue(imgClaim);
-    if (typeof v === "string") {
-      const id = v.split("/")[1] || v;
+    if (typeof v === "string" && v.includes("/")) {
+      const id = v.split("/")[1];
       thumb = `<img src="https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,150/0/default.jpg" alt="${label}">`;
     }
   }
 
   const node = {
     id: rootQid,
-    label: label,
-    dates: dates,
-    thumb: thumb,
+    label,
+    dates,
+    thumb,
     parents: [],
-    children: [],
+    children: []
   };
 
-  // Parents
+  // 🔼 Parents (P53 father, P55 mother)
   for (const pid of ["P53", "P55"]) {
     const rels = claims[pid] || [];
     for (const stmt of rels) {
       const q = Utils.firstValue(stmt);
       if (q && /^Q\d+$/.test(q)) {
-        const childNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-        if (childNode) node.parents.push(childNode);
+        const parentNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+        if (parentNode) node.parents.push(parentNode);
       }
     }
   }
 
-  // Children
+  // 🔽 Children (P54)
   const children = claims["P54"] || [];
   for (const stmt of children) {
     const q = Utils.firstValue(stmt);
