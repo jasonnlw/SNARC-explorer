@@ -258,7 +258,11 @@ if (mediaStmts && mediaStmts.length) {
 const qidMatch = location.hash.match(/Q\d+/);
 if (qidMatch) {
   const qid = qidMatch[0];
-  renderFamilyTree(qid, Utils.getLang()).then(tree => drawFamilyTree(tree));
+  console.log("FamilyTree: building for", qid);
+renderFamilyTree(qid, Utils.getLang()).then(tree => {
+  console.log("FamilyTree result:", tree);
+  drawFamilyTree(tree);
+});
 }
 
       });
