@@ -25,6 +25,95 @@ window.Templates = (() => {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
+    // --- 📸 Wikimedia Commons image (P50) ---
+    if (pid === "P50") {
+      const filename = value.replace(/^File:/i, "").trim();
+      const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
+      const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
+      return `
+        <a href="${filePage}" target="_blank" rel="noopener">
+          <img src="${thumbUrl}" alt="${filename}" loading="lazy"
+            style="max-width:300px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.15); margin:4px;">
+        </a>
+      `;
+    }
+
+    // --- 🗺️ Coordinates (P26) ---
+    if (pid === "P26") {
+      const [lat, lon] = value.split(",").map(Number);
+      const mapId = `map-${Math.random().toString(36).slice(2)}`;
+      const modalId = `modal-${mapId}`;
+      // static container for Leaflet map
+      setTimeout(() => {
+        const map = L.map(mapId, {
+          zoomControl: false,
+          attributionControl: false,
+          dragging: false,
+          scrollWheelZoom: false
+        }).setView([lat, lon], 9);
+        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          maxZoom: 19
+        }).addTo(map);
+        L.marker([lat, lon]).addTo(map);
+      }, 100); // ensure element exists
+
+      // modal popup for larger map
+      const modalHTML = `
+        <div id="${modalId}" class="map-modal">
+          <div class="map-modal-content">
+            <div id="${mapId}-large" class="map-large"></div>
+            <button class="map-close">&times;</button>
+          </div>
+        </div>
+      `;
+
+      // attach modal after rendering
+      setTimeout(() => {
+        if (!document.getElementById(modalId)) {
+          document.body.insertAdjacentHTML("beforeend", modalHTML);
+          const modalMap = L.map(`${mapId}-large`).setView([lat, lon], 13);
+          L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(modalMap);
+          L.marker([lat, lon]).addTo(modalMap);
+          document.querySelector(`#${modalId} .map-close`).onclick = () => {
+            document.getElementById(modalId).style.display = "none";
+          };
+        }
+      }, 200);
+
+      return `
+        <div class="map-thumb" onclick="document.getElementById('${modalId}').style.display='block'">
+          <div id="${mapId}" style="width:300px;height:200px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;"></div>
+        </div>
+      `;
+    }
+
+    // ---- External IDs ----
+    if (dtNorm === "externalid" || dtNorm === "external-id") {
+      const v = encodeURIComponent(String(value));
+      const pattern = propInfo?.url_pattern;
+      const url = pattern ? pattern.replace("$1", v) : null;
+      return url
+        ? `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`
+        : `<code>${String(value)}</code>`;
+    }
+
+    // ---- URLs ----
+    if (dtNorm === "url") {
+      return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
+    }
+
+    // ---- Times, quantities, etc. ----
+    if (dtNorm === "time") return Utils.formatTime(value);
+    if (dtNorm === "quantity")
+      return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
+
+    return String(value);
+  }
+
+
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
+
     // --- 📸 Special case: Wikimedia Commons file (P31) ---
     if (pid === "P31") {
       // Handle either plain filename or URL
