@@ -121,20 +121,32 @@ window.Templates = (() => {
   // --- Extract coordinates (P26) separately ---
   let mapHTML = "";
   const coordStmts = claims["P26"];
+  console.log("P26 raw claim:", coordStmts);
+
   if (coordStmts && coordStmts.length) {
-    const v = Utils.firstValue(coordStmts[0]);
+    const first = coordStmts[0];
+    const snak = first.mainsnak;
+    const dv = snak?.datavalue;
     let lat = null, lon = null;
 
-    if (typeof v === "string" && v.includes(",")) {
-      [lat, lon] = v.split(",").map(Number);
-    } else if (typeof v === "object" && "latitude" in v && "longitude" in v) {
-      lat = v.latitude;
-      lon = v.longitude;
-    } else if (typeof v === "string" && v.includes("/")) {
-      const parts = v.split(/[\/,]/);
-      lat = Number(parts[0].replace(/[^\d.-]/g, ""));
-      lon = Number(parts[1].replace(/[^\d.-]/g, ""));
+    if (dv?.type === "globecoordinate" && dv.value) {
+      lat = dv.value.latitude;
+      lon = dv.value.longitude;
+    } else {
+      const v = Utils.firstValue(first);
+      if (typeof v === "string" && v.includes(",")) {
+        [lat, lon] = v.split(",").map(Number);
+      } else if (typeof v === "object" && "latitude" in v && "longitude" in v) {
+        lat = v.latitude;
+        lon = v.longitude;
+      } else if (typeof v === "string" && v.includes("/")) {
+        const parts = v.split(/[\/,]/);
+        lat = Number(parts[0].replace(/[^\d.-]/g, ""));
+        lon = Number(parts[1].replace(/[^\d.-]/g, ""));
+      }
     }
+
+    console.log("Detected coordinates:", lat, lon);
 
     if (isFinite(lat) && isFinite(lon)) {
       const id = `map-${Math.random().toString(36).slice(2)}`;
@@ -147,7 +159,7 @@ window.Templates = (() => {
 
   // --- Build property rows (excluding P26) ---
   const rows = Object.keys(claims)
-    .filter(pid => pid !== "P26") // skip coordinates
+    .filter(pid => pid !== "P26")
     .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
 
   return `
