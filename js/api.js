@@ -43,7 +43,7 @@ window.API = (() => {
       cleanup();
       reject(new Error("JSONP request failed"));
     };
-
+    console.log("Injecting JSONP script:", u.toString());
     document.body.appendChild(script);
   });
 }
