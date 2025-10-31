@@ -41,32 +41,6 @@ window.Templates = (() => {
     // ---- External IDs ----
     if (dtNorm === "externalid" || dtNorm === "external-id") {
       const v = encodeURIComponent(String(value));
-      const pattern = propInfo?.url_pattern;
-      const url = pattern ? pattern.replace("$1", v) : null;
-      return url
-        ? `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`
-        : `<code>${String(value)}</code>`;
-    }
-
-    // ---- URLs ----
-    if (dtNorm === "url") {
-      return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
-    }
-
-    // ---- Times, quantities, etc. ----
-    if (dtNorm === "time") return Utils.formatTime(value);
-    if (dtNorm === "quantity")
-      return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
-
-    return String(value);
-  }
-
-    const propInfo = window.PROPERTY_INFO?.[pid];
-    const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
-
-    // ---- External IDs ----
-    if (dtNorm === "externalid" || dtNorm === "external-id") {
-      const v = encodeURIComponent(String(value));
       let url = "";
 
       // Check if pattern exists in property info
@@ -152,4 +126,5 @@ window.Templates = (() => {
   }
 
   return { renderGeneric };
+
 })();
