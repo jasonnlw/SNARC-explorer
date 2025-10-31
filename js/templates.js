@@ -111,18 +111,16 @@ window.Templates = (() => {
   }
 
   // ---------- Generic entity render ----------
-  function renderGeneric(entity, lang, labelMap = {}) {
+function renderGeneric(entity, lang, labelMap = {}) {
   if (!entity) return `<p>Entity not found.</p>`;
 
   const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
   const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
   const claims = entity.claims || {};
 
-  // --- Extract coordinates (P26) separately ---
+  // --- 📍 Extract coordinates (P26) ---
   let mapHTML = "";
   const coordStmts = claims["P26"];
-  console.log("P26 raw claim:", coordStmts);
-
   if (coordStmts && coordStmts.length) {
     const first = coordStmts[0];
     const snak = first.mainsnak;
@@ -132,21 +130,7 @@ window.Templates = (() => {
     if (dv?.type === "globecoordinate" && dv.value) {
       lat = dv.value.latitude;
       lon = dv.value.longitude;
-    } else {
-      const v = Utils.firstValue(first);
-      if (typeof v === "string" && v.includes(",")) {
-        [lat, lon] = v.split(",").map(Number);
-      } else if (typeof v === "object" && "latitude" in v && "longitude" in v) {
-        lat = v.latitude;
-        lon = v.longitude;
-      } else if (typeof v === "string" && v.includes("/")) {
-        const parts = v.split(/[\/,]/);
-        lat = Number(parts[0].replace(/[^\d.-]/g, ""));
-        lon = Number(parts[1].replace(/[^\d.-]/g, ""));
-      }
     }
-
-    console.log("Detected coordinates:", lat, lon);
 
     if (isFinite(lat) && isFinite(lon)) {
       const id = `map-${Math.random().toString(36).slice(2)}`;
@@ -157,9 +141,38 @@ window.Templates = (() => {
     }
   }
 
-  // --- Build property rows (excluding P26) ---
+  // --- 🖼️ Extract IIIF images (P50) ---
+  let galleryHTML = "";
+  const mediaStmts = claims["P50"];
+  if (mediaStmts && mediaStmts.length) {
+    const images = mediaStmts.map(stmt => {
+      const v = Utils.firstValue(stmt);
+      if (!v || typeof v !== "string") return "";
+
+      // extract numeric part from "10107/123456"
+      const parts = v.split("/");
+      const handle = parts.join("/");
+      const id = parts[1];
+      if (!id) return "";
+
+      const manifestUrl = `https://damsssl.llgc.org.uk/iiif/2.0/${id}/manifest.json`;
+      const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/${id}/full/!400,400/0/default.jpg`;
+      const rootUrl = `https://hdl.handle.net/${handle}`;
+
+      return `
+        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item">
+          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
+        </a>`;
+    }).filter(Boolean);
+
+    if (images.length) {
+      galleryHTML = `<div class="gallery">${images.join("")}</div>`;
+    }
+  }
+
+  // --- Build property rows (exclude P26 & P50) ---
   const rows = Object.keys(claims)
-    .filter(pid => pid !== "P26")
+    .filter(pid => pid !== "P26" && pid !== "P50")
     .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
 
   return `
@@ -167,6 +180,7 @@ window.Templates = (() => {
       <h2>${title}</h2>
       ${desc ? `<p>${desc}</p>` : ""}
       ${mapHTML}
+      ${galleryHTML}
       <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
     </section>
   `;
