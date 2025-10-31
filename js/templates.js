@@ -112,21 +112,53 @@ window.Templates = (() => {
 
   // ---------- Generic entity render ----------
   function renderGeneric(entity, lang, labelMap = {}) {
-    if (!entity) return `<p>Entity not found.</p>`;
-    const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
-    const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
-    const claims = entity.claims || {};
+  if (!entity) return `<p>Entity not found.</p>`;
 
-    const rows = Object.keys(claims).map(pid =>
-      renderClaimRow(pid, claims[pid], labelMap, lang)
-    );
+  const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
+  const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
+  const claims = entity.claims || {};
 
-    return `<section class="card">
-              <h2>${title}</h2>
-              ${desc ? `<p>${desc}</p>` : ""}
-              <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
-            </section>`;
+  // --- Extract coordinates (P26) separately ---
+  let mapHTML = "";
+  const coordStmts = claims["P26"];
+  if (coordStmts && coordStmts.length) {
+    const v = Utils.firstValue(coordStmts[0]);
+    let lat = null, lon = null;
+
+    if (typeof v === "string" && v.includes(",")) {
+      [lat, lon] = v.split(",").map(Number);
+    } else if (typeof v === "object" && "latitude" in v && "longitude" in v) {
+      lat = v.latitude;
+      lon = v.longitude;
+    } else if (typeof v === "string" && v.includes("/")) {
+      const parts = v.split(/[\/,]/);
+      lat = Number(parts[0].replace(/[^\d.-]/g, ""));
+      lon = Number(parts[1].replace(/[^\d.-]/g, ""));
+    }
+
+    if (isFinite(lat) && isFinite(lon)) {
+      const id = `map-${Math.random().toString(36).slice(2)}`;
+      mapHTML = `
+        <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
+          <div id="${id}" class="map-thumb-canvas"></div>
+        </div>`;
+    }
   }
+
+  // --- Build property rows (excluding P26) ---
+  const rows = Object.keys(claims)
+    .filter(pid => pid !== "P26") // skip coordinates
+    .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
+
+  return `
+    <section class="card">
+      <h2>${title}</h2>
+      ${desc ? `<p>${desc}</p>` : ""}
+      ${mapHTML}
+      <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
+    </section>
+  `;
+}
 
   // ---------- Leaflet map initializer ----------
   function postRender() {
