@@ -217,7 +217,7 @@ if (mediaStmts && mediaStmts.length) {
       });
     }
 
-    document.querySelectorAll(".map-thumb").forEach(el => {
+        document.querySelectorAll(".map-thumb").forEach(el => {
       const lat = Number(el.dataset.lat);
       const lon = Number(el.dataset.lon);
       const id  = el.dataset.mapid;
@@ -254,18 +254,21 @@ if (mediaStmts && mediaStmts.length) {
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(bigMap);
         L.marker([lat, lon]).addTo(bigMap);
         setTimeout(() => bigMap.invalidateSize(), 100);
-});
-      // 🧬 Always render the family tree after maps are drawn
-  const qidMatch = location.hash.match(/Q\d+/);
-  if (qidMatch) {
-    const qid = qidMatch[0];
-    console.log("FamilyTree: building for", qid);
-    renderFamilyTree(qid, Utils.getLang()).then(tree => {
-      console.log("FamilyTree result:", tree);
-      drawFamilyTree(tree);
+      });
     });
+
+    // 🧬 Always render the family tree after maps are drawn
+    const qidMatch = location.hash.match(/Q\d+/);
+    if (qidMatch) {
+      const qid = qidMatch[0];
+      console.log("FamilyTree: building for", qid);
+      renderFamilyTree(qid, Utils.getLang()).then(tree => {
+        console.log("FamilyTree result:", tree);
+        drawFamilyTree(tree);
+      });
+    }
   }
-}
+
       });
     });
   }
