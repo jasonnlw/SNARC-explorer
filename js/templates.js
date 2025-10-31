@@ -198,6 +198,7 @@ if (mediaStmts && mediaStmts.length) {
 
   // ---------- Leaflet map initializer ----------
   function postRender() {
+    console.log("✅ postRender triggered");
     if (typeof L === "undefined") return;
 
     let modal = document.getElementById("map-modal");
