@@ -1,4 +1,24 @@
 window.Templates = (() => {
+
+  // ---------- Identifier URL patterns ----------
+  const ID_URL = {
+    P10: "https://viaf.org/viaf/$1",
+    P102: "https://id.library.wales/$1",
+    P107: "https://id.library.wales/$1",
+    P108: "https://snarc-llgc.wikibase.cloud/wiki/$1",
+    P11: "https://id.loc.gov/authorities/$1",
+    P12: "https://archives.library.wales/index.php/$1",
+    P5: "https://biography.wales/article/$1",
+    P6: "https://bywgraffiadur.cymru/article/$1",
+    P68: "https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=$1",
+    P69: "https://coflein.gov.uk/en/site/$1",
+    P8: "https://id.loc.gov/vocabulary/iso639-1/$1",
+    P83: "https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/$1",
+    P9: "https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A$1",
+    P91: "https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/$1",
+    P97: "https://discovery.nationalarchives.gov.uk/details/c/$1"
+  };
+
   // ---------- Helpers ----------
   function normalizeQid(value) {
     if (!value) return null;
@@ -10,35 +30,17 @@ window.Templates = (() => {
     return dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
   }
 
-  // Try to find an existing PID→pattern map the project already defines in this file
-  function getUrlPattern(pid) {
-    const sources = [
-      // common names people use
-      window.URL_PATTERNS,
-      window.ID_URL,
-      window.ID_URLS,
-      window.PROPERTY_URLS,
-      window.ID_URL_PATTERNS,
-      window.EXTERNAL_ID_PATTERNS
-    ];
-    for (const src of sources) {
-      if (src && typeof src === "object" && src[pid]) return String(src[pid]);
-    }
-    return null;
-  }
-
   // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-    // QID values → link to entity with label
+    // Link to other entities
     const qid = normalizeQid(value);
     if (qid) {
       const label = labelMap[qid] || qid;
       return `<a href="#/item/${qid}">${label}</a>`;
     }
 
-    // Use propInfo only for label/known datatype fallbacks; links are pattern-driven
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
@@ -56,7 +58,7 @@ window.Templates = (() => {
       `;
     }
 
-    // 🗺️ Coordinates placeholder (P26) → actual Leaflet map is created in postRender()
+    // 🗺️ Coordinates placeholder (P26)
     if (pid === "P26") {
       const [latStr, lonStr] = String(value).split(",");
       const lat = Number(latStr), lon = Number(lonStr);
@@ -70,15 +72,15 @@ window.Templates = (() => {
       `;
     }
 
-    // 🔗 External identifiers → hyperlink whenever a PID pattern exists (datatype not required)
-    const pattern = getUrlPattern(pid);
-    if (pattern) {
+    // 🔗 External identifiers using our URL map
+    if (ID_URL[pid]) {
+      const pattern = ID_URL[pid];
       const encoded = encodeURIComponent(String(value).trim());
       const url = pattern.replace(/\$1/g, encoded);
       return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
     }
 
-    // 🔗 URLs (native)
+    // 🔗 URLs
     if (dtNorm === "url") {
       const v = String(value).trim();
       return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
@@ -96,7 +98,7 @@ window.Templates = (() => {
 
   // ---------- Property rows ----------
   function renderClaimRow(pid, statements, labelMap, lang) {
-    const cleanPid = pid.replace(/^.*[\/#]/, ""); // ensure plain "P123"
+    const cleanPid = pid.replace(/^.*[\/#]/, "");
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
     const label = propInfo
       ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
@@ -135,12 +137,10 @@ window.Templates = (() => {
     `;
   }
 
-  // ---------- After-render: initialize Leaflet maps (safe, non-blocking) ----------
+  // ---------- After-render: initialize Leaflet maps safely ----------
   function postRender() {
-    // Keep the app functional even if Leaflet wasn't loaded
     if (typeof L === "undefined") return;
 
-    // Modal container (once)
     let modal = document.getElementById("map-modal");
     if (!modal) {
       document.body.insertAdjacentHTML("beforeend", `
@@ -151,16 +151,13 @@ window.Templates = (() => {
           </div>
         </div>
       `);
-      document.getElementById("map-close").onclick = () => {
-        document.getElementById("map-modal").style.display = "none";
-      };
-      // Click outside to close
-      document.getElementById("map-modal").addEventListener("click", (e) => {
+      document.getElementById("map-close").onclick = () =>
+        (document.getElementById("map-modal").style.display = "none");
+      document.getElementById("map-modal").addEventListener("click", e => {
         if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
       });
     }
 
-    // Initialize all thumbnails
     document.querySelectorAll(".map-thumb").forEach(el => {
       const lat = Number(el.dataset.lat);
       const lon = Number(el.dataset.lon);
@@ -168,7 +165,6 @@ window.Templates = (() => {
       const canvas = document.getElementById(id);
       if (!canvas) return;
 
-      // Thumb style (match image)
       canvas.style.width = "300px";
       canvas.style.height = "200px";
       canvas.style.borderRadius = "8px";
@@ -185,11 +181,9 @@ window.Templates = (() => {
         keyboard: false,
         tap: false
       }).setView([lat, lon], 9);
-
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
       L.marker([lat, lon]).addTo(map);
 
-      // Expand to modal on click
       el.addEventListener("click", () => {
         const modalEl = document.getElementById("map-modal");
         modalEl.style.display = "block";
