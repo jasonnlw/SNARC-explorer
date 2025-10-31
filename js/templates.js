@@ -256,17 +256,16 @@ if (mediaStmts && mediaStmts.length) {
         setTimeout(() => bigMap.invalidateSize(), 100);
 });
       // 🧬 Always render the family tree after maps are drawn
-const qidMatch = location.hash.match(/Q\d+/);
-if (qidMatch) {
-  const qid = qidMatch[0];
-  console.log("FamilyTree: building for", qid);
-  renderFamilyTree(qid, Utils.getLang()).then(tree => {
-    console.log("FamilyTree result:", tree);
-    drawFamilyTree(tree);
-  });
-
+  const qidMatch = location.hash.match(/Q\d+/);
+  if (qidMatch) {
+    const qid = qidMatch[0];
+    console.log("FamilyTree: building for", qid);
+    renderFamilyTree(qid, Utils.getLang()).then(tree => {
+      console.log("FamilyTree result:", tree);
+      drawFamilyTree(tree);
+    });
+  }
 }
-    }
       });
     });
   }
