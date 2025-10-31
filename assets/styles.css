@@ -84,7 +84,7 @@ a{color:#0645ad}
 }
 .gallery {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 8px;
   margin: 10px 0 20px;
 }
@@ -97,7 +97,7 @@ a{color:#0645ad}
 }
 
 .gallery-item img:hover {
-  transform: scale(1.02);
+  transform: scale(1.03);
 }
 
 
