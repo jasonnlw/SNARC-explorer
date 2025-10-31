@@ -142,33 +142,37 @@ function renderGeneric(entity, lang, labelMap = {}) {
   }
 
   // --- 🖼️ Extract IIIF images (P50) ---
-  let galleryHTML = "";
-  const mediaStmts = claims["P50"];
-  if (mediaStmts && mediaStmts.length) {
-    const images = mediaStmts.map(stmt => {
-      const v = Utils.firstValue(stmt);
-      if (!v || typeof v !== "string") return "";
+  // --- 🖼️ NLW IIIF image gallery (P50) ---
+let galleryHTML = "";
+const mediaStmts = claims["P50"];
+if (mediaStmts && mediaStmts.length) {
+  const images = mediaStmts.map(stmt => {
+    const v = Utils.firstValue(stmt);
+    if (!v || typeof v !== "string") return "";
 
-      // extract numeric part from "10107/123456"
-      const parts = v.split("/");
-      const handle = parts.join("/");
-      const id = parts[1];
-      if (!id) return "";
+    // Expect values like "10107/1127631"
+    const parts = v.split("/");
+    const handle = parts.join("/");
+    const id = parts[1];
+    if (!id) return "";
 
-      const manifestUrl = `https://damsssl.llgc.org.uk/iiif/2.0/${id}/manifest.json`;
-      const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/${id}/full/!400,400/0/default.jpg`;
-      const rootUrl = `https://hdl.handle.net/${handle}`;
+    const manifestUrl = `https://damsssl.llgc.org.uk/iiif/2.0/${id}/manifest.json`;
+    const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,300/0/default.jpg`;
+    const rootUrl = `https://hdl.handle.net/${handle}`;
 
-      return `
-        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item">
-          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
-        </a>`;
-    }).filter(Boolean);
+    return `
+      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
+        <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
+      </a>`;
+  }).filter(Boolean);
 
-    if (images.length) {
-      galleryHTML = `<div class="gallery">${images.join("")}</div>`;
-    }
+  if (images.length) {
+    galleryHTML = `
+      <div class="gallery">
+        ${images.join("")}
+      </div>`;
   }
+}
 
   // --- Build property rows (exclude P26 & P50) ---
   const rows = Object.keys(claims)
