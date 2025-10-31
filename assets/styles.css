@@ -34,3 +34,15 @@ a{color:#0645ad}
   background: #e0e0ff;
 }
 
+.wikidata img {
+  border-radius: 6px;
+  margin: 4px 6px;
+  max-width: 300px;
+  height: auto;
+  transition: transform 0.2s ease;
+}
+.wikidata img:hover {
+  transform: scale(1.03);
+}
+
+
