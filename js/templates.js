@@ -268,10 +268,8 @@ if (mediaStmts && mediaStmts.length) {
       });
     }
   }
-
       });
-    });
-  }
+
 // ---------- 🧬 Family tree generator (fixed) ----------
 async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
   if (depth > maxDepth || visited.has(rootQid)) return null;
