@@ -132,6 +132,8 @@ window.App = (() => {
     } catch (err) {
       console.error("Render item error:", err);
       $app().innerHTML = `<p class="error">Failed to render entity ${qid}</p>`;
+      <div id="family-tree" class="family-tree-container"></div>
+
     }
   }
 
