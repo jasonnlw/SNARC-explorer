@@ -31,67 +31,85 @@ window.Templates = (() => {
   }
 
   // ---------- Value renderer ----------
-  function renderValue(datatype, value, labelMap, lang, pid) {
-    if (value == null) return "";
+function renderValue(datatype, value, labelMap, lang, pid) {
+  if (value == null) return "";
 
-    // Link to other entities
-    const qid = normalizeQid(value);
-    if (qid) {
-      const label = labelMap[qid] || qid;
-      return `<a href="#/item/${qid}">${label}</a>`;
+  // QID values → link to other entities
+  const qid = normalizeQid(value);
+  if (qid) {
+    const label = labelMap[qid] || qid;
+    return `<a href="#/item/${qid}">${label}</a>`;
+  }
+
+  const propInfo = window.PROPERTY_INFO?.[pid];
+  const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
+
+  // 📸 Wikimedia Commons image thumbnails (P31)
+  if (pid === "P31") {
+    const filename = String(value).replace(/^File:/i, "").trim();
+    if (!filename) return "";
+    const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
+    const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
+    return `
+      <a href="${filePage}" target="_blank" rel="noopener">
+        <img src="${thumbUrl}" alt="${filename}" loading="lazy"
+             style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
+      </a>
+    `;
+  }
+
+  // 🗺️ Coordinates (globe-coordinate type OR P26)
+  if (dtNorm === "globe-coordinate" || pid === "P26") {
+    // Handle both structured and string forms
+    let lat, lon;
+
+    if (typeof value === "string" && value.includes(",")) {
+      const [latStr, lonStr] = value.split(",");
+      lat = Number(latStr);
+      lon = Number(lonStr);
+    } else if (typeof value === "object" && "latitude" in value && "longitude" in value) {
+      lat = value.latitude;
+      lon = value.longitude;
+    } else if (typeof value === "string" && value.includes("/")) {
+      // e.g., +52.414/-4.083
+      const parts = value.split(/[\/,]/);
+      lat = Number(parts[0].replace(/[^\d.-]/g, ""));
+      lon = Number(parts[1].replace(/[^\d.-]/g, ""));
     }
 
-    const propInfo = window.PROPERTY_INFO?.[pid];
-    const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
+    if (!isFinite(lat) || !isFinite(lon)) return String(value);
 
-    // 📸 Wikimedia Commons image thumbnails (P31)
-    if (pid === "P31") {
-      const filename = String(value).replace(/^File:/i, "").trim();
-      if (!filename) return "";
-      const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
-      const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
-      return `
-        <a href="${filePage}" target="_blank" rel="noopener">
-          <img src="${thumbUrl}" alt="${filename}" loading="lazy"
-               style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
-        </a>
-      `;
-    }
+    const id = `map-${Math.random().toString(36).slice(2)}`;
+    return `
+      <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
+        <div id="${id}" class="map-thumb-canvas"></div>
+      </div>
+    `;
+  }
 
-    // 🗺️ Coordinates placeholder (P26)
-    if (pid === "P26") {
-      const [latStr, lonStr] = String(value).split(",");
-      const lat = Number(latStr), lon = Number(lonStr);
-      if (!isFinite(lat) || !isFinite(lon)) return String(value);
+  // 🔗 External identifiers using our URL map
+  if (ID_URL[pid]) {
+    const pattern = ID_URL[pid];
+    const encoded = encodeURIComponent(String(value).trim());
+    const url = pattern.replace(/\$1/g, encoded);
+    return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
+  }
 
-      const id = `map-${Math.random().toString(36).slice(2)}`;
-      return `
-        <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
-          <div id="${id}" class="map-thumb-canvas"></div>
-        </div>
-      `;
-    }
+  // 🔗 URLs
+  if (dtNorm === "url") {
+    const v = String(value).trim();
+    return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
+  }
 
-    // 🔗 External identifiers using our URL map
-    if (ID_URL[pid]) {
-      const pattern = ID_URL[pid];
-      const encoded = encodeURIComponent(String(value).trim());
-      const url = pattern.replace(/\$1/g, encoded);
-      return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
-    }
+  // ⏱ Times / quantities / default
+  if (dtNorm === "time") return Utils.formatTime(value);
+  if (dtNorm === "quantity") {
+    const s = String(value);
+    return s.startsWith("+") ? s.slice(1) : s;
+  }
 
-    // 🔗 URLs
-    if (dtNorm === "url") {
-      const v = String(value).trim();
-      return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
-    }
-
-    // ⏱ Times / quantities / default
-    if (dtNorm === "time") return Utils.formatTime(value);
-    if (dtNorm === "quantity") {
-      const s = String(value);
-      return s.startsWith("+") ? s.slice(1) : s;
-    }
+  return String(value);
+}
 
     return String(value);
   }
