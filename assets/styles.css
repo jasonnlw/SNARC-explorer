@@ -115,4 +115,45 @@ a{color:#0645ad}
 .gallery-item:hover img {
   transform: scale(1.03);
 }
+.family-tree-container {
+  margin: 20px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.tree-root {
+  display: inline-block;
+}
+
+.tree-node {
+  display: inline-block;
+  margin: 10px;
+  text-align: center;
+}
+
+.person-card {
+  display: inline-block;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  padding: 6px;
+  width: 160px;
+}
+
+.person-card img {
+  width: auto;
+  height: 100px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.person-label {
+  font-weight: 600;
+  margin-top: 4px;
+}
+
+.person-dates {
+  font-size: 0.85em;
+  color: #555;
+}
 
