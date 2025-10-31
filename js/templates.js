@@ -362,6 +362,6 @@ function drawFamilyTree(treeData) {
 }
 
 // ✅ Export all tree-related functions too
-return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
+return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree }
 })();
 
