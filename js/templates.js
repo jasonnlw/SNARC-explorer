@@ -255,7 +255,7 @@ if (mediaStmts && mediaStmts.length) {
         L.marker([lat, lon]).addTo(bigMap);
         setTimeout(() => bigMap.invalidateSize(), 100);
       });
-    });
+    
 
     // 🧬 Always render the family tree after maps are drawn
     const qidMatch = location.hash.match(/Q\d+/);
