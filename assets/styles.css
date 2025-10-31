@@ -82,22 +82,37 @@ a{color:#0645ad}
 .map-close:hover {
   color: #000;
 }
+
+/* 🖼️ IIIF image gallery */
 .gallery {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 8px;
+  gap: 10px;
   margin: 10px 0 20px;
 }
 
-.gallery-item img {
-  width: 100%;
+/* Each gallery tile */
+.gallery-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+  background: #fafafa;
+  height: 300px;              /* ✅ fixed height for uniform rows */
+}
+
+/* Thumbnail images */
+.gallery-item img {
+  height: 100%;               /* fill vertical space */
+  width: auto;                /* preserve aspect ratio */
+  object-fit: contain;        /* fit entire image without cropping */
   transition: transform 0.2s ease;
 }
 
-.gallery-item img:hover {
+/* Subtle hover zoom */
+.gallery-item:hover img {
   transform: scale(1.03);
 }
-
 
