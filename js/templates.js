@@ -25,6 +25,45 @@ window.Templates = (() => {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
+    // --- 📸 Special case: Wikimedia Commons file (P50) ---
+    if (pid === "P50") {
+      // Handle either plain filename or URL
+      const filename = value.replace(/^File:/i, "").trim();
+      const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
+      const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
+      return `
+        <a href="${filePage}" target="_blank" rel="noopener">
+          <img src="${thumbUrl}" alt="${filename}" loading="lazy" style="max-width:300px; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.15); margin:4px;">
+        </a>
+      `;
+    }
+
+    // ---- External IDs ----
+    if (dtNorm === "externalid" || dtNorm === "external-id") {
+      const v = encodeURIComponent(String(value));
+      const pattern = propInfo?.url_pattern;
+      const url = pattern ? pattern.replace("$1", v) : null;
+      return url
+        ? `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`
+        : `<code>${String(value)}</code>`;
+    }
+
+    // ---- URLs ----
+    if (dtNorm === "url") {
+      return `<a href="${value}" target="_blank" rel="noopener">${String(value)}</a>`;
+    }
+
+    // ---- Times, quantities, etc. ----
+    if (dtNorm === "time") return Utils.formatTime(value);
+    if (dtNorm === "quantity")
+      return typeof value === "string" && value.startsWith("+") ? value.slice(1) : String(value);
+
+    return String(value);
+  }
+
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
+
     // ---- External IDs ----
     if (dtNorm === "externalid" || dtNorm === "external-id") {
       const v = encodeURIComponent(String(value));
