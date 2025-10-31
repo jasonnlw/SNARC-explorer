@@ -359,5 +359,7 @@ function drawFamilyTree(treeData) {
   container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
 }
 
+// ✅ Export all tree-related functions too
 return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
 })();
+
