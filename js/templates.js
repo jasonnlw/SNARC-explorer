@@ -20,102 +20,80 @@ window.Templates = (() => {
   };
 
   // ---------- Helpers ----------
-  function normalizeQid(value) {
-    if (!value) return null;
-    const m = String(value).match(/Q\d+/i);
-    return m ? m[0].toUpperCase() : null;
-  }
-
-  function normalizeDatatype(dt) {
-    return dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
-  }
+  const normalizeQid = value => (value && /Q\d+/i.test(value)) ? value.match(/Q\d+/i)[0].toUpperCase() : null;
+  const normalizeDatatype = dt => dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
   // ---------- Value renderer ----------
-function renderValue(datatype, value, labelMap, lang, pid) {
-  if (value == null) return "";
+  function renderValue(datatype, value, labelMap, lang, pid) {
+    if (value == null) return "";
 
-  // QID values → link to other entities
-  const qid = normalizeQid(value);
-  if (qid) {
-    const label = labelMap[qid] || qid;
-    return `<a href="#/item/${qid}">${label}</a>`;
-  }
-
-  const propInfo = window.PROPERTY_INFO?.[pid];
-  const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
-
-  // 📸 Wikimedia Commons image thumbnails (P31)
-  if (pid === "P31") {
-    const filename = String(value).replace(/^File:/i, "").trim();
-    if (!filename) return "";
-    const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
-    const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
-    return `
-      <a href="${filePage}" target="_blank" rel="noopener">
-        <img src="${thumbUrl}" alt="${filename}" loading="lazy"
-             style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
-      </a>
-    `;
-  }
-
-  // 🗺️ Coordinates (globe-coordinate type OR P26)
-  if (dtNorm === "globe-coordinate" || pid === "P26") {
-    // Handle both structured and string forms
-    let lat, lon;
-
-    if (typeof value === "string" && value.includes(",")) {
-      const [latStr, lonStr] = value.split(",");
-      lat = Number(latStr);
-      lon = Number(lonStr);
-    } else if (typeof value === "object" && "latitude" in value && "longitude" in value) {
-      lat = value.latitude;
-      lon = value.longitude;
-    } else if (typeof value === "string" && value.includes("/")) {
-      // e.g., +52.414/-4.083
-      const parts = value.split(/[\/,]/);
-      lat = Number(parts[0].replace(/[^\d.-]/g, ""));
-      lon = Number(parts[1].replace(/[^\d.-]/g, ""));
+    // QID links
+    const qid = normalizeQid(value);
+    if (qid) {
+      const label = labelMap[qid] || qid;
+      return `<a href="#/item/${qid}">${label}</a>`;
     }
 
-    if (!isFinite(lat) || !isFinite(lon)) return String(value);
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
-    const id = `map-${Math.random().toString(36).slice(2)}`;
-    return `
-      <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
-        <div id="${id}" class="map-thumb-canvas"></div>
-      </div>
-    `;
-  }
+    // 📸 Wikimedia Commons image thumbnails (P31)
+    if (pid === "P31") {
+      const filename = String(value).replace(/^File:/i, "").trim();
+      if (!filename) return "";
+      const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
+      const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
+      return `<a href="${filePage}" target="_blank" rel="noopener">
+                <img src="${thumbUrl}" alt="${filename}" loading="lazy"
+                     style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
+              </a>`;
+    }
 
-  // 🔗 External identifiers using our URL map
-  if (ID_URL[pid]) {
-    const pattern = ID_URL[pid];
-    const encoded = encodeURIComponent(String(value).trim());
-    const url = pattern.replace(/\$1/g, encoded);
-    return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
-  }
+    // 🗺️ Coordinates (globe-coordinate or P26)
+    if (dtNorm === "globe-coordinate" || pid === "P26") {
+      let lat, lon;
+      if (typeof value === "string" && value.includes(",")) {
+        const [latStr, lonStr] = value.split(",");
+        lat = Number(latStr);
+        lon = Number(lonStr);
+      } else if (typeof value === "object" && "latitude" in value && "longitude" in value) {
+        lat = value.latitude;
+        lon = value.longitude;
+      } else if (typeof value === "string" && value.includes("/")) {
+        const parts = value.split(/[\/,]/);
+        lat = Number(parts[0].replace(/[^\d.-]/g, ""));
+        lon = Number(parts[1].replace(/[^\d.-]/g, ""));
+      }
+      if (!isFinite(lat) || !isFinite(lon)) return String(value);
 
-  // 🔗 URLs
-  if (dtNorm === "url") {
-    const v = String(value).trim();
-    return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
-  }
+      const id = `map-${Math.random().toString(36).slice(2)}`;
+      return `<div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
+                <div id="${id}" class="map-thumb-canvas"></div>
+              </div>`;
+    }
 
-  // ⏱ Times / quantities / default
-  if (dtNorm === "time") return Utils.formatTime(value);
-  if (dtNorm === "quantity") {
-    const s = String(value);
-    return s.startsWith("+") ? s.slice(1) : s;
-  }
+    // 🔗 Identifier links
+    if (ID_URL[pid]) {
+      const encoded = encodeURIComponent(String(value).trim());
+      const url = ID_URL[pid].replace(/\$1/g, encoded);
+      return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
+    }
 
-  return String(value);
-}
+    // 🔗 URLs
+    if (dtNorm === "url") {
+      const v = String(value).trim();
+      return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
+    }
+
+    // ⏱ Times / quantities
+    if (dtNorm === "time") return Utils.formatTime(value);
+    if (dtNorm === "quantity") return String(value).replace(/^\+/, "");
 
     return String(value);
   }
 
   // ---------- Property rows ----------
-  function renderClaimRow(pid, statements, labelMap, lang)
+  function renderClaimRow(pid, statements, labelMap, lang) {
     const cleanPid = pid.replace(/^.*[\/#]/, "");
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
     const label = propInfo
@@ -132,30 +110,25 @@ function renderValue(datatype, value, labelMap, lang, pid) {
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
   }
 
-  // ---------- Main render ----------
+  // ---------- Generic entity render ----------
   function renderGeneric(entity, lang, labelMap = {}) {
     if (!entity) return `<p>Entity not found.</p>`;
-
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
     const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
-
     const claims = entity.claims || {};
+
     const rows = Object.keys(claims).map(pid =>
       renderClaimRow(pid, claims[pid], labelMap, lang)
     );
 
-    return `
-      <section class="card">
-        <h2>${title}</h2>
-        ${desc ? `<p>${desc}</p>` : ""}
-        <table class="wikidata">
-          <tbody>${rows.join("")}</tbody>
-        </table>
-      </section>
-    `;
+    return `<section class="card">
+              <h2>${title}</h2>
+              ${desc ? `<p>${desc}</p>` : ""}
+              <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
+            </section>`;
   }
 
-  // ---------- After-render: initialize Leaflet maps safely ----------
+  // ---------- Leaflet map initializer ----------
   function postRender() {
     if (typeof L === "undefined") return;
 
@@ -167,8 +140,7 @@ function renderValue(datatype, value, labelMap, lang, pid) {
             <div id="map-large" class="map-large"></div>
             <button id="map-close" class="map-close" aria-label="Close">&times;</button>
           </div>
-        </div>
-      `);
+        </div>`);
       document.getElementById("map-close").onclick = () =>
         (document.getElementById("map-modal").style.display = "none");
       document.getElementById("map-modal").addEventListener("click", e => {
@@ -199,8 +171,10 @@ function renderValue(datatype, value, labelMap, lang, pid) {
         keyboard: false,
         tap: false
       }).setView([lat, lon], 9);
+
       L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
       L.marker([lat, lon]).addTo(map);
+      setTimeout(() => map.invalidateSize(), 100);
 
       el.addEventListener("click", () => {
         const modalEl = document.getElementById("map-modal");
@@ -210,7 +184,7 @@ function renderValue(datatype, value, labelMap, lang, pid) {
         const bigMap = L.map("map-large").setView([lat, lon], 13);
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(bigMap);
         L.marker([lat, lon]).addTo(bigMap);
-        setTimeout(() => bigMap.invalidateSize(), 50);
+        setTimeout(() => bigMap.invalidateSize(), 100);
       });
     });
   }
