@@ -176,18 +176,24 @@ if (mediaStmts && mediaStmts.length) {
 
   // --- Build property rows (exclude P26 & P50) ---
   const rows = Object.keys(claims)
-    .filter(pid => pid !== "P26" && pid !== "P50")
+    .filter(pid => !["P26", "P50", "P52", "P53", "P54", "P55", "P56"].includes(pid))
+
     .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
 
   return `
-    <section class="card">
-      <h2>${title}</h2>
-      ${desc ? `<p>${desc}</p>` : ""}
-      ${mapHTML}
-      ${galleryHTML}
-      <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
-    </section>
-  `;
+  <section class="card">
+    <h2>${title}</h2>
+    ${desc ? `<p>${desc}</p>` : ""}
+    ${mapHTML}
+    ${galleryHTML}
+
+    <!-- 🧬 Family Tree Container -->
+    <div id="family-tree" class="family-tree-container"></div>
+
+    <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
+  </section>
+`;
+
 }
 
   // ---------- Leaflet map initializer ----------
@@ -247,9 +253,103 @@ if (mediaStmts && mediaStmts.length) {
         L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(bigMap);
         L.marker([lat, lon]).addTo(bigMap);
         setTimeout(() => bigMap.invalidateSize(), 100);
+
+        // 🧬 Family Tree Rendering
+const qidMatch = location.hash.match(/Q\d+/);
+if (qidMatch) {
+  const qid = qidMatch[0];
+  renderFamilyTree(qid, Utils.getLang()).then(tree => drawFamilyTree(tree));
+}
+
       });
     });
   }
+// ---------- 🧬 Family tree generator ----------
+async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+  if (depth > maxDepth || visited.has(rootQid)) return null;
+  visited.add(rootQid);
+
+  const entities = await API.getEntities(rootQid, lang);
+  const entity = entities[rootQid];
+  if (!entity) return null;
+
+  const label = entity.labels?.[lang]?.value || entity.id;
+  const claims = entity.claims || {};
+
+  // Extract birth & death years if present
+  const birth = Utils.formatTime(Utils.firstValue(claims["P17"]?.[0])) || "";
+  const death = Utils.formatTime(Utils.firstValue(claims["P18"]?.[0])) || "";
+  const dates = birth || death ? `(${birth}–${death})` : "";
+
+  // Thumbnail (P31 or P50)
+  let thumb = "";
+  const imgClaim = claims["P31"]?.[0] || claims["P50"]?.[0];
+  if (imgClaim) {
+    const v = Utils.firstValue(imgClaim);
+    if (typeof v === "string") {
+      const id = v.split("/")[1] || v;
+      thumb = `<img src="https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,150/0/default.jpg" alt="${label}">`;
+    }
+  }
+
+  const node = {
+    id: rootQid,
+    label: label,
+    dates: dates,
+    thumb: thumb,
+    parents: [],
+    children: [],
+  };
+
+  // Parents
+  for (const pid of ["P53", "P55"]) {
+    const rels = claims[pid] || [];
+    for (const stmt of rels) {
+      const q = Utils.firstValue(stmt);
+      if (q && /^Q\d+$/.test(q)) {
+        const childNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+        if (childNode) node.parents.push(childNode);
+      }
+    }
+  }
+
+  // Children
+  const children = claims["P54"] || [];
+  for (const stmt of children) {
+    const q = Utils.firstValue(stmt);
+    if (q && /^Q\d+$/.test(q)) {
+      const childNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+      if (childNode) node.children.push(childNode);
+    }
+  }
+
+  return node;
+}
+
+// ---------- Draw family tree ----------
+function drawFamilyTree(treeData) {
+  const container = document.getElementById("family-tree");
+  if (!container || !treeData) return;
+
+  // Basic recursive layout (simplified)
+  const createNodeHTML = (node) => {
+    const children = node.children.map(createNodeHTML).join("");
+    const parents = node.parents.map(createNodeHTML).join("");
+    return `
+      <div class="tree-node">
+        <div class="person-card">
+          ${node.thumb || ""}
+          <div class="person-label">${node.label}</div>
+          <div class="person-dates">${node.dates}</div>
+        </div>
+        <div class="tree-parents">${parents}</div>
+        <div class="tree-children">${children}</div>
+      </div>
+    `;
+  };
+
+  container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
+}
 
   return { renderGeneric, postRender };
 })();
