@@ -115,7 +115,7 @@ function renderValue(datatype, value, labelMap, lang, pid) {
   }
 
   // ---------- Property rows ----------
-  function renderClaimRow(pid, statements, labelMap, lang) {
+  function renderClaimRow(pid, statements, labelMap, lang)
     const cleanPid = pid.replace(/^.*[\/#]/, "");
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
     const label = propInfo
