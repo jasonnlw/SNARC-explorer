@@ -25,8 +25,8 @@ window.Templates = (() => {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
-    // 📸 Commons image thumbnails (P50)
-    if (pid === "P50") {
+    // 📸 Commons image thumbnails (P31)
+    if (pid === "P31") {
       const filename = String(value).replace(/^File:/i, "").trim();
       const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
       const filePage = `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
