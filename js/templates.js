@@ -25,8 +25,8 @@ window.Templates = (() => {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
 
-    // --- 📸 Special case: Wikimedia Commons file (P50) ---
-    if (pid === "P50") {
+    // --- 📸 Special case: Wikimedia Commons file (P31) ---
+    if (pid === "P31") {
       // Handle either plain filename or URL
       const filename = value.replace(/^File:/i, "").trim();
       const thumbUrl = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
