@@ -359,5 +359,5 @@ function drawFamilyTree(treeData) {
   container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
 }
 
-  return { renderGeneric, postRender };
+return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
 })();
