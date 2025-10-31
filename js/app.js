@@ -35,22 +35,26 @@ window.App = (() => {
     const q = (qp.get("q") || "").trim();
     if (!q) return renderHome();
 
-    const results = await API.searchEntities(q);
-    const items = results.map(r => `
-      <a class="card" href="#/item/${r.id}">
-        <strong>${r.label || r.id}</strong><br>
-        <small>${r.description || ""}</small>
-      </a>
-    `);
+    try {
+      const results = await API.searchEntities(q);
+      const items = results.map(r => `
+        <a class="card" href="#/item/${r.id}">
+          <strong>${r.label || r.id}</strong><br>
+          <small>${r.description || ""}</small>
+        </a>
+      `);
 
-    $app().innerHTML = `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
+      $app().innerHTML = `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
+    } catch (err) {
+      console.error("Search render error:", err);
+      $app().innerHTML = `<p class="error">Search failed. Please try again.</p>`;
+    }
   }
 
   // ----------------------------------------------------------
-  // Helpers for item page: strict QID collection + batched labels
+  // Collect all linked QIDs
   // ----------------------------------------------------------
   function collectQidsStrict(entity) {
-    // Robustly extract QIDs from all claims (handles .id or numeric-id)
     const claims = entity?.claims || {};
     const qids = [];
 
@@ -65,17 +69,18 @@ window.App = (() => {
           const q = (v && (v.id || (v["entity-type"] === "item" && "Q" + v["numeric-id"]))) || null;
           if (q) qids.push(q);
         } else {
-          // Also allow Utils.firstValue (covers time/quantity/monolingualtext) -> QIDs too
           const v2 = Utils.firstValue(stmt);
           if (typeof v2 === "string" && /^Q\d+$/i.test(v2)) qids.push(v2.toUpperCase());
         }
       }
     }
 
-    // de-dup + normalize
     return [...new Set(qids.map(x => String(x).trim().toUpperCase()))];
   }
 
+  // ----------------------------------------------------------
+  // Fetch label maps in batches (for linked QIDs)
+  // ----------------------------------------------------------
   async function fetchLabelMapBatched(qids, lang) {
     const out = {};
     const batchSize = 50;
@@ -102,35 +107,36 @@ window.App = (() => {
     const qid = match[1].toUpperCase();
     const lang = Utils.getLang();
 
-    // Fetch main entity
-    const entities = await API.getEntities(qid, lang);
-    const entity = entities[qid];
-    if (!entity) {
-      $app().innerHTML = `<p>Not found: ${qid}</p>`;
-      return;
+    try {
+      const entities = await API.getEntities(qid, lang);
+      const entity = entities[qid];
+      if (!entity) {
+        $app().innerHTML = `<p>Not found: ${qid}</p>`;
+        return;
+      }
+
+      const linkedAll = collectQidsStrict(entity).filter(id => id !== qid);
+      const linked = linkedAll.slice(0, 200);
+
+      const labelMap = await fetchLabelMapBatched(linked, lang);
+
+      console.log("Linked QIDs (capped):", linked.length, linked.slice(0, 25));
+      console.log("Label map keys:", Object.keys(labelMap).length);
+
+      const html = Templates.renderGeneric(entity, lang, labelMap);
+      $app().innerHTML = html;
+
+      // ✅ initialize images/maps after rendering
+      if (Templates.postRender) Templates.postRender();
+
+    } catch (err) {
+      console.error("Render item error:", err);
+      $app().innerHTML = `<p class="error">Failed to render entity ${qid}</p>`;
     }
-
-    // Collect linked QIDs strictly and safely
-    const linkedAll = collectQidsStrict(entity).filter(id => id !== qid);
-    // JSONP-safe cap; adjust if needed
-    const linked = linkedAll.slice(0, 200);
-
-    // Fetch labels in safe batches using entities (most reliable)
-    const labelMap = await fetchLabelMapBatched(linked, lang);
-
-    // Debug hooks (visible in console)
-    window.lastLinked = linked;
-    window.lastLabelMap = labelMap;
-    console.log("Linked QIDs (capped):", linked.length, linked.slice(0, 25));
-    console.log("Label map keys:", Object.keys(labelMap).length);
-
-    // Render page
-    const html = Templates.renderGeneric(entity, lang, labelMap);
-    $app().innerHTML = html;
   }
 
   // ----------------------------------------------------------
-  // UI Event handlers
+  // UI Events
   // ----------------------------------------------------------
   function initEvents() {
     document.querySelector(".lang-switch").addEventListener("click", (e) => {
@@ -150,7 +156,7 @@ window.App = (() => {
   }
 
   // ----------------------------------------------------------
-  // Live dropdown search with keyboard navigation
+  // Live dropdown search (with keyboard navigation)
   // ----------------------------------------------------------
   function initLiveSearch() {
     const input = document.getElementById("search-input");
