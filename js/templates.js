@@ -329,7 +329,22 @@ else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
       if (childNode) node.children.push(childNode);
     }
   }
-
+// Spouses (P56) — show on the same generation (no depth change)
+node.spouses = [];
+const spouseStmts = claims["P56"] || [];
+for (const stmt of spouseStmts) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/i.test(q) && !visited.has(q)) {
+    try {
+      // mark as visited so recursion doesn’t loop forever
+      visited.add(q);
+      const spouseNode = await renderFamilyTree(q, lang, depth, maxDepth, visited);
+      if (spouseNode) node.spouses.push(spouseNode);
+    } catch (err) {
+      console.warn("Failed to fetch spouse node", q, err);
+    }
+  }
+}
   return node;
 }
 
