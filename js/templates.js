@@ -374,12 +374,12 @@ function drawFamilyTree(treeData) {
 
     const pRect = card.getBoundingClientRect();
     const parentX = pRect.left - containerRect.left + pRect.width / 2 + container.scrollLeft;
-    const parentY = pRect.bottom - containerRect.top + container.scrollTop;
+    const parentY = pRect.bottom - containerRect.top + container.scrollTop - 10;
 
     children.forEach(child => {
       const cRect = child.getBoundingClientRect();
       const childX = cRect.left - containerRect.left + cRect.width / 2 + container.scrollLeft;
-      const childY = cRect.top - containerRect.top + container.scrollTop;
+      const childY  = cRect.top    - containerRect.top + container.scrollTop + 10;
 
       // Neat elbow connector
       const midY = (parentY + childY) / 2;
