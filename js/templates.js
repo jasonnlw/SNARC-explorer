@@ -250,8 +250,6 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   if (depth > maxDepth || visited.has(rootQid)) return null;
   visited.add(rootQid);
 
-
-  const entities = await API.getEntities(rootQid, lang);
   let entities;
 try {
   entities = await API.getEntities(rootQid, lang);
