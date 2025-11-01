@@ -255,17 +255,17 @@ a { color: #0645ad; }
 }
 /* ===== Family Tree Wrapper ===== */
 .family-tree-wrapper {
-  position: relative;
-  width: 100%;
   display: flex;
   justify-content: center;
   align-items: flex-start;
+  position: relative;
   overflow-x: auto;
-  overflow-y: visible;
-  margin: 40px 0; /* pushes content above/below */
+  overflow-y: hidden;
   padding: 20px 0;
-  box-sizing: border-box;
+  margin: 20px 0;
+  min-height: 600px;
 }
+
 
 .family-tree-canvas {
   position: relative;
