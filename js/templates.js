@@ -338,15 +338,48 @@ else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
     }
   }
 
-  // === Spouses (P56) ===
-  const spouseStmts = claims["P56"] || [];
-  for (const stmt of spouseStmts) {
-    const q = Utils.firstValue(stmt);
-    if (q && /^Q\d+$/.test(q)) {
-      const spouseNode = await renderFamilyTree(q, lang, depth, maxDepth, visited);
-      if (spouseNode) node.spouses.push(spouseNode);
+// === Spouses (P56) ===
+// Only show direct spouse cards — no recursion into their families
+const spouseStmts = claims["P56"] || [];
+for (const stmt of spouseStmts) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/.test(q) && !visited.has(q)) {
+    try {
+      // Fetch basic spouse entity but DO NOT call renderFamilyTree() again
+      const sData = await API.getEntities(q, lang);
+      const sItem = sData[q];
+      const sClaims = sItem.claims || {};
+
+      // Minimal spouse card
+      const sLabel = Utils.label(sItem, lang);
+      const sThumb = Utils.thumb(sItem);
+      const sDates = Utils.dates(sItem);
+      const sGender = (() => {
+        const gClaim = sClaims["P13"]?.[0];
+        const gId = gClaim?.mainsnak?.datavalue?.value?.id || "";
+        if (/Q1050|Q6581097/i.test(gId)) return "male";
+        if (/Q1051|Q6581072/i.test(gId)) return "female";
+        return "unknown";
+      })();
+
+      const spouseNode = {
+        id: q,
+        label: sLabel,
+        dates: sDates,
+        thumb: sThumb,
+        gender: sGender,
+        parents: [],
+        children: [],
+        spouses: [] // prevent further recursion
+      };
+
+      node.spouses.push(spouseNode);
+    } catch (err) {
+      console.warn("Failed to fetch spouse", q, err);
     }
   }
+}
+
 
   return node;
 }
