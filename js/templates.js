@@ -335,7 +335,11 @@ function drawFamilyTree(treeData) {
     `;
   };
 
-  container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
+    container.innerHTML = `
+    <div class="tree-root">${createNodeHTML(treeData)}</div>
+    <svg id="tree-lines" class="tree-lines"></svg>
+  `;
+
 }
 
 
