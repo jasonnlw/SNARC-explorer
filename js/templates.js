@@ -316,161 +316,66 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  // ---- helpers ----
-  const byId = new Map();                 // QID -> node (from data)
-  (function index(node) {
-    if (!node || byId.has(node.id)) return;
-    byId.set(node.id, node);
-    (node.parents || []).forEach(index);
-    (node.children || []).forEach(index);
-  })(treeData);
-
-  const uniqById = (arr) => {
-    const seen = new Set();
-    const out = [];
-    for (const x of arr) if (x && !seen.has(x.id)) { seen.add(x.id); out.push(x); }
-    return out;
-  };
-
-  // Build level arrays: ancestors rows (top), the subject row, descendants rows (bottom)
-  function buildAncestorLevels(root) {
-    const levels = [];
-    let current = [root];
-    while (true) {
-      let up = [];
-      current.forEach(n => up.push(...(n.parents || [])));
-      up = uniqById(up);
-      if (!up.length) break;
-      levels.push(up);
-      current = up;
-    }
-    return levels.reverse(); // farthest ancestors first
-  }
-
-  function buildDescendantLevels(root) {
-    const levels = [];
-    let current = [root];
-    while (true) {
-      let down = [];
-      current.forEach(n => down.push(...(n.children || [])));
-      down = uniqById(down);
-      if (!down.length) break;
-      levels.push(down);
-      current = down;
-    }
-    return levels; // nearest children first
-  }
-
-  const ancestorLevels   = buildAncestorLevels(treeData);
-  const descendantLevels = buildDescendantLevels(treeData);
-
-  // simple card HTML
-  const cardHTML = (node) => {
-    const genderClass =
-      node.gender === "male" ? "male" :
-      node.gender === "female" ? "female" : "";
-    return `
-      <div class="person-card ${genderClass}" data-qid="${node.id}">
-        ${node.thumb || ""}
-        <div class="person-label">${node.label}</div>
-        <div class="person-dates">${node.dates}</div>
-      </div>`;
-  };
-
-  const rowHTML = (nodes, cls) =>
-    `<div class="tree-row ${cls}" data-row="${cls}">${nodes.map(cardHTML).join("")}</div>`;
-
-  // ---- render rows (levels) ----
-  const rowsHTML = [
-    ...ancestorLevels.map(level => rowHTML(level, "ancestors")),
-    rowHTML([treeData], "subject"),
-    ...descendantLevels.map(level => rowHTML(level, "descendants"))
-  ].join("");
+  // Compute coordinates
+  const layout = FamilyLayout.computeLayout(treeData);
 
   container.innerHTML = `
-    <div class="tree-root">${rowsHTML}</div>
-    <svg id="tree-lines" class="tree-lines"></svg>
+    <div class="family-tree-canvas" style="position:relative;width:${layout.width}px;height:${layout.height}px;">
+      <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
+    </div>
   `;
 
-  const rootEl = container.querySelector(".tree-root");
-  const svg    = container.querySelector("#tree-lines");
+  const canvas = container.querySelector(".family-tree-canvas");
+  const svg = canvas.querySelector("svg");
 
-  // map QID -> element for fast lookups
-  const elById = new Map();
-  rootEl.querySelectorAll(".person-card[data-qid]").forEach(el => {
-    elById.set(el.getAttribute("data-qid"), el);
+  // Draw person nodes
+  layout.nodes.forEach(n => {
+    const genderClass = n.gender === "male" ? "male" :
+                        n.gender === "female" ? "female" : "";
+    const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" />` : "";
+    const card = document.createElement("div");
+    card.className = `person-card ${genderClass}`;
+    card.style.position = "absolute";
+    card.style.left = `${n.x}px`;
+    card.style.top = `${n.y}px`;
+    card.innerHTML = `${thumbHTML}<div class="person-label">${n.label}</div><div class="person-dates">${n.dates || ""}</div>`;
+    canvas.appendChild(card);
   });
 
-  // collect all parent->child edges from data (once)
-  const edges = [];
-  (function collectEdges(node, seen = new Set()) {
-    if (!node || seen.has(node.id)) return;
-    seen.add(node.id);
-    (node.children || []).forEach(ch => edges.push([node.id, ch.id]));
-    (node.parents  || []).forEach(p  => collectEdges(p, seen));
-    (node.children || []).forEach(c  => collectEdges(c, seen));
-  })(treeData);
+  // Draw connectors
+  const drawLine = (a, b, opts = {}) => {
+    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+    line.setAttribute("x1", a.x);
+    line.setAttribute("y1", a.y);
+    line.setAttribute("x2", b.x);
+    line.setAttribute("y2", b.y);
+    line.setAttribute("stroke", opts.color || "#555");
+    line.setAttribute("stroke-width", "1.5");
+    svg.appendChild(line);
+  };
 
-  // draw connectors after layout settles (fonts/images)
-  const drawConnectors = () => {
-    // size SVG to content
-    const w = rootEl.scrollWidth, h = rootEl.scrollHeight;
-    svg.setAttribute("width",  w);
-    svg.setAttribute("height", h);
-    svg.style.width  = w + "px";
-    svg.style.height = h + "px";
-    svg.innerHTML = "";
-
-    const base = container.getBoundingClientRect();
-    const offX = -base.left + container.scrollLeft;
-    const offY = -base.top  + container.scrollTop;
-
-    const anchor = (el, edge) => {
-      const r = el.getBoundingClientRect();
-      const cx = r.left + r.width / 2 + offX;
-      if (edge === "top")    return { x: cx, y: r.top    + offY };
-      if (edge === "bottom") return { x: cx, y: r.bottom + offY };
-      return { x: cx, y: r.top + offY };
-    };
-
-    // For each edge, connect parent bottom to child top with a mid elbow
-    for (const [parentId, childId] of edges) {
-      const pEl = elById.get(parentId);
-      const cEl = elById.get(childId);
-      if (!pEl || !cEl) continue;
-
-      const p = anchor(pEl, "bottom");
-      const c = anchor(cEl, "top");
-
-      // space the elbow between rows; tweak offsets to avoid entering cards
-      const parentY = p.y - 22;
-      const childY  = c.y + 22;
-      const midY    = (parentY + childY) / 2;
-
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", `M ${p.x} ${parentY} L ${p.x} ${midY} L ${c.x} ${midY} L ${c.x} ${childY}`);
-      path.setAttribute("vector-effect", "non-scaling-stroke");
-      svg.appendChild(path);
+  layout.nodes.forEach(n => {
+    if (n.children) {
+      n.children.forEach(c => {
+        drawLine(
+          { x: n.x + 90, y: n.y + 120 }, // bottom center of parent
+          { x: c.x + 90, y: c.y },       // top center of child
+          { color: "#777" }
+        );
+      });
     }
-  };
-
-  // redraw timing
-  const redraw = () => {
-    requestAnimationFrame(() => requestAnimationFrame(drawConnectors));
-  };
-  // redraw when images load
-  rootEl.querySelectorAll("img").forEach(img => {
-    if (!img.complete) {
-      img.addEventListener("load", redraw,  { once: true });
-      img.addEventListener("error", redraw, { once: true });
+    if (n.spouses) {
+      n.spouses.forEach(s => {
+        drawLine(
+          { x: n.x + 180, y: n.y + 60 },
+          { x: s.x, y: s.y + 60 },
+          { color: "#999" }
+        );
+      });
     }
   });
-  // initial + delayed redraw (font/layout settle)
-  redraw();
-  setTimeout(redraw, 400);
-  // on resize
-  window.addEventListener("resize", redraw, { once: true });
 }
+
 
 
 
