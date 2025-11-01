@@ -281,25 +281,37 @@ window.Templates = (() => {
     return node;
   }
 
-  function drawFamilyTree(treeData) {
-    const container = document.getElementById("family-tree");
-    if (!container || !treeData) return;
-    const createNodeHTML = (node) => {
-      const children = node.children.map(createNodeHTML).join("");
-      const parents = node.parents.map(createNodeHTML).join("");
-      return `
-        <div class="tree-node">
-          <div class="person-card">
-            ${node.thumb || ""}
-            <div class="person-label">${node.label}</div>
-            <div class="person-dates">${node.dates}</div>
-          </div>
-          <div class="tree-parents">${parents}</div>
-          <div class="tree-children">${children}</div>
-        </div>`;
-    };
-    container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
-  }
+function drawFamilyTree(treeData) {
+  const container = document.getElementById("family-tree");
+  if (!container || !treeData) return;
+
+  // Recursive renderer
+  const createNodeHTML = (node) => {
+    const parents = node.parents.map(createNodeHTML).join("");
+    const children = node.children.map(createNodeHTML).join("");
+
+    // Determine gender color
+    const gender = node.gender || "unknown";
+    const color =
+      gender === "male" ? "#d0e6ff" :
+      gender === "female" ? "#ffd9e6" :
+      "#f2f2f2";
+
+    return `
+      <div class="tree-node">
+        ${parents ? `<div class="tree-parents">${parents}</div>` : ""}
+        <div class="person-card" style="background:${color}">
+          ${node.thumb || ""}
+          <div class="person-label">${node.label}</div>
+          <div class="person-dates">${node.dates}</div>
+        </div>
+        ${children ? `<div class="tree-children">${children}</div>` : ""}
+      </div>
+    `;
+  };
+
+  container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
+}
 
   // ✅ Properly close and export
   return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
