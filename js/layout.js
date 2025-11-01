@@ -78,6 +78,13 @@ window.FamilyLayout = (() => {
     // Normalize coordinates to positive space
     const minX = Math.min(...positioned.map(n => n.x));
     positioned.forEach(n => { n.x -= minX - 50; });
+    
+    // Normalize depth levels so all start from 0 (ancestors above)
+const minDepth = Math.min(...Array.from(nodesById.values()).map(n => n.depth));
+if (minDepth < 0) {
+  nodesById.forEach(n => { n.depth = n.depth - minDepth; });
+}
+
 
     return {
       nodes: positioned,
