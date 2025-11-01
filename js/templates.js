@@ -316,7 +316,7 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  // 1) Compute coordinates using your layout.js
+  // 1) Compute coordinates using layout.js (must be loaded before templates.js)
   const layout = FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
@@ -324,158 +324,144 @@ function drawFamilyTree(treeData) {
     vGap: 60
   });
 
-  // 2) Build the canvas and svg
-container.innerHTML = `
-  <div class="family-tree-wrapper">
-    <div class="family-tree-canvas" style="width:${layout.width}px;height:${layout.height}px;">
-      <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
+  // 2) Build wrapper, canvas, and SVG (wrapper is the scroll container)
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <div class="family-tree-canvas" style="width:${layout.width}px;height:${layout.height}px;">
+        <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
+      </div>
     </div>
-  </div>
-`;
-  const canvas = container.querySelector(".family-tree-canvas");
-  const svg    = canvas.querySelector("svg");
+  `;
+  const wrapper = container.querySelector(".family-tree-wrapper");
+  const canvas  = container.querySelector(".family-tree-canvas");
+  const svg     = canvas.querySelector("svg");
 
-  // 3) Render cards (absolute positioned). Tag each with data-qid
+  // 3) RENDER CARDS FIRST (absolute positioned), tag with data-qid
   layout.nodes.forEach(n => {
-  const nEl = elById.get(n.id);
-  if (!nEl) return;
+    const genderClass =
+      n.gender === "male" ? "male" :
+      n.gender === "female" ? "female" : "";
 
-  // Draw to children (descendants)
-  if (n.children && n.children.length) {
-    const pBottom = anchor(nEl, 'bottom');
-    n.children.forEach(c => {
-      const cEl = elById.get(c.id);
-      if (!cEl) return;
-      const cTop = anchor(cEl, 'top');
-      const d = elbowPath(pBottom, cTop, 8, 8);
-      drawPath(d, '#777', 1.5);
-    });
-  }
+    const card = document.createElement("div");
+    card.className = `person-card ${genderClass}`;
+    card.dataset.qid = n.id;
+    card.style.left = `${n.x}px`;
+    card.style.top  = `${n.y}px`;
 
-  // Draw to parents (ancestors)
-  if (n.parents && n.parents.length) {
-    const cTop = anchor(nEl, 'top');
-    n.parents.forEach(p => {
-      const pEl = elById.get(p.id);
-      if (!pEl) return;
-      const pBottom = anchor(pEl, 'bottom');
-      const d = elbowPath(pBottom, cTop, 8, 8);
-      drawPath(d, '#777', 1.5);
-    });
-  }
+    const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
+    card.innerHTML = `
+      ${thumbHTML}
+      <div class="person-label">${n.label || n.id}</div>
+      <div class="person-dates">${n.dates || ""}</div>
+    `;
 
-  // Draw spouse lines (unchanged)
-  if (n.spouses && n.spouses.length) {
-    const aC = anchor(nEl, 'center');
-    n.spouses.forEach(s => {
-      const sEl = elById.get(s.id);
-      if (!sEl) return;
-      const bC = anchor(sEl, 'center');
-      const y = (aC.y + bC.y) / 2;
-      const d = `M ${aC.x} ${y} L ${bC.x} ${y}`;
-      drawPath(d, '#999', 2);
-    });
-  }
-});
+    // Bold border for subject
+    if (n.id === treeData.id) card.classList.add("subject-card");
 
+    canvas.appendChild(card);
+  });
 
-  // 4) Build a quick lookup from QID -> element
+  // 4) Build quick lookup AFTER cards exist
   const elById = new Map();
   canvas.querySelectorAll('.person-card[data-qid]').forEach(el => {
     elById.set(el.dataset.qid, el);
   });
 
-  // 5) Helpers that ALWAYS use actual card size (no magic numbers!)
+  // 5) Helpers that ALWAYS use actual card dimensions
   const anchor = (el, edge) => {
     const left = el.offsetLeft;
     const top  = el.offsetTop;
     const w    = el.offsetWidth;
     const h    = el.offsetHeight;
-    const xMid = left + w / 2;
-    if (edge === 'top')    return { x: xMid, y: top };
-    if (edge === 'bottom') return { x: xMid, y: top + h };
-    // default center
-    return { x: xMid, y: top + h / 2 };
+    const cx   = left + w / 2;
+    if (edge === "top")    return { x: cx, y: top };
+    if (edge === "bottom") return { x: cx, y: top + h };
+    return { x: cx, y: top + h / 2 }; // center
   };
 
   const elbowPath = (from, to, padTop = 8, padBottom = 8) => {
-    // Pull slightly off the card edges to avoid drawing "into" the border
+    // offset off the card edges a bit so we don't draw into borders
     const start = { x: from.x, y: from.y + padBottom }; // from bottom edge
     const end   = { x: to.x,   y: to.y - padTop };      // to top edge
     const midY  = (start.y + end.y) / 2;
     return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
   };
 
-  const drawPath = (d, stroke = '#777', width = 1.5) => {
-    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    p.setAttribute('d', d);
-    p.setAttribute('stroke', stroke);
-    p.setAttribute('stroke-width', width);
-    p.setAttribute('fill', 'none');
-    p.setAttribute('vector-effect', 'non-scaling-stroke');
+  const drawPath = (d, stroke = "#777", width = 1.5) => {
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", d);
+    p.setAttribute("stroke", stroke);
+    p.setAttribute("stroke-width", width);
+    p.setAttribute("fill", "none");
+    p.setAttribute("vector-effect", "non-scaling-stroke");
     svg.appendChild(p);
   };
 
-  // 6) Draw connectors using REAL edges per card
+  // 6) Draw connectors (ancestors AND descendants) using real edges
   const drawConnectors = () => {
-    svg.innerHTML = '';
-// Center the subject in view
-const subjectEl = canvas.querySelector(`.person-card[data-qid="${treeData.id}"]`);
-if (subjectEl) {
-  subjectEl.classList.add("subject-card"); // highlight
-  // Scroll to center horizontally
-  const rect = subjectEl.getBoundingClientRect();
-  const parentRect = canvas.getBoundingClientRect();
-  const offset = rect.left - parentRect.left - parentRect.width / 2 + rect.width / 2;
-  container.scrollTo({
-    left: offset,
-    behavior: "smooth"
-  });
-}
+    svg.innerHTML = "";
 
-    // Parent -> child edges
     layout.nodes.forEach(n => {
-      if (!n.children || !n.children.length) return;
-      const pEl = elById.get(n.id);
-      if (!pEl) return;
+      const nEl = elById.get(n.id);
+      if (!nEl) return;
 
-      const pBottom = anchor(pEl, 'bottom'); // true bottom center
+      // Parents (ancestors) -> this node
+      if (n.parents && n.parents.length) {
+        const childTop = anchor(nEl, "top");
+        n.parents.forEach(p => {
+          const pEl = elById.get(p.id);
+          if (!pEl) return;
+          const pBottom = anchor(pEl, "bottom");
+          const d = elbowPath(pBottom, childTop, 8, 8);
+          drawPath(d, "#777", 1.5);
+        });
+      }
 
-      n.children.forEach(c => {
-        const cEl = elById.get(c.id);
-        if (!cEl) return;
-        const cTop = anchor(cEl, 'top'); // true top center
-        const d = elbowPath(pBottom, cTop, 8, 8);
-        drawPath(d, '#777', 1.5);
-      });
+      // This node -> children (descendants)
+      if (n.children && n.children.length) {
+        const pBottom = anchor(nEl, "bottom");
+        n.children.forEach(c => {
+          const cEl = elById.get(c.id);
+          if (!cEl) return;
+          const cTop = anchor(cEl, "top");
+          const d = elbowPath(pBottom, cTop, 8, 8);
+          drawPath(d, "#777", 1.5);
+        });
+      }
+
+      // Horizontal spouse lines (center-to-center midline)
+      if (n.spouses && n.spouses.length) {
+        const aC = anchor(nEl, "center");
+        n.spouses.forEach(s => {
+          const sEl = elById.get(s.id);
+          if (!sEl) return;
+          const bC = anchor(sEl, "center");
+          const y  = (aC.y + bC.y) / 2;
+          const d  = `M ${aC.x} ${y} L ${bC.x} ${y}`;
+          drawPath(d, "#999", 2);
+        });
+      }
     });
 
-    // Spouse lines (center to center horizontally)
-    layout.nodes.forEach(n => {
-      if (!n.spouses || !n.spouses.length) return;
-      const aEl = elById.get(n.id);
-      if (!aEl) return;
-      const aC = anchor(aEl, 'center');
-
-      n.spouses.forEach(s => {
-        const sEl = elById.get(s.id);
-        if (!sEl) return;
-        const bC = anchor(sEl, 'center');
-        const y = (aC.y + bC.y) / 2; // midline between the two cards
-        const d = `M ${aC.x} ${y} L ${bC.x} ${y}`;
-        drawPath(d, '#999', 2); // thicker spouse line
-      });
-    });
+    // Center subject horizontally after lines are laid out
+    const subjectEl = elById.get(treeData.id);
+    if (subjectEl && wrapper) {
+      const rect       = subjectEl.getBoundingClientRect();
+      const wrapperRect= wrapper.getBoundingClientRect();
+      const offset     = (rect.left - wrapperRect.left) - (wrapperRect.width / 2 - rect.width / 2);
+      wrapper.scrollTo({ left: wrapper.scrollLeft + offset, behavior: "smooth" });
+    }
   };
 
-  // 7) Redraw when sizes change (e.g., images load)
+  // 7) Redraw when sizes change (e.g., thumbnails load)
   const ro = new ResizeObserver(() => drawConnectors());
-  canvas.querySelectorAll('.person-card').forEach(el => ro.observe(el));
+  canvas.querySelectorAll(".person-card").forEach(el => ro.observe(el));
 
-  // Initial draw + a delayed re-draw to catch late font/image settling
+  // Initial draw + delayed redraw
   drawConnectors();
   setTimeout(drawConnectors, 300);
 }
+
 
 
 // ✅ Properly close and export
