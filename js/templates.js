@@ -255,15 +255,17 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   return null;
 }
 
-  let entities;
+let fetchedEntities;
 try {
-  entities = await API.getEntities(rootQid, lang);
+  fetchedEntities = await API.getEntities(rootQid, lang);
 } catch (e) {
   console.warn("FamilyTree: failed to fetch entity", rootQid, e);
   return null;
 }
 
-  const entity = entities ? entities[rootQid] : null;
+const entity = fetchedEntities ? fetchedEntities[rootQid] : null;
+
+
   if (!entity) return null;
 
   const label  = entity.labels?.[lang]?.value || entity.labels?.en?.value || rootQid;
