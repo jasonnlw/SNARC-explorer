@@ -247,3 +247,24 @@ a { color: #0645ad; }
     height: 52px;
   }
 }
+/* ===== Family Tree Wrapper ===== */
+.family-tree-wrapper {
+  position: relative;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  overflow-x: auto;
+  overflow-y: visible;
+  margin: 40px 0; /* pushes content above/below */
+  padding: 20px 0;
+  box-sizing: border-box;
+}
+
+.family-tree-canvas {
+  position: relative;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 0;
+  min-height: 300px;
+}
