@@ -461,7 +461,7 @@ const drawConnectors = () => {
     const yMid = (aC.y + bC.y) / 2;
     const dx = Math.abs(aC.x - bC.x);
     const curve = Math.min(70, Math.max(24, dx / 3));
-    const offset = 1.6;
+    const offset = 6;
     const d1 = `M ${aC.x} ${yMid - offset} C ${aC.x} ${yMid - curve}, ${bC.x} ${yMid - curve}, ${bC.x} ${yMid - offset}`;
     const d2 = `M ${aC.x} ${yMid + offset} C ${aC.x} ${yMid + curve}, ${bC.x} ${yMid + curve}, ${bC.x} ${yMid + offset}`;
     drawPath(group, d1, color, 1.2);
