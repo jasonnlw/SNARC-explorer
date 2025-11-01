@@ -338,47 +338,68 @@ else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
     }
   }
 
-// === Spouses (P56) ===
-// Only show direct spouse cards — no recursion into their families
+// === Spouses (P56) — include spouse cards only; DO NOT pull their families ===
 const spouseStmts = claims["P56"] || [];
 for (const stmt of spouseStmts) {
   const q = Utils.firstValue(stmt);
-  if (q && /^Q\d+$/.test(q) && !visited.has(q)) {
-    try {
-      // Fetch basic spouse entity but DO NOT call renderFamilyTree() again
-      const sData = await API.getEntities(q, lang);
-      const sItem = sData[q];
-      const sClaims = sItem.claims || {};
+  if (!(q && /^Q\d+$/i.test(q))) continue;
 
-      // Minimal spouse card
-      const sLabel = Utils.label(sItem, lang);
-      const sThumb = Utils.thumb(sItem);
-      const sDates = Utils.dates(sItem);
-      const sGender = (() => {
-        const gClaim = sClaims["P13"]?.[0];
-        const gId = gClaim?.mainsnak?.datavalue?.value?.id || "";
-        if (/Q1050|Q6581097/i.test(gId)) return "male";
-        if (/Q1051|Q6581072/i.test(gId)) return "female";
-        return "unknown";
-      })();
+  try {
+    const sData  = await API.getEntities(q, lang);
+    const sItem  = sData?.[q];
+    if (!sItem) continue;
 
-      const spouseNode = {
-        id: q,
-        label: sLabel,
-        dates: sDates,
-        thumb: sThumb,
-        gender: sGender,
-        parents: [],
-        children: [],
-        spouses: [] // prevent further recursion
-      };
+    const sClaims = sItem.claims || {};
 
-      node.spouses.push(spouseNode);
-    } catch (err) {
-      console.warn("Failed to fetch spouse", q, err);
+    // label
+    const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
+
+    // dates (P17 birth, P18 death) – year only
+    const sBirthRaw = Utils.formatTime(Utils.firstValue(sClaims["P17"]?.[0])) || "";
+    const sDeathRaw = Utils.formatTime(Utils.firstValue(sClaims["P18"]?.[0])) || "";
+    const sBirth = sBirthRaw ? sBirthRaw.slice(0,4) : "";
+    const sDeath = sDeathRaw ? sDeathRaw.slice(0,4) : "";
+    const sDates = sBirth || sDeath ? `(${sBirth}–${sDeath})` : "";
+
+    // gender (P13) – your instance uses Q33/Q34; include Wikidata fallbacks
+    let sGender = "unknown";
+    let sGenderId = "";
+    const gClaim = sClaims["P13"]?.[0];
+    if (gClaim?.mainsnak?.datavalue?.value?.id) {
+      sGenderId = gClaim.mainsnak.datavalue.value.id;
+      if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
+      else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
     }
+
+    // thumbnail from P31 (Commons file)
+    let sThumb = "";
+    const sImgClaim = sClaims["P31"]?.[0];
+    if (sImgClaim) {
+      const v = Utils.firstValue(sImgClaim);
+      if (typeof v === "string") {
+        const filename = String(v).replace(/^File:/i, "").trim();
+        if (filename) {
+          sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
+        }
+      }
+    }
+
+    // minimal spouse node – note: empty parents/children/spouses prevents expansion
+    node.spouses.push({
+      id: q,
+      label: sLabel,
+      dates: sDates,
+      thumb: sThumb,
+      gender: sGender,
+      parents: [],
+      children: [],
+      spouses: []
+    });
+  } catch (err) {
+    console.warn("Failed to fetch spouse", q, err);
   }
 }
+
 
 
   return node;
