@@ -195,6 +195,12 @@ a { color: #0645ad; }
 .person-card.female {
   background-color: #ffe5f0;
 }
+/* Subject person highlight */
+.subject-card {
+  border: 3px solid #333;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  z-index: 5;
+}
 
 /* ---- Thumbnail images ---- */
 .person-thumb {
