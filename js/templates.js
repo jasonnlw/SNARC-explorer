@@ -316,7 +316,6 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  // 1) Compute coordinates using layout.js (must be loaded before templates.js)
   const layout = FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
@@ -324,7 +323,6 @@ function drawFamilyTree(treeData) {
     vGap: 40
   });
 
-  // 2) Build wrapper, canvas, and SVG (wrapper is the scroll container)
   container.innerHTML = `
     <div class="family-tree-wrapper">
       <div class="family-tree-canvas" style="width:${layout.width}px;height:${layout.height}px;">
@@ -332,15 +330,14 @@ function drawFamilyTree(treeData) {
       </div>
     </div>
   `;
+
   const wrapper = container.querySelector(".family-tree-wrapper");
   const canvas  = container.querySelector(".family-tree-canvas");
   const svg     = canvas.querySelector("svg");
 
-  // 3) RENDER CARDS FIRST (absolute positioned), tag with data-qid
   layout.nodes.forEach(n => {
-    const genderClass =
-      n.gender === "male" ? "male" :
-      n.gender === "female" ? "female" : "";
+    const genderClass = n.gender === "male" ? "male" :
+                        n.gender === "female" ? "female" : "";
 
     const card = document.createElement("div");
     card.className = `person-card ${genderClass}`;
@@ -355,19 +352,13 @@ function drawFamilyTree(treeData) {
       <div class="person-dates">${n.dates || ""}</div>
     `;
 
-    // Bold border for subject
     if (n.id === treeData.id) card.classList.add("subject-card");
-
     canvas.appendChild(card);
   });
 
-  // 4) Build quick lookup AFTER cards exist
   const elById = new Map();
-  canvas.querySelectorAll('.person-card[data-qid]').forEach(el => {
-    elById.set(el.dataset.qid, el);
-  });
+  canvas.querySelectorAll('.person-card[data-qid]').forEach(el => elById.set(el.dataset.qid, el));
 
-  // 5) Helpers that ALWAYS use actual card dimensions
   const anchor = (el, edge) => {
     const left = el.offsetLeft;
     const top  = el.offsetTop;
@@ -376,13 +367,12 @@ function drawFamilyTree(treeData) {
     const cx   = left + w / 2;
     if (edge === "top")    return { x: cx, y: top };
     if (edge === "bottom") return { x: cx, y: top + h };
-    return { x: cx, y: top + h / 2 }; // center
+    return { x: cx, y: top + h / 2 };
   };
 
   const elbowPath = (from, to, padTop = 8, padBottom = 8) => {
-    // offset off the card edges a bit so we don't draw into borders
-    const start = { x: from.x, y: from.y + padBottom }; // from bottom edge
-    const end   = { x: to.x,   y: to.y - padTop };      // to top edge
+    const start = { x: from.x, y: from.y + padBottom };
+    const end   = { x: to.x,   y: to.y - padTop };
     const midY  = (start.y + end.y) / 2;
     return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
   };
@@ -397,7 +387,6 @@ function drawFamilyTree(treeData) {
     svg.appendChild(p);
   };
 
-  // 6) Draw connectors (ancestors AND descendants) using real edges
   const drawConnectors = () => {
     svg.innerHTML = "";
 
@@ -405,127 +394,73 @@ function drawFamilyTree(treeData) {
       const nEl = elById.get(n.id);
       if (!nEl) return;
 
-      // Parents (ancestors) -> this node
-      if (n.parents && n.parents.length) {
+      // parents → this node
+      if (n.parents) {
         const childTop = anchor(nEl, "top");
         n.parents.forEach(p => {
           const pEl = elById.get(p.id);
           if (!pEl) return;
           const pBottom = anchor(pEl, "bottom");
-          const d = elbowPath(pBottom, childTop, 8, 8);
-          drawPath(d, "#777", 1.5);
+          drawPath(elbowPath(pBottom, childTop), "#777", 1.5);
         });
       }
 
-      // This node -> children (descendants)
-      if (n.children && n.children.length) {
+      // this node → children
+      if (n.children) {
         const pBottom = anchor(nEl, "bottom");
         n.children.forEach(c => {
           const cEl = elById.get(c.id);
           if (!cEl) return;
           const cTop = anchor(cEl, "top");
-          const d = elbowPath(pBottom, cTop, 8, 8);
-          drawPath(d, "#777", 1.5);
+          drawPath(elbowPath(pBottom, cTop), "#777", 1.5);
         });
       }
 
-      // Horizontal spouse lines (center-to-center midline)
-      if (n.spouses && n.spouses.length) {
+      // spouse lines
+      if (n.spouses) {
         const aC = anchor(nEl, "center");
         n.spouses.forEach(s => {
           const sEl = elById.get(s.id);
           if (!sEl) return;
           const bC = anchor(sEl, "center");
-          const y  = (aC.y + bC.y) / 2;
-          const d  = `M ${aC.x} ${y} L ${bC.x} ${y}`;
-          drawPath(d, "#999", 2);
+          drawPath(`M ${aC.x} ${(aC.y + bC.y) / 2} L ${bC.x} ${(aC.y + bC.y) / 2}`, "#999", 2);
         });
       }
     });
-
-    // Center subject horizontally after lines are laid out
-    const subjectEl = elById.get(treeData.id);
-    if (subjectEl && wrapper) {
-      const rect       = subjectEl.getBoundingClientRect();
-      const wrapperRect= wrapper.getBoundingClientRect();
-      const offset     = (rect.left - wrapperRect.left) - (wrapperRect.width / 2 - rect.width / 2);
-      wrapper.scrollTo({ left: wrapper.scrollLeft + offset, behavior: "smooth" });
-    }
   };
 
-// --- Normalize vertical spacing based on tallest card per generation ---
-function normalizeRowHeights() {
-  // Group nodes by their generation (level)
-  const byLevel = {};
-  layout.nodes.forEach(n => {
-    if (!byLevel[n.level]) byLevel[n.level] = [];
-    byLevel[n.level].push(n);
-  });
-
-  // Measure heights and reposition each row
-  let currentY = 0;
-  const sortedLevels = Object.keys(byLevel).sort((a, b) => a - b);
-
-  sortedLevels.forEach(level => {
-    const nodes = byLevel[level];
-    const els = nodes.map(n => elById.get(n.id)).filter(Boolean);
-
-    // Find tallest card in this generation
-    const maxHeight = Math.max(...els.map(el => el.offsetHeight || 0), 0);
-
-    // Align all nodes in this row to same top position
-    nodes.forEach(n => {
-      n.y = currentY;
-      const el = elById.get(n.id);
-      if (el) el.style.top = `${currentY}px`;
+  // normalize vertical spacing
+  function normalizeRowHeights() {
+    const byLevel = {};
+    layout.nodes.forEach(n => {
+      if (!byLevel[n.level]) byLevel[n.level] = [];
+      byLevel[n.level].push(n);
     });
 
-    // Increase Y offset for next row based on tallest card + gap
-    currentY += maxHeight + 60; // 60 = vGap between rows
-  });
+    let currentY = 0;
+    Object.keys(byLevel).sort((a,b)=>a-b).forEach(level => {
+      const els = byLevel[level].map(n => elById.get(n.id)).filter(Boolean);
+      const maxH = Math.max(...els.map(el => el.offsetHeight || 0), 0);
+      els.forEach(el => el.style.top = `${currentY}px`);
+      byLevel[level].forEach(n => n.y = currentY);
+      currentY += maxH + 60;
+    });
 
-  // Update SVG height to fit new tree height
-  svg.setAttribute("height", currentY + 60);
+    svg.setAttribute("height", currentY + 60);
+    drawConnectors();
+  }
 
-  // Redraw connectors after adjustment
-  drawConnectors();
-}
-  
-  // 7) Redraw when sizes change (e.g., thumbnails load)
-  const ro = new ResizeObserver(() => drawConnectors());
+  // observe for resizing and redraw connectors
+  const ro = new ResizeObserver(drawConnectors);
   canvas.querySelectorAll(".person-card").forEach(el => ro.observe(el));
 
-  // Initial draw + delayed redraw
-// Initial draw + delayed height normalization
-drawConnectors();
-setTimeout(normalizeRowHeights, 400);
-
-}
-
-
-  let currentY = 0;
-  const levels = Object.keys(byLevel).sort((a,b)=>a-b);
-  levels.forEach((lvl, i) => {
-    const cards = byLevel[lvl]
-      .map(n => elById.get(n.id))
-      .filter(Boolean);
-    const maxH = Math.max(...cards.map(c => c.offsetHeight));
-    cards.forEach(c => { c.style.top = `${currentY}px`; });
-    // update layout positions too
-    byLevel[lvl].forEach(n => n.y = currentY);
-    currentY += maxH + 60; // 60 = vGap
-  });
-
-  // redraw connectors after vertical shift
   drawConnectors();
+  setTimeout(normalizeRowHeights, 400);
 }
-
-// Run once after render settles
-setTimeout(adjustVerticalSpacing, 400);
-
 
 // ✅ Properly close and export
 return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
 
 })();
+
 
