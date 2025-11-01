@@ -17,7 +17,7 @@ window.FamilyLayout = (() => {
     const nodeWidth  = opts.nodeWidth  || 180;
     const nodeHeight = opts.nodeHeight || 120;
     const hGap = opts.hGap || 60;
-    const vGap = opts.vGap || 100;
+    const vGap = opts.vGap || 60;
 
     // Flatten nodes and map by id
     const nodesById = new Map();
