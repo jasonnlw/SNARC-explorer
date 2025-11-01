@@ -446,6 +446,9 @@ function drawFamilyTree(treeData) {
 
   // Redraw now and on resize
   redraw();
+  // Re-run connector alignment after fonts and images stabilize
+setTimeout(redraw, 500);
+
   window.addEventListener("resize", redraw, { once: true });
 }
 
