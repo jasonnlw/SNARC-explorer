@@ -265,18 +265,19 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   const death = deathRaw ? deathRaw.slice(0, 4) : "";
   const dates = birth || death ? `(${birth}–${death})` : "";
 
-// Gender (P13): Q1050 male, Q1051 female (fallbacks for Wikidata-style too)
+// Gender (P13): Q1050 male, Q1051 female (plus Wikidata fallbacks)
 let gender = "unknown";
 const rawGender = Utils.firstValue(claims["P13"]?.[0]);
-const genderId =
-  typeof rawGender === "object"
-    ? rawGender.id || rawGender.value || ""
-    : String(rawGender || "");
+let genderId = "";
 
-// Support both your Wikibase IDs and Wikidata's
+if (typeof rawGender === "string") {
+  genderId = rawGender;
+} else if (rawGender && typeof rawGender === "object") {
+  genderId = rawGender.id || rawGender.value || "";
+}
+
 if (/Q1050|Q6581097/i.test(genderId)) gender = "male";
-if (/Q1051|Q6581072/i.test(genderId)) gender = "female";
-
+else if (/Q1051|Q6581072/i.test(genderId)) gender = "female";
 
   // Thumbnail from P31 (Commons filename)
   let thumb = "";
