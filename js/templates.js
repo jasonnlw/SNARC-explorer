@@ -358,8 +358,8 @@ function drawFamilyTree(treeData) {
     if (n.children) {
       n.children.forEach(c => {
         drawLine(
-  { x: n.x + 90, y: n.y + 110 }, // slightly higher start point
-  { x: c.x + 90, y: c.y - 10 },  // slightly above the child's top
+  { x: n.x + 90, y: n.y + 0 }, // slightly higher start point
+  { x: c.x + 90, y: c.y - 0 },  // slightly above the child's top
   { color: "#777" }
 );
 
