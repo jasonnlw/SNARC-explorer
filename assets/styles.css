@@ -156,84 +156,113 @@ a{color:#0645ad}
   font-size: 0.85em;
   color: #555;
 }
-/* ============= FAMILY TREE STYLING ============= */
-
-/* ============= FAMILY TREE STYLING (horizontal generations) ============= */
+/* ============= IMPROVED FAMILY TREE LAYOUT ============= */
 
 .family-tree-container {
-  margin: 40px 0;
+  overflow: auto;
+  padding: 30px 10px;
   text-align: center;
-  overflow-x: auto;
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
+/* Root wraps vertically; each generation row is flex horizontal */
 .tree-root {
   display: flex;
-  justify-content: center;
   flex-direction: column;
   align-items: center;
+  gap: 40px; /* vertical distance between generations */
 }
 
-/* each generation (parents, children) laid out horizontally */
+/* Each generation row */
 .tree-level {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px;
-  margin: 10px 0;
+  gap: 15px; /* horizontal gap between siblings / parents */
+  flex-wrap: wrap;
 }
 
+/* Center nodes and connect via lines */
 .tree-node {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
-/* Vertical connector line */
+/* Connector from a parent down to its children */
 .tree-node::after {
   content: "";
   position: absolute;
-  width: 2px;
-  background: #999;
-  top: -10px;
-  bottom: -10px;
+  top: 100%;
   left: 50%;
+  width: 2px;
+  height: 40px;
+  background: #aaa;
   transform: translateX(-50%);
   z-index: 0;
 }
 
-/* remove connectors on top level */
-.tree-root > .tree-node::after {
-  display: none;
+/* Connector from children up to parent (elbow style) */
+.tree-level.children::before {
+  content: "";
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: #aaa;
+  z-index: 0;
 }
 
-/* person cards */
+.tree-level.children {
+  position: relative;
+}
+
+/* Person cards */
 .person-card {
   position: relative;
   z-index: 1;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  padding: 8px;
-  min-width: 140px;
+  border: 1.5px solid #ccc;
+  border-radius: 8px;
+  padding: 6px 8px;
+  min-width: 130px;
+  max-width: 180px;
+  background: #f9f9f9;
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  margin: 5px;
 }
 
+/* Gender colours */
+.person-card.male { background: #dceeff; }
+.person-card.female { background: #ffe5f0; }
+
 .person-thumb {
-  width: 80px;
-  height: 80px;
+  width: 60px;
+  height: 60px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
-  margin: 0 auto 6px;
+  margin: 0 auto 4px;
 }
 
 .person-label {
   font-weight: 600;
+  font-size: 0.95em;
+  line-height: 1.2em;
 }
 
 .person-dates {
-  font-size: 0.85em;
+  font-size: 0.8em;
   color: #555;
+  margin-top: 2px;
 }
+
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .tree-root { gap: 25px; }
+  .tree-level { gap: 10px; }
+  .person-card { min-width: 100px; }
+}
+
