@@ -1,15 +1,66 @@
-*{box-sizing:border-box} 
-body{font-family:system-ui,Segoe UI,Arial,sans-serif;margin:0}
-header{display:flex;gap:1rem;align-items:center;padding:.75rem 1rem;border-bottom:1px solid #ddd;position:sticky;top:0;background:#fff}
-.brand{font-weight:700;text-decoration:none;color:inherit}
-#search-form{flex:1}
-#search-input{width:100%;padding:.5rem .75rem;border:1px solid #ccc;border-radius:8px}
-.lang-switch button{margin-left:.25rem;padding:.4rem .6rem;border:1px solid #ccc;background:#f8f8f8;border-radius:8px;cursor:pointer}
-.lang-switch button.active{border-color:#000}
-main{max-width:1000px;margin:1rem auto;padding:0 1rem}
-.card{border:1px solid #e5e5e5;border-radius:12px;padding:1rem;margin:.75rem 0}
-a{color:#0645ad}
-.list{display:grid;gap:.5rem}
+/* ========== BASE LAYOUT ========== */
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, Segoe UI, Arial, sans-serif;
+  margin: 0;
+}
+
+header {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+  padding: .75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  position: sticky;
+  top: 0;
+  background: #fff;
+}
+
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
+
+#search-form { flex: 1; }
+
+#search-input {
+  width: 100%;
+  padding: .5rem .75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.lang-switch button {
+  margin-left: .25rem;
+  padding: .4rem .6rem;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lang-switch button.active { border-color: #000; }
+
+main {
+  max-width: 1000px;
+  margin: 1rem auto;
+  padding: 0 1rem;
+}
+
+.card {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1rem;
+  margin: .75rem 0;
+}
+
+a { color: #0645ad; }
+
+.list { display: grid; gap: .5rem; }
+
+/* ========== SEARCH DROPDOWN ========== */
 .suggestions {
   position: absolute;
   background: #fff;
@@ -22,28 +73,39 @@ a{color:#0645ad}
   z-index: 999;
 }
 
-.suggestion {
-  padding: 0.5rem 0.75rem;
-  cursor: pointer;
+.suggestion { padding: 0.5rem 0.75rem; cursor: pointer; }
+.suggestion:hover { background: #f0f0f0; }
+.suggestion.active { background: #e0e0ff; }
+
+/* ========== IIIF IMAGE GALLERY ========== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin: 10px 0 20px;
 }
 
-.suggestion:hover {
-  background: #f0f0f0;
-}
-.suggestion.active {
-  background: #e0e0ff;
+.gallery-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background: #fafafa;
+  height: 300px;
 }
 
-.wikidata img {
-  border-radius: 6px;
-  margin: 4px 6px;
-  max-width: 300px;
-  height: auto;
+.gallery-item img {
+  height: 100%;
+  width: auto;
+  object-fit: contain;
   transition: transform 0.2s ease;
 }
-.wikidata img:hover {
-  transform: scale(1.03);
-}
+
+.gallery-item:hover img { transform: scale(1.03); }
+
+/* ========== MAP MODAL ========== */
 .map-modal {
   display: none;
   position: fixed;
@@ -54,6 +116,7 @@ a{color:#0645ad}
   height: 100%;
   background-color: rgba(0,0,0,0.6);
 }
+
 .map-modal-content {
   position: relative;
   margin: 5% auto;
@@ -64,11 +127,9 @@ a{color:#0645ad}
   border-radius: 10px;
   box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 }
-.map-large {
-  width: 100%;
-  height: 500px;
-  border-radius: 6px;
-}
+
+.map-large { width: 100%; height: 500px; border-radius: 6px; }
+
 .map-close {
   position: absolute;
   top: 10px;
@@ -79,164 +140,86 @@ a{color:#0645ad}
   cursor: pointer;
   color: #333;
 }
-.map-close:hover {
-  color: #000;
-}
 
-/* 🖼️ IIIF image gallery */
-.gallery {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 10px;
-  margin: 10px 0 20px;
-}
+.map-close:hover { color: #000; }
 
-/* Each gallery tile */
-.gallery-item {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow: hidden;
-  border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
-  background: #fafafa;
-  height: 300px;              /* ✅ fixed height for uniform rows */
-}
-
-/* Thumbnail images */
-.gallery-item img {
-  height: 100%;               /* fill vertical space */
-  width: auto;                /* preserve aspect ratio */
-  object-fit: contain;        /* fit entire image without cropping */
-  transition: transform 0.2s ease;
-}
-
-/* Subtle hover zoom */
-.gallery-item:hover img {
-  transform: scale(1.03);
-}
-.family-tree-container {
-  margin: 20px 0;
-  text-align: center;
-  overflow-x: auto;
-}
-
-.tree-root {
-  display: inline-block;
-}
-
-.tree-node {
-  display: inline-block;
-  margin: 10px;
-  text-align: center;
-}
-
-.person-card {
-  display: inline-block;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
-  padding: 6px;
-  width: 160px;
-}
-
-.person-card img {
-  width: auto;
-  height: 100px;
-  border-radius: 6px;
-  object-fit: cover;
-}
-
-.person-label {
-  font-weight: 600;
-  margin-top: 4px;
-}
-
-.person-dates {
-  font-size: 0.85em;
-  color: #555;
-}
-/* ============= IMPROVED FAMILY TREE LAYOUT ============= */
-
-/* ===== FAMILY TREE (clean, node-anchored, responsive) ===== */
+/* ========== FAMILY TREE ========== */
 
 .family-tree-container {
-  position: relative;        /* for the SVG overlay */
+  position: relative;
   overflow: auto;
-  padding: 24px 10px;
   text-align: center;
-  max-width: 100%;
+  padding: 24px 10px;
   box-sizing: border-box;
 }
 
 .tree-root {
+  position: relative;
   display: flex;
-  flex-direction: column;    /* generations stacked vertically */
+  flex-direction: column;
   align-items: center;
-  gap: 28px;                 /* vertical distance between generations */
+  gap: 28px;
 }
 
-/* Each generation row (parents or children) */
 .tree-level {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 14px;                 /* horizontal spacing between siblings */
+  gap: 14px;
   flex-wrap: wrap;
 }
 
-/* Node wrapper */
 .tree-node {
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
-/* --- Variable-height, properly clipped cards --- */
+/* Person card (variable height, fixed width) */
 .person-card {
   position: relative;
-  overflow: hidden;                /* crops wide images */
+  overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding: 8px 10px;               /* inner space on all sides */
+  padding: 8px 10px;
   border: 1.5px solid #d6d6d6;
   border-radius: 10px;
   background: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   box-sizing: border-box;
-  width: auto;
-  min-width: 130px;
-  max-width: 200px;
+  max-width: 180px;
+  width: 100%;
 }
 
-/* shrink cards naturally when no image is present */
+/* Card shrink when no image */
 .person-card:not(:has(img.person-thumb)) {
-  padding-top: 10px;
+  padding-top: 6px;
   padding-bottom: 6px;
 }
 
-/* --- Thumbnail --- */
+/* Thumbnail */
 .person-thumb {
-  width: 52px;                     /* smaller circle to keep full padding */
-  height: 52px;
+  width: 56px;
+  height: 56px;
   margin-top: 4px;
   margin-bottom: 6px;
   border-radius: 50%;
-  object-fit: cover;               /* crop within the circle */
+  object-fit: cover;
   object-position: center;
   border: 2px solid #fff;
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
   display: block;
-  max-width: calc(100% - 16px);    /* ensure 8px padding on both sides */
+  max-width: calc(100% - 16px);
+  flex-shrink: 0;
 }
 
-/* --- Gender colours remain --- */
+/* Gender colours */
 .person-card.male   { background: #dceeff; }
 .person-card.female { background: #ffe5f0; }
-
 
 .person-label {
   font-weight: 600;
@@ -250,96 +233,7 @@ a{color:#0645ad}
   margin-top: 2px;
 }
 
-/* SVG overlay for connectors */
-.tree-lines {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  pointer-events: none;
-  stroke: #8a8a8a;
-  stroke-width: 2;
-  fill: none;
-}
-
-/* Responsive tweaks */
-@media (max-width: 600px) {
-  .tree-root  { gap: 22px; }
-  .tree-level { gap: 10px; }
-  .person-card { min-width: 120px; }
-}
-/* ===== Fix overlapping thumbnails in family tree ===== */
-
-/* Make sure person cards clip any overflowing image */
-.person-card {
-  overflow: hidden;           /* ✅ crop anything outside the rounded box */
-}
-
-/* Keep thumbnail strictly inside card bounds */
-.person-thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;          /* ✅ ensures cropping within circle */
-  object-position: center;    /* center the crop */
-  display: block;
-  margin: 0 auto 6px;
-  flex-shrink: 0;
-}
-
-/* Optional: add a soft border to separate thumb from background */
-.person-thumb {
-  border: 2px solid #fff;
-  box-shadow: 0 0 2px rgba(0,0,0,0.25);
-}
-/* --- Refined layout: guarantee padding between image and card edge --- */
-.person-card {
-  position: relative;
-  overflow: hidden;                /* crop anything outside */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-  padding: 10px 8px 10px 8px;      /* top/bottom padding adds visual gap */
-  min-height: 150px;               /* keeps vertical breathing room */
-  box-sizing: border-box;
-}
-/* --- FINAL Card height fix for people without images --- */
-
-/* Default card (with image) */
-.person-card {
-  min-height: auto !important;        /* remove any fixed minimum */
-  padding-top: 10px;
-  padding-bottom: 10px;
-}
-
-/* If no image is present, tighten padding vertically */
-.person-card:not(:has(img.person-thumb)) {
-  padding-top: 6px !important;
-  padding-bottom: 6px !important;
-}
-
-/* Ensure consistent width but natural height */
-.person-card {
-  width: 100%;
-  max-width: 180px;                   /* same width range for all */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-start;
-}
-
-.person-thumb {
-  width: 56px;                     /* slightly smaller than before */
-  height: 56px;
-  margin-top: 4px;                 /* pushes down from top edge */
-  margin-bottom: 6px;              /* space before label text */
-  border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
-  border: 2px solid #fff;
-  box-shadow: 0 0 2px rgba(0,0,0,0.25);
-  flex-shrink: 0;
-}
+/* SVG connector overlay */
 .tree-lines {
   position: absolute;
   top: 0;
@@ -348,17 +242,15 @@ a{color:#0645ad}
   height: 100%;
   pointer-events: none;
   overflow: visible;
+  stroke: #777;
+  stroke-width: 1.5;
+  fill: none;
   z-index: 0;
 }
-.tree-root {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.tree-node {
-  position: relative;
-  text-align: center;
-}
 
-
+/* Responsive tweaks */
+@media (max-width: 600px) {
+  .tree-root  { gap: 22px; }
+  .tree-level { gap: 10px; }
+  .person-card { max-width: 140px; }
+}
