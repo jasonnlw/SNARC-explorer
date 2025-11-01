@@ -145,11 +145,13 @@ a { color: #0645ad; }
 
 /* ========== FAMILY TREE ========== */
 
+/* ========== FAMILY TREE (final layout fix) ========== */
+
 .family-tree-container {
   position: relative;
   overflow: auto;
   text-align: center;
-  padding: 24px 10px;
+  padding: 30px 10px;
   box-sizing: border-box;
 }
 
@@ -158,17 +160,19 @@ a { color: #0645ad; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 28px;
+  gap: 60px; /* ✅ vertical space between generations */
 }
 
 .tree-level {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 14px;
+  gap: 20px; /* ✅ horizontal space between siblings */
   flex-wrap: wrap;
+  position: relative;
 }
 
+/* Node wrapper */
 .tree-node {
   position: relative;
   display: flex;
@@ -177,7 +181,7 @@ a { color: #0645ad; }
   text-align: center;
 }
 
-/* Person card (variable height, fixed width) */
+/* Person card */
 .person-card {
   position: relative;
   overflow: hidden;
@@ -191,11 +195,11 @@ a { color: #0645ad; }
   background: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   box-sizing: border-box;
-  max-width: 180px;
-  width: 100%;
+  width: 180px;
+  z-index: 1;
 }
 
-/* Card shrink when no image */
+/* Variable height depending on image */
 .person-card:not(:has(img.person-thumb)) {
   padding-top: 6px;
   padding-bottom: 6px;
@@ -214,7 +218,6 @@ a { color: #0645ad; }
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
   display: block;
   max-width: calc(100% - 16px);
-  flex-shrink: 0;
 }
 
 /* Gender colours */
@@ -233,7 +236,7 @@ a { color: #0645ad; }
   margin-top: 2px;
 }
 
-/* SVG connector overlay */
+/* SVG overlay for connectors */
 .tree-lines {
   position: absolute;
   top: 0;
@@ -250,7 +253,7 @@ a { color: #0645ad; }
 
 /* Responsive tweaks */
 @media (max-width: 600px) {
-  .tree-root  { gap: 22px; }
-  .tree-level { gap: 10px; }
-  .person-card { max-width: 140px; }
+  .tree-root  { gap: 40px; }
+  .tree-level { gap: 12px; }
+  .person-card { width: 150px; }
 }
