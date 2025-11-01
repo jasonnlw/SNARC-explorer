@@ -16,55 +16,50 @@ window.FamilyLayout = (() => {
 
     const nodesById = new Map();
 
-    /** Traverse recursively to collect all nodes with signed depth */
+    // --- Traverse recursively to collect all nodes with signed depth ---
     function traverse(node, depth = 0) {
       if (!node || nodesById.has(node.id)) return;
       node.depth = depth;
       nodesById.set(node.id, node);
 
-      // spouses share the same generation depth
       (node.spouses || []).forEach(s => traverse(s, depth));
-
-      // ancestors (parents) are above => smaller depth
       (node.parents || []).forEach(p => traverse(p, depth - 1));
-
-      // descendants (children) are below => larger depth
       (node.children || []).forEach(c => traverse(c, depth + 1));
     }
 
     traverse(root, 0);
 
-    // ---- NORMALISE DEPTHS so 0 = topmost ancestor ----
+    // --- Normalise depths so 0 = topmost ancestor ---
     const allNodes = Array.from(nodesById.values());
     const minDepth = Math.min(...allNodes.map(n => n.depth));
     const maxDepth = Math.max(...allNodes.map(n => n.depth));
-
     const totalLevels = maxDepth - minDepth + 1;
+
     const normalized = allNodes.map(n => ({
       ...n,
-      level: n.depth - minDepth // 0..N continuous
+      level: n.depth - minDepth
     }));
 
-    // ---- GROUP BY LEVEL ----
+    // --- Group by level ---
     const levels = [];
     normalized.forEach(n => {
       if (!levels[n.level]) levels[n.level] = [];
       levels[n.level].push(n);
     });
 
-    // ---- Horizontal layout for each generation ----
+    // --- Horizontal layout for each generation ---
     let maxWidth = 0;
     levels.forEach((level, i) => {
       const totalWidth = level.length * (nodeWidth + hGap) - hGap;
       let startX = -totalWidth / 2;
       level.forEach((n, j) => {
         n.x = startX + j * (nodeWidth + hGap);
-        n.y = i * (nodeHeight + vGap); // i = level index (top→bottom)
+        n.y = i * (nodeHeight + vGap);
       });
       maxWidth = Math.max(maxWidth, totalWidth);
     });
 
-    // ---- Spouse pairing side-by-side ----
+    // --- Spouse pairing side-by-side ---
     normalized.forEach(n => {
       if (!n.spouses || !n.spouses.length) return;
       const baseX = n.x;
@@ -74,47 +69,38 @@ window.FamilyLayout = (() => {
       });
     });
 
-    // ---- Normalise X coordinates so tree is positive space ----
+    // --- Normalise X coordinates so tree is positive space ---
     const minX = Math.min(...normalized.map(n => n.x));
     normalized.forEach(n => { n.x -= minX - 50; });
 
-    // ---- Calculate true height from levels ----
-    const height = totalLevels * (nodeHeight + vGap);
+    // --- Adjust Y positions based on row spacing ---
+    const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
 
     return {
-      nodes: normalized,
+      nodes: adjusted,
       width: maxWidth + 100,
-      height
+      height: totalLevels * (nodeHeight + vGap)
     };
   }
-// --- Adjust Y positions based on real card heights after layout is known ---
-function normalizeRowSpacing(nodes, nodeHeight, vGap) {
-  // Group by level
-  const levels = {};
-  nodes.forEach(n => {
-    if (!levels[n.level]) levels[n.level] = [];
-    levels[n.level].push(n);
-  });
 
-  // Compute offsets per level so each row is spaced by actual max height + vGap
-  let currentY = 0;
-  Object.keys(levels).sort((a,b)=>a-b).forEach(lvl => {
-    const levelNodes = levels[lvl];
-    const maxH = nodeHeight; // placeholder, will be re-adjusted later
-    levelNodes.forEach(n => n.y = currentY);
-    currentY += maxH + vGap;
-  });
-  return nodes;
-}
+  // --- Helper: normalize vertical spacing by row ---
+  function normalizeRowSpacing(nodes, nodeHeight, vGap) {
+    const levels = {};
+    nodes.forEach(n => {
+      if (!levels[n.level]) levels[n.level] = [];
+      levels[n.level].push(n);
+    });
 
-const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
+    let currentY = 0;
+    Object.keys(levels).sort((a,b)=>a-b).forEach(lvl => {
+      const levelNodes = levels[lvl];
+      levelNodes.forEach(n => n.y = currentY);
+      currentY += nodeHeight + vGap;
+    });
+    return nodes;
+  }
 
-return {
-  nodes: adjusted,
-  width: maxWidth + 100,
-  height: totalLevels * (nodeHeight + vGap)
-};
-
+  // ✅ Properly export function
   return { computeLayout };
-})();
 
+})();
