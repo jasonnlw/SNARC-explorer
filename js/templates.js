@@ -325,11 +325,13 @@ function drawFamilyTree(treeData) {
   });
 
   // 2) Build the canvas and svg
-  container.innerHTML = `
-    <div class="family-tree-canvas" style="position:relative;width:${layout.width}px;height:${layout.height}px;">
+container.innerHTML = `
+  <div class="family-tree-wrapper">
+    <div class="family-tree-canvas" style="width:${layout.width}px;height:${layout.height}px;">
       <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
     </div>
-  `;
+  </div>
+`;
   const canvas = container.querySelector(".family-tree-canvas");
   const svg    = canvas.querySelector("svg");
 
