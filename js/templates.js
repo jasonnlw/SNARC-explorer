@@ -405,68 +405,46 @@ for (const stmt of spouseStmts) {
   return node;
 }
   
-
-
-
 // ---------- Family tree: render HTML + draw connectors ----------
 function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  window.lastTreeData = treeData;  // 🔍 expose data for debugging
+  window.lastTreeData = treeData;
 
+  // Compute layout
   const layout = FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
     hGap: 40,
     vGap: 40
   });
-window.lastLayout = layout;
+  window.lastLayout = layout;
 
-// Define top/bottom padding (in px)
-const treePadding = 70;
+  // Padding settings
+  const treePadding = 70;
 
-// Create wrapper first (same as before)
-container.innerHTML = `
-  <div class="family-tree-wrapper">
-    <div class="family-tree-canvas" style="position:relative;">
-      <svg class="tree-lines"></svg>
+  // --- Rebuild wrapper + SVG shell ---
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <div class="family-tree-canvas" style="position:relative;">
+        <svg class="tree-lines"></svg>
+      </div>
     </div>
-  </div>
-`;
-
-// After cards are rendered (later in drawFamilyTree)
-...
-// === after all cards are appended ===
-
-// Compute actual content bounds
-const cards = Array.from(container.querySelectorAll('.person-card'));
-if (cards.length) {
-  const cardBottoms = cards.map(el => el.offsetTop + el.offsetHeight);
-  const maxY = Math.max(...cardBottoms);
-  const svg = container.querySelector('svg.tree-lines');
-  const canvas = container.querySelector('.family-tree-canvas');
-
-  // Resize SVG and canvas to fit content + balanced padding
-  const totalHeight = maxY + treePadding;
-  svg.setAttribute('height', totalHeight);
-  canvas.style.height = `${totalHeight}px`;
-  canvas.style.paddingTop = `${treePadding}px`;
-  canvas.style.paddingBottom = `${treePadding}px`;
-}
-
+  `;
 
   const wrapper = container.querySelector(".family-tree-wrapper");
   const canvas  = container.querySelector(".family-tree-canvas");
   const svg     = canvas.querySelector("svg");
 
-layout.nodes.forEach(n => {
-  const genderClass =
-    n.gender === "male" ? "male" :
-    n.gender === "female" ? "female" : "";
+  // --- Create and position cards ---
+  layout.nodes.forEach(n => {
+    const genderClass =
+      n.gender === "male" ? "male" :
+      n.gender === "female" ? "female" : "";
 
-  const card = document.createElement("div");
-  card.className = `person-card ${genderClass}`;
+    const card = document.createElement("div");
+    card.className = `person-card ${genderClass}`;
     card.dataset.qid = n.id;
     card.style.left = `${n.x}px`;
     card.style.top  = `${n.y}px`;
@@ -482,6 +460,19 @@ layout.nodes.forEach(n => {
     canvas.appendChild(card);
   });
 
+  // --- Adjust canvas height based on actual cards ---
+  const cards = Array.from(canvas.querySelectorAll('.person-card'));
+  if (cards.length) {
+    const cardBottoms = cards.map(el => el.offsetTop + el.offsetHeight);
+    const maxY = Math.max(...cardBottoms);
+    const totalHeight = maxY + treePadding;
+    svg.setAttribute('height', totalHeight);
+    canvas.style.height = `${totalHeight}px`;
+    canvas.style.paddingTop = `${treePadding}px`;
+    canvas.style.paddingBottom = `${treePadding}px`;
+  }
+
+  // --- Anchor + connector functions follow ---
   const elById = new Map();
   canvas.querySelectorAll('.person-card[data-qid]').forEach(el => elById.set(el.dataset.qid, el));
 
@@ -501,50 +492,6 @@ layout.nodes.forEach(n => {
     const end   = { x: to.x,   y: to.y - padTop };
     const midY  = (start.y + end.y) / 2;
     return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
-  };
-
-  const drawPath = (d, stroke = "#777", width = 1.5) => {
-    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", d);
-    p.setAttribute("stroke", stroke);
-    p.setAttribute("stroke-width", width);
-    p.setAttribute("fill", "none");
-    p.setAttribute("vector-effect", "non-scaling-stroke");
-    svg.appendChild(p);
-  };
-
-const drawConnectors = () => {
-  svg.innerHTML = "";
-
-  // --- background group for spouse lines ---
-  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  spouseGroup.setAttribute("class", "spouse-lines");
-  svg.appendChild(spouseGroup);
-
-  // --- main group for parent/child lines ---
-  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  mainGroup.setAttribute("class", "family-lines");
-  svg.appendChild(mainGroup);
-
-  const drawPath = (group, d, stroke = "#777", width = 1.5) => {
-    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", d);
-    p.setAttribute("stroke", stroke);
-    p.setAttribute("stroke-width", width);
-    p.setAttribute("fill", "none");
-    p.setAttribute("vector-effect", "non-scaling-stroke");
-    group.appendChild(p);
-  };
-
-  const drawSpouseDoubleCurve = (group, aC, bC, color = "#aaa") => {
-    const yMid = (aC.y + bC.y) / 2;
-    const dx = Math.abs(aC.x - bC.x);
-    const curve = Math.min(70, Math.max(24, dx / 3));
-    const offset = 6;
-    const d1 = `M ${aC.x} ${yMid - offset} C ${aC.x} ${yMid - curve}, ${bC.x} ${yMid - curve}, ${bC.x} ${yMid - offset}`;
-    const d2 = `M ${aC.x} ${yMid + offset} C ${aC.x} ${yMid + curve}, ${bC.x} ${yMid + curve}, ${bC.x} ${yMid + offset}`;
-    drawPath(group, d1, color, 1.2);
-    drawPath(group, d2, color, 1.2);
   };
 
   // --- iterate all nodes ---
