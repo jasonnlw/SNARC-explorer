@@ -278,7 +278,7 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
       const filename = String(v).replace(/^File:/i, "").trim();
       if (filename) {
         const url = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
-        thumb = `<img src="${url}" alt="${label}" class="person-thumb" loading="lazy">`;
+        thumb = url; // store just the URL
       }
     }
   }
