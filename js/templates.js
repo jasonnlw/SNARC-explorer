@@ -391,7 +391,7 @@ function drawFamilyTree(treeData) {
   svg.setAttribute("width", contentBox.width);
   svg.setAttribute("height", contentBox.height);
 
-  };
+  }
 
   drawConnectors();
 }
