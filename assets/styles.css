@@ -248,5 +248,29 @@ a{color:#0645ad}
   .tree-level { gap: 10px; }
   .person-card { min-width: 120px; }
 }
+/* ===== Fix overlapping thumbnails in family tree ===== */
+
+/* Make sure person cards clip any overflowing image */
+.person-card {
+  overflow: hidden;           /* ✅ crop anything outside the rounded box */
+}
+
+/* Keep thumbnail strictly inside card bounds */
+.person-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;          /* ✅ ensures cropping within circle */
+  object-position: center;    /* center the crop */
+  display: block;
+  margin: 0 auto 6px;
+  flex-shrink: 0;
+}
+
+/* Optional: add a soft border to separate thumb from background */
+.person-thumb {
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+}
 
 
