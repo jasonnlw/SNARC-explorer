@@ -462,6 +462,33 @@ function drawFamilyTree(treeData) {
   setTimeout(drawConnectors, 300);
 }
 
+// --- Recalculate row offsets based on real DOM heights ---
+function adjustVerticalSpacing() {
+  const byLevel = {};
+  layout.nodes.forEach(n => {
+    if (!byLevel[n.level]) byLevel[n.level] = [];
+    byLevel[n.level].push(n);
+  });
+
+  let currentY = 0;
+  const levels = Object.keys(byLevel).sort((a,b)=>a-b);
+  levels.forEach((lvl, i) => {
+    const cards = byLevel[lvl]
+      .map(n => elById.get(n.id))
+      .filter(Boolean);
+    const maxH = Math.max(...cards.map(c => c.offsetHeight));
+    cards.forEach(c => { c.style.top = `${currentY}px`; });
+    // update layout positions too
+    byLevel[lvl].forEach(n => n.y = currentY);
+    currentY += maxH + 60; // 60 = vGap
+  });
+
+  // redraw connectors after vertical shift
+  drawConnectors();
+}
+
+// Run once after render settles
+setTimeout(adjustVerticalSpacing, 400);
 
 
 // ✅ Properly close and export
