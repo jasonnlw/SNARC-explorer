@@ -337,21 +337,47 @@ container.innerHTML = `
 
   // 3) Render cards (absolute positioned). Tag each with data-qid
   layout.nodes.forEach(n => {
-    const genderClass = n.gender === "male" ? "male" :
-                        n.gender === "female" ? "female" : "";
-    const card = document.createElement("div");
-    card.className = `person-card ${genderClass}`;
-    card.dataset.qid = n.id;
-    card.style.left = `${n.x}px`;
-    card.style.top  = `${n.y}px`;
-    const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
-    card.innerHTML = `
-      ${thumbHTML}
-      <div class="person-label">${n.label || n.id}</div>
-      <div class="person-dates">${n.dates || ""}</div>
-    `;
-    canvas.appendChild(card);
-  });
+  const nEl = elById.get(n.id);
+  if (!nEl) return;
+
+  // Draw to children (descendants)
+  if (n.children && n.children.length) {
+    const pBottom = anchor(nEl, 'bottom');
+    n.children.forEach(c => {
+      const cEl = elById.get(c.id);
+      if (!cEl) return;
+      const cTop = anchor(cEl, 'top');
+      const d = elbowPath(pBottom, cTop, 8, 8);
+      drawPath(d, '#777', 1.5);
+    });
+  }
+
+  // Draw to parents (ancestors)
+  if (n.parents && n.parents.length) {
+    const cTop = anchor(nEl, 'top');
+    n.parents.forEach(p => {
+      const pEl = elById.get(p.id);
+      if (!pEl) return;
+      const pBottom = anchor(pEl, 'bottom');
+      const d = elbowPath(pBottom, cTop, 8, 8);
+      drawPath(d, '#777', 1.5);
+    });
+  }
+
+  // Draw spouse lines (unchanged)
+  if (n.spouses && n.spouses.length) {
+    const aC = anchor(nEl, 'center');
+    n.spouses.forEach(s => {
+      const sEl = elById.get(s.id);
+      if (!sEl) return;
+      const bC = anchor(sEl, 'center');
+      const y = (aC.y + bC.y) / 2;
+      const d = `M ${aC.x} ${y} L ${bC.x} ${y}`;
+      drawPath(d, '#999', 2);
+    });
+  }
+});
+
 
   // 4) Build a quick lookup from QID -> element
   const elById = new Map();
