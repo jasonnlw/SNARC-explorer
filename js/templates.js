@@ -299,31 +299,45 @@ function drawFamilyTree(treeData) {
 
   // Recursive renderer
   const createNodeHTML = (node) => {
-    const parents = node.parents.map(createNodeHTML).join("");
-    const children = node.children.map(createNodeHTML).join("");
+    // Render all parents in one horizontal row
+    const parentsHTML = node.parents.length
+      ? `<div class="tree-level parents">
+           ${node.parents.map(createNodeHTML).join("")}
+         </div>`
+      : "";
+
+    // Render all children in one horizontal row
+    const childrenHTML = node.children.length
+      ? `<div class="tree-level children">
+           ${node.children.map(createNodeHTML).join("")}
+         </div>`
+      : "";
 
     // Determine gender color
-    const gender = node.gender || "unknown";
     const color =
-      gender === "male" ? "#d0e6ff" :
-      gender === "female" ? "#ffd9e6" :
-      "#f2f2f2";
+      node.gender === "male"
+        ? "#d0e6ff"
+        : node.gender === "female"
+        ? "#ffd9e6"
+        : "#f2f2f2";
 
+    // Combine
     return `
       <div class="tree-node">
-        ${parents ? `<div class="tree-parents">${parents}</div>` : ""}
+        ${parentsHTML}
         <div class="person-card" style="background:${color}">
           ${node.thumb || ""}
           <div class="person-label">${node.label}</div>
           <div class="person-dates">${node.dates}</div>
         </div>
-        ${children ? `<div class="tree-children">${children}</div>` : ""}
+        ${childrenHTML}
       </div>
     `;
   };
 
   container.innerHTML = `<div class="tree-root">${createNodeHTML(treeData)}</div>`;
 }
+
 
   // ✅ Properly close and export
   return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
