@@ -339,6 +339,45 @@ function drawFamilyTree(treeData) {
     <div class="tree-root">${createNodeHTML(treeData)}</div>
     <svg id="tree-lines" class="tree-lines"></svg>
   `;
+function drawFamilyTree(treeData) {
+  const container = document.getElementById("family-tree");
+  if (!container || !treeData) return;
+
+  // ... your existing recursive createNodeHTML() code here ...
+
+  container.innerHTML = `
+    <div class="tree-root">${createNodeHTML(treeData)}</div>
+    <svg id="tree-lines" class="tree-lines"></svg>
+  `;
+
+  // --- now draw connectors dynamically ---
+  const svg = container.querySelector("#tree-lines");
+  const cards = container.querySelectorAll(".person-card");
+
+  cards.forEach(card => {
+    const node = card.closest(".tree-node");
+    const children = node?.querySelectorAll(":scope > .tree-level.children .person-card");
+    if (!children?.length) return;
+
+    const parentRect = card.getBoundingClientRect();
+    const parentX = parentRect.left + parentRect.width / 2 + window.scrollX;
+    const parentY = parentRect.bottom + window.scrollY;
+
+    children.forEach(child => {
+      const childRect = child.getBoundingClientRect();
+      const childX = childRect.left + childRect.width / 2 + window.scrollX;
+      const childY = childRect.top + window.scrollY;
+
+      // Path: down from parent, then across to child, then down to child
+      const midY = (parentY + childY) / 2;
+      const path = `M${parentX},${parentY} L${parentX},${midY} L${childX},${midY} L${childX},${childY}`;
+
+      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", path);
+      svg.appendChild(p);
+    });
+  });
+}
 
 }
 
