@@ -306,47 +306,52 @@ else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
     }
   }
 
-  const node = { id: rootQid, label, dates, thumb, gender, parents: [], children: [] };
+  // === Build base node object ===
+  const node = {
+    id: rootQid,
+    label,
+    dates,
+    thumb,
+    gender,
+    parents: [],
+    children: [],
+    spouses: [] 
+  };
 
-  // Parents (P53 father, P55 mother)
-  for (const pid of ["P53", "P55"]) {
-    const rels = claims[pid] || [];
-    for (const stmt of rels) {
-      const q = Utils.firstValue(stmt);
-      if (q && /^Q\d+$/.test(q)) {
-        const parentNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-        if (parentNode) node.parents.push(parentNode);
-      }
+  // === Parents (P53) ===
+  const parentStmts = claims["P53"] || [];
+  for (const stmt of parentStmts) {
+    const q = Utils.firstValue(stmt);
+    if (q && /^Q\d+$/.test(q)) {
+      const parentNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+      if (parentNode) node.parents.push(parentNode);
     }
   }
 
-  // Children (P54)
-  const kids = claims["P54"] || [];
-  for (const stmt of kids) {
+  // === Children (P54) ===
+  const childStmts = claims["P54"] || [];
+  for (const stmt of childStmts) {
     const q = Utils.firstValue(stmt);
     if (q && /^Q\d+$/.test(q)) {
       const childNode = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
       if (childNode) node.children.push(childNode);
     }
   }
-// Spouses (P56) — show on the same generation (no depth change)
-node.spouses = [];
-const spouseStmts = claims["P56"] || [];
-for (const stmt of spouseStmts) {
-  const q = Utils.firstValue(stmt);
-  if (q && /^Q\d+$/i.test(q) && !visited.has(q)) {
-    try {
-      // mark as visited so recursion doesn’t loop forever
-      visited.add(q);
+
+  // === Spouses (P56) ===
+  const spouseStmts = claims["P56"] || [];
+  for (const stmt of spouseStmts) {
+    const q = Utils.firstValue(stmt);
+    if (q && /^Q\d+$/.test(q)) {
       const spouseNode = await renderFamilyTree(q, lang, depth, maxDepth, visited);
       if (spouseNode) node.spouses.push(spouseNode);
-    } catch (err) {
-      console.warn("Failed to fetch spouse node", q, err);
     }
   }
-}
+
   return node;
 }
+  
+
 
 
 // ---------- Family tree: render HTML + draw connectors ----------
