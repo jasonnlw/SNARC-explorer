@@ -316,7 +316,7 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  // --- Recursive HTML build ---
+  // --- Build the HTML tree first ---
   const createNodeHTML = (node) => {
     const parentsHTML = node.parents?.length
       ? `<div class="tree-level parents">${node.parents.map(createNodeHTML).join("")}</div>`
@@ -325,17 +325,14 @@ function drawFamilyTree(treeData) {
       ? `<div class="tree-level children">${node.children.map(createNodeHTML).join("")}</div>`
       : "";
 
-    const color =
-      node.gender === "male"
-        ? "#d0e6ff"
-        : node.gender === "female"
-        ? "#ffd9e6"
-        : "#f2f2f2";
+    const genderClass =
+      node.gender === "male" ? "male" :
+      node.gender === "female" ? "female" : "";
 
     return `
       <div class="tree-node">
         ${parentsHTML}
-        <div class="person-card" style="background:${color}">
+        <div class="person-card ${genderClass}">
           ${node.thumb || ""}
           <div class="person-label">${node.label}</div>
           <div class="person-dates">${node.dates}</div>
@@ -344,53 +341,66 @@ function drawFamilyTree(treeData) {
       </div>`;
   };
 
-  // --- Insert HTML + SVG ---
+  // --- Insert HTML and SVG overlay ---
   container.innerHTML = `
     <div class="tree-root">${createNodeHTML(treeData)}</div>
     <svg id="tree-lines" class="tree-lines"></svg>
   `;
 
-  // --- Draw connectors ---
+  // --- Connector drawing ---
   const svg = container.querySelector("#tree-lines");
-  const cards = container.querySelectorAll(".person-card");
+  const root = container.querySelector(".tree-root");
 
-  const svgRect = svg.getBoundingClientRect();
-  const offsetX = svgRect.left;
-  const offsetY = svgRect.top;
+  // Resize SVG to match content
+  const resizeSVG = () => {
+    const r = root.getBoundingClientRect();
+    svg.setAttribute("width", r.width);
+    svg.setAttribute("height", r.height);
+    svg.style.width = `${r.width}px`;
+    svg.style.height = `${r.height}px`;
+  };
+  resizeSVG();
+
+  // Compute connector coordinates relative to container
+  const containerRect = container.getBoundingClientRect();
+
+  svg.innerHTML = "";
+  const cards = root.querySelectorAll(".person-card");
 
   cards.forEach(card => {
     const node = card.closest(".tree-node");
     const children = node?.querySelectorAll(":scope > .tree-level.children .person-card");
     if (!children?.length) return;
 
-    const parentRect = card.getBoundingClientRect();
-    const parentX = parentRect.left + parentRect.width / 2 - offsetX;
-    const parentY = parentRect.bottom - offsetY;
+    const pRect = card.getBoundingClientRect();
+    const parentX = pRect.left - containerRect.left + pRect.width / 2 + container.scrollLeft;
+    const parentY = pRect.bottom - containerRect.top + container.scrollTop;
 
     children.forEach(child => {
-      const childRect = child.getBoundingClientRect();
-      const childX = childRect.left + childRect.width / 2 - offsetX;
-      const childY = childRect.top - offsetY;
+      const cRect = child.getBoundingClientRect();
+      const childX = cRect.left - containerRect.left + cRect.width / 2 + container.scrollLeft;
+      const childY = cRect.top - containerRect.top + container.scrollTop;
 
-      // Draw a neat 90° elbow connector
+      // Neat elbow connector
       const midY = (parentY + childY) / 2;
-      const path = `M${parentX},${parentY} L${parentX},${midY} L${childX},${midY} L${childX},${childY}`;
+      const d = `M${parentX},${parentY} L${parentX},${midY} L${childX},${midY} L${childX},${childY}`;
 
-      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      p.setAttribute("d", path);
-      p.setAttribute("stroke", "#666");
-      p.setAttribute("stroke-width", "1.5");
-      p.setAttribute("fill", "none");
-      p.setAttribute("vector-effect", "non-scaling-stroke");
-      svg.appendChild(p);
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("stroke", "#777");
+      path.setAttribute("stroke-width", "1.5");
+      path.setAttribute("fill", "none");
+      path.setAttribute("vector-effect", "non-scaling-stroke");
+      svg.appendChild(path);
     });
   });
 
-    // Resize SVG to fit entire tree
-  const contentBox = container.querySelector(".tree-root").getBoundingClientRect();
-  svg.setAttribute("width", contentBox.width);
-  svg.setAttribute("height", contentBox.height);
-} 
+  // Redraw on resize
+  window.addEventListener("resize", () => {
+    resizeSVG();
+    drawFamilyTree(treeData);
+  }, { once: true });
+}
 
 // ✅ Properly close and export
 return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
