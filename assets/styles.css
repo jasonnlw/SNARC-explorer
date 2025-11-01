@@ -193,31 +193,50 @@ a{color:#0645ad}
   align-items: center;
 }
 
-/* Person card */
+/* --- Variable-height, properly clipped cards --- */
 .person-card {
   position: relative;
-  z-index: 1;
+  overflow: hidden;                /* crops wide images */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 8px 10px;               /* inner space on all sides */
   border: 1.5px solid #d6d6d6;
   border-radius: 10px;
-  padding: 8px 10px;
-  min-width: 140px;
-  max-width: 200px;
   background: #f9f9f9;
-  text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  box-sizing: border-box;
+  width: auto;
+  min-width: 130px;
+  max-width: 200px;
 }
 
+/* shrink cards naturally when no image is present */
+.person-card:not(:has(img.person-thumb)) {
+  padding-top: 10px;
+  padding-bottom: 6px;
+}
+
+/* --- Thumbnail --- */
+.person-thumb {
+  width: 52px;                     /* smaller circle to keep full padding */
+  height: 52px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  border-radius: 50%;
+  object-fit: cover;               /* crop within the circle */
+  object-position: center;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  display: block;
+  max-width: calc(100% - 16px);    /* ensure 8px padding on both sides */
+}
+
+/* --- Gender colours remain --- */
 .person-card.male   { background: #dceeff; }
 .person-card.female { background: #ffe5f0; }
 
-.person-thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
-  display: block;
-  margin: 0 auto 6px;
-}
 
 .person-label {
   font-weight: 600;
