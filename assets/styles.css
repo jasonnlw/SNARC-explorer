@@ -233,6 +233,46 @@ a{color:#0645ad}
   text-align: center;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
 }
+/* ============= FAMILY TREE CONNECTORS (elbow style) ============= */
+
+/* vertical line down from parent */
+.tree-node::after {
+  content: "";
+  position: absolute;
+  top: calc(100% - 2px);
+  left: 50%;
+  width: 2px;
+  height: 30px;
+  background: #999;
+  transform: translateX(-50%);
+  z-index: 0;
+}
+
+/* horizontal elbow from parent to child */
+.tree-level.children .tree-node::before {
+  content: "";
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  width: 50%;
+  height: 2px;
+  background: #999;
+  z-index: 0;
+}
+
+/* Remove connector for first (top) and last (bottom) generation */
+.tree-root > .tree-node::after,
+.tree-root > .tree-node .tree-level.children:last-child .tree-node::after {
+  display: none;
+}
+
+/* Align the elbow endpoints neatly to the center of cards */
+.tree-level.children .tree-node:first-child::before {
+  border-top-left-radius: 3px;
+}
+.tree-level.children .tree-node:last-child::before {
+  border-top-right-radius: 3px;
+}
 
 /* Gender colours */
 .person-card.male { background: #dceeff; }
@@ -261,8 +301,8 @@ a{color:#0645ad}
 
 /* Responsive tweaks */
 @media (max-width: 600px) {
-  .tree-root { gap: 25px; }
-  .tree-level { gap: 10px; }
+  .tree-root { gap: 30px; }
+  .tree-level { gap: 12px; }
   .person-card { min-width: 100px; }
 }
 
