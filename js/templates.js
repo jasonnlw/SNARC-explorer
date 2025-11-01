@@ -558,27 +558,20 @@ function drawFamilyTree(treeData) {
       });
     }
   });
-  // === FINAL CANVAS HEIGHT NORMALIZATION ===
-requestAnimationFrame(() => {
-  const canvas = document.querySelector(".family-tree-canvas");
-  const svg = canvas.querySelector("svg");
-  const cards = canvas.querySelectorAll(".person-card");
-
-  if (!cards.length) return;
-
-  // Find the topmost and bottommost card positions
-  const topY = Math.min(...Array.from(cards).map(el => el.offsetTop));
-  const bottomY = Math.max(...Array.from(cards).map(el => el.offsetTop + el.offsetHeight));
-
-  // Use equal padding top and bottom
-  const verticalPadding = 60;
-  const totalHeight = bottomY - topY + verticalPadding * 2;
+  // --- Adjust canvas height to the lowest visible card ---
+const cards = Array.from(canvas.querySelectorAll(".person-card"));
+if (cards.length) {
+  const minY = Math.min(...cards.map(el => el.offsetTop));
+  const maxY = Math.max(...cards.map(el => el.offsetTop + el.offsetHeight));
+  const balancedPadding = 60;
+  const totalHeight = (maxY - minY) + balancedPadding * 2;
 
   svg.setAttribute("height", totalHeight);
   canvas.style.height = `${totalHeight}px`;
-  canvas.style.paddingTop = `${verticalPadding}px`;
-  canvas.style.paddingBottom = `${verticalPadding}px`;
-});
+  canvas.style.paddingTop = `${balancedPadding}px`;
+  canvas.style.paddingBottom = `${balancedPadding}px`;
+}
+
 }
 
 
