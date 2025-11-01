@@ -431,35 +431,44 @@ layout.nodes.forEach(n => {
 const drawConnectors = () => {
   svg.innerHTML = "";
 
+  // --- background group for spouse lines ---
+  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  spouseGroup.setAttribute("class", "spouse-lines");
+  svg.appendChild(spouseGroup);
 
-// === Spouse connectors (double curved grey line) ===
-if (n.spouses && n.spouses.length) {
-  const aC = anchor(nEl, "center");
-  n.spouses.forEach(s => {
-    const sEl = elById.get(s.id);
-    if (!sEl) return;
-    const bC = anchor(sEl, "center");
+  // --- main group for parent/child lines ---
+  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  mainGroup.setAttribute("class", "family-lines");
+  svg.appendChild(mainGroup);
+
+  const drawPath = (group, d, stroke = "#777", width = 1.5) => {
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", d);
+    p.setAttribute("stroke", stroke);
+    p.setAttribute("stroke-width", width);
+    p.setAttribute("fill", "none");
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    group.appendChild(p);
+  };
+
+  const drawSpouseDoubleCurve = (group, aC, bC, color = "#aaa") => {
     const yMid = (aC.y + bC.y) / 2;
     const dx = Math.abs(aC.x - bC.x);
-    const curve = Math.min(70, Math.max(24, dx / 3)); // curvature based on spacing
-    const offset = 1.6; // gap between the double lines
-
-    // two smooth parallel curves
+    const curve = Math.min(70, Math.max(24, dx / 3));
+    const offset = 1.6;
     const d1 = `M ${aC.x} ${yMid - offset} C ${aC.x} ${yMid - curve}, ${bC.x} ${yMid - curve}, ${bC.x} ${yMid - offset}`;
     const d2 = `M ${aC.x} ${yMid + offset} C ${aC.x} ${yMid + curve}, ${bC.x} ${yMid + curve}, ${bC.x} ${yMid + offset}`;
+    drawPath(group, d1, color, 1.2);
+    drawPath(group, d2, color, 1.2);
+  };
 
-    drawPath(spouseGroup, d1, "#aaa", 1.2);
-    drawPath(spouseGroup, d2, "#aaa", 1.2);
-  });
-}
-
-
+  // --- iterate all nodes ---
   layout.nodes.forEach(n => {
     const nEl = elById.get(n.id);
     if (!nEl) return;
 
-    // --- Parent → child lines ---
-    if (n.parents) {
+    // Parents → child
+    if (n.parents && n.parents.length) {
       const childTop = anchor(nEl, "top");
       n.parents.forEach(p => {
         const pEl = elById.get(p.id);
@@ -470,8 +479,8 @@ if (n.spouses && n.spouses.length) {
       });
     }
 
-    // --- Child lines ---
-    if (n.children) {
+    // This node → children
+    if (n.children && n.children.length) {
       const pBottom = anchor(nEl, "bottom");
       n.children.forEach(c => {
         const cEl = elById.get(c.id);
@@ -482,14 +491,14 @@ if (n.spouses && n.spouses.length) {
       });
     }
 
-    // --- Spouse double lines ---
+    // Spouses → curved double line
     if (n.spouses && n.spouses.length) {
       const aC = anchor(nEl, "center");
       n.spouses.forEach(s => {
         const sEl = elById.get(s.id);
         if (!sEl) return;
         const bC = anchor(sEl, "center");
-        drawDoubleLine(spouseGroup, aC, bC, "#aaa");
+        drawSpouseDoubleCurve(spouseGroup, aC, bC, "#aaa");
       });
     }
   });
