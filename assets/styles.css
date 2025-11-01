@@ -143,13 +143,14 @@ a { color: #0645ad; }
 
 .map-close:hover { color: #000; }
 
-/* ========== FAMILY TREE ========== */
+
+/* === FAMILY TREE (stable layout & spacing fix) === */
 
 .family-tree-container {
   position: relative;
   overflow: auto;
   text-align: center;
-  padding: 30px 10px;
+  padding: 40px 10px;
   box-sizing: border-box;
 }
 
@@ -158,16 +159,19 @@ a { color: #0645ad; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 54px;           /* vertical space between generations */
+  /* base vertical gap between generation rows */
+  gap: 80px;
 }
 
+/* Each generation row */
 .tree-level {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 18px;           /* horizontal space between siblings */
+  gap: 20px; /* horizontal sibling spacing */
   flex-wrap: wrap;
   position: relative;
+  min-height: 160px; /* ✅ guarantees vertical room for connectors */
 }
 
 .tree-node {
@@ -177,17 +181,19 @@ a { color: #0645ad; }
   align-items: center;
 }
 
+/* Person cards */
 .person-card {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: flex-start;
+  width: 180px;
   padding: 8px 10px;
   border: 1.5px solid #d6d6d6;
   border-radius: 10px;
   background: #f9f9f9;
-  width: 180px;        /* fixed width across the tree */
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
   z-index: 1;
 }
@@ -197,14 +203,15 @@ a { color: #0645ad; }
   padding-bottom: 6px;
 }
 
+/* Thumbnail */
 .person-thumb {
   width: 56px;
   height: 56px;
+  margin-top: 4px;
+  margin-bottom: 6px;
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
-  margin-top: 4px;
-  margin-bottom: 6px;
   border: 2px solid #fff;
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
   display: block;
@@ -214,14 +221,25 @@ a { color: #0645ad; }
 .person-card.male   { background: #dceeff; }
 .person-card.female { background: #ffe5f0; }
 
-.person-label { font-weight: 600; font-size: 0.95em; }
-.person-dates { font-size: 0.82em; color: #555; margin-top: 2px; }
+.person-label {
+  font-weight: 600;
+  font-size: 0.95em;
+  line-height: 1.2em;
+}
+
+.person-dates {
+  font-size: 0.82em;
+  color: #555;
+  margin-top: 2px;
+}
 
 /* SVG overlay for connectors */
 .tree-lines {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   pointer-events: none;
   overflow: visible;
   stroke: #777;
@@ -231,8 +249,9 @@ a { color: #0645ad; }
 }
 
 @media (max-width: 600px) {
-  .tree-root  { gap: 40px; }
-  .tree-level { gap: 12px; }
+  .tree-root  { gap: 60px; }
+  .tree-level { gap: 14px; min-height: 140px; }
   .person-card { width: 150px; }
 }
+
 
