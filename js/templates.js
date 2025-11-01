@@ -250,6 +250,11 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   if (depth > maxDepth || visited.has(rootQid)) return null;
   visited.add(rootQid);
 
+  if (typeof API === "undefined" || !API.getEntities) {
+  console.warn("API not ready when renderFamilyTree called", rootQid);
+  return null;
+}
+
   let entities;
 try {
   entities = await API.getEntities(rootQid, lang);
