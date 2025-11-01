@@ -431,34 +431,28 @@ layout.nodes.forEach(n => {
 const drawConnectors = () => {
   svg.innerHTML = "";
 
-  // Create a background group for spouse connectors
-  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  spouseGroup.setAttribute("class", "spouse-lines");
-  svg.appendChild(spouseGroup);
 
-  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-  mainGroup.setAttribute("class", "family-lines");
-  svg.appendChild(mainGroup);
-
-  const drawPath = (group, d, stroke = "#777", width = 1.5) => {
-    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", d);
-    p.setAttribute("stroke", stroke);
-    p.setAttribute("stroke-width", width);
-    p.setAttribute("fill", "none");
-    p.setAttribute("vector-effect", "non-scaling-stroke");
-    group.appendChild(p);
-  };
-
-  // Helper for spouse double line
-  const drawDoubleLine = (group, aC, bC, color = "#aaa") => {
+// === Spouse connectors (double curved grey line) ===
+if (n.spouses && n.spouses.length) {
+  const aC = anchor(nEl, "center");
+  n.spouses.forEach(s => {
+    const sEl = elById.get(s.id);
+    if (!sEl) return;
+    const bC = anchor(sEl, "center");
     const yMid = (aC.y + bC.y) / 2;
-    const offset = 1.5; // pixels between the double lines
-    const path1 = `M ${aC.x} ${yMid - offset} L ${bC.x} ${yMid - offset}`;
-    const path2 = `M ${aC.x} ${yMid + offset} L ${bC.x} ${yMid + offset}`;
-    drawPath(group, path1, color, 1.2);
-    drawPath(group, path2, color, 1.2);
-  };
+    const dx = Math.abs(aC.x - bC.x);
+    const curve = Math.min(70, Math.max(24, dx / 3)); // curvature based on spacing
+    const offset = 1.6; // gap between the double lines
+
+    // two smooth parallel curves
+    const d1 = `M ${aC.x} ${yMid - offset} C ${aC.x} ${yMid - curve}, ${bC.x} ${yMid - curve}, ${bC.x} ${yMid - offset}`;
+    const d2 = `M ${aC.x} ${yMid + offset} C ${aC.x} ${yMid + curve}, ${bC.x} ${yMid + curve}, ${bC.x} ${yMid + offset}`;
+
+    drawPath(spouseGroup, d1, "#aaa", 1.2);
+    drawPath(spouseGroup, d2, "#aaa", 1.2);
+  });
+}
+
 
   layout.nodes.forEach(n => {
     const nEl = elById.get(n.id);
