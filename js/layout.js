@@ -87,6 +87,33 @@ window.FamilyLayout = (() => {
       height
     };
   }
+// --- Adjust Y positions based on real card heights after layout is known ---
+function normalizeRowSpacing(nodes, nodeHeight, vGap) {
+  // Group by level
+  const levels = {};
+  nodes.forEach(n => {
+    if (!levels[n.level]) levels[n.level] = [];
+    levels[n.level].push(n);
+  });
+
+  // Compute offsets per level so each row is spaced by actual max height + vGap
+  let currentY = 0;
+  Object.keys(levels).sort((a,b)=>a-b).forEach(lvl => {
+    const levelNodes = levels[lvl];
+    const maxH = nodeHeight; // placeholder, will be re-adjusted later
+    levelNodes.forEach(n => n.y = currentY);
+    currentY += maxH + vGap;
+  });
+  return nodes;
+}
+
+const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
+
+return {
+  nodes: adjusted,
+  width: maxWidth + 100,
+  height: totalLevels * (nodeHeight + vGap)
+};
 
   return { computeLayout };
 })();
