@@ -246,8 +246,10 @@ function postRender() {
 
 // ---------- Family tree: fetch data (gender, dates, thumb) ----------
 async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+  if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;  // ✅ ensure valid QID
   if (depth > maxDepth || visited.has(rootQid)) return null;
   visited.add(rootQid);
+
 
   const entities = await API.getEntities(rootQid, lang);
   const entity = entities ? entities[rootQid] : null;
