@@ -316,66 +316,125 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
-  // Compute coordinates
-  const layout = FamilyLayout.computeLayout(treeData);
+  // 1) Compute coordinates using your layout.js
+  const layout = FamilyLayout.computeLayout(treeData, {
+    nodeWidth: 180,
+    nodeHeight: 120,
+    hGap: 60,
+    vGap: 60
+  });
 
+  // 2) Build the canvas and svg
   container.innerHTML = `
     <div class="family-tree-canvas" style="position:relative;width:${layout.width}px;height:${layout.height}px;">
       <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
     </div>
   `;
-
   const canvas = container.querySelector(".family-tree-canvas");
-  const svg = canvas.querySelector("svg");
+  const svg    = canvas.querySelector("svg");
 
-  // Draw person nodes
+  // 3) Render cards (absolute positioned). Tag each with data-qid
   layout.nodes.forEach(n => {
     const genderClass = n.gender === "male" ? "male" :
                         n.gender === "female" ? "female" : "";
-    const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" />` : "";
     const card = document.createElement("div");
     card.className = `person-card ${genderClass}`;
-    card.style.position = "absolute";
+    card.dataset.qid = n.id;
     card.style.left = `${n.x}px`;
-    card.style.top = `${n.y}px`;
-    card.innerHTML = `${thumbHTML}<div class="person-label">${n.label}</div><div class="person-dates">${n.dates || ""}</div>`;
+    card.style.top  = `${n.y}px`;
+    const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
+    card.innerHTML = `
+      ${thumbHTML}
+      <div class="person-label">${n.label || n.id}</div>
+      <div class="person-dates">${n.dates || ""}</div>
+    `;
     canvas.appendChild(card);
   });
 
-  // Draw connectors
-  const drawLine = (a, b, opts = {}) => {
-    const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
-    line.setAttribute("x1", a.x);
-    line.setAttribute("y1", a.y);
-    line.setAttribute("x2", b.x);
-    line.setAttribute("y2", b.y);
-    line.setAttribute("stroke", opts.color || "#555");
-    line.setAttribute("stroke-width", "1.5");
-    svg.appendChild(line);
+  // 4) Build a quick lookup from QID -> element
+  const elById = new Map();
+  canvas.querySelectorAll('.person-card[data-qid]').forEach(el => {
+    elById.set(el.dataset.qid, el);
+  });
+
+  // 5) Helpers that ALWAYS use actual card size (no magic numbers!)
+  const anchor = (el, edge) => {
+    const left = el.offsetLeft;
+    const top  = el.offsetTop;
+    const w    = el.offsetWidth;
+    const h    = el.offsetHeight;
+    const xMid = left + w / 2;
+    if (edge === 'top')    return { x: xMid, y: top };
+    if (edge === 'bottom') return { x: xMid, y: top + h };
+    // default center
+    return { x: xMid, y: top + h / 2 };
   };
 
-  layout.nodes.forEach(n => {
-    if (n.children) {
+  const elbowPath = (from, to, padTop = 8, padBottom = 8) => {
+    // Pull slightly off the card edges to avoid drawing "into" the border
+    const start = { x: from.x, y: from.y + padBottom }; // from bottom edge
+    const end   = { x: to.x,   y: to.y - padTop };      // to top edge
+    const midY  = (start.y + end.y) / 2;
+    return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
+  };
+
+  const drawPath = (d, stroke = '#777', width = 1.5) => {
+    const p = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    p.setAttribute('d', d);
+    p.setAttribute('stroke', stroke);
+    p.setAttribute('stroke-width', width);
+    p.setAttribute('fill', 'none');
+    p.setAttribute('vector-effect', 'non-scaling-stroke');
+    svg.appendChild(p);
+  };
+
+  // 6) Draw connectors using REAL edges per card
+  const drawConnectors = () => {
+    svg.innerHTML = '';
+
+    // Parent -> child edges
+    layout.nodes.forEach(n => {
+      if (!n.children || !n.children.length) return;
+      const pEl = elById.get(n.id);
+      if (!pEl) return;
+
+      const pBottom = anchor(pEl, 'bottom'); // true bottom center
+
       n.children.forEach(c => {
-      const parentMid = { x: n.x + 90, y: n.y + (n.children?.length ? 130 : 120) };
-const childMid = { x: c.x + 90, y: c.y - 20 };
-drawLine(parentMid, childMid, { color: "#777" });
-
+        const cEl = elById.get(c.id);
+        if (!cEl) return;
+        const cTop = anchor(cEl, 'top'); // true top center
+        const d = elbowPath(pBottom, cTop, 8, 8);
+        drawPath(d, '#777', 1.5);
       });
-    }
-    if (n.spouses) {
+    });
+
+    // Spouse lines (center to center horizontally)
+    layout.nodes.forEach(n => {
+      if (!n.spouses || !n.spouses.length) return;
+      const aEl = elById.get(n.id);
+      if (!aEl) return;
+      const aC = anchor(aEl, 'center');
+
       n.spouses.forEach(s => {
-        drawLine(
-          { x: n.x + 180, y: n.y + 60 },
-          { x: s.x, y: s.y + 60 },
-          { color: "#999" }
-        );
+        const sEl = elById.get(s.id);
+        if (!sEl) return;
+        const bC = anchor(sEl, 'center');
+        const y = (aC.y + bC.y) / 2; // midline between the two cards
+        const d = `M ${aC.x} ${y} L ${bC.x} ${y}`;
+        drawPath(d, '#999', 2); // thicker spouse line
       });
-    }
-  });
+    });
+  };
+
+  // 7) Redraw when sizes change (e.g., images load)
+  const ro = new ResizeObserver(() => drawConnectors());
+  canvas.querySelectorAll('.person-card').forEach(el => ro.observe(el));
+
+  // Initial draw + a delayed re-draw to catch late font/image settling
+  drawConnectors();
+  setTimeout(drawConnectors, 300);
 }
-
-
 
 
 // ✅ Properly close and export
