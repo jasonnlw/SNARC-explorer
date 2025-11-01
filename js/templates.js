@@ -496,8 +496,10 @@ function normalizeRowHeights() {
   canvas.querySelectorAll(".person-card").forEach(el => ro.observe(el));
 
   // Initial draw + delayed redraw
-  drawConnectors();
-  setTimeout(drawConnectors, 300);
+// Initial draw + delayed height normalization
+drawConnectors();
+setTimeout(normalizeRowHeights, 400);
+
 }
 
 
