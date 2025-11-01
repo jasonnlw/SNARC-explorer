@@ -252,6 +252,14 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
 
 
   const entities = await API.getEntities(rootQid, lang);
+  let entities;
+try {
+  entities = await API.getEntities(rootQid, lang);
+} catch (e) {
+  console.warn("FamilyTree: failed to fetch entity", rootQid, e);
+  return null;
+}
+
   const entity = entities ? entities[rootQid] : null;
   if (!entity) return null;
 
