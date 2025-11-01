@@ -303,6 +303,30 @@ a{color:#0645ad}
   min-height: 150px;               /* keeps vertical breathing room */
   box-sizing: border-box;
 }
+/* --- FINAL Card height fix for people without images --- */
+
+/* Default card (with image) */
+.person-card {
+  min-height: auto !important;        /* remove any fixed minimum */
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+/* If no image is present, tighten padding vertically */
+.person-card:not(:has(img.person-thumb)) {
+  padding-top: 6px !important;
+  padding-bottom: 6px !important;
+}
+
+/* Ensure consistent width but natural height */
+.person-card {
+  width: 100%;
+  max-width: 180px;                   /* same width range for all */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+}
 
 .person-thumb {
   width: 56px;                     /* slightly smaller than before */
