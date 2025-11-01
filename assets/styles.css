@@ -272,5 +272,30 @@ a{color:#0645ad}
   border: 2px solid #fff;
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
 }
+/* --- Refined layout: guarantee padding between image and card edge --- */
+.person-card {
+  position: relative;
+  overflow: hidden;                /* crop anything outside */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 10px 8px 10px 8px;      /* top/bottom padding adds visual gap */
+  min-height: 150px;               /* keeps vertical breathing room */
+  box-sizing: border-box;
+}
+
+.person-thumb {
+  width: 56px;                     /* slightly smaller than before */
+  height: 56px;
+  margin-top: 4px;                 /* pushes down from top edge */
+  margin-bottom: 6px;              /* space before label text */
+  border-radius: 50%;
+  object-fit: cover;
+  object-position: center;
+  border: 2px solid #fff;
+  box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  flex-shrink: 0;
+}
 
 
