@@ -358,10 +358,11 @@ function drawFamilyTree(treeData) {
     if (n.children) {
       n.children.forEach(c => {
         drawLine(
-          { x: n.x + 90, y: n.y + 120 }, // bottom center of parent
-          { x: c.x + 90, y: c.y },       // top center of child
-          { color: "#777" }
-        );
+  { x: n.x + 90, y: n.y + 110 }, // slightly higher start point
+  { x: c.x + 90, y: c.y - 10 },  // slightly above the child's top
+  { color: "#777" }
+);
+
       });
     }
     if (n.spouses) {
