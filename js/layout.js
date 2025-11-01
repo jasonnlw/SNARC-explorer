@@ -58,16 +58,16 @@ window.FamilyLayout = (() => {
       });
       maxWidth = Math.max(maxWidth, totalWidth);
     });
-
-    // --- Spouse pairing side-by-side ---
-    normalized.forEach(n => {
-      if (!n.spouses || !n.spouses.length) return;
-      const baseX = n.x;
-      n.spouses.forEach((s, i) => {
-        s.x = baseX + (i + 1) * (nodeWidth + hGap) / 2;
-        s.y = n.y;
-      });
-    });
+// --- Spouse pairing: place spouses side-by-side ---
+normalized.forEach(n => {
+  if (!n.spouses || !n.spouses.length) return;
+  const baseX = n.x;
+  n.spouses.forEach((s, i) => {
+    // keep them on the same y, stagger horizontally
+    s.x = baseX + (i + 1) * (nodeWidth + hGap) / 2;
+    s.y = n.y;
+  });
+});
 
     // --- Normalise X coordinates so tree is positive space ---
     const minX = Math.min(...normalized.map(n => n.x));
