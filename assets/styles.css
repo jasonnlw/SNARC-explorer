@@ -146,11 +146,13 @@ a { color: #0645ad; }
 
 /* === FAMILY TREE (stable layout & spacing fix) === */
 
+/* ===== FAMILY TREE (row-based, stable spacing) ===== */
+
 .family-tree-container {
   position: relative;
   overflow: auto;
   text-align: center;
-  padding: 40px 10px;
+  padding: 36px 10px;
   box-sizing: border-box;
 }
 
@@ -159,99 +161,81 @@ a { color: #0645ad; }
   display: flex;
   flex-direction: column;
   align-items: center;
-  /* base vertical gap between generation rows */
-  gap: 80px;
+  gap: 56px;                 /* vertical space between rows */
 }
 
-/* Each generation row */
-.tree-level {
+/* each generation row */
+.tree-row {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 20px; /* horizontal sibling spacing */
+  gap: 18px;                 /* horizontal spacing between cards */
   flex-wrap: wrap;
+  min-height: 132px;         /* guarantees room for connectors */
   position: relative;
-  min-height: 160px; /* ✅ guarantees vertical room for connectors */
 }
 
-.tree-node {
+.tree-node { /* no longer used in layout, safe fallback */
   position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* Person cards */
+/* person cards */
 .person-card {
   position: relative;
   overflow: hidden;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  width: 180px;
   padding: 8px 10px;
   border: 1.5px solid #d6d6d6;
   border-radius: 10px;
   background: #f9f9f9;
   box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  width: 180px;              /* same width for all cards */
   z-index: 1;
 }
 
+/* shrink vertically when no image */
 .person-card:not(:has(img.person-thumb)) {
   padding-top: 6px;
   padding-bottom: 6px;
 }
 
-/* Thumbnail */
+/* thumbnails */
 .person-thumb {
-  width: 56px;
-  height: 56px;
-  margin-top: 4px;
-  margin-bottom: 6px;
+  width: 56px; height: 56px;
   border-radius: 50%;
-  object-fit: cover;
-  object-position: center;
+  object-fit: cover; object-position: center;
   border: 2px solid #fff;
   box-shadow: 0 0 2px rgba(0,0,0,0.25);
+  margin-top: 4px; margin-bottom: 6px;
   display: block;
   max-width: calc(100% - 16px);
 }
 
+/* gender */
 .person-card.male   { background: #dceeff; }
 .person-card.female { background: #ffe5f0; }
 
-.person-label {
-  font-weight: 600;
-  font-size: 0.95em;
-  line-height: 1.2em;
-}
+.person-label { font-weight: 600; font-size: .95em; line-height: 1.2em; }
+.person-dates { font-size: .82em; color: #555; margin-top: 2px; }
 
-.person-dates {
-  font-size: 0.82em;
-  color: #555;
-  margin-top: 2px;
-}
-
-/* SVG overlay for connectors */
+/* connectors overlay */
 .tree-lines {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
   pointer-events: none;
   overflow: visible;
-  stroke: #777;
-  stroke-width: 1.5;
-  fill: none;
+  stroke: #777; stroke-width: 1.5; fill: none;
   z-index: 0;
 }
 
 @media (max-width: 600px) {
-  .tree-root  { gap: 60px; }
-  .tree-level { gap: 14px; min-height: 140px; }
+  .tree-root { gap: 42px; }
+  .tree-row  { gap: 12px; min-height: 120px; }
   .person-card { width: 150px; }
 }
-
-
