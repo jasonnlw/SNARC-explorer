@@ -191,30 +191,7 @@ a{color:#0645ad}
   align-items: center;
 }
 
-/* Connector from a parent down to its children */
-.tree-node::after {
-  content: "";
-  position: absolute;
-  top: 100%;
-  left: 50%;
-  width: 2px;
-  height: 40px;
-  background: #aaa;
-  transform: translateX(-50%);
-  z-index: 0;
-}
 
-/* Connector from children up to parent (elbow style) */
-.tree-level.children::before {
-  content: "";
-  position: absolute;
-  top: -40px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: #aaa;
-  z-index: 0;
-}
 
 .tree-level.children {
   position: relative;
@@ -247,17 +224,6 @@ a{color:#0645ad}
   z-index: 0;
 }
 
-/* horizontal elbow from parent to child */
-.tree-level.children .tree-node::before {
-  content: "";
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  width: 50%;
-  height: 2px;
-  background: #999;
-  z-index: 0;
-}
 
 /* Remove connector for first (top) and last (bottom) generation */
 .tree-root > .tree-node::after,
