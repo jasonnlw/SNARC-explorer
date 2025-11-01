@@ -264,10 +264,13 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
   const dates = birth || death ? `(${birth}–${death})` : "";
 
   // Gender (P13): Q1050 male, Q1051 female
-  let gender = "unknown";
-  const genderVal = Utils.firstValue(claims["P13"]?.[0]);
-  if (genderVal === "Q1050") gender = "male";
-  if (genderVal === "Q1051") gender = "female";
+ let gender = "unknown";
+ const rawGender = Utils.firstValue(claims["P13"]?.[0]);
+ const genderQid = normalizeQid(
+   typeof rawGender === "object" && rawGender ? (rawGender.id || rawGender.value || rawGender) : rawGender
+ );
+ if (genderQid === "Q1050") gender = "male";
+ if (genderQid === "Q1051") gender = "female";
 
   // Thumbnail from P31 (Commons filename)
   let thumb = "";
@@ -336,8 +339,8 @@ function drawFamilyTree(treeData) {
   const svg     = canvas.querySelector("svg");
 
   layout.nodes.forEach(n => {
-    const genderClass = n.gender === "male" ? "male" :
-                        n.gender === "female" ? "female" : "";
+    n.gender === "male" ? "male" :
+    n.gender === "female" ? "female" : "";
 
     const card = document.createElement("div");
     card.className = `person-card ${genderClass}`;
