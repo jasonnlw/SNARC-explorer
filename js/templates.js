@@ -413,47 +413,79 @@ layout.nodes.forEach(n => {
     svg.appendChild(p);
   };
 
-  const drawConnectors = () => {
-    svg.innerHTML = "";
+const drawConnectors = () => {
+  svg.innerHTML = "";
 
-    layout.nodes.forEach(n => {
-      const nEl = elById.get(n.id);
-      if (!nEl) return;
+  // Create a background group for spouse connectors
+  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  spouseGroup.setAttribute("class", "spouse-lines");
+  svg.appendChild(spouseGroup);
 
-      // parents → this node
-      if (n.parents) {
-        const childTop = anchor(nEl, "top");
-        n.parents.forEach(p => {
-          const pEl = elById.get(p.id);
-          if (!pEl) return;
-          const pBottom = anchor(pEl, "bottom");
-          drawPath(elbowPath(pBottom, childTop), "#777", 1.5);
-        });
-      }
+  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  mainGroup.setAttribute("class", "family-lines");
+  svg.appendChild(mainGroup);
 
-      // this node → children
-      if (n.children) {
-        const pBottom = anchor(nEl, "bottom");
-        n.children.forEach(c => {
-          const cEl = elById.get(c.id);
-          if (!cEl) return;
-          const cTop = anchor(cEl, "top");
-          drawPath(elbowPath(pBottom, cTop), "#777", 1.5);
-        });
-      }
-
-      // spouse lines
-      if (n.spouses) {
-        const aC = anchor(nEl, "center");
-        n.spouses.forEach(s => {
-          const sEl = elById.get(s.id);
-          if (!sEl) return;
-          const bC = anchor(sEl, "center");
-          drawPath(`M ${aC.x} ${(aC.y + bC.y) / 2} L ${bC.x} ${(aC.y + bC.y) / 2}`, "#999", 2);
-        });
-      }
-    });
+  const drawPath = (group, d, stroke = "#777", width = 1.5) => {
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", d);
+    p.setAttribute("stroke", stroke);
+    p.setAttribute("stroke-width", width);
+    p.setAttribute("fill", "none");
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    group.appendChild(p);
   };
+
+  // Helper for spouse double line
+  const drawDoubleLine = (group, aC, bC, color = "#aaa") => {
+    const yMid = (aC.y + bC.y) / 2;
+    const offset = 1.5; // pixels between the double lines
+    const path1 = `M ${aC.x} ${yMid - offset} L ${bC.x} ${yMid - offset}`;
+    const path2 = `M ${aC.x} ${yMid + offset} L ${bC.x} ${yMid + offset}`;
+    drawPath(group, path1, color, 1.2);
+    drawPath(group, path2, color, 1.2);
+  };
+
+  layout.nodes.forEach(n => {
+    const nEl = elById.get(n.id);
+    if (!nEl) return;
+
+    // --- Parent → child lines ---
+    if (n.parents) {
+      const childTop = anchor(nEl, "top");
+      n.parents.forEach(p => {
+        const pEl = elById.get(p.id);
+        if (!pEl) return;
+        const pBottom = anchor(pEl, "bottom");
+        const d = elbowPath(pBottom, childTop);
+        drawPath(mainGroup, d, "#777", 1.5);
+      });
+    }
+
+    // --- Child lines ---
+    if (n.children) {
+      const pBottom = anchor(nEl, "bottom");
+      n.children.forEach(c => {
+        const cEl = elById.get(c.id);
+        if (!cEl) return;
+        const cTop = anchor(cEl, "top");
+        const d = elbowPath(pBottom, cTop);
+        drawPath(mainGroup, d, "#777", 1.5);
+      });
+    }
+
+    // --- Spouse double lines ---
+    if (n.spouses && n.spouses.length) {
+      const aC = anchor(nEl, "center");
+      n.spouses.forEach(s => {
+        const sEl = elById.get(s.id);
+        if (!sEl) return;
+        const bC = anchor(sEl, "center");
+        drawDoubleLine(spouseGroup, aC, bC, "#aaa");
+      });
+    }
+  });
+};
+
 
   // normalize vertical spacing
   function normalizeRowHeights() {
