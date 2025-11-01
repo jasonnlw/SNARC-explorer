@@ -409,8 +409,8 @@ function drawFamilyTree(treeData) {
           const c = cardAnchor(childEl, "top");
 
           // Slight offsets so the elbow sits between generations
-          const parentY = p.y - 10; // 10px above bottom
-          const childY  = c.y + 10; // 10px below top
+          const parentY = p.y - 30; // 30px above bottom
+          const childY  = c.y + 30; // 30px below top
           const midY    = (parentY + childY) / 2;
 
           const d = `M ${p.x} ${parentY} L ${p.x} ${midY} L ${c.x} ${midY} L ${c.x} ${childY}`;
