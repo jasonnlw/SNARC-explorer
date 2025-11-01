@@ -146,96 +146,104 @@ a { color: #0645ad; }
 
 /* === FAMILY TREE (stable layout & spacing fix) === */
 
-/* ===== FAMILY TREE (row-based, stable spacing) ===== */
+/* ==========================================================
+   SNARC Explorer — Family Tree (EntiTree-style layout)
+   ========================================================== */
 
-.family-tree-container {
+/* Main tree container */
+.family-tree-canvas {
   position: relative;
-  overflow: auto;
-  text-align: center;
-  padding: 36px 10px;
-  box-sizing: border-box;
+  margin: 0 auto;
+  overflow: visible;
+  padding: 20px 0;
+  min-height: 400px;
 }
 
-.tree-root {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 56px;                 /* vertical space between rows */
-}
-
-/* each generation row */
-.tree-row {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 18px;                 /* horizontal spacing between cards */
-  flex-wrap: wrap;
-  min-height: 132px;         /* guarantees room for connectors */
-  position: relative;
-}
-
-.tree-node { /* no longer used in layout, safe fallback */
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-/* person cards */
-.person-card {
-  position: relative;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 8px 10px;
-  border: 1.5px solid #d6d6d6;
-  border-radius: 10px;
-  background: #f9f9f9;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-  width: 180px;              /* same width for all cards */
-  z-index: 1;
-}
-
-/* shrink vertically when no image */
-.person-card:not(:has(img.person-thumb)) {
-  padding-top: 6px;
-  padding-bottom: 6px;
-}
-
-/* thumbnails */
-.person-thumb {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  object-fit: cover; object-position: center;
-  border: 2px solid #fff;
-  box-shadow: 0 0 2px rgba(0,0,0,0.25);
-  margin-top: 4px; margin-bottom: 6px;
-  display: block;
-  max-width: calc(100% - 16px);
-}
-
-/* gender */
-.person-card.male   { background: #dceeff; }
-.person-card.female { background: #ffe5f0; }
-
-.person-label { font-weight: 600; font-size: .95em; line-height: 1.2em; }
-.person-dates { font-size: .82em; color: #555; margin-top: 2px; }
-
-/* connectors overlay */
+/* Connector SVG layer */
 .tree-lines {
   position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
+  top: 0;
+  left: 0;
   pointer-events: none;
-  overflow: visible;
-  stroke: #777; stroke-width: 1.5; fill: none;
   z-index: 0;
 }
 
-@media (max-width: 600px) {
-  .tree-root { gap: 42px; }
-  .tree-row  { gap: 12px; min-height: 120px; }
-  .person-card { width: 150px; }
+/* ---- Person cards ---- */
+.person-card {
+  position: absolute;
+  width: 180px;
+  background: #f9f9f9;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  padding: 6px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  box-sizing: border-box;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  z-index: 2;
+}
+
+.person-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Gender tinting */
+.person-card.male {
+  background-color: #dceeff;
+}
+.person-card.female {
+  background-color: #ffe5f0;
+}
+
+/* ---- Thumbnail images ---- */
+.person-thumb {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 4px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+/* ---- Labels and dates ---- */
+.person-label {
+  font-weight: 600;
+  font-size: 0.95em;
+  line-height: 1.2;
+  color: #222;
+}
+
+.person-dates {
+  font-size: 0.8em;
+  color: #555;
+  line-height: 1.1;
+  margin-top: 2px;
+}
+
+/* ---- Connector styling ---- */
+.tree-lines line {
+  stroke: #777;
+  stroke-width: 1.5;
+}
+
+.tree-lines line.marriage {
+  stroke-width: 2.5;
+  stroke-dasharray: 2, 2;
+  stroke: #999;
+}
+
+/* ---- Responsive scaling ---- */
+@media (max-width: 768px) {
+  .person-card {
+    width: 140px;
+    font-size: 0.9em;
+  }
+  .person-thumb {
+    width: 52px;
+    height: 52px;
+  }
 }
