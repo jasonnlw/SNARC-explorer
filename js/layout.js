@@ -85,12 +85,17 @@ if (minDepth < 0) {
   nodesById.forEach(n => { n.depth = n.depth - minDepth; });
 }
 
+// Compute actual height based on deepest and highest node positions
+const minY = Math.min(...positioned.map(n => n.y));
+const maxY = Math.max(...positioned.map(n => n.y + (n.height || nodeHeight)));
+const totalHeight = (maxY - minY) + nodeHeight / 2 + 60;
 
-    return {
-      nodes: positioned,
-      width: maxWidth + 100,
-      height: (levelKeys.length + 1) * (nodeHeight + vGap)
-    };
+return {
+  nodes: positioned,
+  width: maxWidth + 100,
+  height: totalHeight
+};
+
   }
 
   return { computeLayout };
