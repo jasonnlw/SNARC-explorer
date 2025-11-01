@@ -423,13 +423,38 @@ function drawFamilyTree(treeData) {
   });
 window.lastLayout = layout;
 
-  container.innerHTML = `
-    <div class="family-tree-wrapper">
-      <div class="family-tree-canvas" style="width:${layout.width}px;height:${layout.height}px;">
-        <svg class="tree-lines" width="${layout.width}" height="${layout.height}"></svg>
-      </div>
+// Define top/bottom padding (in px)
+const treePadding = 70;
+
+// Create wrapper first (same as before)
+container.innerHTML = `
+  <div class="family-tree-wrapper">
+    <div class="family-tree-canvas" style="position:relative;">
+      <svg class="tree-lines"></svg>
     </div>
-  `;
+  </div>
+`;
+
+// After cards are rendered (later in drawFamilyTree)
+...
+// === after all cards are appended ===
+
+// Compute actual content bounds
+const cards = Array.from(container.querySelectorAll('.person-card'));
+if (cards.length) {
+  const cardBottoms = cards.map(el => el.offsetTop + el.offsetHeight);
+  const maxY = Math.max(...cardBottoms);
+  const svg = container.querySelector('svg.tree-lines');
+  const canvas = container.querySelector('.family-tree-canvas');
+
+  // Resize SVG and canvas to fit content + balanced padding
+  const totalHeight = maxY + treePadding;
+  svg.setAttribute('height', totalHeight);
+  canvas.style.height = `${totalHeight}px`;
+  canvas.style.paddingTop = `${treePadding}px`;
+  canvas.style.paddingBottom = `${treePadding}px`;
+}
+
 
   const wrapper = container.querySelector(".family-tree-wrapper");
   const canvas  = container.querySelector(".family-tree-canvas");
