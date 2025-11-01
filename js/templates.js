@@ -386,19 +386,14 @@ function drawFamilyTree(treeData) {
     });
   });
 
-  // Resize SVG to fit entire tree
+    // Resize SVG to fit entire tree
   const contentBox = container.querySelector(".tree-root").getBoundingClientRect();
   svg.setAttribute("width", contentBox.width);
   svg.setAttribute("height", contentBox.height);
+} 
 
-  }
+// ✅ Properly close and export
+return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
 
-  drawConnectors();
-}
+})();
 
-
-
-  // ✅ Properly close and export
-  return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
-
-})(); 
