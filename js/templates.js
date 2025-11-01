@@ -453,6 +453,44 @@ function drawFamilyTree(treeData) {
     }
   };
 
+// --- Normalize vertical spacing based on tallest card per generation ---
+function normalizeRowHeights() {
+  // Group nodes by their generation (level)
+  const byLevel = {};
+  layout.nodes.forEach(n => {
+    if (!byLevel[n.level]) byLevel[n.level] = [];
+    byLevel[n.level].push(n);
+  });
+
+  // Measure heights and reposition each row
+  let currentY = 0;
+  const sortedLevels = Object.keys(byLevel).sort((a, b) => a - b);
+
+  sortedLevels.forEach(level => {
+    const nodes = byLevel[level];
+    const els = nodes.map(n => elById.get(n.id)).filter(Boolean);
+
+    // Find tallest card in this generation
+    const maxHeight = Math.max(...els.map(el => el.offsetHeight || 0), 0);
+
+    // Align all nodes in this row to same top position
+    nodes.forEach(n => {
+      n.y = currentY;
+      const el = elById.get(n.id);
+      if (el) el.style.top = `${currentY}px`;
+    });
+
+    // Increase Y offset for next row based on tallest card + gap
+    currentY += maxHeight + 60; // 60 = vGap between rows
+  });
+
+  // Update SVG height to fit new tree height
+  svg.setAttribute("height", currentY + 60);
+
+  // Redraw connectors after adjustment
+  drawConnectors();
+}
+  
   // 7) Redraw when sizes change (e.g., thumbnails load)
   const ro = new ResizeObserver(() => drawConnectors());
   canvas.querySelectorAll(".person-card").forEach(el => ro.observe(el));
@@ -462,13 +500,6 @@ function drawFamilyTree(treeData) {
   setTimeout(drawConnectors, 300);
 }
 
-// --- Recalculate row offsets based on real DOM heights ---
-function adjustVerticalSpacing() {
-  const byLevel = {};
-  layout.nodes.forEach(n => {
-    if (!byLevel[n.level]) byLevel[n.level] = [];
-    byLevel[n.level].push(n);
-  });
 
   let currentY = 0;
   const levels = Object.keys(byLevel).sort((a,b)=>a-b);
