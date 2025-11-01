@@ -320,8 +320,8 @@ function drawFamilyTree(treeData) {
   const layout = FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
-    hGap: 60,
-    vGap: 60
+    hGap: 40,
+    vGap: 40
   });
 
   // 2) Build wrapper, canvas, and SVG (wrapper is the scroll container)
