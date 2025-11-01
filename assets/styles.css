@@ -156,4 +156,79 @@ a{color:#0645ad}
   font-size: 0.85em;
   color: #555;
 }
+/* ============= FAMILY TREE STYLING ============= */
+
+.family-tree-container {
+  margin: 40px 0;
+  text-align: center;
+  overflow-x: auto;
+}
+
+.tree-root {
+  display: inline-block;
+  position: relative;
+}
+
+.tree-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 10px;
+}
+
+/* Lines connecting parents and children */
+.tree-node::before,
+.tree-node::after {
+  content: "";
+  position: absolute;
+  border-left: 2px solid #aaa;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.tree-node::before {
+  height: 20px; /* connector above */
+}
+
+.tree-children .tree-node::before {
+  height: 20px; /* connector below */
+}
+
+.person-card {
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  padding: 8px;
+  min-width: 140px;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+  margin: 5px;
+}
+
+.person-thumb {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto 6px;
+}
+
+.person-label {
+  font-weight: 600;
+}
+
+.person-dates {
+  font-size: 0.85em;
+  color: #555;
+}
+
+/* Marriage (spouse) connectors — double line */
+.tree-spouse {
+  border-top: 4px double #888;
+  width: 60px;
+  margin: 0 auto;
+  height: 0;
+}
 
