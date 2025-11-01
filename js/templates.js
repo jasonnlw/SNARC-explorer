@@ -338,12 +338,13 @@ function drawFamilyTree(treeData) {
   const canvas  = container.querySelector(".family-tree-canvas");
   const svg     = canvas.querySelector("svg");
 
-  layout.nodes.forEach(n => {
+layout.nodes.forEach(n => {
+  const genderClass =
     n.gender === "male" ? "male" :
     n.gender === "female" ? "female" : "";
 
-    const card = document.createElement("div");
-    card.className = `person-card ${genderClass}`;
+  const card = document.createElement("div");
+  card.className = `person-card ${genderClass}`;
     card.dataset.qid = n.id;
     card.style.left = `${n.x}px`;
     card.style.top  = `${n.y}px`;
