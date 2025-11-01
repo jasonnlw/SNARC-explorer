@@ -234,30 +234,42 @@ window.Templates = (() => {
   }
 
   // ---------- Family tree functions ----------
-  async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
-    if (depth > maxDepth || visited.has(rootQid)) return null;
-    visited.add(rootQid);
-    const entities = await API.getEntities(rootQid, lang);
-    const entity = entities ? entities[rootQid] : null;
-    if (!entity) return null;
+async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+  if (depth > maxDepth || visited.has(rootQid)) return null;
+  visited.add(rootQid);
 
-    const label = entity.labels?.[lang]?.value || entity.labels?.en?.value || rootQid;
-    const claims = entity.claims || {};
-    const birth = Utils.formatTime(Utils.firstValue(claims["P17"]?.[0])) || "";
-    const death = Utils.formatTime(Utils.firstValue(claims["P18"]?.[0])) || "";
-    const dates = birth || death ? `(${birth}–${death})` : "";
+  const entities = await API.getEntities(rootQid, lang);
+  const entity = entities ? entities[rootQid] : null;
+  if (!entity) return null;
 
-    let thumb = "";
-    const imgClaim = claims["P31"]?.[0] || claims["P50"]?.[0];
-    if (imgClaim) {
-      const v = Utils.firstValue(imgClaim);
-      if (typeof v === "string" && v.includes("/")) {
-        const id = v.split("/")[1];
-        thumb = `<img src="https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,150/0/default.jpg" alt="${label}">`;
-      }
+  const label = entity.labels?.[lang]?.value || entity.labels?.en?.value || rootQid;
+  const claims = entity.claims || {};
+
+  // Birth / death year only
+  const birthRaw = Utils.formatTime(Utils.firstValue(claims["P17"]?.[0])) || "";
+  const deathRaw = Utils.formatTime(Utils.firstValue(claims["P18"]?.[0])) || "";
+  const birth = birthRaw ? birthRaw.slice(0, 4) : "";
+  const death = deathRaw ? deathRaw.slice(0, 4) : "";
+  const dates = birth || death ? `(${birth}–${death})` : "";
+
+  // Gender
+  let gender = "unknown";
+  const genderVal = Utils.firstValue(claims["P13"]?.[0]);
+  if (genderVal === "Q1050") gender = "male";   // male
+  if (genderVal === "Q1051") gender = "female"; // female
+
+  // Thumbnail (P31)
+  let thumb = "";
+  const imgClaim = claims["P31"]?.[0];
+  if (imgClaim) {
+    const v = Utils.firstValue(imgClaim);
+    if (typeof v === "string" && v.includes("/")) {
+      const id = v.split("/")[1];
+      thumb = `<img src="https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,120/0/default.jpg" alt="${label}" class="person-thumb">`;
     }
+  }
 
-    const node = { id: rootQid, label, dates, thumb, parents: [], children: [] };
+  const node = { id: rootQid, label, dates, thumb, gender, parents: [], children: [] };
 
     for (const pid of ["P53", "P55"]) {
       const rels = claims[pid] || [];
