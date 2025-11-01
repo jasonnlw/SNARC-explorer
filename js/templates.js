@@ -339,6 +339,8 @@ function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
   if (!container || !treeData) return;
 
+  window.lastTreeData = treeData;  // 🔍 expose data for debugging
+
   const layout = FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
