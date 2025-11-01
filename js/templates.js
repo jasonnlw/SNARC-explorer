@@ -357,11 +357,9 @@ function drawFamilyTree(treeData) {
   layout.nodes.forEach(n => {
     if (n.children) {
       n.children.forEach(c => {
-        drawLine(
-  { x: n.x + 90, y: n.y + 0 }, // slightly higher start point
-  { x: c.x + 90, y: c.y - 0 },  // slightly above the child's top
-  { color: "#777" }
-);
+      const parentMid = { x: n.x + 90, y: n.y + (n.children?.length ? 130 : 120) };
+const childMid = { x: c.x + 90, y: c.y - 20 };
+drawLine(parentMid, childMid, { color: "#777" });
 
       });
     }
