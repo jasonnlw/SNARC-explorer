@@ -278,7 +278,7 @@ const entity = fetchedEntities ? fetchedEntities[rootQid] : null;
   const death = deathRaw ? deathRaw.slice(0, 4) : "";
   const dates = birth || death ? `(${birth}–${death})` : "";
 
-// Gender (P13): Q1050 male, Q1051 female (plus Wikidata fallbacks)
+// Gender (P13): Q33 male, Q34 female (plus Wikidata fallbacks)
 let gender = "unknown";
 const rawGender = Utils.firstValue(claims["P13"]?.[0]);
 let genderId = "";
@@ -289,8 +289,8 @@ if (typeof rawGender === "string") {
   genderId = rawGender.id || rawGender.value || "";
 }
 
-if (/Q1050|Q6581097/i.test(genderId)) gender = "male";
-else if (/Q1051|Q6581072/i.test(genderId)) gender = "female";
+if (/Q33|Q6581097/i.test(genderId)) gender = "male";
+else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
 
   // Thumbnail from P31 (Commons filename)
   let thumb = "";
