@@ -393,6 +393,19 @@ container.innerHTML = `
   // 6) Draw connectors using REAL edges per card
   const drawConnectors = () => {
     svg.innerHTML = '';
+// Center the subject in view
+const subjectEl = canvas.querySelector(`.person-card[data-qid="${treeData.id}"]`);
+if (subjectEl) {
+  subjectEl.classList.add("subject-card"); // highlight
+  // Scroll to center horizontally
+  const rect = subjectEl.getBoundingClientRect();
+  const parentRect = canvas.getBoundingClientRect();
+  const offset = rect.left - parentRect.left - parentRect.width / 2 + rect.width / 2;
+  container.scrollTo({
+    left: offset,
+    behavior: "smooth"
+  });
+}
 
     // Parent -> child edges
     layout.nodes.forEach(n => {
