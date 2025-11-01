@@ -467,18 +467,6 @@ function drawFamilyTree(treeData) {
     canvas.appendChild(card);
   });
 
-  // --- Adjust canvas height dynamically ---
-  const cards = Array.from(canvas.querySelectorAll('.person-card'));
-  if (cards.length) {
-    const cardBottoms = cards.map(el => el.offsetTop + el.offsetHeight);
-    const maxY = Math.max(...cardBottoms);
-    const totalHeight = maxY + treePadding;
-    svg.setAttribute('height', totalHeight);
-    canvas.style.height = `${totalHeight}px`;
-    canvas.style.paddingTop = `${treePadding}px`;
-    canvas.style.paddingBottom = `${treePadding}px`;
-  }
-
   // --- Build a map of elements ---
   const elById = new Map();
   canvas.querySelectorAll('.person-card[data-qid]').forEach(el => elById.set(el.dataset.qid, el));
@@ -570,6 +558,27 @@ function drawFamilyTree(treeData) {
       });
     }
   });
+  // === FINAL CANVAS HEIGHT NORMALIZATION ===
+requestAnimationFrame(() => {
+  const canvas = document.querySelector(".family-tree-canvas");
+  const svg = canvas.querySelector("svg");
+  const cards = canvas.querySelectorAll(".person-card");
+
+  if (!cards.length) return;
+
+  // Find the topmost and bottommost card positions
+  const topY = Math.min(...Array.from(cards).map(el => el.offsetTop));
+  const bottomY = Math.max(...Array.from(cards).map(el => el.offsetTop + el.offsetHeight));
+
+  // Use equal padding top and bottom
+  const verticalPadding = 60;
+  const totalHeight = bottomY - topY + verticalPadding * 2;
+
+  svg.setAttribute("height", totalHeight);
+  canvas.style.height = `${totalHeight}px`;
+  canvas.style.paddingTop = `${verticalPadding}px`;
+  canvas.style.paddingBottom = `${verticalPadding}px`;
+});
 }
 
 
