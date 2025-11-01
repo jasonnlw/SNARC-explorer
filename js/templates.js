@@ -362,6 +362,7 @@ function drawFamilyTree(treeData) {
     hGap: 40,
     vGap: 40
   });
+window.lastLayout = layout;
 
   container.innerHTML = `
     <div class="family-tree-wrapper">
