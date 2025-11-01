@@ -433,9 +433,16 @@ function drawFamilyTree(treeData) {
     </div>
   `;
 
-  const wrapper = container.querySelector(".family-tree-wrapper");
-  const canvas  = container.querySelector(".family-tree-canvas");
-  const svg     = canvas.querySelector("svg");
+  const canvas = container.querySelector(".family-tree-canvas");
+  const svg = canvas.querySelector("svg");
+
+  // Create SVG groups for layers
+  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  mainGroup.classList.add("main-lines");
+  spouseGroup.classList.add("spouse-lines");
+  svg.appendChild(mainGroup);
+  svg.appendChild(spouseGroup);
 
   // --- Create and position cards ---
   layout.nodes.forEach(n => {
@@ -447,7 +454,7 @@ function drawFamilyTree(treeData) {
     card.className = `person-card ${genderClass}`;
     card.dataset.qid = n.id;
     card.style.left = `${n.x}px`;
-    card.style.top  = `${n.y}px`;
+    card.style.top = `${n.y}px`;
 
     const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
     card.innerHTML = `
@@ -460,7 +467,7 @@ function drawFamilyTree(treeData) {
     canvas.appendChild(card);
   });
 
-  // --- Adjust canvas height based on actual cards ---
+  // --- Adjust canvas height dynamically ---
   const cards = Array.from(canvas.querySelectorAll('.person-card'));
   if (cards.length) {
     const cardBottoms = cards.map(el => el.offsetTop + el.offsetHeight);
@@ -472,10 +479,23 @@ function drawFamilyTree(treeData) {
     canvas.style.paddingBottom = `${treePadding}px`;
   }
 
-  // --- Anchor + connector functions follow ---
+  // --- Build a map of elements ---
   const elById = new Map();
   canvas.querySelectorAll('.person-card[data-qid]').forEach(el => elById.set(el.dataset.qid, el));
 
+  // --- Path helper ---
+  const drawPath = (group, d, color = "#777", width = 1.5) => {
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", d);
+    path.setAttribute("stroke", color);
+    path.setAttribute("stroke-width", width);
+    path.setAttribute("fill", "none");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("vector-effect", "non-scaling-stroke");
+    group.appendChild(path);
+  };
+
+  // --- Anchors ---
   const anchor = (el, edge) => {
     const left = el.offsetLeft;
     const top  = el.offsetTop;
@@ -487,119 +507,71 @@ function drawFamilyTree(treeData) {
     return { x: cx, y: top + h / 2 };
   };
 
-  const elbowPath = (from, to, padTop = 8, padBottom = 8) => {
-    const start = { x: from.x, y: from.y + padBottom };
-    const end   = { x: to.x,   y: to.y - padTop };
-    const midY  = (start.y + end.y) / 2;
-    return `M ${start.x} ${start.y} L ${start.x} ${midY} L ${end.x} ${midY} L ${end.x} ${end.y}`;
+  // --- Connector paths ---
+  const elbowPath = (from, to) => {
+    const midY = (from.y + to.y) / 2;
+    return `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
   };
 
-  // --- iterate all nodes ---
+  // --- Draw all connectors ---
   layout.nodes.forEach(n => {
     const nEl = elById.get(n.id);
     if (!nEl) return;
 
-    // Parents → child
-    if (n.parents && n.parents.length) {
-      const childTop = anchor(nEl, "top");
-      n.parents.forEach(p => {
-        const pEl = elById.get(p.id);
-        if (!pEl) return;
-        const pBottom = anchor(pEl, "bottom");
-        const d = elbowPath(pBottom, childTop);
-        drawPath(mainGroup, d, "#777", 1.5);
-      });
-    }
-
-    // This node → children
-    if (n.children && n.children.length) {
-      const pBottom = anchor(nEl, "bottom");
-      n.children.forEach(c => {
-        const cEl = elById.get(c.id);
-        if (!cEl) return;
-        const cTop = anchor(cEl, "top");
-        const d = elbowPath(pBottom, cTop);
-        drawPath(mainGroup, d, "#777", 1.5);
-      });
-    }
-
-// === Spouse side connectors (|===| style) ===
-if (n.spouses && n.spouses.length) {
-  const spouseColor = "#aaa";
-  const lineWidth = 3;
-
-  n.spouses.forEach(s => {
-    const sEl = elById.get(s.id);
-    if (!sEl) return;
-
-    // Get bounding boxes for each card
-    const aRect = nEl.getBoundingClientRect();
-    const bRect = sEl.getBoundingClientRect();
-
-    // Compute positions relative to the SVG coordinate space
-    const svgRect = svg.getBoundingClientRect();
-    const aRight = aRect.left + aRect.width - svgRect.left;
-    const aMidY  = aRect.top + aRect.height / 2 - svgRect.top;
-    const bLeft  = bRect.left - svgRect.left;
-    const bMidY  = bRect.top + bRect.height / 2 - svgRect.top;
-
-    // Define spacing of the bridge (gap between cards)
-    const gapY = (aMidY + bMidY) / 2;
-    const midX1 = aRight + 4; // small offset from card edge
-    const midX2 = bLeft - 4;  // small offset from partner edge
-
-    // Draw three segments: left vertical, horizontal bridge, right vertical
-    const path = `
-      M ${aRight} ${aMidY - 15}
-      L ${aRight} ${aMidY + 15}
-      M ${bLeft} ${bMidY - 15}
-      L ${bLeft} ${bMidY + 15}
-      M ${midX1} ${gapY}
-      L ${midX2} ${gapY}
-    `;
-
-    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-    p.setAttribute("d", path);
-    p.setAttribute("stroke", spouseColor);
-    p.setAttribute("stroke-width", lineWidth);
-    p.setAttribute("fill", "none");
-    p.setAttribute("stroke-linecap", "round");
-    p.setAttribute("vector-effect", "non-scaling-stroke");
-    spouseGroup.appendChild(p);
-  });
-}
-  });
-};
-
-
-  // normalize vertical spacing
-  function normalizeRowHeights() {
-    const byLevel = {};
-    layout.nodes.forEach(n => {
-      if (!byLevel[n.level]) byLevel[n.level] = [];
-      byLevel[n.level].push(n);
+    // Parent connectors
+    (n.parents || []).forEach(p => {
+      const pEl = elById.get(p.id);
+      if (!pEl) return;
+      drawPath(mainGroup, elbowPath(anchor(pEl, "bottom"), anchor(nEl, "top")));
     });
 
-    let currentY = 0;
-    Object.keys(byLevel).sort((a,b)=>a-b).forEach(level => {
-      const els = byLevel[level].map(n => elById.get(n.id)).filter(Boolean);
-      const maxH = Math.max(...els.map(el => el.offsetHeight || 0), 0);
-      els.forEach(el => el.style.top = `${currentY}px`);
-      byLevel[level].forEach(n => n.y = currentY);
-      currentY += maxH + 60;
+    // Child connectors
+    (n.children || []).forEach(c => {
+      const cEl = elById.get(c.id);
+      if (!cEl) return;
+      drawPath(mainGroup, elbowPath(anchor(nEl, "bottom"), anchor(cEl, "top")));
     });
 
-    svg.setAttribute("height", currentY + 60);
-    drawConnectors();
-  }
-
-  // observe for resizing and redraw connectors
-  const ro = new ResizeObserver(drawConnectors);
-  canvas.querySelectorAll(".person-card").forEach(el => ro.observe(el));
-
-  drawConnectors();
-  setTimeout(normalizeRowHeights, 400);
+    // Spouse connectors (|===| style)
+    if (n.spouses && n.spouses.length) {
+      const spouseColor = "#aaa";
+      const lineWidth = 3;
+      n.spouses.forEach(s => {
+        const sEl = elById.get(s.id);
+        if (!sEl) return;
+        const aRect = nEl.getBoundingClientRect();
+        const bRect = sEl.getBoundingClientRect();
+        const svgRect = svg.getBoundingClientRect();
+        const aRight = aRect.left + aRect.width - svgRect.left;
+        const aMidY  = aRect.top + aRect.height / 2 - svgRect.top;
+        const bLeft  = bRect.left - svgRect.left;
+        const bMidY  = bRect.top + bRect.height / 2 - svgRect.top;
+        const gapY = (aMidY + bMidY) / 2;
+        const midX1 = aRight + 4;
+        const midX2 = bLeft - 4;
+        const path = `
+          M ${aRight} ${aMidY - 15}
+          L ${aRight} ${aMidY + 15}
+          M ${bLeft} ${bMidY - 15}
+          L ${bLeft} ${bMidY + 15}
+          M ${midX1} ${gapY - 3}
+          L ${midX2} ${gapY - 3}
+          M ${midX1} ${gapY + 3}
+          L ${midX2} ${gapY + 3}
+        `;
+        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        p.setAttribute("d", path);
+        p.setAttribute("stroke", spouseColor);
+        p.setAttribute("stroke-width", lineWidth);
+        p.setAttribute("fill", "none");
+        p.setAttribute("stroke-linecap", "round");
+        p.setAttribute("vector-effect", "non-scaling-stroke");
+        spouseGroup.appendChild(p);
+      });
+    }
+  });
 }
+
 
 // ✅ Properly close and export
 return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
