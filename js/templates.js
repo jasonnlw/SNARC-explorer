@@ -497,16 +497,51 @@ const drawConnectors = () => {
       });
     }
 
-    // Spouses → curved double line
-    if (n.spouses && n.spouses.length) {
-      const aC = anchor(nEl, "center");
-      n.spouses.forEach(s => {
-        const sEl = elById.get(s.id);
-        if (!sEl) return;
-        const bC = anchor(sEl, "center");
-        drawSpouseDoubleCurve(spouseGroup, aC, bC, "#aaa");
-      });
-    }
+// === Spouse side connectors (|===| style) ===
+if (n.spouses && n.spouses.length) {
+  const spouseColor = "#aaa";
+  const lineWidth = 3;
+
+  n.spouses.forEach(s => {
+    const sEl = elById.get(s.id);
+    if (!sEl) return;
+
+    // Get bounding boxes for each card
+    const aRect = nEl.getBoundingClientRect();
+    const bRect = sEl.getBoundingClientRect();
+
+    // Compute positions relative to the SVG coordinate space
+    const svgRect = svg.getBoundingClientRect();
+    const aRight = aRect.left + aRect.width - svgRect.left;
+    const aMidY  = aRect.top + aRect.height / 2 - svgRect.top;
+    const bLeft  = bRect.left - svgRect.left;
+    const bMidY  = bRect.top + bRect.height / 2 - svgRect.top;
+
+    // Define spacing of the bridge (gap between cards)
+    const gapY = (aMidY + bMidY) / 2;
+    const midX1 = aRight + 4; // small offset from card edge
+    const midX2 = bLeft - 4;  // small offset from partner edge
+
+    // Draw three segments: left vertical, horizontal bridge, right vertical
+    const path = `
+      M ${aRight} ${aMidY - 15}
+      L ${aRight} ${aMidY + 15}
+      M ${bLeft} ${bMidY - 15}
+      L ${bLeft} ${bMidY + 15}
+      M ${midX1} ${gapY}
+      L ${midX2} ${gapY}
+    `;
+
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", path);
+    p.setAttribute("stroke", spouseColor);
+    p.setAttribute("stroke-width", lineWidth);
+    p.setAttribute("fill", "none");
+    p.setAttribute("stroke-linecap", "round");
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    spouseGroup.appendChild(p);
+  });
+}
   });
 };
 
