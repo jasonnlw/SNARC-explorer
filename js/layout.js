@@ -57,7 +57,9 @@ window.FamilyLayout = (() => {
       let startX = -totalWidth / 2;
       level.forEach((n, j) => {
         n.x = startX + j * (nodeWidth + hGap);
-        n.y = (depth - root.depth) * (nodeHeight + vGap);
+        // ancestors (smaller depth) appear above root, descendants below
+        n.y = (n.depth - root.depth) * (nodeHeight + vGap);
+
         positioned.push(n);
       });
       maxWidth = Math.max(maxWidth, totalWidth);
