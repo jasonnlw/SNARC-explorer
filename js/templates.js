@@ -338,7 +338,7 @@ else if (/Q34|Q6581072/i.test(genderId)) gender = "female";
     }
   }
 
-// === Spouses (P56) — include spouse cards only; DO NOT pull their families ===
+// === Spouses (P56) — direct spouses only ===
 const spouseStmts = claims["P56"] || [];
 for (const stmt of spouseStmts) {
   const q = Utils.firstValue(stmt);
@@ -350,47 +350,30 @@ for (const stmt of spouseStmts) {
     if (!sItem) continue;
 
     const sClaims = sItem.claims || {};
-
-    // label
     const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
 
-    // dates (P17 birth, P18 death) – year only
-    const sBirthRaw = Utils.formatTime(Utils.firstValue(sClaims["P17"]?.[0])) || "";
-    const sDeathRaw = Utils.formatTime(Utils.firstValue(sClaims["P18"]?.[0])) || "";
-    const sBirth = sBirthRaw ? sBirthRaw.slice(0,4) : "";
-    const sDeath = sDeathRaw ? sDeathRaw.slice(0,4) : "";
-    const sDates = sBirth || sDeath ? `(${sBirth}–${sDeath})` : "";
+    const sGenderClaim = sClaims["P13"]?.[0];
+    const gId = sGenderClaim?.mainsnak?.datavalue?.value?.id || "";
+    const sGender = /Q33|Q6581097/i.test(gId)
+      ? "male"
+      : /Q34|Q6581072/i.test(gId)
+      ? "female"
+      : "unknown";
 
-    // gender (P13) – your instance uses Q33/Q34; include Wikidata fallbacks
-    let sGender = "unknown";
-    let sGenderId = "";
-    const gClaim = sClaims["P13"]?.[0];
-    if (gClaim?.mainsnak?.datavalue?.value?.id) {
-      sGenderId = gClaim.mainsnak.datavalue.value.id;
-      if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
-      else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
-    }
-
-    // thumbnail from P31 (Commons file)
-    let sThumb = "";
     const sImgClaim = sClaims["P31"]?.[0];
+    let sThumb = "";
     if (sImgClaim) {
       const v = Utils.firstValue(sImgClaim);
-      if (typeof v === "string") {
-        const filename = String(v).replace(/^File:/i, "").trim();
-        if (filename) {
-          sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
-        }
-      }
+      const filename = typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
+      if (filename)
+        sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
     }
 
-    // minimal spouse node – note: empty parents/children/spouses prevents expansion
     node.spouses.push({
       id: q,
       label: sLabel,
-      dates: sDates,
-      thumb: sThumb,
       gender: sGender,
+      thumb: sThumb,
       parents: [],
       children: [],
       spouses: []
@@ -399,6 +382,7 @@ for (const stmt of spouseStmts) {
     console.warn("Failed to fetch spouse", q, err);
   }
 }
+
 
 
 
@@ -520,43 +504,43 @@ function drawFamilyTree(treeData) {
       drawPath(mainGroup, elbowPath(anchor(nEl, "bottom"), anchor(cEl, "top")));
     });
 
-    // Spouse connectors (|===| style)
-    if (n.spouses && n.spouses.length) {
-      const spouseColor = "#aaa";
-      const lineWidth = 3;
-      n.spouses.forEach(s => {
-        const sEl = elById.get(s.id);
-        if (!sEl) return;
-        const aRect = nEl.getBoundingClientRect();
-        const bRect = sEl.getBoundingClientRect();
-        const svgRect = svg.getBoundingClientRect();
-        const aRight = aRect.left + aRect.width - svgRect.left;
-        const aMidY  = aRect.top + aRect.height / 2 - svgRect.top;
-        const bLeft  = bRect.left - svgRect.left;
-        const bMidY  = bRect.top + bRect.height / 2 - svgRect.top;
-        const gapY = (aMidY + bMidY) / 2;
-        const midX1 = aRight + 4;
-        const midX2 = bLeft - 4;
-        const path = `
-          M ${aRight} ${aMidY - 15}
-          L ${aRight} ${aMidY + 15}
-          M ${bLeft} ${bMidY - 15}
-          L ${bLeft} ${bMidY + 15}
-          M ${midX1} ${gapY - 3}
-          L ${midX2} ${gapY - 3}
-          M ${midX1} ${gapY + 3}
-          L ${midX2} ${gapY + 3}
-        `;
-        const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        p.setAttribute("d", path);
-        p.setAttribute("stroke", spouseColor);
-        p.setAttribute("stroke-width", lineWidth);
-        p.setAttribute("fill", "none");
-        p.setAttribute("stroke-linecap", "round");
-        p.setAttribute("vector-effect", "non-scaling-stroke");
-        spouseGroup.appendChild(p);
-      });
-    }
+   // --- Spouse connectors (|===| style) using layout coords ---
+if (n.spouses && n.spouses.length) {
+  const spouseColor = "#aaa";
+  const lineWidth = 3;
+  n.spouses.forEach(s => {
+    const sNode = layout.nodes.find(x => x.id === s.id);
+    if (!sNode) return;
+
+    const aRight = n.x + 180; // nodeWidth
+    const aMidY  = n.y + 60;  // half of nodeHeight
+    const bLeft  = sNode.x;
+    const bMidY  = sNode.y + 60;
+    const gapY   = (aMidY + bMidY) / 2;
+    const midX1  = aRight + 4;
+    const midX2  = bLeft - 4;
+
+    const path = `
+      M ${aRight} ${aMidY - 15}
+      L ${aRight} ${aMidY + 15}
+      M ${bLeft} ${bMidY - 15}
+      L ${bLeft} ${bMidY + 15}
+      M ${midX1} ${gapY - 3}
+      L ${midX2} ${gapY - 3}
+      M ${midX1} ${gapY + 3}
+      L ${midX2} ${gapY + 3}
+    `;
+    const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    p.setAttribute("d", path);
+    p.setAttribute("stroke", spouseColor);
+    p.setAttribute("stroke-width", lineWidth);
+    p.setAttribute("fill", "none");
+    p.setAttribute("stroke-linecap", "round");
+    p.setAttribute("vector-effect", "non-scaling-stroke");
+    spouseGroup.appendChild(p);
+  });
+}
+
   });
   // --- Adjust canvas height to the lowest visible card ---
 const cards = Array.from(canvas.querySelectorAll(".person-card"));
@@ -570,6 +554,18 @@ if (cards.length) {
   canvas.style.height = `${totalHeight}px`;
   canvas.style.paddingTop = `${balancedPadding}px`;
   canvas.style.paddingBottom = `${balancedPadding}px`;
+}
+// --- Center subject in view ---
+const subject = canvas.querySelector(".person-card.subject-card");
+if (subject) {
+  // Compute subject’s center within the canvas
+  const subjectCenterX = subject.offsetLeft + subject.offsetWidth / 2;
+  const canvasWidth = canvas.scrollWidth;
+  const containerWidth = container.clientWidth;
+
+  // Scroll so subject is centered horizontally
+  const scrollX = Math.max(subjectCenterX - containerWidth / 2, 0);
+  container.scrollLeft = scrollX;
 }
 
 }
