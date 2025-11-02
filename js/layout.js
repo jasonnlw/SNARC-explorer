@@ -74,31 +74,32 @@ normalized.forEach(n => {
     normalized.forEach(n => { n.x -= minX - 50; });
 
     // --- Adjust Y positions based on row spacing ---
-    const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
+    // --- Helper: normalize vertical spacing by tallest card per row ---
+function normalizeRowSpacing(nodes, nodeHeight, vGap) {
+  const levels = {};
+  nodes.forEach(n => {
+    if (!levels[n.level]) levels[n.level] = [];
+    levels[n.level].push(n);
+  });
 
-    return {
-      nodes: adjusted,
-      width: maxWidth + 100,
-      height: totalLevels * (nodeHeight + vGap)
-    };
-  }
+  let currentY = 0;
+  Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
+    const levelNodes = levels[lvl];
 
-  // --- Helper: normalize vertical spacing by row ---
-  function normalizeRowSpacing(nodes, nodeHeight, vGap) {
-    const levels = {};
-    nodes.forEach(n => {
-      if (!levels[n.level]) levels[n.level] = [];
-      levels[n.level].push(n);
-    });
+    // Estimate row height based on whether nodes have images
+    // (You can fine-tune these numbers to match your visual card sizes)
+    const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
+    const maxHeight = Math.max(...estimatedHeights);
 
-    let currentY = 0;
-    Object.keys(levels).sort((a,b)=>a-b).forEach(lvl => {
-      const levelNodes = levels[lvl];
-      levelNodes.forEach(n => n.y = currentY);
-      currentY += nodeHeight + vGap;
-    });
-    return nodes;
-  }
+    // Assign the same y for all nodes in this level
+    levelNodes.forEach(n => n.y = currentY);
+
+    // Move Y for the next row based on the tallest card
+    currentY += maxHeight + vGap;
+  });
+
+  return nodes;
+}
 
   // ✅ Properly export function
   return { computeLayout };
