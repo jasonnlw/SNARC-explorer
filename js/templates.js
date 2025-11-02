@@ -397,11 +397,11 @@ function drawFamilyTree(treeData) {
   window.lastTreeData = treeData;
 
   // Compute layout
-  const layout = FamilyLayout.computeLayout(treeData, {
+  + const layout = window.FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
-    hGap: 40,
-    vGap: 40
+    hGap: 30,
+    vGap: 30
   });
   window.lastLayout = layout;
 
