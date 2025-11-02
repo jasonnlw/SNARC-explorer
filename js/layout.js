@@ -73,50 +73,54 @@ normalized.forEach(n => {
     const minX = Math.min(...normalized.map(n => n.x));
     normalized.forEach(n => { n.x -= minX - 50; });
 
-    // --- Adjust Y positions based on row spacing ---
-    // --- Helper: normalize vertical spacing by tallest card per row ---
-// --- Helper: normalize vertical spacing by tallest card per row, with spouse alignment ---
-function normalizeRowSpacing(nodes, nodeHeight, vGap) {
-  const levels = {};
-  nodes.forEach(n => {
-    if (!levels[n.level]) levels[n.level] = [];
-    levels[n.level].push(n);
-  });
+        // --- Adjust Y positions based on row spacing ---
+    const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
 
-  // Sort levels top-down
-  let currentY = 0;
-  Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
-    const levelNodes = levels[lvl];
+    return {
+      nodes: adjusted,
+      width: maxWidth + 100,
+      height: totalLevels * (nodeHeight + vGap)
+    };
+  } // ✅ closes computeLayout
 
-    // --- 1️⃣ Estimate card heights per node ---
-    // Cards with images are taller
-    const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
-    const maxHeight = Math.max(...estimatedHeights);
-
-    // --- 2️⃣ Temporarily assign base Y ---
-    levelNodes.forEach(n => n.y = currentY);
-
-    // --- 3️⃣ Align spouse pairs vertically ---
-    // For each node that has spouses, ensure they share the same y position
-    levelNodes.forEach(n => {
-      if (!n.spouses || !n.spouses.length) return;
-      const spouseNodes = n.spouses.filter(s => typeof s.y === "number");
-      spouseNodes.forEach(s => {
-        // Average their current y and assign to both
-        const midY = (n.y + s.y) / 2;
-        n.y = s.y = midY;
-      });
+  // --- Helper: normalize vertical spacing by tallest card per row, with spouse alignment ---
+  function normalizeRowSpacing(nodes, nodeHeight, vGap) {
+    const levels = {};
+    nodes.forEach(n => {
+      if (!levels[n.level]) levels[n.level] = [];
+      levels[n.level].push(n);
     });
 
-    // --- 4️⃣ Increment to next row ---
-    currentY += maxHeight + vGap;
-  });
+    // Sort levels top-down
+    let currentY = 0;
+    Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
+      const levelNodes = levels[lvl];
 
-  return nodes;
-}
+      // 1️⃣ Estimate height
+      const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
+      const maxHeight = Math.max(...estimatedHeights);
 
+      // 2️⃣ Set base Y
+      levelNodes.forEach(n => n.y = currentY);
 
-  // ✅ Properly export function
+      // 3️⃣ Align spouses vertically
+      levelNodes.forEach(n => {
+        if (!n.spouses || !n.spouses.length) return;
+        const spouseNodes = n.spouses.filter(s => typeof s.y === "number");
+        spouseNodes.forEach(s => {
+          const midY = (n.y + s.y) / 2;
+          n.y = s.y = midY;
+        });
+      });
+
+      // 4️⃣ Increment to next row
+      currentY += maxHeight + vGap;
+    });
+
+    return nodes;
+  }
+
+  // ✅ Properly export
   return { computeLayout };
 
 })();
