@@ -267,6 +267,9 @@ if (subject) {
   padding: 20px 0;
   margin: 20px 0;
   min-height: 600px;
+    scroll-behavior: smooth;      /* smooth horizontal panning */
+  overscroll-behavior-x: none;  /* prevents bounce-back on touchpads */
+  white-space: nowrap; 
 }
 
 
@@ -276,4 +279,5 @@ if (subject) {
   overflow: visible;
   padding: 0;
   min-height: 300px;
+  display: inline-block;
 }
