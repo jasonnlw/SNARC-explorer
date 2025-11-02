@@ -397,7 +397,7 @@ function drawFamilyTree(treeData) {
   window.lastTreeData = treeData;
 
   // Compute layout
-  + const layout = window.FamilyLayout.computeLayout(treeData, {
+  const layout = window.FamilyLayout.computeLayout(treeData, {
     nodeWidth: 180,
     nodeHeight: 120,
     hGap: 30,
