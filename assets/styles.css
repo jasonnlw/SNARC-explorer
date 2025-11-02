@@ -186,7 +186,6 @@ a { color: #0645ad; }
 .person-card {
   position: absolute;
   width: 180px;
-  min-height: 120px;
   box-sizing: border-box;
   background: #fff;
   border: 2px solid #ddd;
