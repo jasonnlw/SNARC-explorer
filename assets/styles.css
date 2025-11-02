@@ -153,9 +153,14 @@ a { color: #0645ad; }
 /* Main tree container */
 .family-tree-canvas {
   position: relative;
-  min-height: 0;
+  min-height: 150px;
 }
 
+// Scroll subject into view if off-center
+const subject = canvas.querySelector(".person-card.subject-card");
+if (subject) {
+  subject.scrollIntoView({ block: "center", inline: "center", behavior: "auto" });
+}
 
 /* Connector SVG layer */
 .tree-lines {
