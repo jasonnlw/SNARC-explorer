@@ -143,141 +143,153 @@ a { color: #0645ad; }
 
 .map-close:hover { color: #000; }
 
+/* ========================================
+   FAMILY TREE CONTAINER STRUCTURE
+   ======================================== */
 
-/* === FAMILY TREE (stable layout & spacing fix) === */
+/* Outer viewport for the tree */
+.family-tree-wrapper {
+  position: relative;
+  width: 100%;
+  overflow-x: auto;        /* ✅ horizontal scroll */
+  overflow-y: hidden;      /* ✅ no vertical scroll */
+  scroll-behavior: smooth; /* smooth scroll when centering subject */
+  background: #fafafa;     /* optional neutral background */
+  border-radius: 8px;
+  padding: 0;              /* JS controls vertical padding dynamically */
+  overscroll-behavior-x: none;
+}
 
-/* ==========================================================
-   SNARC Explorer — Family Tree (EntiTree-style layout)
-   ========================================================== */
-
-/* Main tree container */
+/* The scrollable content area that contains cards + SVG lines */
 .family-tree-canvas {
   position: relative;
-  min-height: 150px;
+  display: inline-block;   /* ✅ makes width match content */
+  vertical-align: top;
+  white-space: normal;
+  min-height: 150px;       /* fallback for single-card trees */
 }
 
-// Scroll subject into view if off-center
-const subject = canvas.querySelector(".person-card.subject-card");
-if (subject) {
-  subject.scrollIntoView({ block: "center", inline: "center", behavior: "auto" });
-}
-
-/* Connector SVG layer */
-.tree-lines {
+/* The SVG connector layer */
+.family-tree-canvas svg.tree-lines {
   position: absolute;
   top: 0;
   left: 0;
-  pointer-events: none;
-  z-index: 0;
+  width: 100%;
+  pointer-events: none;    /* avoid intercepting clicks */
+  z-index: 0;              /* sits behind cards */
 }
 
-/* ---- Person cards ---- */
+/* ========================================
+   PERSON CARDS
+   ======================================== */
+
 .person-card {
   position: absolute;
   width: 180px;
-  background: #f9f9f9;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  padding: 6px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-  text-align: center;
+  min-height: 120px;
   box-sizing: border-box;
+  background: #fff;
+  border: 2px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  padding: 6px 8px;
+  text-align: center;
+  font-family: system-ui, sans-serif;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  z-index: 2;
+  z-index: 2; /* above lines */
 }
 
 .person-card:hover {
-  transform: scale(1.02);
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  transform: translateY(-3px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
 }
 
-/* Gender tinting */
+/* Bold border for subject entity */
+.person-card.subject-card {
+  border: 3px solid #444;
+}
+
+/* Gender colours */
 .person-card.male {
-  background-color: #dceeff;
+  border-color: #3b82f6;           /* blue-500 */
+  background-color: #f0f7ff;
 }
 .person-card.female {
-  background-color: #ffe5f0;
-}
-/* Subject person highlight */
-.subject-card {
-  border: 3px solid #333;
-  box-shadow: 0 0 10px rgba(0,0,0,0.3);
-  z-index: 5;
+  border-color: #ec4899;           /* pink-500 */
+  background-color: #fff0f7;
 }
 
-/* ---- Thumbnail images ---- */
+/* Image inside card */
 .person-thumb {
-  width: 64px;
-  height: 64px;
-  border-radius: 50%;
-  object-fit: cover;
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
   margin-bottom: 4px;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-  border: 1px solid rgba(0, 0, 0, 0.15);
+  object-fit: cover;
 }
 
-/* ---- Labels and dates ---- */
+/* Text layout */
 .person-label {
   font-weight: 600;
-  font-size: 0.95em;
-  line-height: 1.2;
-  color: #222;
-}
-
-.person-dates {
-  font-size: 0.8em;
-  color: #555;
-  line-height: 1.1;
+  font-size: 0.95rem;
   margin-top: 2px;
 }
+.person-dates {
+  font-size: 0.8rem;
+  color: #666;
+}
 
-/* ---- Connector styling ---- */
-.tree-lines line {
+/* ========================================
+   CONNECTOR LINES
+   ======================================== */
+
+svg .main-lines path {
   stroke: #777;
   stroke-width: 1.5;
+  fill: none;
 }
 
-.tree-lines line.marriage {
-  stroke-width: 2.5;
-  stroke-dasharray: 2, 2;
-  stroke: #999;
+svg .spouse-lines path {
+  stroke: #aaa;
+  stroke-width: 3;
+  fill: none;
+  stroke-linecap: round;
 }
 
-/* ---- Responsive scaling ---- */
-@media (max-width: 768px) {
+/* ========================================
+   RESPONSIVE / AESTHETIC TWEAKS
+   ======================================== */
+
+@media (max-width: 900px) {
   .person-card {
-    width: 140px;
-    font-size: 0.9em;
-  }
-  .person-thumb {
-    width: 52px;
-    height: 52px;
+    width: 150px;
+    min-height: 100px;
   }
 }
-/* ===== Family Tree Wrapper ===== */
-.family-tree-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  position: relative;
-  overflow-x: auto;
-  overflow-y: hidden;
-  padding: 20px 0;
-  margin: 20px 0;
-  min-height: 600px;
-    scroll-behavior: smooth;      /* smooth horizontal panning */
-  overscroll-behavior-x: none;  /* prevents bounce-back on touchpads */
-  white-space: nowrap; 
+
+@media (prefers-color-scheme: dark) {
+  .family-tree-wrapper {
+    background: #111;
+  }
+  .person-card {
+    background: #1c1c1c;
+    color: #eee;
+    border-color: #333;
+  }
+  .person-card.male {
+    background-color: #12243b;
+    border-color: #2563eb;
+  }
+  .person-card.female {
+    background-color: #3b142c;
+    border-color: #ec4899;
+  }
+  svg .main-lines path {
+    stroke: #aaa;
+  }
+  svg .spouse-lines path {
+    stroke: #888;
+  }
 }
 
-
-.family-tree-canvas {
-  position: relative;
-  margin: 0 auto;
-  overflow: visible;
-  padding: 0;
-  min-height: 300px;
-  display: inline-block;
 }
