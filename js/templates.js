@@ -569,27 +569,7 @@ if (subject) {
 }
 
 }
-// === RENDER FAMILY TREE FUNCTION ===
-  async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
-    if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
-    if (depth > maxDepth || visited.has(rootQid)) return null;
-    visited.add(rootQid);
 
-    const data = await API.getEntities(rootQid, lang);
-    const item = data?.[rootQid];
-    if (!item) return null;
-
-    const claims = item.claims || {};
-    const node = {
-      id: rootQid,
-      label: item.labels?.[lang]?.value || item.labels?.en?.value || rootQid,
-      dates: "",
-      thumb: "",
-      gender: "unknown",
-      parents: [],
-      children: [],
-      spouses: []
-    };
 
     // --- Dates ---
     const birth = claims["P17"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
