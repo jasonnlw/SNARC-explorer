@@ -2,7 +2,7 @@
  * Simplified EntiTree-style family tree layout algorithm.
  * Computes x,y positions for each person node in a hierarchical tree.
  * Works with relationships: parents, spouses, children.
- * 
+ *
  * Adapted for SNARC Explorer (no React, no dependencies).
  */
 
@@ -49,31 +49,31 @@ window.FamilyLayout = (() => {
 
     // --- Horizontal layout for each generation ---
     let maxWidth = 0;
-    levels.forEach((level, i) => {
+    levels.forEach(level => {
       const totalWidth = level.length * (nodeWidth + hGap) - hGap;
       let startX = -totalWidth / 2;
       level.forEach((n, j) => {
         n.x = startX + j * (nodeWidth + hGap);
-        n.y = i * (nodeHeight + vGap);
+        n.y = n.level * (nodeHeight + vGap);
       });
       maxWidth = Math.max(maxWidth, totalWidth);
     });
-// --- Spouse pairing: place spouses side-by-side ---
-normalized.forEach(n => {
-  if (!n.spouses || !n.spouses.length) return;
-  const baseX = n.x;
-  n.spouses.forEach((s, i) => {
-    // keep them on the same y, stagger horizontally
-    s.x = baseX + (i + 1) * (nodeWidth + hGap) / 2;
-    s.y = n.y;
-  });
-});
+
+    // --- Spouse pairing: place spouses side-by-side ---
+    normalized.forEach(n => {
+      if (!n.spouses || !n.spouses.length) return;
+      const baseX = n.x;
+      n.spouses.forEach((s, i) => {
+        s.x = baseX + (i + 1) * (nodeWidth + hGap) / 2;
+        s.y = n.y;
+      });
+    });
 
     // --- Normalise X coordinates so tree is positive space ---
     const minX = Math.min(...normalized.map(n => n.x));
     normalized.forEach(n => { n.x -= minX - 50; });
 
-        // --- Adjust Y positions based on row spacing ---
+    // --- Adjust Y positions based on row spacing ---
     const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
 
     return {
@@ -81,9 +81,9 @@ normalized.forEach(n => {
       width: maxWidth + 100,
       height: totalLevels * (nodeHeight + vGap)
     };
-  } // ✅ closes computeLayout
+  }
 
-  // --- Helper: normalize vertical spacing by tallest card per row, with spouse alignment ---
+  // --- Helper: normalize vertical spacing by tallest card per row + spouse alignment ---
   function normalizeRowSpacing(nodes, nodeHeight, vGap) {
     const levels = {};
     nodes.forEach(n => {
@@ -91,36 +91,30 @@ normalized.forEach(n => {
       levels[n.level].push(n);
     });
 
-    // Sort levels top-down
     let currentY = 0;
     Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
       const levelNodes = levels[lvl];
 
-      // 1️⃣ Estimate height
+      // Estimate row height based on card type
       const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
       const maxHeight = Math.max(...estimatedHeights);
 
-      // 2️⃣ Set base Y
-      levelNodes.forEach(n => n.y = currentY);
+      // Assign base Y for this level
+      levelNodes.forEach(n => (n.y = currentY));
 
-      // 3️⃣ Align spouses vertically
+      // Align spouse pairs on same vertical baseline
       levelNodes.forEach(n => {
         if (!n.spouses || !n.spouses.length) return;
-        const spouseNodes = n.spouses.filter(s => typeof s.y === "number");
-        spouseNodes.forEach(s => {
-          const midY = (n.y + s.y) / 2;
-          n.y = s.y = midY;
+        n.spouses.forEach(s => {
+          s.y = n.y; // force identical Y
         });
       });
 
-      // 4️⃣ Increment to next row
       currentY += maxHeight + vGap;
     });
 
     return nodes;
   }
 
-  // ✅ Properly export
   return { computeLayout };
-
 })();
