@@ -75,6 +75,7 @@ normalized.forEach(n => {
 
     // --- Adjust Y positions based on row spacing ---
     // --- Helper: normalize vertical spacing by tallest card per row ---
+// --- Helper: normalize vertical spacing by tallest card per row, with spouse alignment ---
 function normalizeRowSpacing(nodes, nodeHeight, vGap) {
   const levels = {};
   nodes.forEach(n => {
@@ -82,24 +83,38 @@ function normalizeRowSpacing(nodes, nodeHeight, vGap) {
     levels[n.level].push(n);
   });
 
+  // Sort levels top-down
   let currentY = 0;
   Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
     const levelNodes = levels[lvl];
 
-    // Estimate row height based on whether nodes have images
-    // (You can fine-tune these numbers to match your visual card sizes)
+    // --- 1️⃣ Estimate card heights per node ---
+    // Cards with images are taller
     const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
     const maxHeight = Math.max(...estimatedHeights);
 
-    // Assign the same y for all nodes in this level
+    // --- 2️⃣ Temporarily assign base Y ---
     levelNodes.forEach(n => n.y = currentY);
 
-    // Move Y for the next row based on the tallest card
+    // --- 3️⃣ Align spouse pairs vertically ---
+    // For each node that has spouses, ensure they share the same y position
+    levelNodes.forEach(n => {
+      if (!n.spouses || !n.spouses.length) return;
+      const spouseNodes = n.spouses.filter(s => typeof s.y === "number");
+      spouseNodes.forEach(s => {
+        // Average their current y and assign to both
+        const midY = (n.y + s.y) / 2;
+        n.y = s.y = midY;
+      });
+    });
+
+    // --- 4️⃣ Increment to next row ---
     currentY += maxHeight + vGap;
   });
 
   return nodes;
 }
+
 
   // ✅ Properly export function
   return { computeLayout };
