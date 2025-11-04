@@ -35,6 +35,10 @@ const depthValues = allNodes.map(n => (typeof n.depth === "number" ? n.depth : 0
 const minDepth = depthValues.length ? Math.min(...depthValues) : 0;
 const maxDepth = depthValues.length ? Math.max(...depthValues) : 0;
 const totalLevels = maxDepth - minDepth + 1;
+    
+if (!Number.isFinite(minDepth) || !Number.isFinite(maxDepth)) {
+  console.warn("Invalid depth values detected in FamilyLayout, resetting to 0");
+}
 
 
     const normalized = allNodes.map(n => ({
