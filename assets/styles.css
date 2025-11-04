@@ -186,6 +186,7 @@ a { color: #0645ad; }
 .person-card {
   position: absolute;
   width: 180px;
+  min-height: 140px;
   box-sizing: border-box;
   background: #fff;
   border: 2px solid #ddd;
@@ -218,13 +219,15 @@ a { color: #0645ad; }
   background-color: #fff0f7;
 }
 
-/* Image inside card */
+/* Image inside card: force square top-crop */
 .person-thumb {
   width: 100%;
-  height: auto;
+  aspect-ratio: 1 / 1;     /* square */
+  height: auto;            /* aspect-ratio controls height */
+  object-fit: cover;       /* crop instead of squeeze */
+  object-position: top;    /* crop from top */
   border-radius: 6px;
   margin-bottom: 4px;
-  object-fit: cover;
 }
 
 /* Text layout */
