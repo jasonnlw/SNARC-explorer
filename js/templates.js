@@ -353,6 +353,14 @@ for (const stmt of claims["P54"] || []) {
       hGap: 40,
       vGap: 40
     });
+    
+svg.setAttribute("width", layout.width);
+svg.setAttribute("height", layout.height);
+
+canvas.style.width = layout.width + "px";
+canvas.style.height = layout.height + "px";
+
+container.style.height = layout.height + 40 + "px"; // 40px padding buffer
 
     container.innerHTML = `
       <div class="family-tree-wrapper">
