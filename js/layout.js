@@ -101,8 +101,11 @@ if (!Number.isFinite(minDepth) || !Number.isFinite(maxDepth)) {
     Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
       const levelNodes = levels[lvl];
 
-      // Estimate row height based on card type
-      const estimatedHeights = levelNodes.map(n => (n.thumb ? nodeHeight : nodeHeight * 0.7));
+// If a node or any spouse has an image, give that row extra height
+const estimatedHeights = levelNodes.map(n => {
+  const hasImage = n.thumb || (n.spouses || []).some(s => s.thumb);
+  return hasImage ? nodeHeight * 1.4 : nodeHeight * 0.9;
+});
       const maxHeight = Math.max(...estimatedHeights);
 
       // Assign base Y for this level
