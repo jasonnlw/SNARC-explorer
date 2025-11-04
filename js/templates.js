@@ -277,23 +277,24 @@ window.Templates = (() => {
     if (/Q33|Q6581097/i.test(gId)) node.gender = "male";
     else if (/Q34|Q6581072/i.test(gId)) node.gender = "female";
 
-    // Parents
-    for (const stmt of claims["P53"] || []) {
-      const q = Utils.firstValue(stmt);
-      if (q && /^Q\d+$/.test(q)) {
-        const parent = await renderFamilyTree(q, lang, depth - 1, maxDepth, visited);
-        if (parent) node.parents.push(parent);
-      }
-    }
+    // Parents (move up one level visually)
+for (const stmt of claims["P53"] || []) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/.test(q)) {
+    const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (parent) node.parents.push(parent);
+  }
+}
 
-    // Children
-    for (const stmt of claims["P54"] || []) {
-      const q = Utils.firstValue(stmt);
-      if (q && /^Q\d+$/.test(q)) {
-        const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-        if (child) node.children.push(child);
-      }
-    }
+// Children (move down one level)
+for (const stmt of claims["P54"] || []) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/.test(q)) {
+    const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (child) node.children.push(child);
+  }
+}
+
 
     // Spouses (non-recursive)
     for (const stmt of claims["P56"] || []) {
