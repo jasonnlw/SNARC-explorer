@@ -400,27 +400,76 @@ svg.appendChild(spouseGroup);
       canvas.appendChild(card);
     });
 
-    const anchor = (n, edge) => {
-      const x = n.x + 90;
-      const y = n.y + (edge === "top" ? 0 : 120);
-      return { x, y };
-    };
+    
+  // ------------------------------------------------------------
+// SAFE CONNECTOR DRAWING
+// ------------------------------------------------------------
 
-    const elbowPath = (from, to) => {
-      const midY = (from.y + to.y) / 2;
-      return `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
-    };
+// Anchor helpers
+const anchor = (n, edge = "bottom") => {
+  if (!n || !Number.isFinite(n.x) || !Number.isFinite(n.y)) return null;
+  const x = n.x + 90; // center of card
+  let y = n.y;
+  if (edge === "top") y += 0;
+  else if (edge === "bottom") y += 120;
+  else if (edge === "middle") y += 60;
+  return { x, y };
+};
 
-    const drawPath = (group, d, color = "#777", width = 1.5) => {
-      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-      path.setAttribute("d", d);
-      path.setAttribute("stroke", color);
-      path.setAttribute("stroke-width", width);
-      path.setAttribute("fill", "none");
-      path.setAttribute("stroke-linecap", "round");
-      path.setAttribute("vector-effect", "non-scaling-stroke");
-      group.appendChild(path);
-    };
+// Draw an elbow path (vertical + horizontal)
+const elbowPath = (from, to) => {
+  if (!from || !to) return "";
+  const midY = (from.y + to.y) / 2;
+  return `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
+};
+
+// Safe path creation
+const drawPath = (group, d, color = "#777", width = 1.5) => {
+  if (!d || d.includes("NaN")) return; // guard
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", d);
+  path.setAttribute("stroke", color);
+  path.setAttribute("stroke-width", width);
+  path.setAttribute("fill", "none");
+  group.appendChild(path);
+};
+
+// ------------------------------------------------------------
+// DRAW FAMILY LINES
+// ------------------------------------------------------------
+
+// Parent–child lines
+layout.nodes.forEach(parent => {
+  if (!parent.children) return;
+  parent.children.forEach(child => {
+    const from = anchor(parent, "bottom");
+    const to = anchor(child, "top");
+    if (from && to) {
+      const d = elbowPath(from, to);
+      drawPath(mainGroup, d, "#777", 1.5);
+    }
+  });
+});
+
+// Spouse connectors (horizontal)
+layout.nodes.forEach(n => {
+  if (!n.spouses || !n.spouses.length) return;
+  n.spouses.forEach(s => {
+    const from = anchor(n, "middle");
+    const to = anchor(s, "middle");
+    if (from && to) {
+      const y = (from.y + to.y) / 2;
+      const d = `M ${from.x} ${y} L ${to.x} ${y}`;
+      drawPath(spouseGroup, d, "#aaa", 3);
+    }
+  });
+});
+
+    
+function safeAnchor(n, edge) {
+  if (!n || !Number.isFinite(n.x) || !Number.isFinite(n.y)) return null;
+  return anchor(n, edge);
+}
 
     layout.nodes.forEach(n => {
       n.parents?.forEach(p => drawPath(mainGroup, elbowPath(anchor(p, "bottom"), anchor(n, "top"))));
