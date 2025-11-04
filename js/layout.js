@@ -1,11 +1,3 @@
-/**
- * Simplified EntiTree-style family tree layout algorithm.
- * Computes x,y positions for each person node in a hierarchical tree.
- * Works with relationships: parents, spouses, children.
- *
- * Adapted for SNARC Explorer (no React, no dependencies).
- */
-
 window.FamilyLayout = (() => {
 
   function computeLayout(root, opts = {}) {
@@ -16,118 +8,93 @@ window.FamilyLayout = (() => {
 
     const nodesById = new Map();
 
-    // --- Traverse recursively to collect all nodes with signed depth ---
+    // --- Traverse & collect (with signed depth) ---
     function traverse(node, depth = 0) {
       if (!node || nodesById.has(node.id)) return;
-      node.depth = depth;
+      node.depth = typeof depth === "number" ? depth : 0;
       nodesById.set(node.id, node);
 
-      (node.spouses || []).forEach(s => traverse(s, depth));
-      (node.parents || []).forEach(p => traverse(p, depth - 1));
-      (node.children || []).forEach(c => traverse(c, depth + 1));
+      (node.spouses || []).forEach(s => traverse(s, depth));      // same level
+      (node.parents || []).forEach(p => traverse(p, depth - 1));  // level up
+      (node.children || []).forEach(c => traverse(c, depth + 1)); // level down
     }
-
     traverse(root, 0);
 
-// --- Safely compute min/max depth (avoid NaN if depths undefined or empty) ---
-const allNodes = Array.from(nodesById.values());
-const depthValues = allNodes.map(n => (typeof n.depth === "number" ? n.depth : 0));
-const minDepth = depthValues.length ? Math.min(...depthValues) : 0;
-const maxDepth = depthValues.length ? Math.max(...depthValues) : 0;
-const totalLevels = maxDepth - minDepth + 1;
-    
-if (!Number.isFinite(minDepth) || !Number.isFinite(maxDepth)) {
-  console.warn("Invalid depth values detected in FamilyLayout, resetting to 0");
-}
+    const allNodes = Array.from(nodesById.values());
+    const depthVals = allNodes.map(n => (typeof n.depth === "number" ? n.depth : 0));
+    const minDepth = depthVals.length ? Math.min(...depthVals) : 0;
 
+    // --- normalize to levels 0..N
+    const normalized = allNodes.map(n => ({ ...n, level: (n.depth ?? 0) - minDepth }));
 
-    const normalized = allNodes.map(n => ({
-      ...n,
-      level: n.depth - minDepth
-    }));
-
-    // --- Group by level ---
-    const levels = [];
+    // --- group by level
+    const levels = new Map();
     normalized.forEach(n => {
-      if (!levels[n.level]) levels[n.level] = [];
-      levels[n.level].push(n);
+      if (!levels.has(n.level)) levels.set(n.level, []);
+      levels.get(n.level).push(n);
     });
 
-    // --- Horizontal layout for each generation ---
+    // --- place horizontally within each level
     let maxWidth = 0;
-    levels.forEach(level => {
+    for (const level of levels.values()) {
       const totalWidth = level.length * (nodeWidth + hGap) - hGap;
       let startX = -totalWidth / 2;
       level.forEach((n, j) => {
         n.x = startX + j * (nodeWidth + hGap);
-        n.y = n.level * (nodeHeight + vGap);
       });
       maxWidth = Math.max(maxWidth, totalWidth);
-    });
+    }
 
-    // --- Spouse pairing: place spouses side-by-side ---
+    // --- spouse next to base node (doesn't change row width calc)
     normalized.forEach(n => {
       if (!n.spouses || !n.spouses.length) return;
       const baseX = n.x;
       n.spouses.forEach((s, i) => {
         s.x = baseX + (i + 1) * (nodeWidth + hGap) / 2;
-        s.y = n.y;
+        s.level = n.level;
       });
     });
 
-    // --- Normalise X coordinates so tree is positive space ---
+    // --- shift X so all positive
     const minX = Math.min(...normalized.map(n => n.x));
-    normalized.forEach(n => { n.x -= minX - 50; });
+    normalized.forEach(n => { n.x -= (minX - 50); });
 
-    // --- Adjust Y positions based on row spacing ---
-    const adjusted = normalizeRowSpacing(normalized, nodeHeight, vGap);
+    // --- ADAPTIVE VERTICAL SPACING (key fix)
+    // compute row heights (image rows are taller), then accumulate Y
+    const sortedLevels = Array.from(levels.keys()).sort((a,b) => a - b);
+    let currentY = 0;
+    const levelHeights = new Map();
+
+    for (const lvl of sortedLevels) {
+      const nodes = levels.get(lvl);
+      // if any node OR any spouse at this level has a thumb, make row taller
+      const rowHeights = nodes.map(n => {
+        const hasImage = !!n.thumb || (n.spouses || []).some(s => !!s.thumb);
+        return hasImage ? nodeHeight * 1.5 : nodeHeight; // adjust factor if you prefer
+      });
+      const rowHeight = Math.max(...rowHeights, nodeHeight);
+      levelHeights.set(lvl, rowHeight);
+
+      // assign Y for this level
+      nodes.forEach(n => { n.y = currentY; });
+      nodes.forEach(n => (n.spouses || []).forEach(s => { s.y = currentY; }));
+
+      currentY += rowHeight + vGap;
+    }
+
+    // --- compute canvas width/height properly
+    const rightMost = Math.max(...normalized.map(n => n.x + nodeWidth));
+    const width = Math.max(rightMost + 50, maxWidth + 100);
+    const height = currentY > 0 ? currentY - vGap + 20 : nodeHeight + 20;
 
     return {
-      nodes: adjusted,
-      width: maxWidth + 100,
-      height: totalLevels * (nodeHeight + vGap)
+      nodes: normalized,
+      width,
+      height,
+      nodeWidth,
+      nodeHeight
     };
   }
-
-// --- Helper: normalize vertical spacing by tallest card per row + spouse alignment ---
-function normalizeRowSpacing(nodes, nodeHeight, vGap) {
-  const levels = {};
-  nodes.forEach(n => {
-    if (!levels[n.level]) levels[n.level] = [];
-    levels[n.level].push(n);
-  });
-
-  let currentY = 0;
-
-  Object.keys(levels)
-    .map(Number)
-    .sort((a, b) => a - b)
-    .forEach(lvl => {
-      const levelNodes = levels[lvl];
-
-      // ✅ Determine max height for this generation
-      const heights = levelNodes.map(n => {
-        const hasImage = n.thumb || (n.spouses || []).some(s => s.thumb);
-        return hasImage ? nodeHeight * 1.5 : nodeHeight;
-      });
-      const maxHeight = Math.max(...heights, nodeHeight);
-
-      // ✅ Assign Y for each node in this generation
-      levelNodes.forEach(n => {
-        n.y = currentY;
-        // Keep spouses aligned horizontally on the same Y
-        if (n.spouses && n.spouses.length) {
-          n.spouses.forEach(s => (s.y = n.y));
-        }
-      });
-
-      // ✅ Move Y offset for next generation
-      currentY += maxHeight + vGap;
-    });
-
-  return nodes;
-}
-
 
   return { computeLayout };
 })();
