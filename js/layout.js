@@ -89,41 +89,45 @@ if (!Number.isFinite(minDepth) || !Number.isFinite(maxDepth)) {
     };
   }
 
-  // --- Helper: normalize vertical spacing by tallest card per row + spouse alignment ---
-  function normalizeRowSpacing(nodes, nodeHeight, vGap) {
-    const levels = {};
-    nodes.forEach(n => {
-      if (!levels[n.level]) levels[n.level] = [];
-      levels[n.level].push(n);
-    });
+// --- Helper: normalize vertical spacing by tallest card per row + spouse alignment ---
+function normalizeRowSpacing(nodes, nodeHeight, vGap) {
+  const levels = {};
+  nodes.forEach(n => {
+    if (!levels[n.level]) levels[n.level] = [];
+    levels[n.level].push(n);
+  });
 
-    let currentY = 0;
-    Object.keys(levels).sort((a, b) => a - b).forEach(lvl => {
+  let currentY = 0;
+
+  Object.keys(levels)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .forEach(lvl => {
       const levelNodes = levels[lvl];
 
-// If a node or any spouse has an image, give that row extra height
-const estimatedHeights = levelNodes.map(n => {
-  const hasImage = n.thumb || (n.spouses || []).some(s => s.thumb);
-  return hasImage ? nodeHeight * 1.4 : nodeHeight * 0.9;
-});
-      const maxHeight = Math.max(...estimatedHeights);
+      // ✅ Determine max height for this generation
+      const heights = levelNodes.map(n => {
+        const hasImage = n.thumb || (n.spouses || []).some(s => s.thumb);
+        return hasImage ? nodeHeight * 1.5 : nodeHeight;
+      });
+      const maxHeight = Math.max(...heights, nodeHeight);
 
-      // Assign base Y for this level
-      levelNodes.forEach(n => (n.y = currentY));
-
-      // Align spouse pairs on same vertical baseline
+      // ✅ Assign Y for each node in this generation
       levelNodes.forEach(n => {
-        if (!n.spouses || !n.spouses.length) return;
-        n.spouses.forEach(s => {
-          s.y = n.y; // force identical Y
-        });
+        n.y = currentY;
+        // Keep spouses aligned horizontally on the same Y
+        if (n.spouses && n.spouses.length) {
+          n.spouses.forEach(s => (s.y = n.y));
+        }
       });
 
+      // ✅ Move Y offset for next generation
       currentY += maxHeight + vGap;
     });
 
-    return nodes;
-  }
+  return nodes;
+}
+
 
   return { computeLayout };
 })();
