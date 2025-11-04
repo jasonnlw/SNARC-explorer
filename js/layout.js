@@ -29,11 +29,13 @@ window.FamilyLayout = (() => {
 
     traverse(root, 0);
 
-    // --- Normalise depths so 0 = topmost ancestor ---
-    const allNodes = Array.from(nodesById.values());
-    const minDepth = Math.min(...allNodes.map(n => n.depth));
-    const maxDepth = Math.max(...allNodes.map(n => n.depth));
-    const totalLevels = maxDepth - minDepth + 1;
+// --- Safely compute min/max depth (avoid NaN if depths undefined or empty) ---
+const allNodes = Array.from(nodesById.values());
+const depthValues = allNodes.map(n => (typeof n.depth === "number" ? n.depth : 0));
+const minDepth = depthValues.length ? Math.min(...depthValues) : 0;
+const maxDepth = depthValues.length ? Math.max(...depthValues) : 0;
+const totalLevels = maxDepth - minDepth + 1;
+
 
     const normalized = allNodes.map(n => ({
       ...n,
