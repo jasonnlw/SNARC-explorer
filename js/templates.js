@@ -348,37 +348,38 @@ for (const stmt of claims["P54"] || []) {
     }
 
     const layout = window.FamilyLayout.computeLayout(treeData, {
-      nodeWidth: 180,
-      nodeHeight: 120,
-      hGap: 40,
-      vGap: 40
-    });
-    
+  nodeWidth: 180,
+  nodeHeight: 120,
+  hGap: 40,
+  vGap: 40
+});
+
+// Clear and rebuild container
+container.innerHTML = `
+  <div class="family-tree-wrapper">
+    <div class="family-tree-canvas" style="position:relative;">
+      <svg class="tree-lines"></svg>
+    </div>
+  </div>
+`;
+
+const canvas = container.querySelector(".family-tree-canvas");
+const svg = canvas.querySelector("svg");
+
+// ✅ Set size *after* svg is defined
 svg.setAttribute("width", layout.width);
 svg.setAttribute("height", layout.height);
-
 canvas.style.width = layout.width + "px";
 canvas.style.height = layout.height + "px";
+container.style.height = layout.height + 40 + "px"; // buffer
 
-container.style.height = layout.height + 40 + "px"; // 40px padding buffer
-
-    container.innerHTML = `
-      <div class="family-tree-wrapper">
-        <div class="family-tree-canvas" style="position:relative;">
-          <svg class="tree-lines"></svg>
-        </div>
-      </div>
-    `;
-
-    const canvas = container.querySelector(".family-tree-canvas");
-    const svg = canvas.querySelector("svg");
-
-    const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    mainGroup.classList.add("main-lines");
-    spouseGroup.classList.add("spouse-lines");
-    svg.appendChild(mainGroup);
-    svg.appendChild(spouseGroup);
+// Groups for path layers
+const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+mainGroup.classList.add("main-lines");
+spouseGroup.classList.add("spouse-lines");
+svg.appendChild(mainGroup);
+svg.appendChild(spouseGroup);
 
     layout.nodes.forEach(n => {
       const genderClass = n.gender === "male" ? "male" :
