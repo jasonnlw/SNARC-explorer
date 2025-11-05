@@ -645,7 +645,7 @@ layout.nodes.forEach(n => {
     drawPath(spouseGroup, d2, "#aaa", 3);
   });
 });
-
+});
 
 
     // Center the subject
