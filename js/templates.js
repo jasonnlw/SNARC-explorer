@@ -399,6 +399,65 @@ svg.appendChild(spouseGroup);
       if (n.id === treeData.id) card.classList.add("subject-card");
       canvas.appendChild(card);
     });
+// ------------------------------------------------------------
+// WAIT FOR IMAGES TO LOAD THEN ADJUST ROW SPACING
+// ------------------------------------------------------------
+function adjustRowSpacingOnceImagesReady() {
+  const thumbs = Array.from(canvas.querySelectorAll("img.person-thumb"));
+  let loaded = 0;
+
+  const performAdjustment = () => {
+    const cards = Array.from(canvas.querySelectorAll(".person-card"));
+    if (!cards.length) return;
+
+    // group cards into rows by their Y (top) value
+    const rows = {};
+    cards.forEach(card => {
+      const y = parseFloat(card.style.top);
+      const key = Math.round(y / 10) * 10;
+      if (!rows[key]) rows[key] = [];
+      rows[key].push(card);
+    });
+
+    // compute tallest card per row
+    let cumulativeY = 0;
+    const spacing = 40;
+    const sortedKeys = Object.keys(rows).map(Number).sort((a, b) => a - b);
+    sortedKeys.forEach(k => {
+      const cardsInRow = rows[k];
+      const tallest = Math.max(...cardsInRow.map(c => c.offsetHeight));
+      cardsInRow.forEach(c => (c.style.top = `${cumulativeY}px`));
+      cumulativeY += tallest + spacing;
+    });
+
+    // resize canvas + svg
+    const newHeight = cumulativeY + spacing;
+    svg.setAttribute("height", newHeight);
+    canvas.style.height = `${newHeight}px`;
+    container.style.height = `${newHeight}px`;
+  };
+
+  // Wait for all thumbs to load before adjusting
+  if (!thumbs.length) {
+    performAdjustment();
+  } else {
+    thumbs.forEach(img => {
+      if (img.complete) {
+        if (++loaded === thumbs.length) performAdjustment();
+      } else {
+        img.addEventListener("load", () => {
+          if (++loaded === thumbs.length) performAdjustment();
+        });
+        img.addEventListener("error", () => {
+          if (++loaded === thumbs.length) performAdjustment();
+        });
+      }
+    });
+  }
+}
+
+// call the function
+adjustRowSpacingOnceImagesReady();
 
 
 // Build + draw family tree
