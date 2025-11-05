@@ -400,6 +400,51 @@ svg.appendChild(spouseGroup);
       canvas.appendChild(card);
     });
 
+
+// ------------------------------------------------------------
+// ADAPT TREE HEIGHT TO REAL CARD DIMENSIONS
+// ------------------------------------------------------------
+requestAnimationFrame(() => {
+  const cards = Array.from(canvas.querySelectorAll(".person-card"));
+  if (!cards.length) return;
+
+  // group cards by their Y coordinate (within small tolerance)
+  const rows = {};
+  cards.forEach(card => {
+    const y = parseFloat(card.style.top);
+    const key = Math.round(y / 10) * 10; // bucket rows
+    if (!rows[key]) rows[key] = [];
+    rows[key].push(card);
+  });
+
+  // compute tallest card per row
+  let cumulativeY = 0;
+  const spacing = 40; // vGap buffer between rows
+  const rowHeights = Object.keys(rows)
+    .map(Number)
+    .sort((a, b) => a - b)
+    .map(k => {
+      const h = Math.max(...rows[k].map(c => c.offsetHeight));
+      return h;
+    });
+
+  // update each row’s Y offset cumulatively
+  const levelKeys = Object.keys(rows).map(Number).sort((a,b)=>a-b);
+  levelKeys.forEach((k, i) => {
+    const cardsInRow = rows[k];
+    cardsInRow.forEach(card => {
+      card.style.top = `${cumulativeY}px`;
+    });
+    cumulativeY += rowHeights[i] + spacing;
+  });
+
+  // resize SVG + container to fit new height
+  const newHeight = cumulativeY + spacing;
+  svg.setAttribute("height", newHeight);
+  canvas.style.height = newHeight + "px";
+  container.style.height = newHeight + "px";
+});
+
     
   // ------------------------------------------------------------
 // SAFE CONNECTOR DRAWING
