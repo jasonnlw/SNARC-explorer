@@ -249,7 +249,7 @@ window.Templates = (() => {
   async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
     if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
     if (depth > maxDepth || visited.has(rootQid)) return null;
-    visited.add(rootQid);f
+    visited.add(rootQid);
 
     const data = await API.getEntities(rootQid, lang);
     const item = data?.[rootQid];
