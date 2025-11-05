@@ -401,147 +401,249 @@ svg.appendChild(spouseGroup);
     });
 
 
+// Build + draw family tree
+    const qidMatch = location.hash.match(/Q\d+/);
+    if (!qidMatch) return;
+    const qid = qidMatch[0];
+
+    renderFamilyTree(qid, Utils.getLang()).then(tree => {
+      drawFamilyTree(tree);
+      const redraw = () => drawFamilyTree(tree);
+      requestAnimationFrame(redraw);
+      window.addEventListener("resize", redraw, { once: true });
+    });
+  }
+
+  // ---------- Family tree data ----------
+  async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+    if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
+    if (depth > maxDepth || visited.has(rootQid)) return null;
+    visited.add(rootQid);
+
+    const data = await API.getEntities(rootQid, lang);
+    const item = data?.[rootQid];
+    if (!item) return null;
+
+    const claims = item.claims || {};
+    const node = {
+      id: rootQid,
+      label: item.labels?.[lang]?.value || item.labels?.en?.value || rootQid,
+      dates: "",
+      thumb: "",
+      gender: "unknown",
+      parents: [],
+      children: [],
+      spouses: []
+    };
+
+    // Dates
+    const birth = claims["P17"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
+    const death = claims["P18"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
+    if (birth || death) node.dates = `(${birth.slice(1, 5) || ""}–${death.slice(1, 5) || ""})`;
+
+    // Image
+    const img = claims["P31"]?.[0]?.mainsnak?.datavalue?.value;
+    if (img) {
+      const filename = String(img).replace(/^File:/i, "").trim();
+      node.thumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
+    }
+
+    // Gender
+    const genderClaim = claims["P13"]?.[0];
+    const gId = genderClaim?.mainsnak?.datavalue?.value?.id || "";
+    if (/Q33|Q6581097/i.test(gId)) node.gender = "male";
+    else if (/Q34|Q6581072/i.test(gId)) node.gender = "female";
+
+    // Parents (move up one level visually)
+for (const stmt of claims["P53"] || []) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/.test(q)) {
+    const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (parent) node.parents.push(parent);
+  }
+}
+
+// Children (move down one level)
+for (const stmt of claims["P54"] || []) {
+  const q = Utils.firstValue(stmt);
+  if (q && /^Q\d+$/.test(q)) {
+    const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (child) node.children.push(child);
+  }
+}
+
+
+    // Spouses (non-recursive)
+    for (const stmt of claims["P56"] || []) {
+      const q = Utils.firstValue(stmt);
+      if (!(q && /^Q\d+$/i.test(q))) continue;
+      try {
+        const sData = await API.getEntities(q, lang);
+        const sItem = sData?.[q];
+        if (!sItem) continue;
+        const sClaims = sItem.claims || {};
+        const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
+        let sGender = "unknown";
+        const sGenderId = sClaims["P13"]?.[0]?.mainsnak?.datavalue?.value?.id || "";
+        if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
+        else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
+
+        let sThumb = "";
+        const sImgClaim = sClaims["P31"]?.[0];
+        if (sImgClaim) {
+          const v = Utils.firstValue(sImgClaim);
+          const filename = typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
+          if (filename)
+            sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
+        }
+
+        node.spouses.push({
+          id: q,
+          label: sLabel,
+          gender: sGender,
+          thumb: sThumb,
+          parents: [],
+          children: [],
+          spouses: []
+        });
+      } catch (err) {
+        console.warn("Failed to fetch spouse", q, err);
+      }
+    }
+
+    return node;
+  }
+
+  // ---------- Family tree rendering ----------
+  function drawFamilyTree(treeData) {
+    const container = document.getElementById("family-tree");
+    if (!container || !treeData) return;
+
+    if (!window.FamilyLayout || !window.FamilyLayout.computeLayout) {
+      console.error("FamilyLayout not available");
+      return;
+    }
+
+    const layout = window.FamilyLayout.computeLayout(treeData, {
+  nodeWidth: 180,
+  nodeHeight: 120,
+  hGap: 40,
+  vGap: 40
+});
+
+// Clear and rebuild container
+container.innerHTML = `
+  <div class="family-tree-wrapper">
+    <div class="family-tree-canvas" style="position:relative;">
+      <svg class="tree-lines"></svg>
+    </div>
+  </div>
+`;
+
+const canvas = container.querySelector(".family-tree-canvas");
+const svg = canvas.querySelector("svg");
+
+// ✅ Set size *after* svg is defined
+svg.setAttribute("width", layout.width);
+svg.setAttribute("height", layout.height);
+canvas.style.width = layout.width + "px";
+canvas.style.height = layout.height + "px";
+container.style.height = layout.height + 40 + "px"; // buffer
+
+// Groups for path layers
+const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+mainGroup.classList.add("main-lines");
+spouseGroup.classList.add("spouse-lines");
+svg.appendChild(mainGroup);
+svg.appendChild(spouseGroup);
+
+    layout.nodes.forEach(n => {
+      const genderClass = n.gender === "male" ? "male" :
+                          n.gender === "female" ? "female" : "";
+      const card = document.createElement("div");
+      card.className = `person-card ${genderClass}`;
+      card.dataset.qid = n.id;
+      card.style.left = `${n.x}px`;
+      card.style.top = `${n.y}px`;
+
+      const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
+      card.innerHTML = `
+        ${thumbHTML}
+        <div class="person-label">${n.label || n.id}</div>
+        <div class="person-dates">${n.dates || ""}</div>
+      `;
+      if (n.id === treeData.id) card.classList.add("subject-card");
+      canvas.appendChild(card);
+    });
+
+
 // ------------------------------------------------------------
-// ADAPT TREE HEIGHT TO REAL CARD DIMENSIONS
+// REDRAW CONNECTORS AFTER LAYOUT ADJUSTMENT
 // ------------------------------------------------------------
 requestAnimationFrame(() => {
   const cards = Array.from(canvas.querySelectorAll(".person-card"));
   if (!cards.length) return;
 
-  // group cards by their Y coordinate (within small tolerance)
-  const rows = {};
-  cards.forEach(card => {
-    const y = parseFloat(card.style.top);
-    const key = Math.round(y / 10) * 10; // bucket rows
-    if (!rows[key]) rows[key] = [];
-    rows[key].push(card);
-  });
+  // clear any existing connector paths
+  svg.querySelectorAll("path").forEach(p => p.remove());
 
-  // compute tallest card per row
-  let cumulativeY = 0;
-  const spacing = 40; // vGap buffer between rows
-  const rowHeights = Object.keys(rows)
-    .map(Number)
-    .sort((a, b) => a - b)
-    .map(k => {
-      const h = Math.max(...rows[k].map(c => c.offsetHeight));
-      return h;
-    });
+  const mainGroup = svg.querySelector(".main-lines");
+  const spouseGroup = svg.querySelector(".spouse-lines");
 
-  // update each row’s Y offset cumulatively
-  const levelKeys = Object.keys(rows).map(Number).sort((a,b)=>a-b);
-  levelKeys.forEach((k, i) => {
-    const cardsInRow = rows[k];
-    cardsInRow.forEach(card => {
-      card.style.top = `${cumulativeY}px`;
-    });
-    cumulativeY += rowHeights[i] + spacing;
-  });
+  // quick lookup of cards by QID
+  const cardMap = {};
+  cards.forEach(c => (cardMap[c.dataset.qid] = c));
 
-  // resize SVG + container to fit new height
-  const newHeight = cumulativeY + spacing;
-  svg.setAttribute("height", newHeight);
-  canvas.style.height = newHeight + "px";
-  container.style.height = newHeight + "px";
-});
+  // anchor helper using actual rendered position
+  const getAnchor = (card, edge = "bottom") => {
+    if (!card) return null;
+    const rect = card.getBoundingClientRect();
+    const canvasRect = canvas.getBoundingClientRect();
+    const x = card.offsetLeft + rect.width / 2;
+    let y = card.offsetTop;
+    if (edge === "top") y += 0;
+    else if (edge === "middle") y += rect.height / 2;
+    else y += rect.height;
+    return { x, y };
+  };
 
-    
-  // ------------------------------------------------------------
-// SAFE CONNECTOR DRAWING
-// ------------------------------------------------------------
+  // draw path safely
+  const drawPath = (group, d, color = "#777", width = 1.5) => {
+    if (!d || d.includes("NaN")) return;
+    const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+    path.setAttribute("d", d);
+    path.setAttribute("stroke", color);
+    path.setAttribute("stroke-width", width);
+    path.setAttribute("fill", "none");
+    group.appendChild(path);
+  };
 
-// Anchor helpers
-const anchor = (n, edge = "bottom") => {
-  if (!n || !Number.isFinite(n.x) || !Number.isFinite(n.y)) return null;
-  const x = n.x + 90; // center of card
-  let y = n.y;
-  if (edge === "top") y += 0;
-  else if (edge === "bottom") y += 120;
-  else if (edge === "middle") y += 60;
-  return { x, y };
-};
-
-// Draw an elbow path (vertical + horizontal)
-const elbowPath = (from, to) => {
-  if (!from || !to) return "";
-  const midY = (from.y + to.y) / 2;
-  return `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
-};
-
-// Safe path creation
-const drawPath = (group, d, color = "#777", width = 1.5) => {
-  if (!d || d.includes("NaN")) return; // guard
-  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-  path.setAttribute("d", d);
-  path.setAttribute("stroke", color);
-  path.setAttribute("stroke-width", width);
-  path.setAttribute("fill", "none");
-  group.appendChild(path);
-};
-
-// ------------------------------------------------------------
-// DRAW FAMILY LINES
-// ------------------------------------------------------------
-
-// Parent–child lines
-layout.nodes.forEach(parent => {
-  if (!parent.children) return;
-  parent.children.forEach(child => {
-    const from = anchor(parent, "bottom");
-    const to = anchor(child, "top");
-    if (from && to) {
-      const d = elbowPath(from, to);
+  // family (vertical elbow connectors)
+  layout.nodes.forEach(p => {
+    (p.children || []).forEach(c => {
+      const from = getAnchor(cardMap[p.id], "bottom");
+      const to   = getAnchor(cardMap[c.id], "top");
+      if (!from || !to) return;
+      const midY = (from.y + to.y) / 2;
+      const d = `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
       drawPath(mainGroup, d, "#777", 1.5);
-    }
-  });
-});
-
-// Spouse connectors (horizontal)
-layout.nodes.forEach(n => {
-  if (!n.spouses || !n.spouses.length) return;
-  n.spouses.forEach(s => {
-    const from = anchor(n, "middle");
-    const to = anchor(s, "middle");
-    if (from && to) {
-      const y = (from.y + to.y) / 2;
-      const d = `M ${from.x} ${y} L ${to.x} ${y}`;
-      drawPath(spouseGroup, d, "#aaa", 3);
-    }
-  });
-});
-
-    
-function safeAnchor(n, edge) {
-  if (!n || !Number.isFinite(n.x) || !Number.isFinite(n.y)) return null;
-  return anchor(n, edge);
-}
-
-    layout.nodes.forEach(n => {
-      n.parents?.forEach(p => drawPath(mainGroup, elbowPath(anchor(p, "bottom"), anchor(n, "top"))));
-      n.children?.forEach(c => drawPath(mainGroup, elbowPath(anchor(n, "bottom"), anchor(c, "top"))));
-      n.spouses?.forEach(s => {
-        const spouseNode = layout.nodes.find(x => x.id === s.id);
-        if (!spouseNode) return;
-        const aRight = n.x + 180;
-        const aMidY  = n.y + 60;
-        const bLeft  = spouseNode.x;
-        const bMidY  = spouseNode.y + 60;
-        const gapY   = (aMidY + bMidY) / 2;
-        const midX1  = aRight + 4;
-        const midX2  = bLeft - 4;
-        const path = `
-          M ${aRight} ${aMidY - 15}
-          L ${aRight} ${aMidY + 15}
-          M ${bLeft} ${bMidY - 15}
-          L ${bLeft} ${bMidY + 15}
-          M ${midX1} ${gapY - 3}
-          L ${midX2} ${gapY - 3}
-          M ${midX1} ${gapY + 3}
-          L ${midX2} ${gapY + 3}
-        `;
-        drawPath(spouseGroup, path, "#aaa", 3);
-      });
     });
+  });
+
+  // spouses (horizontal connectors)
+  layout.nodes.forEach(n => {
+    (n.spouses || []).forEach(s => {
+      const a = getAnchor(cardMap[n.id], "middle");
+      const b = getAnchor(cardMap[s.id], "middle");
+      if (!a || !b) return;
+      const y = (a.y + b.y) / 2;
+      const d = `M ${a.x} ${y} L ${b.x} ${y}`;
+      drawPath(spouseGroup, d, "#aaa", 3);
+    });
+  });
+});
+
 
     // Center the subject
     const wrapper = container.querySelector(".family-tree-wrapper");
@@ -550,6 +652,7 @@ function safeAnchor(n, edge) {
       const subjectCenterX = subject.offsetLeft + subject.offsetWidth / 2;
       const wrapperWidth = wrapper.clientWidth;
       wrapper.scrollLeft = Math.max(subjectCenterX - wrapperWidth / 2, 0);
+ 
     }
   }
 
