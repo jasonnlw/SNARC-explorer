@@ -192,6 +192,22 @@ window.Templates = (() => {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
+           // ---------- Family tree rendering ----------
+    const treeContainer = document.getElementById("family-tree");
+    if (treeContainer) {
+      const qidMatch = location.hash.match(/Q\d+/);
+      if (qidMatch) {
+        const qid = qidMatch[0];
+        renderFamilyTree(qid, Utils.getLang()).then(tree => {
+          if (!tree) return;
+          drawFamilyTree(tree);
+          const redraw = () => drawFamilyTree(tree);
+          requestAnimationFrame(redraw);
+          window.addEventListener("resize", redraw, { once: true });
+        });
+      }
+    }
+
     }
       document.querySelectorAll(".map-thumb").forEach(el => {
         const lat = Number(el.dataset.lat);
@@ -233,7 +249,7 @@ window.Templates = (() => {
   async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
     if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
     if (depth > maxDepth || visited.has(rootQid)) return null;
-    visited.add(rootQid);
+    visited.add(rootQid);f
 
     const data = await API.getEntities(rootQid, lang);
     const item = data?.[rootQid];
