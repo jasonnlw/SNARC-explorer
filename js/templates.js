@@ -192,7 +192,7 @@ window.Templates = (() => {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
-
+    }
       document.querySelectorAll(".map-thumb").forEach(el => {
         const lat = Number(el.dataset.lat);
         const lon = Number(el.dataset.lon);
