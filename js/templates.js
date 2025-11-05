@@ -631,18 +631,21 @@ requestAnimationFrame(() => {
     });
   });
 
-  // spouses (horizontal connectors)
-  layout.nodes.forEach(n => {
-    (n.spouses || []).forEach(s => {
-      const a = getAnchor(cardMap[n.id], "middle");
-      const b = getAnchor(cardMap[s.id], "middle");
-      if (!a || !b) return;
-      const y = (a.y + b.y) / 2;
-      const d = `M ${a.x} ${y} L ${b.x} ${y}`;
-      drawPath(spouseGroup, d, "#aaa", 3);
-    });
+// spouses (parallel "=" connectors)
+layout.nodes.forEach(n => {
+  (n.spouses || []).forEach(s => {
+    const a = getAnchor(cardMap[n.id], "middle");
+    const b = getAnchor(cardMap[s.id], "middle");
+    if (!a || !b) return;
+    const yMid = (a.y + b.y) / 2;
+    const gap = 3; // vertical distance between the two lines
+    const d1 = `M ${a.x} ${yMid - gap} L ${b.x} ${yMid - gap}`;
+    const d2 = `M ${a.x} ${yMid + gap} L ${b.x} ${yMid + gap}`;
+    drawPath(spouseGroup, d1, "#aaa", 3);
+    drawPath(spouseGroup, d2, "#aaa", 3);
   });
 });
+
 
 
     // Center the subject
