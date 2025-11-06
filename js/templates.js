@@ -259,7 +259,7 @@ if (mediaStmts && mediaStmts.length) {
         document.getElementById("map-modal").addEventListener("click", e => {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
-      }
+}
 
 // ---------- Family tree rendering ----------
 const treeContainer = document.getElementById("family-tree");
