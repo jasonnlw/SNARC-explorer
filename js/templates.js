@@ -132,25 +132,71 @@ window.Templates = (() => {
       }
     }
 
-    // --- IIIF image gallery (P50) ---
-    let galleryHTML = "";
-    const mediaStmts = claims["P50"];
-    if (mediaStmts && mediaStmts.length) {
-      const images = mediaStmts.map(stmt => {
-        const v = Utils.firstValue(stmt);
-        if (!v || typeof v !== "string") return "";
+  // --- IIIF image gallery (P50) ---
+  let galleryHTML = "";
+  const mediaStmts = claims["P50"];
+
+  if (mediaStmts && mediaStmts.length) {
+    // helper to build thumbnail HTML
+    const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+      const iconHTML = isMulti
+        ? `<span class="multi-icon" title="Multiple images">🗂</span>`
+        : "";
+      return `
+        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
+          <div class="thumb-wrapper">
+            <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
+            ${iconHTML}
+          </div>
+        </a>`;
+    };
+
+    const imagePromises = mediaStmts.map(async stmt => {
+      const v = Utils.firstValue(stmt);
+      if (!v || typeof v !== "string") return "";
+
+      // Detect whether the value points to an IIIF manifest or an individual image
+      if (v.includes("/manifest")) {
+        try {
+          const res = await fetch(v);
+          const manifest = await res.json();
+          const canvases = manifest.sequences?.[0]?.canvases || [];
+          if (!canvases.length) return "";
+
+          // pick a random canvas
+          const randomCanvas = canvases[Math.floor(Math.random() * canvases.length)];
+          const imgRes = randomCanvas.images?.[0]?.resource;
+          const id = randomCanvas["@id"]?.split("/").pop() || "";
+          const thumbUrl = imgRes?.service
+            ? `${imgRes.service["@id"]}/full/!300,300/0/default.jpg`
+            : imgRes["@id"];
+
+          const isMulti = canvases.length > 1;
+          const rootUrl = v;
+          return buildThumbHTML(thumbUrl, rootUrl, id, isMulti);
+        } catch (err) {
+          console.warn("Failed to load IIIF manifest:", v, err);
+          return "";
+        }
+      } else {
+        // Standard single IIIF image (current behaviour)
         const parts = v.split("/");
         const handle = parts.join("/");
         const id = parts[1];
         if (!id) return "";
         const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,300/0/default.jpg`;
         const rootUrl  = `https://hdl.handle.net/${handle}`;
-        return `<a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
-                  <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
-                </a>`;
-      }).filter(Boolean);
-      if (images.length) galleryHTML = `<div class="gallery">${images.join("")}</div>`;
+        return buildThumbHTML(thumbUrl, rootUrl, id, false);
+      }
+    });
+
+    const images = await Promise.all(imagePromises);
+    const validImages = images.filter(Boolean);
+    if (validImages.length) {
+      galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
     }
+  }
+
 
     // --- Property table (exclude family/map/media props) ---
     const rows = Object.keys(claims)
