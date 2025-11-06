@@ -192,12 +192,28 @@ window.Templates = (() => {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
-           // ---------- Family tree rendering ----------
-    const treeContainer = document.getElementById("family-tree");
-    if (treeContainer) {
-      const qidMatch = location.hash.match(/Q\d+/);
-      if (qidMatch) {
-        const qid = qidMatch[0];
+   // ---------- Family tree rendering ----------
+const treeContainer = document.getElementById("family-tree");
+if (treeContainer) {
+  const qidMatch = location.hash.match(/Q\d+/);
+  if (qidMatch) {
+    const qid = qidMatch[0];
+
+    // Fetch entity data first to check conditions
+    API.getEntities(qid, Utils.getLang()).then(data => {
+      const item = data?.[qid];
+      if (!item) return;
+
+      const claims = item.claims || {};
+      const instanceOf = claims["P7"]?.map(c => Utils.firstValue(c)) || [];
+      const isHuman = instanceOf.includes("Q947");
+
+      // list of family-connection properties
+      const familyProps = ["P52", "P53", "P54", "P55", "P56"];
+      const hasFamilyLink = familyProps.some(p => (claims[p] || []).length > 0);
+
+      // Only render the tree if both conditions are true
+      if (isHuman && hasFamilyLink) {
         renderFamilyTree(qid, Utils.getLang()).then(tree => {
           if (!tree) return;
           drawFamilyTree(tree);
@@ -206,7 +222,9 @@ window.Templates = (() => {
           window.addEventListener("resize", redraw, { once: true });
         });
       }
-    }
+    });
+  }
+}
 
     }
       document.querySelectorAll(".map-thumb").forEach(el => {
