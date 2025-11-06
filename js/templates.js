@@ -138,7 +138,6 @@ let galleryHTML = "";
 const mediaStmts = claims["P50"];
 
 if (mediaStmts && mediaStmts.length) {
-  // Helper to build thumbnail HTML
   const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
     const iconHTML = isMulti
       ? `<span class="multi-icon" title="Multiple images">🗂</span>`
@@ -156,32 +155,33 @@ if (mediaStmts && mediaStmts.length) {
     const v = Utils.firstValue(stmt);
     if (!v || typeof v !== "string") return "";
 
-    // Extract numeric ID from any format (manifest, viewer, or IIIF)
+    // Extract numeric ID (6+ digits) from any form
     const idMatch = v.match(/(\d{6,})/);
     if (!idMatch) return "";
     const baseId = parseInt(idMatch[1], 10);
 
-    // Detect multi-image sets:
-    //   - any value with '/manifest'
-    //   - or any value from viewer.library.wales (multi-page items)
+    // Detect multi-image handles, manifests, or viewer URLs
     const isMulti =
+      v.startsWith("10107/") ||
       v.includes("/manifest") ||
       v.includes("viewer.library.wales");
 
-    // For multi-image items, use +1 (first child image)
+    // For multi-image, use first child (+1)
     const imageId = isMulti ? baseId + 1 : baseId;
 
-    // Always use /iiif/image/ pattern — not /iiif/2.0/
+    // IIIF image endpoint (no 2.0)
     const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+
+    // Public viewer URL for link target
     const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-    // Optionally verify the image exists (skip silently on 404)
+    // Verify image exists; fallback if +1 fails
     const test = new Image();
     test.src = thumbUrl;
     return new Promise(resolve => {
-      test.onload = () => resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
+      test.onload = () =>
+        resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
       test.onerror = () => {
-        // fallback to baseId if +1 fails
         if (isMulti) {
           const fallbackUrl = `https://damsssl.llgc.org.uk/iiif/image/${baseId}/full/300,/0/default.jpg`;
           resolve(buildThumbHTML(fallbackUrl, rootUrl, baseId, true));
@@ -198,6 +198,7 @@ if (mediaStmts && mediaStmts.length) {
     galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
   }
 }
+
 
     // --- Property table (exclude family/map/media props) ---
     const rows = Object.keys(claims)
