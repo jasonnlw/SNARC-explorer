@@ -409,12 +409,14 @@ if (treeContainer) {
       card.style.left = `${n.x}px`;
       card.style.top = `${n.y}px`;
 
-      const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
-      card.innerHTML = `
-        ${thumbHTML}
-        <div class="person-label">${n.label || n.id}</div>
-        <div class="person-dates">${n.dates || ""}</div>
-      `;
+     const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
+card.innerHTML = `
+  <a href="#/item/${n.id}" class="person-link" style="text-decoration:none;color:inherit;display:block;">
+    ${thumbHTML}
+    <div class="person-label">${n.label || n.id}</div>
+    <div class="person-dates">${n.dates || ""}</div>
+  </a>
+`;
       if (n.id === treeData.id) card.classList.add("subject-card");
       canvas.appendChild(card);
     });
