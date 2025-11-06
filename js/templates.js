@@ -260,7 +260,8 @@ if (mediaStmts && mediaStmts.length) {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
-   // ---------- Family tree rendering ----------
+
+// ---------- Family tree rendering ----------
 const treeContainer = document.getElementById("family-tree");
 if (treeContainer) {
   const qidMatch = location.hash.match(/Q\d+/);
@@ -294,382 +295,346 @@ if (treeContainer) {
   }
 }
 
-    }
-      document.querySelectorAll(".map-thumb").forEach(el => {
-        const lat = Number(el.dataset.lat);
-        const lon = Number(el.dataset.lon);
-        const id = el.dataset.mapid;
-        const canvas = document.getElementById(id);
-        if (!canvas) return;
-        canvas.style.width = "300px";
-        canvas.style.height = "200px";
-        const map = L.map(id, {
-          zoomControl: false,
-          attributionControl: false,
-          dragging: false,
-          scrollWheelZoom: false,
-          doubleClickZoom: false,
-          boxZoom: false,
-          keyboard: false,
-          tap: false
-        }).setView([lat, lon], 9);
-        L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(map);
-        L.marker([lat, lon]).addTo(map);
-        setTimeout(() => map.invalidateSize(), 100);
+// ---------- Family tree data ----------
+async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+  if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
+  if (depth > maxDepth || visited.has(rootQid)) return null;
+  visited.add(rootQid);
 
-        el.addEventListener("click", () => {
-          const modalEl = document.getElementById("map-modal");
-          modalEl.style.display = "block";
-          const largeContainer = document.getElementById("map-large");
-          largeContainer.innerHTML = "";
-          const bigMap = L.map("map-large").setView([lat, lon], 13);
-          L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", { maxZoom: 19 }).addTo(bigMap);
-          L.marker([lat, lon]).addTo(bigMap);
-          setTimeout(() => bigMap.invalidateSize(), 100);
-        });
+  const data = await API.getEntities(rootQid, lang);
+  const item = data?.[rootQid];
+  if (!item) return null;
+
+  const claims = item.claims || {};
+
+  const node = {
+    id: rootQid,
+    label: item.labels?.[lang]?.value || item.labels?.en?.value || rootQid,
+    dates: "",
+    thumb: "",
+    gender: "unknown",
+    parents: [],
+    children: [],
+    spouses: []
+  };
+
+  const birth = claims["P17"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
+  const death = claims["P18"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
+  if (birth || death)
+    node.dates = `(${birth.slice(1, 5) || ""}–${death.slice(1, 5) || ""})`;
+
+  const img = claims["P31"]?.[0]?.mainsnak?.datavalue?.value;
+  if (img) {
+    const filename = String(img).replace(/^File:/i, "").trim();
+    node.thumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
+  }
+
+  const genderClaim = claims["P13"]?.[0];
+  const gId = genderClaim?.mainsnak?.datavalue?.value?.id || "";
+  if (/Q33|Q6581097/i.test(gId)) node.gender = "male";
+  else if (/Q34|Q6581072/i.test(gId)) node.gender = "female";
+
+  // Parents: include both P53 (father/parent) and P55 (mother/parent)
+  const parentIds = [
+    ...getRelatedIds(claims["P53"]),
+    ...getRelatedIds(claims["P55"])
+  ];
+  for (const q of parentIds) {
+    if (!/^Q\d+$/i.test(q)) continue;
+    const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (parent) node.parents.push(parent);
+  }
+
+  // Children (P54)
+  for (const q of getRelatedIds(claims["P54"])) {
+    if (!/^Q\d+$/i.test(q)) continue;
+    const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (child) node.children.push(child);
+  }
+
+  // Siblings (P52) — treat them as 'horizontal' relatives if no parents
+  for (const q of getRelatedIds(claims["P52"])) {
+    if (!/^Q\d+$/i.test(q)) continue;
+    if (visited.has(q)) continue;
+    const sibling = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+    if (sibling) node.spouses.push(sibling);
+  }
+
+  // Spouses (P56)
+  for (const q of getRelatedIds(claims["P56"])) {
+    if (!(q && /^Q\d+$/i.test(q))) continue;
+    try {
+      const sData = await API.getEntities(q, lang);
+      const sItem = sData?.[q];
+      if (!sItem) continue;
+      const sClaims = sItem.claims || {};
+      const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
+
+      let sGender = "unknown";
+      const sGenderId = sClaims["P13"]?.[0]?.mainsnak?.datavalue?.value?.id || "";
+      if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
+      else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
+
+      let sThumb = "";
+      const sImgClaim = sClaims["P31"]?.[0];
+      if (sImgClaim) {
+        const v = Utils.firstValue(sImgClaim);
+        const filename =
+          typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
+        if (filename)
+          sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(
+            filename
+          )}?width=120`;
+      }
+
+      node.spouses.push({
+        id: q,
+        label: sLabel,
+        gender: sGender,
+        thumb: sThumb,
+        parents: [],
+        children: [],
+        spouses: []
       });
+    } catch (err) {
+      console.warn("Failed to fetch spouse", q, err);
     }
+  }
 
+  return node;
+}
 
-  // ---------- Family tree data ----------
-  async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
-      
-    if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
-    if (depth > maxDepth || visited.has(rootQid)) return null;
-    visited.add(rootQid);
+// ---------- Family tree rendering ----------
+function drawFamilyTree(treeData) {
+  const container = document.getElementById("family-tree");
+  if (!container || !treeData) return;
+  if (!window.FamilyLayout || !window.FamilyLayout.computeLayout) {
+    console.error("FamilyLayout not available");
+    return;
+  }
 
-    const data = await API.getEntities(rootQid, lang);
-    const item = data?.[rootQid];
-    if (!item) return null;
-
-    const claims = item.claims || {};
-    if (rootQid === "Q63235") {
-  console.log("DEBUG – family claims for", rootQid, {
-    P52: claims["P52"], // siblings
-    P53: claims["P53"], // father/parent
-    P54: claims["P54"], // child
-    P55: claims["P55"], // mother/parent
-    P56: claims["P56"]  // spouse
+  const layout = window.FamilyLayout.computeLayout(treeData, {
+    nodeWidth: 180,
+    nodeHeight: 120,
+    hGap: 40,
+    vGap: 40
   });
-} 
-    const node = {
-      id: rootQid,
-      label: item.labels?.[lang]?.value || item.labels?.en?.value || rootQid,
-      dates: "",
-      thumb: "",
-      gender: "unknown",
-      parents: [],
-      children: [],
-      spouses: []
+
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <div class="family-tree-canvas" style="position:relative;">
+        <svg class="tree-lines"></svg>
+      </div>
+    </div>
+  `;
+
+  const canvas = container.querySelector(".family-tree-canvas");
+  const svg = canvas.querySelector("svg");
+
+  svg.setAttribute("width", layout.width);
+  svg.setAttribute("height", layout.height);
+  canvas.style.width = layout.width + "px";
+  canvas.style.height = layout.height + "px";
+  container.style.height = layout.height + 40 + "px";
+
+  const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  mainGroup.classList.add("main-lines");
+  spouseGroup.classList.add("spouse-lines");
+  svg.appendChild(mainGroup);
+  svg.appendChild(spouseGroup);
+
+  // Render cards
+  layout.nodes.forEach(n => {
+    const genderClass =
+      n.gender === "male"
+        ? "male"
+        : n.gender === "female"
+        ? "female"
+        : "";
+    const card = document.createElement("div");
+    card.className = `person-card ${genderClass}`;
+    card.dataset.qid = n.id;
+    card.style.left = `${n.x}px`;
+    card.style.top = `${n.y}px`;
+
+    const thumbHTML = n.thumb
+      ? `<img src="${n.thumb}" class="person-thumb" alt="">`
+      : "";
+    card.innerHTML = `
+      <a href="#/item/${n.id}" class="person-link" style="text-decoration:none;color:inherit;display:block;">
+        ${thumbHTML}
+        <div class="person-label">${n.label || n.id}</div>
+        <div class="person-dates">${n.dates || ""}</div>
+      </a>
+    `;
+    if (n.id === treeData.id) card.classList.add("subject-card");
+    canvas.appendChild(card);
+  });
+
+  // === Wait for images, then adjust row spacing ===
+  function adjustRowSpacingOnceImagesReady() {
+    const thumbs = Array.from(canvas.querySelectorAll("img.person-thumb"));
+    let loaded = 0;
+
+    const performAdjustment = () => {
+      const cards = Array.from(canvas.querySelectorAll(".person-card"));
+      if (!cards.length) return;
+
+      const rows = {};
+      cards.forEach(card => {
+        const y = parseFloat(card.style.top);
+        const key = Math.round(y / 10) * 10;
+        (rows[key] ||= []).push(card);
+      });
+
+      let cumulativeY = 0;
+      const spacing = 40;
+      const sortedKeys = Object.keys(rows)
+        .map(Number)
+        .sort((a, b) => a - b);
+      sortedKeys.forEach(k => {
+        const row = rows[k];
+        const tallest = Math.max(...row.map(c => c.offsetHeight));
+        row.forEach(c => {
+          c.style.top = `${cumulativeY}px`;
+        });
+        cumulativeY += tallest + spacing;
+      });
+
+      const newHeight = cumulativeY + spacing;
+      svg.setAttribute("height", newHeight);
+      canvas.style.height = `${newHeight}px`;
+      container.style.height = `${newHeight}px`;
+
+      redrawConnectors();
+      centerSubject();
     };
 
-    const birth = claims["P17"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
-    const death = claims["P18"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
-    if (birth || death) node.dates = `(${birth.slice(1, 5) || ""}–${death.slice(1, 5) || ""})`;
-
-    const img = claims["P31"]?.[0]?.mainsnak?.datavalue?.value;
-    if (img) {
-      const filename = String(img).replace(/^File:/i, "").trim();
-      node.thumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
-    }
-
-    const genderClaim = claims["P13"]?.[0];
-    const gId = genderClaim?.mainsnak?.datavalue?.value?.id || "";
-    if (/Q33|Q6581097/i.test(gId)) node.gender = "male";
-    else if (/Q34|Q6581072/i.test(gId)) node.gender = "female";
-
-    // Parents
-    for (const stmt of claims["P53"] || []) {
-      const q = Utils.firstValue(stmt);
-      if (q && /^Q\d+$/.test(q)) {
-        const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-        if (parent) node.parents.push(parent);
-      }
-    }
-
-   // Parents: include both P53 (father/parent) and P55 (mother/parent)
-const parentIds = [
-  ...getRelatedIds(claims["P53"]),
-  ...getRelatedIds(claims["P55"])
-];
-for (const q of parentIds) {
-  if (!/^Q\d+$/i.test(q)) continue;
-  const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-  if (parent) node.parents.push(parent);
-}
-
-// Children (P54)
-for (const q of getRelatedIds(claims["P54"])) {
-  if (!/^Q\d+$/i.test(q)) continue;
-  const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-  if (child) node.children.push(child);
-}
-
-// Siblings (P52) — treat them as 'horizontal' relatives if no parents/children exist
-for (const q of getRelatedIds(claims["P52"])) {
-  if (!/^Q\d+$/i.test(q)) continue;
-  // To prevent duplicates or recursion loops
-  if (visited.has(q)) continue;
-  const sibling = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-  if (sibling) node.spouses.push(sibling); // visually align horizontally (same generation)
-}
-
-// Spouses (P56)
-for (const q of getRelatedIds(claims["P56"])) {
-  if (!(q && /^Q\d+$/i.test(q))) continue;
-  try {
-    const sData = await API.getEntities(q, lang);
-    const sItem = sData?.[q];
-    if (!sItem) continue;
-    const sClaims = sItem.claims || {};
-    const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
-
-    let sGender = "unknown";
-    const sGenderId = sClaims["P13"]?.[0]?.mainsnak?.datavalue?.value?.id || "";
-    if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
-    else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
-
-    let sThumb = "";
-    const sImgClaim = sClaims["P31"]?.[0];
-    if (sImgClaim) {
-      const v = Utils.firstValue(sImgClaim);
-      const filename = typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
-      if (filename)
-        sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
-    }
-
-    node.spouses.push({
-      id: q,
-      label: sLabel,
-      gender: sGender,
-      thumb: sThumb,
-      parents: [],
-      children: [],
-      spouses: []
-    });
-  } catch (err) {
-    console.warn("Failed to fetch spouse", q, err);
-  }
-}
-
-
-    return node;
-  }
-
-  // ---------- Family tree rendering ----------
-  function drawFamilyTree(treeData) {
-    const container = document.getElementById("family-tree");
-    if (!container || !treeData) return;
-    if (!window.FamilyLayout || !window.FamilyLayout.computeLayout) {
-      console.error("FamilyLayout not available");
-      return;
-    }
-
-    const layout = window.FamilyLayout.computeLayout(treeData, {
-      nodeWidth: 180,
-      nodeHeight: 120,
-      hGap: 40,
-      vGap: 40
-    });
-
-    container.innerHTML = `
-      <div class="family-tree-wrapper">
-        <div class="family-tree-canvas" style="position:relative;">
-          <svg class="tree-lines"></svg>
-        </div>
-      </div>
-    `;
-
-    const canvas = container.querySelector(".family-tree-canvas");
-    const svg = canvas.querySelector("svg");
-
-    svg.setAttribute("width", layout.width);
-    svg.setAttribute("height", layout.height);
-    canvas.style.width = layout.width + "px";
-    canvas.style.height = layout.height + "px";
-    container.style.height = layout.height + 40 + "px";
-
-    const mainGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    const spouseGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    mainGroup.classList.add("main-lines");
-    spouseGroup.classList.add("spouse-lines");
-    svg.appendChild(mainGroup);
-    svg.appendChild(spouseGroup);
-
-    // Render cards
-    layout.nodes.forEach(n => {
-      const genderClass = n.gender === "male" ? "male" :
-                          n.gender === "female" ? "female" : "";
-      const card = document.createElement("div");
-      card.className = `person-card ${genderClass}`;
-      card.dataset.qid = n.id;
-      card.style.left = `${n.x}px`;
-      card.style.top = `${n.y}px`;
-
-     const thumbHTML = n.thumb ? `<img src="${n.thumb}" class="person-thumb" alt="">` : "";
-card.innerHTML = `
-  <a href="#/item/${n.id}" class="person-link" style="text-decoration:none;color:inherit;display:block;">
-    ${thumbHTML}
-    <div class="person-label">${n.label || n.id}</div>
-    <div class="person-dates">${n.dates || ""}</div>
-  </a>
-`;
-      if (n.id === treeData.id) card.classList.add("subject-card");
-      canvas.appendChild(card);
-    });
-
-    // === Wait for images, then adjust row spacing ===
-    function adjustRowSpacingOnceImagesReady() {
-      const thumbs = Array.from(canvas.querySelectorAll("img.person-thumb"));
-      let loaded = 0;
-
-      const performAdjustment = () => {
-        const cards = Array.from(canvas.querySelectorAll(".person-card"));
-        if (!cards.length) return;
-
-        const rows = {};
-        cards.forEach(card => {
-          const y = parseFloat(card.style.top);
-          const key = Math.round(y / 10) * 10;
-          (rows[key] ||= []).push(card);
-        });
-
-        let cumulativeY = 0;
-        const spacing = 40;
-        const sortedKeys = Object.keys(rows).map(Number).sort((a,b)=>a-b);
-        sortedKeys.forEach(k => {
-          const row = rows[k];
-          const tallest = Math.max(...row.map(c => c.offsetHeight));
-          row.forEach(c => { c.style.top = `${cumulativeY}px`; });
-          cumulativeY += tallest + spacing;
-        });
-
-        const newHeight = cumulativeY + spacing;
-        svg.setAttribute("height", newHeight);
-        canvas.style.height = `${newHeight}px`;
-        container.style.height = `${newHeight}px`;
-
-        redrawConnectors();
-        centerSubject();
-      };
-
-      if (!thumbs.length) {
-        requestAnimationFrame(performAdjustment);
-      } else {
-        thumbs.forEach(img => {
-          if (img.complete) {
+    if (!thumbs.length) {
+      requestAnimationFrame(performAdjustment);
+    } else {
+      thumbs.forEach(img => {
+        if (img.complete) {
+          if (++loaded === thumbs.length) performAdjustment();
+        } else {
+          img.addEventListener("load", () => {
             if (++loaded === thumbs.length) performAdjustment();
-          } else {
-            img.addEventListener("load",  () => { if (++loaded === thumbs.length) performAdjustment(); });
-            img.addEventListener("error", () => { if (++loaded === thumbs.length) performAdjustment(); });
-          }
-        });
-      }
-    }
-
-    // === Redraw connectors ===
-    function redrawConnectors() {
-      mainGroup.innerHTML = "";
-      spouseGroup.innerHTML = "";
-
-      const cards = Array.from(canvas.querySelectorAll(".person-card"));
-      const cardMap = {};
-      cards.forEach(c => { cardMap[c.dataset.qid] = c; });
-
-      const getAnchor = (card, edge = "bottom") => {
-        if (!card) return null;
-        const rect = card.getBoundingClientRect();
-        const x = card.offsetLeft + rect.width / 2;
-        let y = card.offsetTop;
-        if (edge === "top") y += 0;
-        else if (edge === "middle") y += rect.height / 2;
-        else y += rect.height;
-        return { x, y };
-      };
-
-      const drawPath = (group, d, color = "#777", width = 1.5) => {
-        if (!d || d.includes("NaN")) return;
-        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-        path.setAttribute("d", d);
-        path.setAttribute("stroke", color);
-        path.setAttribute("stroke-width", width);
-        path.setAttribute("fill", "none");
-        group.appendChild(path);
-      };
-
-      // Parent–child (elbow)
-layout.nodes.forEach(node => {
-  if (!node.children) return;
-  node.children.forEach(child => {
-    // prefer father (P53) else mother (P55)
-    const parent = node.gender === "male" ? node : node.gender === "female" ? node : null;
-    if (!parent) return;
-    const from = anchor(parent, "bottom");
-    const to = anchor(child, "top");
-    if (from && to) {
-      const d = elbowPath(from, to);
-      drawPath(mainGroup, d, "#777", 1.5);
-    }
-  });
-});
-
-
-      // Spouse (double "=" line)
-      layout.nodes.forEach(n => {
-        (n.spouses || []).forEach(s => {
-          const a = getAnchor(cardMap[n.id], "middle");
-          const b = getAnchor(cardMap[s.id], "middle");
-          if (!a || !b) return;
-          const yMid = (a.y + b.y) / 2;
-          const gap = 3;
-          const d1 = `M ${a.x} ${yMid - gap} L ${b.x} ${yMid - gap}`;
-          const d2 = `M ${a.x} ${yMid + gap} L ${b.x} ${yMid + gap}`;
-          drawPath(spouseGroup, d1, "#aaa", 3);
-          drawPath(spouseGroup, d2, "#aaa", 3);
-        });
+          });
+          img.addEventListener("error", () => {
+            if (++loaded === thumbs.length) performAdjustment();
+          });
+        }
       });
-
-       // ------------------------------------------------------------
-// Sibling connectors (horizontal single line)
-// ------------------------------------------------------------
-const siblingGroups = {};
-layout.nodes.forEach(n => {
-  // Group by parent ID if available, otherwise group siblings without parents together
-  const parentKey =
-    (n.parents && n.parents.length && n.parents[0].id) || "orphans";
-  if (!siblingGroups[parentKey]) siblingGroups[parentKey] = [];
-  siblingGroups[parentKey].push(n);
-});
-
-Object.values(siblingGroups).forEach(group => {
-  if (group.length < 2) return; // need at least 2 siblings
-  // sort siblings by x position
-  const sorted = group.slice().sort((a, b) => a.x - b.x);
-  const left = sorted[0];
-  const right = sorted[sorted.length - 1];
-  const y = sorted[0].y + 30; // halfway down cards
-  const from = { x: left.x + 90, y };
-  const to = { x: right.x + 90, y };
-  const d = `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
-  drawPath(mainGroup, d, "#aaa", 1.2); // single connecting line
-});
-
     }
-
-    // === Center subject ===
-    function centerSubject() {
-      const wrapper = container.querySelector(".family-tree-wrapper");
-      const subject = canvas.querySelector(".subject-card");
-      if (wrapper && subject) {
-        const subjectCenterX = subject.offsetLeft + subject.offsetWidth / 2;
-        const wrapperWidth = wrapper.clientWidth;
-        wrapper.scrollLeft = Math.max(subjectCenterX - wrapperWidth / 2, 0);
-      }
-    }
-
-    adjustRowSpacingOnceImagesReady();
   }
 
+  // === Redraw connectors ===
+  function redrawConnectors() {
+    mainGroup.innerHTML = "";
+    spouseGroup.innerHTML = "";
+
+    const cards = Array.from(canvas.querySelectorAll(".person-card"));
+    const cardMap = {};
+    cards.forEach(c => {
+      cardMap[c.dataset.qid] = c;
+    });
+
+    const getAnchor = (card, edge = "bottom") => {
+      if (!card) return null;
+      const rect = card.getBoundingClientRect();
+      const x = card.offsetLeft + rect.width / 2;
+      let y = card.offsetTop;
+      if (edge === "top") y += 0;
+      else if (edge === "middle") y += rect.height / 2;
+      else y += rect.height;
+      return { x, y };
+    };
+
+    const elbowPath = (from, to) => {
+      if (!from || !to) return "";
+      const midY = (from.y + to.y) / 2;
+      return `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
+    };
+
+    const drawPath = (group, d, color = "#777", width = 1.5) => {
+      if (!d || d.includes("NaN")) return;
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("d", d);
+      path.setAttribute("stroke", color);
+      path.setAttribute("stroke-width", width);
+      path.setAttribute("fill", "none");
+      group.appendChild(path);
+    };
+
+    // ---- Parent–child connectors (fallback to mother if no father)
+    layout.nodes.forEach(parent => {
+      if (!parent.children) return;
+      parent.children.forEach(child => {
+        const fromCard = cardMap[parent.id];
+        const toCard = cardMap[child.id];
+        if (!fromCard || !toCard) return;
+        const from = getAnchor(fromCard, "bottom");
+        const to = getAnchor(toCard, "top");
+        if (from && to) {
+          const d = elbowPath(from, to);
+          drawPath(mainGroup, d, "#777", 1.5);
+        }
+      });
+    });
+
+    // ---- Spouse connectors (double "=" lines)
+    layout.nodes.forEach(n => {
+      (n.spouses || []).forEach(s => {
+        const a = getAnchor(cardMap[n.id], "middle");
+        const b = getAnchor(cardMap[s.id], "middle");
+        if (!a || !b) return;
+        const yMid = (a.y + b.y) / 2;
+        const gap = 3;
+        const d1 = `M ${a.x} ${yMid - gap} L ${b.x} ${yMid - gap}`;
+        const d2 = `M ${a.x} ${yMid + gap} L ${b.x} ${yMid + gap}`;
+        drawPath(spouseGroup, d1, "#aaa", 3);
+        drawPath(spouseGroup, d2, "#aaa", 3);
+      });
+    });
+
+    // ---- Sibling connectors (single horizontal line)
+    const siblingGroups = {};
+    layout.nodes.forEach(n => {
+      const parentKey =
+        (n.parents && n.parents.length && n.parents[0].id) || "orphans";
+      if (!siblingGroups[parentKey]) siblingGroups[parentKey] = [];
+      siblingGroups[parentKey].push(n);
+    });
+
+    Object.values(siblingGroups).forEach(group => {
+      if (group.length < 2) return;
+      const sorted = group.slice().sort((a, b) => a.x - b.x);
+      const left = sorted[0];
+      const right = sorted[sorted.length - 1];
+      const y = sorted[0].y + 60;
+      const from = { x: left.x + 90, y };
+      const to = { x: right.x + 90, y };
+      const d = `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+      drawPath(mainGroup, d, "#aaa", 1.2);
+    });
+  }
+
+  // === Center subject ===
+  function centerSubject() {
+    const wrapper = container.querySelector(".family-tree-wrapper");
+    const subject = canvas.querySelector(".subject-card");
+    if (wrapper && subject) {
+      const subjectCenterX = subject.offsetLeft + subject.offsetWidth / 2;
+      const wrapperWidth = wrapper.clientWidth;
+      wrapper.scrollLeft = Math.max(subjectCenterX - wrapperWidth / 2, 0);
+    }
+  }
+
+  adjustRowSpacingOnceImagesReady();
+}
+
+       
   // ---------- Exports ----------
   return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
 
