@@ -71,6 +71,31 @@ window.Templates = (() => {
                 <div id="${id}" class="map-thumb-canvas"></div>
               </div>`;
     }
+function extractQidFromSnak(stmt) {
+  // Try Utils.firstValue if available
+  if (typeof Utils?.firstValue === "function") {
+    const v = Utils.firstValue(stmt);
+    if (typeof v === "string" && /^Q\d+$/i.test(v)) return v;
+  }
+  // Common Wikibase shapes
+  const id = stmt?.mainsnak?.datavalue?.value?.id;
+  if (typeof id === "string" && /^Q\d+$/i.test(id)) return id;
+
+  const num = stmt?.mainsnak?.datavalue?.value?.["numeric-id"];
+  if (Number.isFinite(num)) return `Q${num}`;
+
+  return null;
+}
+
+function getRelatedIds(claimArray) {
+  if (!Array.isArray(claimArray)) return [];
+  const ids = [];
+  for (const stmt of claimArray) {
+    const q = extractQidFromSnak(stmt);
+    if (q) ids.push(q);
+  }
+  return ids;
+}
 
     // 🔗 Identifier links
     if (ID_URL[pid]) {
@@ -306,10 +331,7 @@ if (treeContainer) {
 
   // ---------- Family tree data ----------
   async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
-       if (rootQid === "Q63235") {
-    console.log("DEBUG – checking family data for", rootQid);
-    console.log("Claims:", claims);
-  }
+      
     if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
     if (depth > maxDepth || visited.has(rootQid)) return null;
     visited.add(rootQid);
@@ -319,6 +341,15 @@ if (treeContainer) {
     if (!item) return null;
 
     const claims = item.claims || {};
+    if (rootQid === "Q63235") {
+  console.log("DEBUG – family claims for", rootQid, {
+    P52: claims["P52"], // siblings
+    P53: claims["P53"], // father/parent
+    P54: claims["P54"], // child
+    P55: claims["P55"], // mother/parent
+    P56: claims["P56"]  // spouse
+  });
+} 
     const node = {
       id: rootQid,
       label: item.labels?.[lang]?.value || item.labels?.en?.value || rootQid,
