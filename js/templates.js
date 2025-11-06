@@ -29,6 +29,32 @@ window.Templates = (() => {
   const normalizeDatatype = dt =>
     dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
+   function extractQidFromSnak(stmt) {
+  // Try Utils.firstValue if available
+  if (typeof Utils?.firstValue === "function") {
+    const v = Utils.firstValue(stmt);
+    if (typeof v === "string" && /^Q\d+$/i.test(v)) return v;
+  }
+  // Common Wikibase shapes
+  const id = stmt?.mainsnak?.datavalue?.value?.id;
+  if (typeof id === "string" && /^Q\d+$/i.test(id)) return id;
+
+  const num = stmt?.mainsnak?.datavalue?.value?.["numeric-id"];
+  if (Number.isFinite(num)) return `Q${num}`;
+
+  return null;
+}
+
+function getRelatedIds(claimArray) {
+  if (!Array.isArray(claimArray)) return [];
+  const ids = [];
+  for (const stmt of claimArray) {
+    const q = extractQidFromSnak(stmt);
+    if (q) ids.push(q);
+  }
+  return ids;
+}
+
   // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
@@ -71,31 +97,7 @@ window.Templates = (() => {
                 <div id="${id}" class="map-thumb-canvas"></div>
               </div>`;
     }
-function extractQidFromSnak(stmt) {
-  // Try Utils.firstValue if available
-  if (typeof Utils?.firstValue === "function") {
-    const v = Utils.firstValue(stmt);
-    if (typeof v === "string" && /^Q\d+$/i.test(v)) return v;
-  }
-  // Common Wikibase shapes
-  const id = stmt?.mainsnak?.datavalue?.value?.id;
-  if (typeof id === "string" && /^Q\d+$/i.test(id)) return id;
 
-  const num = stmt?.mainsnak?.datavalue?.value?.["numeric-id"];
-  if (Number.isFinite(num)) return `Q${num}`;
-
-  return null;
-}
-
-function getRelatedIds(claimArray) {
-  if (!Array.isArray(claimArray)) return [];
-  const ids = [];
-  for (const stmt of claimArray) {
-    const q = extractQidFromSnak(stmt);
-    if (q) ids.push(q);
-  }
-  return ids;
-}
 
     // 🔗 Identifier links
     if (ID_URL[pid]) {
