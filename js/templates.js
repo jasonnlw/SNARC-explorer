@@ -132,13 +132,12 @@ window.Templates = (() => {
       }
     }
 
-  // --- IIIF image gallery (P50) ---
 // --- IIIF image gallery (P50) ---
 let galleryHTML = "";
 const mediaStmts = claims["P50"];
 
 if (mediaStmts && mediaStmts.length) {
-  // Helper to build HTML for a single thumbnail
+  // Helper to build one thumbnail
   const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
     const iconHTML = isMulti
       ? `<span class="multi-icon" title="Multiple images">🗂</span>`
@@ -152,33 +151,32 @@ if (mediaStmts && mediaStmts.length) {
       </a>`;
   };
 
-  // Build image blocks for each P50 statement
   const imagePromises = mediaStmts.map(async stmt => {
     const v = Utils.firstValue(stmt);
     if (!v || typeof v !== "string") return "";
 
-    // Detect multi-image manifests
+    // --- Multi-image manifests ---
     if (v.includes("/manifest")) {
       const match = v.match(/iiif\/2\.0\/(\d+)/);
       if (match) {
         const manifestId = parseInt(match[1], 10);
-        const childId = manifestId + 1; // First image in the sequence
-        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${childId}/full/!300,300/0/default.jpg`;
+        const childId = manifestId + 1; // first image
+        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${childId}/full/300,/0/default.jpg`;
         const rootUrl = v;
         const id = String(childId);
-        const isMulti = true;
-        return buildThumbHTML(thumbUrl, rootUrl, id, isMulti);
+        return buildThumbHTML(thumbUrl, rootUrl, id, true);
       }
       return "";
     }
 
-    // Single-image items (standard IIIF image endpoint)
-    const parts = v.split("/");
-    const handle = parts.join("/");
-    const id = parts[1];
-    if (!id) return "";
-    const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,300/0/default.jpg`;
-    const rootUrl  = `https://hdl.handle.net/${handle}`;
+    // --- Single-image items ---
+    // works with either /iiif/image/{id} or /iiif/2.0/image/{id}
+    const idMatch = v.match(/iiif(?:\/2\.0)?\/image\/(\d+)/);
+    if (!idMatch) return "";
+
+    const id = idMatch[1];
+    const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${id}/full/300,/0/default.jpg`;
+    const rootUrl = v;
     return buildThumbHTML(thumbUrl, rootUrl, id, false);
   });
 
@@ -188,6 +186,7 @@ if (mediaStmts && mediaStmts.length) {
     galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
   }
 }
+
 
 
 
