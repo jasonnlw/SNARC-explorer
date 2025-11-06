@@ -133,78 +133,62 @@ window.Templates = (() => {
     }
 
   // --- IIIF image gallery (P50) ---
-  let galleryHTML = "";
-  const mediaStmts = claims["P50"];
+// --- IIIF image gallery (P50) ---
+let galleryHTML = "";
+const mediaStmts = claims["P50"];
 
-  if (mediaStmts && mediaStmts.length) {
-    // helper to build thumbnail HTML
-    const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
-      const iconHTML = isMulti
-        ? `<span class="multi-icon" title="Multiple images">🗂</span>`
-        : "";
-      return `
-        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
-          <div class="thumb-wrapper">
-            <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
-            ${iconHTML}
-          </div>
-        </a>`;
-    };
+if (mediaStmts && mediaStmts.length) {
+  // Helper to build HTML for a single thumbnail
+  const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+    const iconHTML = isMulti
+      ? `<span class="multi-icon" title="Multiple images">🗂</span>`
+      : "";
+    return `
+      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
+        <div class="thumb-wrapper">
+          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
+          ${iconHTML}
+        </div>
+      </a>`;
+  };
 
-    const imagePromises = mediaStmts.map(async stmt => {
-      const v = Utils.firstValue(stmt);
-      if (!v || typeof v !== "string") return "";
+  // Build image blocks for each P50 statement
+  const imagePromises = mediaStmts.map(async stmt => {
+    const v = Utils.firstValue(stmt);
+    if (!v || typeof v !== "string") return "";
 
-      // Detect whether the value points to an IIIF manifest or an individual image
-      if (v.includes("/manifest")) {
-        try {
-          const res = await fetch(v);
-          const manifest = await res.json();
-          const canvases = manifest.sequences?.[0]?.canvases || [];
-          if (!canvases.length) return "";
+    // Detect multi-image manifests
+    if (v.includes("/manifest")) {
+      const match = v.match(/iiif\/2\.0\/(\d+)/);
+      if (match) {
+        const manifestId = parseInt(match[1], 10);
+        const childId = manifestId + 1; // First image in the sequence
+        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${childId}/full/!300,300/0/default.jpg`;
+        const rootUrl = v;
+        const id = String(childId);
+        const isMulti = true;
+        return buildThumbHTML(thumbUrl, rootUrl, id, isMulti);
+      }
+      return "";
+    }
 
-          // pick a random canvas
-          const randomCanvas = canvases[Math.floor(Math.random() * canvases.length)];
-          const imgRes = randomCanvas.images?.[0]?.resource;
-          const id = randomCanvas["@id"]?.split("/").pop() || "";
-          let thumbUrl = "";
+    // Single-image items (standard IIIF image endpoint)
+    const parts = v.split("/");
+    const handle = parts.join("/");
+    const id = parts[1];
+    if (!id) return "";
+    const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,300/0/default.jpg`;
+    const rootUrl  = `https://hdl.handle.net/${handle}`;
+    return buildThumbHTML(thumbUrl, rootUrl, id, false);
+  });
 
-if (imgRes?.service?.["@id"]) {
-  // IIIF Image API endpoint
-  thumbUrl = `${imgRes.service["@id"]}/full/!300,300/0/default.jpg`;
-} else if (imgRes?.["@id"]) {
-  // direct image link
-  thumbUrl = imgRes["@id"];
-} else if (randomCanvas.thumbnail?.["@id"]) {
-  // some manifests use the 'thumbnail' field
-  thumbUrl = randomCanvas.thumbnail["@id"];
+  const images = await Promise.all(imagePromises);
+  const validImages = images.filter(Boolean);
+  if (validImages.length) {
+    galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
+  }
 }
 
-          const isMulti = canvases.length > 1;
-          const rootUrl = v;
-          return buildThumbHTML(thumbUrl, rootUrl, id, isMulti);
-        } catch (err) {
-          console.warn("Failed to load IIIF manifest:", v, err);
-          return "";
-        }
-      } else {
-        // Standard single IIIF image (current behaviour)
-        const parts = v.split("/");
-        const handle = parts.join("/");
-        const id = parts[1];
-        if (!id) return "";
-        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/2.0/image/${id}/full/,300/0/default.jpg`;
-        const rootUrl  = `https://hdl.handle.net/${handle}`;
-        return buildThumbHTML(thumbUrl, rootUrl, id, false);
-      }
-    });
-
-    const images = await Promise.all(imagePromises);
-    const validImages = images.filter(Boolean);
-    if (validImages.length) {
-      galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
-    }
-  }
 
 
     // --- Property table (exclude family/map/media props) ---
