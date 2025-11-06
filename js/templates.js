@@ -140,12 +140,18 @@ const mediaStmts = claims["P50"];
 if (mediaStmts && mediaStmts.length) {
   const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
     const iconHTML = isMulti
-      ? `<span class="multi-icon" title="Multiple images">🗂</span>`
+      ? `<span class="multi-icon" title="Multiple images">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#444">
+            <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="#444" stroke-width="1.5" fill="none"/>
+            <line x1="3" y1="9" x2="21" y2="9" stroke="#444" stroke-width="1.5"/>
+            <line x1="3" y1="13" x2="21" y2="13" stroke="#444" stroke-width="1.5"/>
+          </svg>
+        </span>`
       : "";
     return `
       <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
         <div class="thumb-wrapper">
-          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" onerror="this.style.display='none'">
+          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
           ${iconHTML}
         </div>
       </a>`;
@@ -155,40 +161,27 @@ if (mediaStmts && mediaStmts.length) {
     const v = Utils.firstValue(stmt);
     if (!v || typeof v !== "string") return "";
 
-    // Extract numeric ID (6+ digits) from any form
+    // Extract numeric ID (6+ digits)
     const idMatch = v.match(/(\d{6,})/);
     if (!idMatch) return "";
     const baseId = parseInt(idMatch[1], 10);
 
-    // Detect multi-image handles, manifests, or viewer URLs
-    const isMulti =
-      v.startsWith("10107/") ||
-      v.includes("/manifest") ||
-      v.includes("viewer.library.wales");
+    // --- 1️⃣ Identify multi-image collections by numeric range ---
+    const isMulti = baseId >= 1448577 && baseId <= 1588867;
 
-    // For multi-image, use first child (+1)
+    // --- 2️⃣ For multi-image, use +1 child image; otherwise base ID ---
     const imageId = isMulti ? baseId + 1 : baseId;
 
-    // IIIF image endpoint (no 2.0)
+    // Build IIIF URL (always /iiif/image/)
     const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-
-    // Public viewer URL for link target
     const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-    // Verify image exists; fallback if +1 fails
-    const test = new Image();
-    test.src = thumbUrl;
+    // --- 3️⃣ Check image availability ---
     return new Promise(resolve => {
-      test.onload = () =>
-        resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
-      test.onerror = () => {
-        if (isMulti) {
-          const fallbackUrl = `https://damsssl.llgc.org.uk/iiif/image/${baseId}/full/300,/0/default.jpg`;
-          resolve(buildThumbHTML(fallbackUrl, rootUrl, baseId, true));
-        } else {
-          resolve("");
-        }
-      };
+      const testImg = new Image();
+      testImg.onload = () => resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
+      testImg.onerror = () => resolve(""); // remove failed images entirely
+      testImg.src = thumbUrl;
     });
   });
 
