@@ -403,7 +403,7 @@ async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, v
 
   return node;
 }
-
+    }
 // ---------- Family tree rendering ----------
 function drawFamilyTree(treeData) {
   const container = document.getElementById("family-tree");
