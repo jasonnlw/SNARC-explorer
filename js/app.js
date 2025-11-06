@@ -123,7 +123,7 @@ window.App = (() => {
       console.log("Linked QIDs (capped):", linked.length, linked.slice(0, 25));
       console.log("Label map keys:", Object.keys(labelMap).length);
 
-      const html = Templates.renderGeneric(entity, lang, labelMap);
+      const html = await Templates.renderGeneric(entity, lang, labelMap);
       $app().innerHTML = html;
 
       // ✅ initialize images/maps after rendering
