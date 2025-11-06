@@ -132,12 +132,13 @@ window.Templates = (() => {
       }
     }
 
+
 // --- IIIF image gallery (P50) ---
 let galleryHTML = "";
 const mediaStmts = claims["P50"];
 
 if (mediaStmts && mediaStmts.length) {
-  // Helper to build one thumbnail
+  // Helper to build thumbnail HTML
   const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
     const iconHTML = isMulti
       ? `<span class="multi-icon" title="Multiple images">🗂</span>`
@@ -155,23 +156,35 @@ if (mediaStmts && mediaStmts.length) {
     const v = Utils.firstValue(stmt);
     if (!v || typeof v !== "string") return "";
 
-    // --- Multi-image manifests ---
+    // 1️⃣ Detect multi-image manifests
     if (v.includes("/manifest")) {
       const match = v.match(/iiif\/2\.0\/(\d+)/);
       if (match) {
         const manifestId = parseInt(match[1], 10);
-        const childId = manifestId + 1; // first image
-        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${childId}/full/300,/0/default.jpg`;
+        const childId = manifestId + 1;
+        // Try standard non-2.0 image path
+        let thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${childId}/full/300,/0/default.jpg`;
         const rootUrl = v;
         const id = String(childId);
-        return buildThumbHTML(thumbUrl, rootUrl, id, true);
+
+        // Optional fallback: if the child image 404s, try parent ID
+        const test = new Image();
+        test.src = thumbUrl;
+        return new Promise(resolve => {
+          test.onload = () => resolve(buildThumbHTML(thumbUrl, rootUrl, id, true));
+          test.onerror = () => {
+            // fallback to manifestId if +1 fails
+            const fallbackUrl = `https://damsssl.llgc.org.uk/iiif/image/${manifestId}/full/300,/0/default.jpg`;
+            resolve(buildThumbHTML(fallbackUrl, rootUrl, id, true));
+          };
+        });
       }
       return "";
     }
 
-    // --- Single-image items ---
-    // works with either /iiif/image/{id} or /iiif/2.0/image/{id}
-    const idMatch = v.match(/iiif(?:\/2\.0)?\/image\/(\d+)/);
+    // 2️⃣ Handle any standard IIIF or viewer link
+    // Match plain numeric IDs from viewer or iiif paths
+    const idMatch = v.match(/(\d{6,})/); // any long numeric ID
     if (!idMatch) return "";
 
     const id = idMatch[1];
