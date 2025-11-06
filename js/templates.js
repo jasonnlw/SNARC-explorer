@@ -167,9 +167,18 @@ window.Templates = (() => {
           const randomCanvas = canvases[Math.floor(Math.random() * canvases.length)];
           const imgRes = randomCanvas.images?.[0]?.resource;
           const id = randomCanvas["@id"]?.split("/").pop() || "";
-          const thumbUrl = imgRes?.service
-            ? `${imgRes.service["@id"]}/full/!300,300/0/default.jpg`
-            : imgRes["@id"];
+          let thumbUrl = "";
+
+if (imgRes?.service?.["@id"]) {
+  // IIIF Image API endpoint
+  thumbUrl = `${imgRes.service["@id"]}/full/!300,300/0/default.jpg`;
+} else if (imgRes?.["@id"]) {
+  // direct image link
+  thumbUrl = imgRes["@id"];
+} else if (randomCanvas.thumbnail?.["@id"]) {
+  // some manifests use the 'thumbnail' field
+  thumbUrl = randomCanvas.thumbnail["@id"];
+}
 
           const isMulti = canvases.length > 1;
           const rootUrl = v;
