@@ -385,52 +385,71 @@ if (treeContainer) {
       }
     }
 
-    // Children
-    for (const stmt of claims["P54"] || []) {
-      const q = Utils.firstValue(stmt);
-      if (q && /^Q\d+$/.test(q)) {
-        const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-        if (child) node.children.push(child);
-      }
+   // Parents: include both P53 (father/parent) and P55 (mother/parent)
+const parentIds = [
+  ...getRelatedIds(claims["P53"]),
+  ...getRelatedIds(claims["P55"])
+];
+for (const q of parentIds) {
+  if (!/^Q\d+$/i.test(q)) continue;
+  const parent = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+  if (parent) node.parents.push(parent);
+}
+
+// Children (P54)
+for (const q of getRelatedIds(claims["P54"])) {
+  if (!/^Q\d+$/i.test(q)) continue;
+  const child = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+  if (child) node.children.push(child);
+}
+
+// Siblings (P52) — treat them as 'horizontal' relatives if no parents/children exist
+for (const q of getRelatedIds(claims["P52"])) {
+  if (!/^Q\d+$/i.test(q)) continue;
+  // To prevent duplicates or recursion loops
+  if (visited.has(q)) continue;
+  const sibling = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+  if (sibling) node.spouses.push(sibling); // visually align horizontally (same generation)
+}
+
+// Spouses (P56)
+for (const q of getRelatedIds(claims["P56"])) {
+  if (!(q && /^Q\d+$/i.test(q))) continue;
+  try {
+    const sData = await API.getEntities(q, lang);
+    const sItem = sData?.[q];
+    if (!sItem) continue;
+    const sClaims = sItem.claims || {};
+    const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
+
+    let sGender = "unknown";
+    const sGenderId = sClaims["P13"]?.[0]?.mainsnak?.datavalue?.value?.id || "";
+    if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
+    else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
+
+    let sThumb = "";
+    const sImgClaim = sClaims["P31"]?.[0];
+    if (sImgClaim) {
+      const v = Utils.firstValue(sImgClaim);
+      const filename = typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
+      if (filename)
+        sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
     }
 
-    // Spouses
-    for (const stmt of claims["P56"] || []) {
-      const q = Utils.firstValue(stmt);
-      if (!(q && /^Q\d+$/i.test(q))) continue;
-      try {
-        const sData = await API.getEntities(q, lang);
-        const sItem = sData?.[q];
-        if (!sItem) continue;
-        const sClaims = sItem.claims || {};
-        const sLabel = sItem.labels?.[lang]?.value || sItem.labels?.en?.value || q;
-        let sGender = "unknown";
-        const sGenderId = sClaims["P13"]?.[0]?.mainsnak?.datavalue?.value?.id || "";
-        if (/Q33|Q6581097/i.test(sGenderId)) sGender = "male";
-        else if (/Q34|Q6581072/i.test(sGenderId)) sGender = "female";
+    node.spouses.push({
+      id: q,
+      label: sLabel,
+      gender: sGender,
+      thumb: sThumb,
+      parents: [],
+      children: [],
+      spouses: []
+    });
+  } catch (err) {
+    console.warn("Failed to fetch spouse", q, err);
+  }
+}
 
-        let sThumb = "";
-        const sImgClaim = sClaims["P31"]?.[0];
-        if (sImgClaim) {
-          const v = Utils.firstValue(sImgClaim);
-          const filename = typeof v === "string" ? v.replace(/^File:/i, "").trim() : "";
-          if (filename)
-            sThumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=120`;
-        }
-
-        node.spouses.push({
-          id: q,
-          label: sLabel,
-          gender: sGender,
-          thumb: sThumb,
-          parents: [],
-          children: [],
-          spouses: []
-        });
-      } catch (err) {
-        console.warn("Failed to fetch spouse", q, err);
-      }
-    }
 
     return node;
   }
