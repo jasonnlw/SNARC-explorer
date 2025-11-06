@@ -598,16 +598,21 @@ card.innerHTML = `
       };
 
       // Parent–child (elbow)
-      layout.nodes.forEach(p => {
-        (p.children || []).forEach(c => {
-          const from = getAnchor(cardMap[p.id], "bottom");
-          const to   = getAnchor(cardMap[c.id], "top");
-          if (!from || !to) return;
-          const midY = (from.y + to.y) / 2;
-          const d = `M ${from.x} ${from.y} L ${from.x} ${midY} L ${to.x} ${midY} L ${to.x} ${to.y}`;
-          drawPath(mainGroup, d, "#777", 1.5);
-        });
-      });
+layout.nodes.forEach(node => {
+  if (!node.children) return;
+  node.children.forEach(child => {
+    // prefer father (P53) else mother (P55)
+    const parent = node.gender === "male" ? node : node.gender === "female" ? node : null;
+    if (!parent) return;
+    const from = anchor(parent, "bottom");
+    const to = anchor(child, "top");
+    if (from && to) {
+      const d = elbowPath(from, to);
+      drawPath(mainGroup, d, "#777", 1.5);
+    }
+  });
+});
+
 
       // Spouse (double "=" line)
       layout.nodes.forEach(n => {
@@ -623,6 +628,32 @@ card.innerHTML = `
           drawPath(spouseGroup, d2, "#aaa", 3);
         });
       });
+
+       // ------------------------------------------------------------
+// Sibling connectors (horizontal single line)
+// ------------------------------------------------------------
+const siblingGroups = {};
+layout.nodes.forEach(n => {
+  // Group by parent ID if available, otherwise group siblings without parents together
+  const parentKey =
+    (n.parents && n.parents.length && n.parents[0].id) || "orphans";
+  if (!siblingGroups[parentKey]) siblingGroups[parentKey] = [];
+  siblingGroups[parentKey].push(n);
+});
+
+Object.values(siblingGroups).forEach(group => {
+  if (group.length < 2) return; // need at least 2 siblings
+  // sort siblings by x position
+  const sorted = group.slice().sort((a, b) => a.x - b.x);
+  const left = sorted[0];
+  const right = sorted[sorted.length - 1];
+  const y = sorted[0].y + 30; // halfway down cards
+  const from = { x: left.x + 90, y };
+  const to = { x: right.x + 90, y };
+  const d = `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+  drawPath(mainGroup, d, "#aaa", 1.2); // single connecting line
+});
+
     }
 
     // === Center subject ===
