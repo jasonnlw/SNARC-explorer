@@ -108,7 +108,7 @@ window.Templates = (() => {
   }
 
   // ---------- Generic entity render ----------
-  function renderGeneric(entity, lang, labelMap = {}) {
+  async function renderGeneric(entity, lang, labelMap = {}) {
     if (!entity) return `<p>Entity not found.</p>`;
 
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
