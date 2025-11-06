@@ -306,6 +306,10 @@ if (treeContainer) {
 
   // ---------- Family tree data ----------
   async function renderFamilyTree(rootQid, lang = "en", depth = 0, maxDepth = 5, visited = new Set()) {
+       if (rootQid === "Q63235") {
+    console.log("DEBUG – checking family data for", rootQid);
+    console.log("Claims:", claims);
+  }
     if (!rootQid || !/^Q\d+$/i.test(rootQid)) return null;
     if (depth > maxDepth || visited.has(rootQid)) return null;
     visited.add(rootQid);
