@@ -224,64 +224,73 @@ window.Templates = (() => {
         <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
       </section>`;
   }
+// ---------- Post-render ----------
+function postRender() {
+  // Only run this if Leaflet has loaded
+  if (typeof L !== "undefined") {
 
-  // ---------- Post-render ----------
-  function postRender() {
-    if (typeof L !== "undefined") {
-      let modal = document.getElementById("map-modal");
-      if (!modal) {
-        document.body.insertAdjacentHTML("beforeend", `
-          <div id="map-modal" class="map-modal" style="display:none">
-            <div class="map-modal-content">
-              <div id="map-large" class="map-large"></div>
-              <button id="map-close" class="map-close" aria-label="Close">&times;</button>
-            </div>
-          </div>`);
-        document.getElementById("map-close").onclick = () =>
-          (document.getElementById("map-modal").style.display = "none");
-        document.getElementById("map-modal").addEventListener("click", e => {
-          if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
-        });
-      }
+    // --- Create modal if it doesn't already exist ---
+    let modal = document.getElementById("map-modal");
+    if (!modal) {
+      document.body.insertAdjacentHTML("beforeend", `
+        <div id="map-modal" class="map-modal" style="display:none">
+          <div class="map-modal-content">
+            <div id="map-large" class="map-large"></div>
+            <button id="map-close" class="map-close" aria-label="Close">&times;</button>
+          </div>
+        </div>`);
+      document.getElementById("map-close").onclick = () =>
+        (document.getElementById("map-modal").style.display = "none");
+      document.getElementById("map-modal").addEventListener("click", e => {
+        if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
+      });
+    }
 
-      // Initialize mini-maps
-      document.querySelectorAll(".map-thumb").forEach(thumb => {
-        const lat = parseFloat(thumb.dataset.lat);
-        const lon = parseFloat(thumb.dataset.lon);
-        const mapId = thumb.dataset.mapid;
-        if (!isFinite(lat) || !isFinite(lon)) return;
+    // --- Initialize all mini-maps on the page ---
+    document.querySelectorAll(".map-thumb").forEach(thumb => {
+      const lat = parseFloat(thumb.dataset.lat);
+      const lon = parseFloat(thumb.dataset.lon);
+      const mapId = thumb.dataset.mapid;
+      if (!isFinite(lat) || !isFinite(lon)) return;
 
-        const mapDiv = document.getElementById(mapId);
-        if (!mapDiv || mapDiv.dataset.initialized) return;
+      const mapDiv = document.getElementById(mapId);
+      if (!mapDiv || mapDiv.dataset.initialized) return;
 
-        const map = L.map(mapId, {
-          center: [lat, lon],
-          zoom: 13,
-          scrollWheelZoom: false,
-          dragging: false,
-          zoomControl: false,
-          attributionControl: false
-        });
+      // create small static map
+      const map = L.map(mapId, {
+        center: [lat, lon],
+        zoom: 13,
+        scrollWheelZoom: false,
+        dragging: false,
+        zoomControl: false,
+        attributionControl: false
+      });
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: '© OpenStreetMap'
-        }).addTo(map);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap"
+      }).addTo(map);
 
-        L.marker([lat, lon]).addTo(map);
-        mapDiv.dataset.initialized = "true";
-        thumb.addEventListener("click", () => {
-          const modal = document.getElementById("map-modal");
-          modal.style.display = "flex";
-          setTimeout(() => {
-            const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-              .addTo(largeMap);
-            L.marker([lat, lon]).addTo(largeMap);
-          }, 100);
-        });
-      }); // end forEach
-    } // end if (typeof L !== "undefined")
-  } // end postRender
+      L.marker([lat, lon]).addTo(map);
+      mapDiv.dataset.initialized = "true";
+
+      // click → open modal with large map
+      thumb.style.cursor = "pointer";
+      thumb.addEventListener("click", () => {
+        const modal = document.getElementById("map-modal");
+        modal.style.display = "flex";
+        setTimeout(() => {
+          const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
+          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+            .addTo(largeMap);
+          L.marker([lat, lon]).addTo(largeMap);
+        }, 100);
+      });
+    }); // <-- closes the forEach loop properly
+
+  } // <-- closes "if (typeof L !== 'undefined')"
+} // <-- closes postRender()
+
+
 
         thumb.style.cursor = "pointer";
   
