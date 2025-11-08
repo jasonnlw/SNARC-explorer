@@ -513,21 +513,31 @@ window.Templates = (() => {
         group.appendChild(path);
       };
 
-      // ---- Parent–child connectors (fallback to mother if no father)
-      layout.nodes.forEach(parent => {
-        if (!parent.children) return;
-        parent.children.forEach(child => {
-          const fromCard = cardMap[parent.id];
-          const toCard = cardMap[child.id];
-          if (!fromCard || !toCard) return;
-          const from = getAnchor(fromCard, "bottom");
-          const to = getAnchor(toCard, "top");
-          if (from && to) {
-            const d = elbowPath(from, to);
-            drawPath(mainGroup, d, "#777", 1.5);
-          }
-        });
-      });
+  // ---- Parent–child connectors (choose one parent: father, else mother)
+layout.nodes.forEach(n => {
+  const parents = n.parents || [];
+  if (!parents.length) return;
+
+  // Try to find a father first (male or labelled as such), else use the first mother
+  let father = parents.find(p => /male/i.test(p.gender || ""));
+  let mother = parents.find(p => /female/i.test(p.gender || ""));
+
+  let chosenParent = father || mother || parents[0];
+  if (!chosenParent) return;
+
+  const parentCard = cardMap[chosenParent.id];
+  const childCard = cardMap[n.id];
+  if (!parentCard || !childCard) return;
+
+  const a = getAnchor(parentCard, "bottom");
+  const b = getAnchor(childCard, "top");
+  if (!a || !b) return;
+
+  // Draw one clean vertical connector
+  const d = `M ${a.x} ${a.y} L ${b.x} ${b.y}`;
+  drawPath(mainGroup, d, "#aaa", 1.2);
+});
+
 
 // ---- Spouse connectors (double "=" lines) – draw each unique pair once
       const drawnPairs = new Set();
