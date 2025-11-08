@@ -269,21 +269,22 @@ window.Templates = (() => {
 
         L.marker([lat, lon]).addTo(map);
         mapDiv.dataset.initialized = "true";
-
-        thumb.style.cursor = "pointer";
         thumb.addEventListener("click", () => {
           const modal = document.getElementById("map-modal");
           modal.style.display = "flex";
           setTimeout(() => {
             const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(largeMap);
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+              .addTo(largeMap);
             L.marker([lat, lon]).addTo(largeMap);
           }, 100);
         });
-      });
-    } // end if L
+      }); // end forEach
+    } // end if (typeof L !== "undefined")
   } // end postRender
 
+        thumb.style.cursor = "pointer";
+  
   // ---------- Exports ----------
   return { renderGeneric, postRender };
 
