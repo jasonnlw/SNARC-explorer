@@ -513,35 +513,54 @@ window.Templates = (() => {
         group.appendChild(path);
       };
 
-// ---- Parent–child connectors (choose father if present, else mother, else first)
+// ---- Parent–child connectors (father preferred, fallback to mother, grouped by parent pair)
 {
-  // Ensure we draw at most one connector per child
-  const connected = new Set();
+  const drawnChild = new Set();
 
-  layout.nodes.forEach(child => {
-    const parents = child.parents || [];
-    if (!parents.length) return;
-    if (connected.has(child.id)) return;
+  // Build a quick lookup to know which nodes are ancestors (above the subject)
+  // So we can skip drawing upward connectors.
+  const minLevel = Math.min(...layout.nodes.map(n => n.level || 0));
+  const subjectLevel = Math.max(...layout.nodes.map(n => n.level || 0)); // usually 0 or base
 
-    // Prefer father (male) if available; else mother (female); else first parent
-    // Gender is set earlier from P13 and propagates to parent nodes.
-    const father = parents.find(p => /male/i.test(p.gender || ""));
-    const mother = parents.find(p => /female/i.test(p.gender || ""));
-    const chosen = father || mother || parents[0];
+  layout.nodes.forEach(parent => {
+    const children = parent.children || [];
+    if (!children.length) return;
 
-    const fromCard = cardMap[chosen?.id];
-    const toCard = cardMap[child.id];
-    if (!fromCard || !toCard) return;
+    // Skip if this parent is above the subject's generation (top ancestors)
+    if ((parent.level || 0) < minLevel) return;
 
-    const from = getAnchor(fromCard, "bottom");
-    const to = getAnchor(toCard, "top");
-    if (!from || !to) return;
+    // Determine partner/family group to ensure we connect from only one parent
+    // Find father or mother partner if exists
+    let familyPartner = null;
+    if (parent.spouses && parent.spouses.length) {
+      familyPartner = parent.spouses[0]; // assume first spouse in same generation
+    }
 
-    // Keep the familiar “└──┘” shape
-    const d = elbowPath(from, to);
-    drawPath(mainGroup, d, "#777", 1.5);
+    // Choose base parent for connector origin: father > mother > self
+    let isMale = /male/i.test(parent.gender || "");
+    let baseParent = parent;
 
-    connected.add(child.id);
+    // If this is a mother and has a male spouse in same generation, let that spouse be connector base
+    if (!isMale && familyPartner && /male/i.test(familyPartner.gender || "")) {
+      baseParent = familyPartner;
+    }
+
+    const fromCard = cardMap[baseParent.id];
+    if (!fromCard) return;
+    const fromAnchor = getAnchor(fromCard, "bottom");
+
+    // For each child in this family
+    children.forEach(child => {
+      if (drawnChild.has(child.id)) return; // already connected
+      const toCard = cardMap[child.id];
+      if (!toCard) return;
+      const toAnchor = getAnchor(toCard, "top");
+      if (!fromAnchor || !toAnchor) return;
+
+      const path = elbowPath(fromAnchor, toAnchor);
+      drawPath(mainGroup, path, "#777", 1.5);
+      drawnChild.add(child.id);
+    });
   });
 }
 
