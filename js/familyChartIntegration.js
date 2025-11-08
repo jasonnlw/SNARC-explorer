@@ -1,9 +1,10 @@
-// familyChartIntegration.js
-import * as f3 from 'family-chart';
-
-// --- Fetch & transform data from your Wikibase ---
-export async function renderFamilyTree(subjectQid, lang = "en") {
-  // 1. Fetch family data from your Wikibase (replace with your existing API call)
+window.renderFamilyTree = async function (subjectQid, lang = "en") {
+  const f3 = window.f3;
+  if (!f3) {
+    console.error("Family-Chart library not loaded yet");
+    return;
+  }
+  
   const url = `https://snarc-llgc.wikibase.cloud/query/sparql?query=${encodeURIComponent(`
     SELECT ?person ?personLabel ?image ?dob ?dod ?gender ?spouse ?child WHERE {
       VALUES ?person { wd:${subjectQid} }
@@ -64,3 +65,4 @@ export async function renderFamilyTree(subjectQid, lang = "en") {
   ]);
   chart.updateTree({ initial: true });
 }
+
