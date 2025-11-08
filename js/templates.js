@@ -513,31 +513,37 @@ window.Templates = (() => {
         group.appendChild(path);
       };
 
-  // ---- Parent–child connectors (choose one parent: father, else mother)
-layout.nodes.forEach(n => {
-  const parents = n.parents || [];
-  if (!parents.length) return;
+// ---- Parent–child connectors (choose father if present, else mother, else first)
+{
+  // Ensure we draw at most one connector per child
+  const connected = new Set();
 
-  // Try to find a father first (male or labelled as such), else use the first mother
-  let father = parents.find(p => /male/i.test(p.gender || ""));
-  let mother = parents.find(p => /female/i.test(p.gender || ""));
+  layout.nodes.forEach(child => {
+    const parents = child.parents || [];
+    if (!parents.length) return;
+    if (connected.has(child.id)) return;
 
-  let chosenParent = father || mother || parents[0];
-  if (!chosenParent) return;
+    // Prefer father (male) if available; else mother (female); else first parent
+    // Gender is set earlier from P13 and propagates to parent nodes.
+    const father = parents.find(p => /male/i.test(p.gender || ""));
+    const mother = parents.find(p => /female/i.test(p.gender || ""));
+    const chosen = father || mother || parents[0];
 
-  const parentCard = cardMap[chosenParent.id];
-  const childCard = cardMap[n.id];
-  if (!parentCard || !childCard) return;
+    const fromCard = cardMap[chosen?.id];
+    const toCard = cardMap[child.id];
+    if (!fromCard || !toCard) return;
 
-  const a = getAnchor(parentCard, "bottom");
-  const b = getAnchor(childCard, "top");
-  if (!a || !b) return;
+    const from = getAnchor(fromCard, "bottom");
+    const to = getAnchor(toCard, "top");
+    if (!from || !to) return;
 
-  // Draw one clean vertical connector
-  const d = `M ${a.x} ${a.y} L ${b.x} ${b.y}`;
-  drawPath(mainGroup, d, "#aaa", 1.2);
-});
+    // Keep the familiar “└──┘” shape
+    const d = elbowPath(from, to);
+    drawPath(mainGroup, d, "#777", 1.5);
 
+    connected.add(child.id);
+  });
+}
 
 // ---- Spouse connectors (double "=" lines) – draw each unique pair once
       const drawnPairs = new Set();
