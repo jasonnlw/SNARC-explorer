@@ -513,53 +513,96 @@ window.Templates = (() => {
         group.appendChild(path);
       };
 
-// ---- Parent–child connectors (father preferred, fallback to mother, grouped by parent pair)
+// ---- Parent–child connectors (grouped by parent pair; father preferred;
+//      fallback to mother; supports unmarried co-parents with a shared parent bar)
 {
-  const drawnChild = new Set();
+  // 1) Build child groups keyed by their parent set (1 or 2 parents).
+  //    We derive groups from each CHILD's parents to avoid relying on
+  //    sometimes-incomplete parent.children lists (common in top/ancestor rows).
+  const groups = new Map(); // key -> { parentIds: [Q..], children: [Q..] }
 
-  // Build a quick lookup to know which nodes are ancestors (above the subject)
-  // So we can skip drawing upward connectors.
-  const minLevel = Math.min(...layout.nodes.map(n => n.level || 0));
-  const subjectLevel = Math.max(...layout.nodes.map(n => n.level || 0)); // usually 0 or base
+  layout.nodes.forEach(child => {
+    const pList = (child.parents || [])
+      .map(p => p.id)
+      .filter(id => cardMap[id]); // only parents that actually have visible cards
 
-  layout.nodes.forEach(parent => {
-    const children = parent.children || [];
-    if (!children.length) return;
+    if (!pList.length) return;
 
-    // Skip if this parent is above the subject's generation (top ancestors)
-    if ((parent.level || 0) < minLevel) return;
+    // only consider the first two parents (typical: father+mother)
+    const parentIds = pList.slice(0, 2).sort();
 
-    // Determine partner/family group to ensure we connect from only one parent
-    // Find father or mother partner if exists
-    let familyPartner = null;
-    if (parent.spouses && parent.spouses.length) {
-      familyPartner = parent.spouses[0]; // assume first spouse in same generation
+    // Build a stable key: 'Qxx' for 1-parent; 'Qaa+Qbb' for 2-parents
+    const key = parentIds.join("+");
+    if (!groups.has(key)) groups.set(key, { parentIds, children: [] });
+    groups.get(key).children.push(child.id);
+  });
+
+  // 2) For each group, choose a single origin point.
+  //    - If two parents and they are spouses → draw from FATHER's bottom (else mother).
+  //    - If two parents and NOT spouses → draw a "parent bar" between them,
+  //      then route the children from the bar's midpoint (your bracket example).
+  //    - If one parent → draw from that parent's bottom.
+  groups.forEach(({ parentIds, children }) => {
+    let fromPoint = null;
+
+    if (parentIds.length === 2) {
+      const [p1Id, p2Id] = parentIds;
+      const p1 = layout.nodes.find(n => n.id === p1Id);
+      const p2 = layout.nodes.find(n => n.id === p2Id);
+      if (!p1 || !p2) return;
+
+      const p1Card = cardMap[p1.id];
+      const p2Card = cardMap[p2.id];
+      if (!p1Card || !p2Card) return;
+
+      const p1Male = /male/i.test(p1.gender || "");
+      const p2Male = /male/i.test(p2.gender || "");
+      const fatherCard = p1Male ? p1Card : (p2Male ? p2Card : null);
+      const motherCard = !p1Male ? p1Card : (!p2Male ? p2Card : null);
+
+      const areSpouses =
+        (p1.spouses || []).some(s => s.id === p2.id) ||
+        (p2.spouses || []).some(s => s.id === p1.id);
+
+      if (areSpouses) {
+        // Married/partnered parents: draw from father if available, else mother.
+        const base = fatherCard || motherCard || p1Card;
+        fromPoint = getAnchor(base, "bottom");
+        if (!fromPoint) return;
+      } else {
+        // Unmarried co-parents: draw a single horizontal "parent bar",
+        // then route down from its midpoint to each child.
+        const a = getAnchor(p1Card, "bottom");
+        const b = getAnchor(p2Card, "bottom");
+        if (!a || !b) return;
+
+        // draw the parent bar (single line)
+        const y = Math.max(a.y, b.y); // they should be same level; guard anyway
+        const dBar = `M ${a.x} ${y} L ${b.x} ${y}`;
+        drawPath(mainGroup, dBar, "#777", 1.5);
+
+        // origin for children = midpoint of the bar
+        fromPoint = { x: (a.x + b.x) / 2, y };
+      }
+    } else {
+      // Single parent
+      const pId = parentIds[0];
+      const pNode = layout.nodes.find(n => n.id === pId);
+      const pCard = pNode && cardMap[pNode.id];
+      if (!pCard) return;
+      fromPoint = getAnchor(pCard, "bottom");
+      if (!fromPoint) return;
     }
 
-    // Choose base parent for connector origin: father > mother > self
-    let isMale = /male/i.test(parent.gender || "");
-    let baseParent = parent;
-
-    // If this is a mother and has a male spouse in same generation, let that spouse be connector base
-    if (!isMale && familyPartner && /male/i.test(familyPartner.gender || "")) {
-      baseParent = familyPartner;
-    }
-
-    const fromCard = cardMap[baseParent.id];
-    if (!fromCard) return;
-    const fromAnchor = getAnchor(fromCard, "bottom");
-
-    // For each child in this family
-    children.forEach(child => {
-      if (drawnChild.has(child.id)) return; // already connected
-      const toCard = cardMap[child.id];
+    // 3) Draw connectors to each child in the group from the chosen origin.
+    children.forEach(cid => {
+      const toCard = cardMap[cid];
       if (!toCard) return;
-      const toAnchor = getAnchor(toCard, "top");
-      if (!fromAnchor || !toAnchor) return;
+      const to = getAnchor(toCard, "top");
+      if (!to) return;
 
-      const path = elbowPath(fromAnchor, toAnchor);
+      const path = elbowPath(fromPoint, to);  // keeps your right-angle style
       drawPath(mainGroup, path, "#777", 1.5);
-      drawnChild.add(child.id);
     });
   });
 }
