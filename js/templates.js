@@ -1,10 +1,10 @@
 /* ===============================================================
-   SNARC Explorer Templates.js – fully corrected version (2025)
+   SNARC Explorer Templates.js – cleaned + ready for Family-Chart
    =============================================================== */
 
 window.Templates = (() => {
 
-// ---------- Identifier URL patterns ----------
+  // ---------- Identifier URL patterns ----------
   const ID_URL = {
     P10: "https://viaf.org/viaf/$1",
     P102: "https://id.library.wales/$1",
@@ -30,18 +30,14 @@ window.Templates = (() => {
     dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
   function extractQidFromSnak(stmt) {
-    // Try Utils.firstValue if available
     if (typeof Utils?.firstValue === "function") {
       const v = Utils.firstValue(stmt);
       if (typeof v === "string" && /^Q\d+$/i.test(v)) return v;
     }
-    // Common Wikibase shapes
     const id = stmt?.mainsnak?.datavalue?.value?.id;
     if (typeof id === "string" && /^Q\d+$/i.test(id)) return id;
-
     const num = stmt?.mainsnak?.datavalue?.value?.["numeric-id"];
     if (Number.isFinite(num)) return `Q${num}`;
-
     return null;
   }
 
@@ -186,26 +182,18 @@ window.Templates = (() => {
         const v = Utils.firstValue(stmt);
         if (!v || typeof v !== "string") return "";
 
-        // Extract numeric ID (6+ digits)
         const idMatch = v.match(/(\d{6,})/);
         if (!idMatch) return "";
         const baseId = parseInt(idMatch[1], 10);
-
-        // --- 1️⃣ Identify multi-image collections by numeric range ---
         const isMulti = baseId >= 1448577 && baseId <= 1588867;
-
-        // --- 2️⃣ For multi-image, use +1 child image; otherwise base ID ---
         const imageId = isMulti ? baseId + 1 : baseId;
-
-        // Build IIIF URL (always /iiif/image/)
         const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
         const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-        // --- 3️⃣ Check image availability ---
         return new Promise(resolve => {
           const testImg = new Image();
           testImg.onload = () => resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
-          testImg.onerror = () => resolve(""); // remove failed images entirely
+          testImg.onerror = () => resolve("");
           testImg.src = thumbUrl;
         });
       });
@@ -229,20 +217,16 @@ window.Templates = (() => {
         ${mapHTML}
         ${galleryHTML}
 
-        <div id="family-tree" class="family-tree-container">
-          <div class="tree-root"></div>
-          <svg id="tree-lines" class="tree-lines"></svg>
-        </div>
+        <!-- Family tree container -->
+        <div id="familyChartContainer" class="family-tree-container"></div>
+        <!-- Rendered by familyChartIntegration.js -->
 
         <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
       </section>`;
   }
 
- 
-
   // ---------- Post-render ----------
   function postRender() {
-    // Leaflet mini-map handling
     if (typeof L !== "undefined") {
       let modal = document.getElementById("map-modal");
       if (!modal) {
@@ -296,10 +280,9 @@ window.Templates = (() => {
             L.marker([lat, lon]).addTo(largeMap);
           }, 100);
         });
-      }
-    }
-  }
-
+      });
+    } // end if L
+  } // end postRender
 
   // ---------- Exports ----------
   return { renderGeneric, postRender };
