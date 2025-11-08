@@ -532,6 +532,7 @@ window.Templates = (() => {
       // ---- Spouse connectors (double "=" lines)
       layout.nodes.forEach(n => {
         (n.spouses || []).forEach(s => {
+          if (n.id > s.id) return;
           const a = getAnchor(cardMap[n.id], "middle");
           const b = getAnchor(cardMap[s.id], "middle");
           if (!a || !b) return;
@@ -544,26 +545,56 @@ window.Templates = (() => {
         });
       });
 
-      // ---- Sibling connectors (single horizontal line)
-      const siblingGroups = {};
+      // ---- Sibling connectors (single horizontal line) from explicit data
+      // Build adjacency from layout nodes' siblings
+      const sibAdj = new Map(); // id -> Set(ids)
       layout.nodes.forEach(n => {
-        const parentKey =
-          (n.parents && n.parents.length && n.parents[0].id) || "orphans";
-        if (!siblingGroups[parentKey]) siblingGroups[parentKey] = [];
-        siblingGroups[parentKey].push(n);
+        if (!sibAdj.has(n.id)) sibAdj.set(n.id, new Set());
+        (n.siblings || []).forEach(s => {
+          if (!sibAdj.has(s.id)) sibAdj.set(s.id, new Set());
+          sibAdj.get(n.id).add(s.id);
+          sibAdj.get(s.id).add(n.id);
+        });
       });
 
-      Object.values(siblingGroups).forEach(group => {
-        if (group.length < 2) return;
-        const sorted = group.slice().sort((a, b) => a.x - b.x);
-        const left = sorted[0];
-        const right = sorted[sorted.length - 1];
-        const y = sorted[0].y + 60;
-        const from = { x: left.x + 90, y };
-        const to = { x: right.x + 90, y };
-        const d = `M ${from.x} ${from.y} L ${to.x} ${to.y}`;
+      // Find connected components (sibling groups)
+      const visited = new Set();
+      const groups = [];
+      for (const start of sibAdj.keys()) {
+        if (visited.has(start)) continue;
+        const queue = [start];
+        const group = [];
+        visited.add(start);
+        while (queue.length) {
+          const u = queue.shift();
+          group.push(u);
+          for (const v of (sibAdj.get(u) || [])) {
+            if (!visited.has(v)) {
+              visited.add(v);
+              queue.push(v);
+            }
+          }
+        }
+        if (group.length > 1) groups.push(group);
+      }
+
+      // Draw one single horizontal line per sibling group
+      groups.forEach(ids => {
+        const members = ids
+          .map(id => cardMap[id])
+          .filter(Boolean)
+          .map(card => ({
+            x: card.offsetLeft + card.offsetWidth / 2,
+            y: card.offsetTop + card.offsetHeight / 2
+          }));
+        if (members.length < 2) return;
+        members.sort((a, b) => a.x - b.x);
+        const left = members[0];
+        const right = members[members.length - 1];
+        const y = members.reduce((acc, m) => acc + m.y, 0) / members.length;
+        const d = `M ${left.x} ${y} L ${right.x} ${y}`;
         drawPath(mainGroup, d, "#aaa", 1.2);
-      });
+      });  
     }
 
     // === Center subject ===
