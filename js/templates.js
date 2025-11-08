@@ -296,11 +296,12 @@ window.Templates = (() => {
             L.marker([lat, lon]).addTo(largeMap);
           }, 100);
         });
-      });
+      }
     }
+  }
 
 
   // ---------- Exports ----------
-  return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
+  return { renderGeneric, postRender };
 
 })(); // end window.Templates IIFE
