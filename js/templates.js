@@ -529,10 +529,14 @@ window.Templates = (() => {
         });
       });
 
-      // ---- Spouse connectors (double "=" lines)
+// ---- Spouse connectors (double "=" lines) – draw each unique pair once
+      const drawnPairs = new Set();
       layout.nodes.forEach(n => {
         (n.spouses || []).forEach(s => {
-          if (n.id > s.id) return;
+          // Build a consistent key regardless of order
+          const key = [n.id, s.id].sort().join("-");
+          if (drawnPairs.has(key)) return;
+          drawnPairs.add(key);
           const a = getAnchor(cardMap[n.id], "middle");
           const b = getAnchor(cardMap[s.id], "middle");
           if (!a || !b) return;
