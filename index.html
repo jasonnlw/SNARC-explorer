@@ -8,6 +8,19 @@
   <!-- Site styles -->
   <link rel="stylesheet" href="assets/styles.css">
 
+  <!-- Family-Chart loader (guaranteed to define window.f3 before other scripts) -->
+<link rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/family-chart@3/dist/styles/family-chart.css">
+
+<script type="module">
+  import * as f3 from "https://esm.sh/family-chart@3";
+
+  // Expose globally once loaded
+  window.f3 = f3;
+  window.dispatchEvent(new Event("familychart-ready"));
+</script>
+
+
   <!-- ✅ Leaflet for interactive maps (integrity removed to avoid SRI blocking) -->
   <link
     rel="stylesheet"
@@ -43,15 +56,6 @@
     <small>Static client on GitHub Pages · Data from SNARC Wikibase</small>
   </footer>
 
-
-<!-- Family-Chart (ES module via esm.sh, exposes global window.f3) -->
-<link rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/family-chart@3/dist/styles/family-chart.css">
-
-<script type="module">
-  import * as f3 from "https://esm.sh/family-chart@3";
-  window.f3 = f3; // make available to non-module scripts
-</script>
 
 
 
