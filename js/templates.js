@@ -258,7 +258,9 @@ window.Templates = (() => {
       gender: "unknown",
       parents: [],
       children: [],
+      siblings: [],
       spouses: []
+      
     };
 
     const birth = claims["P17"]?.[0]?.mainsnak?.datavalue?.value?.time || "";
@@ -295,12 +297,12 @@ window.Templates = (() => {
       if (child) node.children.push(child);
     }
 
-    // Siblings (P52) – treat them as 'horizontal' relatives if no parents
-    for (const q of getRelatedIds(claims["P52"])) {
-      if (!/^Q\d+$/i.test(q)) continue;
-      if (visited.has(q)) continue;
-      const sibling = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
-      if (sibling) node.spouses.push(sibling);
+    // Siblings (P52) – true siblings, tracked separately
+   for (const q of getRelatedIds(claims["P52"])) {    
+   if (!/^Q\d+$/i.test(q)) continue;
+   if (visited.has(q)) continue;
+   const sibling = await renderFamilyTree(q, lang, depth + 1, maxDepth, visited);
+   if (sibling) node.siblings.push(sibling);
     }
 
     // Spouses (P56)
@@ -336,6 +338,7 @@ window.Templates = (() => {
           gender: sGender,
           thumb: sThumb,
           parents: [],
+          siblings: [],
           children: [],
           spouses: []
         });
