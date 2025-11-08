@@ -8,12 +8,12 @@ window.renderFamilyTree = async function (subjectQid, lang = "en") {
   const url = `https://snarc-llgc.wikibase.cloud/query/sparql?query=${encodeURIComponent(`
     SELECT ?person ?personLabel ?image ?dob ?dod ?gender ?spouse ?child WHERE {
       VALUES ?person { wd:${subjectQid} }
-      OPTIONAL { ?person wdt:P18 ?image. }
-      OPTIONAL { ?person wdt:P569 ?dob. }
-      OPTIONAL { ?person wdt:P570 ?dod. }
-      OPTIONAL { ?person wdt:P21 ?gender. }
-      OPTIONAL { ?person wdt:P26 ?spouse. }
-      OPTIONAL { ?person wdt:P40 ?child. }
+      OPTIONAL { ?person wdt:P31 ?image. }
+      OPTIONAL { ?person wdt:P17 ?dob. }
+      OPTIONAL { ?person wdt:P18 ?dod. }
+      OPTIONAL { ?person wdt:P13 ?gender. }
+      OPTIONAL { ?person wdt:P56 ?spouse. }
+      OPTIONAL { ?person wdt:P54 ?child. }
       SERVICE wikibase:label { bd:serviceParam wikibase:language "${lang},en". }
     }
   `)}`;
@@ -65,4 +65,5 @@ window.renderFamilyTree = async function (subjectQid, lang = "en") {
   ]);
   chart.updateTree({ initial: true });
 }
+
 
