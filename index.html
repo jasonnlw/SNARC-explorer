@@ -43,10 +43,14 @@
     <small>Static client on GitHub Pages · Data from SNARC Wikibase</small>
   </footer>
 
-<!-- Family-Chart (UMD build exposes window.f3) -->
+<!-- Family-Chart as ES module -->
 <link rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/family-chart@3/dist/styles/family-chart.css">
-<script src="https://cdn.jsdelivr.net/npm/family-chart@3/dist/family-chart.umd.js"></script>
+
+<script type="module">
+  import * as f3 from "https://cdn.jsdelivr.net/npm/family-chart@3/dist/family-chart.esm.js";
+  window.f3 = f3; // expose globally for your existing non-module scripts
+</script>
 
 
   <!-- JS modules -->
