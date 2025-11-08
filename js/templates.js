@@ -290,9 +290,6 @@ function postRender() {
   } // <-- closes "if (typeof L !== 'undefined')"
 } // <-- closes postRender()
 
-
-
-        thumb.style.cursor = "pointer";
   
   // ---------- Exports ----------
   return { renderGeneric, postRender };
