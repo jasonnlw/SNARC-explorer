@@ -299,10 +299,6 @@ window.Templates = (() => {
       });
     }
 
-        });
-      }
-    }
-  }
 
   // ---------- Exports ----------
   return { renderGeneric, postRender, renderFamilyTree, drawFamilyTree };
