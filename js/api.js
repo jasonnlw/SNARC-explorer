@@ -3,6 +3,17 @@ window.API = (() => {
   // --- Base parameters for API requests ---
   const baseParams = { format: "json" };
 
+  // In your app.js or similar:
+document.addEventListener("DOMContentLoaded", async () => {
+  try {
+    await API.getEntities("Q1"); // or any known safe QID
+    console.log("Wikibase preloaded successfully");
+  } catch (e) {
+    console.warn("Initial preload failed:", e);
+  }
+});
+
+
   // ============================================================
   // JSONP TRANSPORT (used because SNARC Wikibase is not CORS-enabled)
   // ============================================================
