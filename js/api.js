@@ -19,6 +19,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   // ============================================================
   async function apiGet(params) {
   const u = new URL(CONFIG.ACTION_API);
+  const query = { format: "json", ...params };
+
+  for (const [k, v] of Object.entries(query)) {
+    if (v !== undefined && v !== null && v !== "") {
+      u.searchParams.set(k, v);
+    }
+  }
+
+  // --- Use fetch when calling through proxy (has proper CORS) ---
+  if (CONFIG.ACTION_API.includes("workers.dev")) {
+    const response = await fetch(u.toString());
+    if (!response.ok) throw new Error(`Fetch failed: ${response.status}`);
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.info || "API error");
+    return data;
+  }
+
+  // --- Otherwise fallback to JSONP for direct Wikibase ---
   const callbackName = "jsonp_cb_" + Math.random().toString(36).slice(2);
 
   return new Promise((resolve, reject) => {
@@ -41,23 +59,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       resolve(data);
     };
 
-    // --- Build query string safely ---
-    for (const [k, v] of Object.entries({ ...baseParams, ...params })) {
-      if (v !== undefined && v !== null && v !== "") {
-        u.searchParams.set(k, v);
-      }
-    }
     u.searchParams.set("callback", callbackName);
-
     script.src = u.toString();
     script.onerror = () => {
       cleanup();
       reject(new Error("JSONP request failed"));
     };
-    console.log("Injecting JSONP script:", u.toString());
     document.body.appendChild(script);
   });
 }
+
 
   // ============================================================
   // CORE API FUNCTIONS
