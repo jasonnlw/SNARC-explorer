@@ -1,9 +1,9 @@
 window.CONFIG = {
   BASE: "https://snarc-llgc.wikibase.cloud",
-  CONFIG.ACTION_API = "https://api.allorigins.win/raw?url=https://snarc-llgc.wikibase.cloud/w/api.php";
-
-  // ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php", //
+  ACTION_API: "https://api.allorigins.win/raw?url=https://snarc-llgc.wikibase.cloud/w/api.php",
+  // ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php", // original
   DEFAULT_LANG: "en",
+
 
   // Property IDs used for filtering
   PIDS: {
