@@ -1,7 +1,6 @@
 window.CONFIG = {
   BASE: "https://snarc-llgc.wikibase.cloud",
-  ACTION_API: "https://api.allorigins.win/raw?url=https://snarc-llgc.wikibase.cloud/w/api.php",
-  // ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php", // original
+  ACTION_API: "https://snarc-llgc.wikibase.cloud/w/api.php",
   DEFAULT_LANG: "en",
 
 
