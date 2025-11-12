@@ -423,4 +423,30 @@ a { color: #0645ad; }
 
 }
 
+/* Ensure the form is the positioning context and is shrink-wrapped */
+.site-header #search-form {
+  position: relative !important;
+  width: min(100%, 600px);
+  margin: 0;                 /* no stray offsets */
+  justify-self: center;      /* stay centred in the middle grid cell */
+}
+
+/* Make the input define the exact box width */
+.site-header #search-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Anchor the dropdown to the form and make its width EXACTLY match the input */
+.site-header #search-suggestions,
+.site-header .suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;                  /* <-- let left+right set width; no calc drift */
+  width: auto;               /* ignore earlier width:100% */
+  box-sizing: border-box;
+  z-index: 999;
+}
 
