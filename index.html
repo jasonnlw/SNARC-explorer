@@ -23,22 +23,26 @@
 
 <body>
   
-  <header>
-    <a href="#/" class="brand">SNARC Explorer</a>
+  <header class="site-header">
+  <!-- 🏛️ Logo replacing text brand -->
+  <a href="#/" class="brand">
+    <img src="assets/logo.png" alt="endiD" class="brand-logo">
+  </a>
 
-    <!-- 🔍 Search form with dropdown container -->
-    <form id="search-form" role="search" autocomplete="off" style="position: relative;">
-      <input id="search-input" type="search" placeholder="Search…" />
-      <!-- ▼ Suggestions dropdown will appear here -->
-      <div id="search-suggestions" class="suggestions"></div>
-    </form>
+  <!-- 🔍 Search form with dropdown container -->
+  <form id="search-form" role="search" autocomplete="off">
+    <input id="search-input" type="search" placeholder="Search…" />
+    <!-- ▼ Suggestions dropdown will appear here -->
+    <div id="search-suggestions" class="suggestions"></div>
+  </form>
 
-    <!-- 🌐 Language switch -->
-    <div class="lang-switch">
-      <button data-lang="en">EN</button>
-      <button data-lang="cy">CY</button>
-    </div>
-  </header>
+  <!-- 🌐 Language switch -->
+  <div class="lang-switch">
+    <button data-lang="en" class="active">EN</button>
+    <button data-lang="cy">CY</button>
+  </div>
+</header>
+
 
   <main id="app" aria-live="polite"></main>
   <footer>
