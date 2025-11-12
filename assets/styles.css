@@ -366,39 +366,48 @@ a { color: #0645ad; }
     gap: 0.4rem;
   }
 
-  /* Top row: logo left, language right */
-  .brand, .lang-switch {
-    display: inline-flex;
+  /* Top row: logo left, language right (single flex row) */
+  .mobile-top {
+    display: flex;
+    justify-content: space-between;
     align-items: center;
   }
 
-  .brand { justify-content: flex-start; }
-  .lang-switch { justify-content: flex-end; }
-
-  /* Group top row */
-  .brand, .lang-switch {
-    width: 100%;
-    justify-content: space-between;
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 0 0 auto;
   }
 
-  /* Search full-width below */
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 0 0 auto;
+  }
+
+  /* Search full width below, but constrained to padding */
   #search-form {
     width: 100%;
-    margin-top: 0.25rem;
+    margin-top: 0.4rem;
+    box-sizing: border-box;
   }
 
   #search-input {
     width: 100%;
+    max-width: 100%;
     font-size: 1rem;
+    box-sizing: border-box;
   }
 
   #search-suggestions {
     width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
   }
 }
 
-
-}
 
 /* Ensure the form is the positioning context and is shrink-wrapped */
 .site-header #search-form {
