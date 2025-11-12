@@ -237,6 +237,71 @@ a { color: #0645ad; }
   color: #0b7e5c;
 }
 
+/* === Desktop layout for header === */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #0b7e5c;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+/* Arrange logo, search, and language switch in one row */
+.site-header-top {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 1rem;
+}
+
+.brand {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo {
+  height: 38px;
+  width: auto;
+}
+
+#search-form {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.lang-switch {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.lang-switch button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.lang-switch button:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.lang-switch button.active {
+  background: #fff;
+  color: #0b7e5c;
+}
+
+
 /* Responsive tweaks */
 @media (max-width: 768px) {
   .site-header {
