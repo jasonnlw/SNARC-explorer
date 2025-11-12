@@ -356,6 +356,26 @@ a { color: #0645ad; }
 .suggestions .suggestion { color:#000; background:#fff; padding:.5rem .75rem; cursor:pointer; }
 .suggestions .suggestion:hover { background:#f0f0f0; }
 
+/* === Desktop override to flatten the mobile-top wrapper === */
+@media (min-width: 769px) {
+  /* Make .mobile-top invisible to the grid layout */
+  .mobile-top {
+    display: contents;
+  }
+
+  /* Ensure language switch aligns right inside the grid */
+  .lang-switch {
+    justify-self: end;
+  }
+
+  /* Keep search centered and full width inside its grid cell */
+  #search-form {
+    justify-self: center;
+    width: 100%;
+    max-width: 600px;
+  }
+}
+
 /* === Mobile layout === */
 @media (max-width: 768px) {
   .site-header {
