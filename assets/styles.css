@@ -461,3 +461,33 @@ a { color: #0645ad; }
   z-index: 999;
 }
 
+/* --- Desktop placement: force brand | search | language in one row --- */
+@media (min-width: 769px) {
+  .site-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand search lang";
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Make wrapper transparent so its children enter the grid */
+  .mobile-top { display: contents; }
+
+  /* Pin each element to its area */
+  .brand { grid-area: brand; }
+  #search-form { 
+    grid-area: search; 
+    justify-self: center;
+    width: 100%;
+    max-width: 600px;
+  }
+  .lang-switch { 
+    grid-area: lang; 
+    justify-self: end; 
+  }
+
+  /* Override earlier flex-oriented desktop remnants */
+  #search-form { flex: initial; }              /* neutralise flex:1 */
+  #search-form { max-width: 600px !important; }/* beat old 500px cap */
+}
