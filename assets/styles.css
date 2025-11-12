@@ -206,16 +206,6 @@ a { color: #0645ad; }
   position: relative;
 }
 
-#search-input {
-  width: 100%;
-  max-width: 600px;
-  padding: 0.55rem 0.9rem;
-  border-radius: 6px;
-  border: none;
-  outline: none;
-  font-size: 1rem;
-}
-
 /* Language buttons */
 .lang-switch button {
   margin-left: .4rem;
