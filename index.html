@@ -23,27 +23,24 @@
 
 <body>
   
-  <header class="site-header">
-  <div class="site-header-top">
-    <!-- 🏛️ Logo -->
-    <a href="#/" class="brand">
-      <img src="assets/Logo.png" alt="SNARC Explorer" class="brand-logo">
-    </a>
+ <header class="site-header">
+  <!-- Logo -->
+  <a href="#/" class="brand">
+    <img src="assets/Logo.png" alt="SNARC Explorer" class="brand-logo">
+  </a>
 
-    <!-- 🌐 Language switch -->
-    <div class="lang-switch">
-      <button data-lang="en" class="active">EN</button>
-      <button data-lang="cy">CY</button>
-    </div>
-  </div>
-
-  <!-- 🔍 Search form -->
+  <!-- Search -->
   <form id="search-form" role="search" autocomplete="off">
     <input id="search-input" type="search" placeholder="Search…" />
     <div id="search-suggestions" class="suggestions"></div>
   </form>
-</header>
 
+  <!-- Language switch -->
+  <div class="lang-switch">
+    <button data-lang="en" class="active">EN</button>
+    <button data-lang="cy">CY</button>
+  </div>
+</header>
 
 
   <main id="app" aria-live="polite"></main>
