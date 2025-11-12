@@ -270,17 +270,36 @@ window.App = (() => {
     Router.parse();
   }
 
+   // ----------------------------------------------------------
+  // Startup with Cloudflare clearance priming
   // ----------------------------------------------------------
-  // Startup
-  // ----------------------------------------------------------
-  function start() {
+  async function start() {
     if (!localStorage.getItem("lang")) Utils.setLang(CONFIG.DEFAULT_LANG);
     setActiveLangButton();
+
+    // --- Prime the Wikibase domain ---
+    console.log("Priming Wikibase clearance...");
+    await new Promise(r => setTimeout(r, 1500)); // small wait (1.5s)
+
+    try {
+      await API.getEntities("Q1"); // harmless ping to ensure connection
+      console.log("Wikibase connection established.");
+    } catch (err) {
+      console.warn("Initial API call failed (may be cookie delay):", err);
+      // retry once after 2s
+      await new Promise(r => setTimeout(r, 2000));
+      await API.getEntities("Q1").catch(e =>
+        console.error("Second attempt failed:", e)
+      );
+    }
+
+    // --- Continue with normal app setup ---
     initEvents();
     initLiveSearch();
     initRoutes();
   }
 
   document.addEventListener("DOMContentLoaded", start);
+
   return { renderHome };
 })();
