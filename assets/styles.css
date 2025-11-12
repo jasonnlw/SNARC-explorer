@@ -442,12 +442,6 @@ a { color: #0645ad; }
 }
 
 
-  @media (max-width: 768px) {
-  .site-header { display: flex; flex-direction: column; gap: .4rem; }
-  .site-header-top { display: flex; justify-content: space-between; align-items: center; }
-  /* ...your other mobile rules... */
-}
-
 }
 
 
