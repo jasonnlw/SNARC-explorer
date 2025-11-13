@@ -136,6 +136,14 @@ window.Templates = (() => {
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
     const desc = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
     const claims = entity.claims || {};
+// Extract Wikidata ID from P2
+let wikidataId = null;
+if (claims["P2"] && claims["P2"].length) {
+  const v = Utils.firstValue(claims["P2"][0]);
+  if (typeof v === "string" && /^Q\d+$/i.test(v)) {
+    wikidataId = v; // Example: "Q289990"
+  }
+}
 
     // --- Coordinates (P26) ---
     let mapHTML = "";
@@ -218,7 +226,7 @@ return new Promise(resolve => {
 const qid = entity.id;
 
 // Inject iframe after HTML is rendered
-setTimeout(() => injectFamilyTree(qid, lang), 0);
+setTimeout(() => injectFamilyTree(wikidataId, lang), 0);
        
     }
 
@@ -249,17 +257,14 @@ return `
 }
 
 // Inject family tree iframe into placeholder
-function injectFamilyTree(qid, lang) {
+function injectFamilyTree(wikidataId, lang) {
   const container = document.getElementById("familyChartContainer");
-  if (!container) return;
+  if (!container || !wikidataId) return;
 
-  // Clear any previous iframe
   container.innerHTML = "";
 
-  // Build the correct URL
-  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${qid}&lang=${lang}`;
+  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
 
-  // Responsive iframe injection
   container.innerHTML = `
     <div class="family-tree-wrapper">
       <iframe 
