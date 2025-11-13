@@ -190,12 +190,22 @@ window.Templates = (() => {
         const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
         const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-        return new Promise(resolve => {
-          const testImg = new Image();
-          testImg.onload = () => resolve(buildThumbHTML(thumbUrl, rootUrl, imageId, isMulti));
-          testImg.onerror = () => resolve("");
-          testImg.src = thumbUrl;
-        });
+return new Promise(resolve => {
+  const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+  const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+  const rootUrl = `https://viewer.library.wales/${baseId}`;
+
+  const tryLoad = (urlList) => {
+    if (!urlList.length) return resolve(""); // all attempts failed
+    const url = urlList.shift();
+    const img = new Image();
+    img.onload = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
+    img.onerror = () => tryLoad(urlList); // try next pattern
+    img.src = url;
+  };
+
+  tryLoad([baseUrl1, baseUrl2]);
+});
       });
 
       const images = await Promise.all(imagePromises);
