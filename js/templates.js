@@ -213,6 +213,13 @@ return new Promise(resolve => {
       if (validImages.length) {
         galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
       }
+
+// QID of the subject entity
+const qid = entity.id;
+
+// Inject iframe after HTML is rendered
+setTimeout(() => injectFamilyTree(qid, lang), 0);
+       
     }
 
     // --- Property table (exclude family/map/media props) ---
@@ -241,6 +248,30 @@ return `
   </section>`;
 }
 
+// Inject family tree iframe into placeholder
+function injectFamilyTree(qid, lang) {
+  const container = document.getElementById("familyChartContainer");
+  if (!container) return;
+
+  // Clear any previous iframe
+  container.innerHTML = "";
+
+  // Build the correct URL
+  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${qid}&lang=${lang}`;
+
+  // Responsive iframe injection
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <iframe 
+        src="${treeUrl}" 
+        class="family-tree-iframe" 
+        loading="lazy"
+        frameborder="0"
+      ></iframe>
+    </div>`;
+}
+
+   
 // ---------- Post-render ----------
 function postRender() {
   // Only run this if Leaflet has loaded
