@@ -138,20 +138,40 @@ window.Templates = (() => {
     const claims = entity.claims || {};
 
 // Determine if entity is human (P7 = Q947)
-const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947") || false;
-
-// Make available globally for the language switch reload
+const isHuman = (claims["P7"] || []).some(stmt => {
+  const v = Utils.firstValue(stmt);
+  if (typeof v === "string") return v === "Q947";
+  if (v && typeof v === "object" && v.id) return v.id === "Q947";
+  return false;
+});
 window.currentIsHuman = isHuman;
 
-     console.log("DEBUG renderGeneric:", {
-  human: isHuman,
-  wikidataId,
-  P62: claims["P62"]
-});
-
-     
 // Extract Wikidata ID from P62 (URI or QID)
 let wikidataId = null;
+
+if (claims["P62"] && claims["P62"].length) {
+  const raw = Utils.firstValue(claims["P62"][0]); // could be string or object
+
+  let v = raw;
+
+  // If value is an object: use .id
+  if (typeof raw === "object" && raw?.id) {
+    v = raw.id;
+  }
+
+  // If it's a Wikidata URL or string: extract QID
+  if (typeof v === "string") {
+    const match = v.match(/Q\d+/i);
+    if (match) {
+      wikidataId = match[0]; // e.g., "Q13127787"
+    }
+  }
+}
+
+window.currentWikidataId = wikidataId;
+// Optional: debug
+// console.log("DEBUG renderGeneric:", { human: isHuman, wikidataId, P62: claims["P62"] });
+
 
 if (claims["P62"] && claims["P62"].length) {
   const raw = Utils.firstValue(claims["P62"][0]); // could be string or object
@@ -244,17 +264,18 @@ return new Promise(resolve => {
 });
       });
 
-      const images = await Promise.all(imagePromises);
+            const images = await Promise.all(imagePromises);
       const validImages = images.filter(Boolean);
       if (validImages.length) {
         galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
       }
+    } // <-- closes `if (mediaStmts && mediaStmts.length)`
 
-// QID of the subject entity
-const qid = entity.id;
 
-// Inject iframe after HTML is rendered
-setTimeout(() => injectFamilyTree(wikidataId, lang), 0);
+    // Inject family tree iframe after HTML is rendered (for humans only)
+    if (isHuman && wikidataId) {
+      setTimeout(() => injectFamilyTree(wikidataId, lang), 0);
+    }
        
     }
 
