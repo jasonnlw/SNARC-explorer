@@ -1,5 +1,5 @@
 /* ===============================================================
-   SNARC Explorer Templates.js – cleaned + ready for Family-Chart
+   SNARC Explorer Templates.js – cleaned + ready for Family-Charts
    =============================================================== */
 
 window.Templates = (() => {
