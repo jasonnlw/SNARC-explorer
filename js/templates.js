@@ -270,14 +270,14 @@ return new Promise(resolve => {
         galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
       }
     } // <-- closes `if (mediaStmts && mediaStmts.length)`
-
+  
 
     // Inject family tree iframe after HTML is rendered (for humans only)
     if (isHuman && wikidataId) {
       setTimeout(() => injectFamilyTree(wikidataId, lang), 0);
     }
        
-    }
+    
 
     // --- Property table (exclude family/map/media props) ---
     const rows = Object.keys(claims)
