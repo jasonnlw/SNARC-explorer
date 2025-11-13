@@ -250,9 +250,10 @@ return `
     <!-- 1. Data table (moved to top) -->
     <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
 
-        <!-- 2. Family tree container -->
-    <div id="familyChartContainer" class="family-tree-container"></div>
-    <!-- Rendered by familyChartIntegration.js -->
+<!-- 2. Family tree (only for humans) -->
+${isHuman ? `
+  <div id="familyChartContainer" class="family-tree-container"></div>
+` : ""}
 
     <!-- 3. Map (if present) -->
     ${mapHTML}
