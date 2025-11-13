@@ -220,20 +220,27 @@ return new Promise(resolve => {
       .filter(pid => !["P26","P50","P52","P53","P54","P55","P56"].includes(pid))
       .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
 
-    return `
-      <section class="card">
-        <h2>${title}</h2>
-        ${desc ? `<p>${desc}</p>` : ""}
-        ${mapHTML}
-        ${galleryHTML}
+return `
+  <section class="card entity-layout">
+    <h2>${title}</h2>
+    ${desc ? `<p>${desc}</p>` : ""}
 
-        <!-- Family tree container -->
-        <div id="familyChartContainer" class="family-tree-container"></div>
-        <!-- Rendered by familyChartIntegration.js -->
+    <!-- 1. Data table (moved to top) -->
+    <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
 
-        <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
-      </section>`;
-  }
+        <!-- 2. Family tree container -->
+    <div id="familyChartContainer" class="family-tree-container"></div>
+    <!-- Rendered by familyChartIntegration.js -->
+
+    <!-- 3. Map (if present) -->
+    ${mapHTML}
+
+    <!-- 4. IIIF image gallery -->
+    ${galleryHTML}
+
+  </section>`;
+}
+
 // ---------- Post-render ----------
 function postRender() {
   // Only run this if Leaflet has loaded
