@@ -144,7 +144,7 @@ if (claims["P2"] && claims["P2"].length) {
     wikidataId = v; // Example: "Q289990"
   }
 }
-
+window.currentWikidataId = wikidataId;
     // --- Coordinates (P26) ---
     let mapHTML = "";
     const coordStmts = claims["P26"];
