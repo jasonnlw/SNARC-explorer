@@ -142,6 +142,13 @@ const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947") ||
 
 // Make available globally for the language switch reload
 window.currentIsHuman = isHuman;
+
+     console.log("DEBUG renderGeneric:", {
+  human: isHuman,
+  wikidataId,
+  P62: claims["P62"]
+});
+
      
 // Extract Wikidata ID from P62 (URI or QID)
 let wikidataId = null;
@@ -280,6 +287,7 @@ ${galleryHTML}
 
 // Inject family tree iframe into placeholder
 function injectFamilyTree(wikidataId, lang) {
+   console.log("DEBUG injectFamilyTree CALLED:", { wikidataId, lang });
   const container = document.getElementById("familyChartContainer");
   if (!container || !wikidataId) return;
 
