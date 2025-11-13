@@ -269,11 +269,11 @@ ${isHuman ? `
   <div id="familyChartContainer" class="family-tree-container"></div>
 ` : ""}
 
-    <!-- 3. Map (if present) -->
-    ${mapHTML}
+<!-- 3. Map (if present) -->
+${mapHTML}
 
-    <!-- 4. IIIF image gallery -->
-    ${galleryHTML}
+<!-- 4. IIIF image gallery -->
+${galleryHTML}
 
   </section>`;
 }
