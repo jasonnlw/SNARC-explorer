@@ -147,6 +147,15 @@ window.App = (() => {
       Utils.setLang(btn.dataset.lang);
       setActiveLangButton();
       Router.parse();
+// After rerender, reload the family tree iframe
+setTimeout(() => {
+  const qid = window.currentEntityId;
+  const lang = Utils.getLang();
+  if (qid && typeof injectFamilyTree === "function") {
+    injectFamilyTree(qid, lang);
+  }
+}, 30);
+      
     });
 
     searchForm().addEventListener("submit", (e) => {
