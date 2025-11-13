@@ -143,14 +143,28 @@ const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947") ||
 // Make available globally for the language switch reload
 window.currentIsHuman = isHuman;
      
-// Extract Wikidata ID from P62
+// Extract Wikidata ID from P62 (URI or QID)
 let wikidataId = null;
+
 if (claims["P62"] && claims["P62"].length) {
-  const v = Utils.firstValue(claims["P62"][0]);
-  if (typeof v === "string" && /^Q\d+$/i.test(v)) {
-    wikidataId = v; // Example: "Q289990"
+  const raw = Utils.firstValue(claims["P62"][0]); // could be string or object
+
+  let v = raw;
+
+  // If value is an object: use .id
+  if (typeof raw === "object" && raw?.id) {
+    v = raw.id;
+  }
+
+  // If it's a Wikidata URL: extract QID
+  if (typeof v === "string") {
+    const match = v.match(/Q\d+/i); 
+    if (match) {
+      wikidataId = match[0];  // e.g., "Q13127787"
+    }
   }
 }
+
 window.currentWikidataId = wikidataId;
     // --- Coordinates (P26) ---
     let mapHTML = "";
