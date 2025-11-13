@@ -136,10 +136,17 @@ window.Templates = (() => {
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
     const desc = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
     const claims = entity.claims || {};
-// Extract Wikidata ID from P2
+
+// Determine if entity is human (P7 = Q947)
+const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947") || false;
+
+// Make available globally for the language switch reload
+window.currentIsHuman = isHuman;
+     
+// Extract Wikidata ID from P62
 let wikidataId = null;
-if (claims["P2"] && claims["P2"].length) {
-  const v = Utils.firstValue(claims["P2"][0]);
+if (claims["P62"] && claims["P62"].length) {
+  const v = Utils.firstValue(claims["P62"][0]);
   if (typeof v === "string" && /^Q\d+$/i.test(v)) {
     wikidataId = v; // Example: "Q289990"
   }
