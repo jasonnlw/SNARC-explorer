@@ -149,10 +149,11 @@ window.App = (() => {
       Router.parse();
 // After rerender, reload the family tree iframe
 setTimeout(() => {
-  const qid = window.currentEntityId;
+  const wikidataId = window.currentWikidataId;
   const lang = Utils.getLang();
-  if (qid && typeof injectFamilyTree === "function") {
-    injectFamilyTree(qid, lang);
+
+  if (wikidataId && typeof injectFamilyTree === "function") {
+    injectFamilyTree(wikidataId, lang);
   }
 }, 30);
       
