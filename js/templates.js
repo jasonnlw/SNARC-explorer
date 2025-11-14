@@ -318,12 +318,13 @@ function injectFamilyTree(wikidataId, lang) {
 
   container.innerHTML = `
     <div class="family-tree-wrapper">
-      <iframe 
-        src="${treeUrl}" 
-        class="family-tree-iframe" 
-        loading="lazy"
-        frameborder="0"
-      ></iframe>
+      <iframe
+  src="${treeUrl}"
+  class="family-tree-iframe"
+  loading="lazy"
+  frameborder="0"
+  style="width:100vw; max-width:100%; display:block; border:0;"
+></iframe>
     </div>`;
 }
 
