@@ -519,6 +519,11 @@ a { color: #0645ad; }
   overflow: hidden;
 }
 
+@media (max-width: 768px) {
+  .family-tree-iframe {
+    height: 740px;
+  }
+}
 
 
 
