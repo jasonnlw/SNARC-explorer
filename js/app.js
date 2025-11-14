@@ -167,14 +167,6 @@ setTimeout(() => {
     });
   }
 
-  // --- Listen for auto-height messages from EntiTree ---
-window.addEventListener("message", (event) => {
-  if (event.data && event.data.entitreeHeight) {
-    const iframe = document.querySelector(".family-tree-iframe");
-    if (iframe) iframe.style.height = event.data.entitreeHeight + "px";
-  }
-});
-
 
 
   // ----------------------------------------------------------
