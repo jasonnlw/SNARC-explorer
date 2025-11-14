@@ -521,7 +521,7 @@ a { color: #0645ad; }
 
 @media (max-width: 768px) {
   .family-tree-iframe {
-    height: 580px;
+    height: 400px;
   }
 }
 
