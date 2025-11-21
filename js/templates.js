@@ -146,6 +146,16 @@ const isHuman = (claims["P7"] || []).some(stmt => {
 });
 window.currentIsHuman = isHuman;
 
+// Determine if entity has any family relationships
+const hasFamily =
+  (claims["P26"] && claims["P26"].length) ||   // spouse
+  (claims["P52"] && claims["P52"].length) ||   // father
+  (claims["P53"] && claims["P53"].length) ||   // mother
+  (claims["P54"] && claims["P54"].length) ||   // child
+  (claims["P56"] && claims["P56"].length);     // sibling
+
+window.currentHasFamily = hasFamily;
+
 // Extract Wikidata ID from P62 (URI or QID)
 let wikidataId = null;
 
@@ -273,9 +283,13 @@ return new Promise(resolve => {
   
 
     // Inject family tree iframe after HTML is rendered (for humans only)
-    if (isHuman && wikidataId) {
-      setTimeout(() => injectFamilyTree(wikidataId, lang), 0);
-    }
+    const treeContainer = document.getElementById("familyChartContainer");
+
+if (isHuman && hasFamily && wikidataId) {
+  injectFamilyTree(wikidataId, lang);
+} else {
+  if (treeContainer) treeContainer.innerHTML = ""; 
+}
        
     
 
