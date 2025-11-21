@@ -1,31 +1,32 @@
 /* ===============================================================
-   SNARC Explorer Templates.js – cleaned + ready for Family-Charts
+   SNARC Explorer Templates.js – cleaned + ready for family tree
    =============================================================== */
 
 window.Templates = (() => {
 
   // ---------- Identifier URL patterns ----------
   const ID_URL = {
-    P10: "https://viaf.org/viaf/$1",
+    P10:  "https://viaf.org/viaf/$1",
     P102: "https://id.library.wales/$1",
     P107: "https://id.library.wales/$1",
     P108: "https://snarc-llgc.wikibase.cloud/wiki/$1",
-    P11: "https://id.loc.gov/authorities/$1",
-    P12: "https://archives.library.wales/index.php/$1",
-    P5: "https://biography.wales/article/$1",
-    P6: "https://bywgraffiadur.cymru/article/$1",
-    P68: "https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=$1",
-    P69: "https://coflein.gov.uk/en/site/$1",
-    P8: "https://id.loc.gov/vocabulary/iso639-1/$1",
-    P83: "https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/$1",
-    P9: "https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A$1",
-    P91: "https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/$1",
-    P97: "https://discovery.nationalarchives.gov.uk/details/c/$1"
+    P11:  "https://id.loc.gov/authorities/$1",
+    P12:  "https://archives.library.wales/index.php/$1",
+    P5:   "https://biography.wales/article/$1",
+    P6:   "https://bywgraffiadur.cymru/article/$1",
+    P68:  "https://cadwpublic-api.azurewebsites.net/reports/listedbuilding/FullReport?id=$1",
+    P69:  "https://coflein.gov.uk/en/site/$1",
+    P8:   "https://id.loc.gov/vocabulary/iso639-1/$1",
+    P83:  "https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/$1",
+    P9:   "https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A$1",
+    P91:  "https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/$1",
+    P97:  "https://discovery.nationalarchives.gov.uk/details/c/$1"
   };
 
   // ---------- Helpers ----------
   const normalizeQid = value =>
     (value && /Q\d+/i.test(value)) ? value.match(/Q\d+/i)[0].toUpperCase() : null;
+
   const normalizeDatatype = dt =>
     dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
@@ -134,76 +135,55 @@ window.Templates = (() => {
     if (!entity) return `<p>Entity not found.</p>`;
 
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
-    const desc = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
+    const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
     const claims = entity.claims || {};
 
-// Determine if entity is human (P7 = Q947)
-const isHuman = (claims["P7"] || []).some(stmt => {
-  const v = Utils.firstValue(stmt);
-  if (typeof v === "string") return v === "Q947";
-  if (v && typeof v === "object" && v.id) return v.id === "Q947";
-  return false;
-});
-window.currentIsHuman = isHuman;
+    // --- Human / family detection ------------------------------------
+    // Determine if entity is human (P7 = Q947 in your SNARC)
+    const isHuman = (claims["P7"] || []).some(stmt => {
+      const v = Utils.firstValue(stmt);
+      if (typeof v === "string") return v === "Q947";
+      if (v && typeof v === "object" && v.id) return v.id === "Q947";
+      return false;
+    });
+    window.currentIsHuman = isHuman;
 
-// Determine if entity has any family relationships (SNARC properties)
-const hasFamily =
-  (claims["P53"] && claims["P53"].length) ||   // father
-  (claims["P55"] && claims["P55"].length) ||   // mother
-  (claims["P52"] && claims["P52"].length) ||   // sibling
-  (claims["P56"] && claims["P56"].length) ||   // spouse
-  (claims["P54"] && claims["P54"].length);     // child
+    // Determine if entity has any family relationships (SNARC properties)
+    const hasFamily =
+      (claims["P53"] && claims["P53"].length) ||   // father
+      (claims["P55"] && claims["P55"].length) ||   // mother
+      (claims["P52"] && claims["P52"].length) ||   // sibling
+      (claims["P56"] && claims["P56"].length) ||   // spouse
+      (claims["P54"] && claims["P54"].length);     // child
 
-window.currentHasFamily = hasFamily;
+    window.currentHasFamily = hasFamily;
 
-// Extract Wikidata ID from P62 (URI or QID)
-let wikidataId = null;
+    // --- Extract Wikidata ID from P62 (URI or QID) -------------------
+    let wikidataId = null;
 
-if (claims["P62"] && claims["P62"].length) {
-  const raw = Utils.firstValue(claims["P62"][0]); // could be string or object
+    if (claims["P62"] && claims["P62"].length) {
+      const raw = Utils.firstValue(claims["P62"][0]); // string or object
+      let v = raw;
 
-  let v = raw;
+      // If value is an object: use .id
+      if (typeof raw === "object" && raw?.id) {
+        v = raw.id;
+      }
 
-  // If value is an object: use .id
-  if (typeof raw === "object" && raw?.id) {
-    v = raw.id;
-  }
-
-  // If it's a Wikidata URL or string: extract QID
-  if (typeof v === "string") {
-    const match = v.match(/Q\d+/i);
-    if (match) {
-      wikidataId = match[0]; // e.g., "Q13127787"
+      // If it's a Wikidata URL or string: extract QID
+      if (typeof v === "string") {
+        const match = v.match(/Q\d+/i);
+        if (match) {
+          wikidataId = match[0]; // e.g. "Q13127787"
+        }
+      }
     }
-  }
-}
 
-window.currentWikidataId = wikidataId;
-// Optional: debug
-// console.log("DEBUG renderGeneric:", { human: isHuman, wikidataId, P62: claims["P62"] });
+    window.currentWikidataId = wikidataId;
+    // Optional: debug
+    // console.log("DEBUG renderGeneric:", { isHuman, hasFamily, wikidataId, P62: claims["P62"] });
 
-
-if (claims["P62"] && claims["P62"].length) {
-  const raw = Utils.firstValue(claims["P62"][0]); // could be string or object
-
-  let v = raw;
-
-  // If value is an object: use .id
-  if (typeof raw === "object" && raw?.id) {
-    v = raw.id;
-  }
-
-  // If it's a Wikidata URL: extract QID
-  if (typeof v === "string") {
-    const match = v.match(/Q\d+/i); 
-    if (match) {
-      wikidataId = match[0];  // e.g., "Q13127787"
-    }
-  }
-}
-
-window.currentWikidataId = wikidataId;
-    // --- Coordinates (P26) ---
+    // --- Coordinates (P26) -------------------------------------------
     let mapHTML = "";
     const coordStmts = claims["P26"];
     if (coordStmts && coordStmts.length) {
@@ -220,7 +200,7 @@ window.currentWikidataId = wikidataId;
       }
     }
 
-    // --- IIIF image gallery (P50) ---
+    // --- IIIF image gallery (P50) ------------------------------------
     let galleryHTML = "";
     const mediaStmts = claims["P50"];
 
@@ -253,163 +233,163 @@ window.currentWikidataId = wikidataId;
         const baseId = parseInt(idMatch[1], 10);
         const isMulti = baseId >= 1448577 && baseId <= 1588867;
         const imageId = isMulti ? baseId + 1 : baseId;
-        const thumbUrl = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-        const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-return new Promise(resolve => {
-  const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-  const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
-  const rootUrl = `https://viewer.library.wales/${baseId}`;
+        // Two IIIF patterns – fallback logic
+        return new Promise(resolve => {
+          const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+          const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+          const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-  const tryLoad = (urlList) => {
-    if (!urlList.length) return resolve(""); // all attempts failed
-    const url = urlList.shift();
-    const img = new Image();
-    img.onload = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
-    img.onerror = () => tryLoad(urlList); // try next pattern
-    img.src = url;
-  };
+          const tryLoad = (urlList) => {
+            if (!urlList.length) return resolve(""); // all attempts failed
+            const url = urlList.shift();
+            const img = new Image();
+            img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
+            img.onerror = () => tryLoad(urlList); // try next pattern
+            img.src = url;
+          };
 
-  tryLoad([baseUrl1, baseUrl2]);
-});
+          tryLoad([baseUrl1, baseUrl2]);
+        });
       });
 
-            const images = await Promise.all(imagePromises);
+      const images = await Promise.all(imagePromises);
       const validImages = images.filter(Boolean);
       if (validImages.length) {
         galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
       }
-    } // <-- closes `if (mediaStmts && mediaStmts.length)`
-  
+    } // end mediaStmts check
 
-    // Inject family tree iframe after HTML is rendered (for humans only)
-    const treeContainer = document.getElementById("familyChartContainer");
-
-if (isHuman && hasFamily && wikidataId) {
-  injectFamilyTree(wikidataId, lang);
-} else {
-  if (treeContainer) treeContainer.innerHTML = ""; 
-}
-       
-    
-
-    // --- Property table (exclude family/map/media props) ---
+    // --- Property table (exclude family/map/media props) -------------
     const rows = Object.keys(claims)
       .filter(pid => !["P26","P50","P52","P53","P54","P55","P56"].includes(pid))
       .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
 
-return `
-  <section class="card entity-layout">
-    <h2>${title}</h2>
-    ${desc ? `<p>${desc}</p>` : ""}
+    // --- HTML layout -------------------------------------------------
+    return `
+      <section class="card entity-layout">
+        <h2>${title}</h2>
+        ${desc ? `<p>${desc}</p>` : ""}
 
-    <!-- 1. Data table (moved to top) -->
-    <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
+        <!-- 1. Data table (moved to top) -->
+        <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
 
-<!-- 2. Family tree (only for humans) -->
-${isHuman ? `
-  <div id="familyChartContainer" class="family-tree-container"></div>
-` : ""}
+        <!-- 2. Family tree (only for humans; content injected in postRender) -->
+        ${isHuman ? `
+          <div id="familyChartContainer" class="family-tree-container"></div>
+        ` : ""}
 
-<!-- 3. Map (if present) -->
-${mapHTML}
+        <!-- 3. Map (if present) -->
+        ${mapHTML}
 
-<!-- 4. IIIF image gallery -->
-${galleryHTML}
+        <!-- 4. IIIF image gallery -->
+        ${galleryHTML}
 
-  </section>`;
-}
+      </section>`;
+  }
 
-// Inject family tree iframe into placeholder
-function injectFamilyTree(wikidataId, lang) {
-   console.log("DEBUG injectFamilyTree CALLED:", { wikidataId, lang });
-  const container = document.getElementById("familyChartContainer");
-  if (!container || !wikidataId) return;
+  // ---------- Family tree iframe injection ----------
+  function injectFamilyTree(wikidataId, lang) {
+    console.log("DEBUG injectFamilyTree CALLED:", { wikidataId, lang });
+    const container = document.getElementById("familyChartContainer");
+    if (!container || !wikidataId) return;
 
-  container.innerHTML = "";
+    container.innerHTML = "";
 
-  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
+    const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
 
-  container.innerHTML = `
-    <div class="family-tree-wrapper">
-      <iframe
-  src="${treeUrl}"
-  class="family-tree-iframe"
-  loading="lazy"
-  frameborder="0"
-  style="width:100vw; max-width:100%; display:block; border:0;"
-></iframe>
-    </div>`;
-}
+    container.innerHTML = `
+      <div class="family-tree-wrapper">
+        <iframe
+          src="${treeUrl}"
+          class="family-tree-iframe"
+          loading="lazy"
+          frameborder="0"
+          style="width:100vw; max-width:100%; display:block; border:0;"
+        ></iframe>
+      </div>`;
+  }
 
-   
-// ---------- Post-render ----------
-function postRender() {
-  // Only run this if Leaflet has loaded
-  if (typeof L !== "undefined") {
+  // ---------- Post-render ----------
+  function postRender() {
+    // --- Family tree injection (runs AFTER DOM is rendered) ----------
+    const treeContainer = document.getElementById("familyChartContainer");
+    if (treeContainer) {
+      const isHuman   = window.currentIsHuman;
+      const hasFamily = window.currentHasFamily;
+      const wikidataId = window.currentWikidataId;
+      const lang = Utils.getLang();
 
-    // --- Create modal if it doesn't already exist ---
-    let modal = document.getElementById("map-modal");
-    if (!modal) {
-      document.body.insertAdjacentHTML("beforeend", `
-        <div id="map-modal" class="map-modal" style="display:none">
-          <div class="map-modal-content">
-            <div id="map-large" class="map-large"></div>
-            <button id="map-close" class="map-close" aria-label="Close">&times;</button>
-          </div>
-        </div>`);
-      document.getElementById("map-close").onclick = () =>
-        (document.getElementById("map-modal").style.display = "none");
-      document.getElementById("map-modal").addEventListener("click", e => {
-        if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
-      });
+      if (isHuman && hasFamily && wikidataId) {
+        injectFamilyTree(wikidataId, lang);
+      } else {
+        treeContainer.innerHTML = "";
+      }
     }
 
-    // --- Initialize all mini-maps on the page ---
-    document.querySelectorAll(".map-thumb").forEach(thumb => {
-      const lat = parseFloat(thumb.dataset.lat);
-      const lon = parseFloat(thumb.dataset.lon);
-      const mapId = thumb.dataset.mapid;
-      if (!isFinite(lat) || !isFinite(lon)) return;
+    // --- Map logic (only if Leaflet is loaded) -----------------------
+    if (typeof L !== "undefined") {
 
-      const mapDiv = document.getElementById(mapId);
-      if (!mapDiv || mapDiv.dataset.initialized) return;
+      // Create modal if it doesn't already exist
+      let modal = document.getElementById("map-modal");
+      if (!modal) {
+        document.body.insertAdjacentHTML("beforeend", `
+          <div id="map-modal" class="map-modal" style="display:none">
+            <div class="map-modal-content">
+              <div id="map-large" class="map-large"></div>
+              <button id="map-close" class="map-close" aria-label="Close">&times;</button>
+            </div>
+          </div>`);
+        document.getElementById("map-close").onclick = () =>
+          (document.getElementById("map-modal").style.display = "none");
+        document.getElementById("map-modal").addEventListener("click", e => {
+          if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
+        });
+      }
 
-      // create small static map
-      const map = L.map(mapId, {
-        center: [lat, lon],
-        zoom: 13,
-        scrollWheelZoom: false,
-        dragging: false,
-        zoomControl: false,
-        attributionControl: false
-      });
+      // Initialize all mini-maps on the page
+      document.querySelectorAll(".map-thumb").forEach(thumb => {
+        const lat = parseFloat(thumb.dataset.lat);
+        const lon = parseFloat(thumb.dataset.lon);
+        const mapId = thumb.dataset.mapid;
+        if (!isFinite(lat) || !isFinite(lon)) return;
 
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: "© OpenStreetMap"
-      }).addTo(map);
+        const mapDiv = document.getElementById(mapId);
+        if (!mapDiv || mapDiv.dataset.initialized) return;
 
-      L.marker([lat, lon]).addTo(map);
-      mapDiv.dataset.initialized = "true";
+        // Small static map
+        const map = L.map(mapId, {
+          center: [lat, lon],
+          zoom: 13,
+          scrollWheelZoom: false,
+          dragging: false,
+          zoomControl: false,
+          attributionControl: false
+        });
 
-      // click → open modal with large map
-      thumb.style.cursor = "pointer";
-      thumb.addEventListener("click", () => {
-        const modal = document.getElementById("map-modal");
-        modal.style.display = "flex";
-        setTimeout(() => {
-          const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
-          L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-            .addTo(largeMap);
-          L.marker([lat, lon]).addTo(largeMap);
-        }, 100);
-      });
-    }); // <-- closes the forEach loop properly
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "© OpenStreetMap"
+        }).addTo(map);
 
-  } // <-- closes "if (typeof L !== 'undefined')"
-} // <-- closes postRender()
+        L.marker([lat, lon]).addTo(map);
+        mapDiv.dataset.initialized = "true";
 
-  
+        // Click → open modal with large map
+        thumb.style.cursor = "pointer";
+        thumb.addEventListener("click", () => {
+          const modal = document.getElementById("map-modal");
+          modal.style.display = "flex";
+          setTimeout(() => {
+            const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
+            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+              .addTo(largeMap);
+            L.marker([lat, lon]).addTo(largeMap);
+          }, 100);
+        });
+      }); // end forEach
+    } // end Leaflet guard
+  }
+
   // ---------- Exports ----------
   return { renderGeneric, postRender };
 
