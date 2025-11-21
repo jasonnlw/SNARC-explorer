@@ -146,13 +146,13 @@ const isHuman = (claims["P7"] || []).some(stmt => {
 });
 window.currentIsHuman = isHuman;
 
-// Determine if entity has any family relationships
+// Determine if entity has any family relationships (SNARC properties)
 const hasFamily =
-  (claims["P26"] && claims["P26"].length) ||   // spouse
-  (claims["P52"] && claims["P52"].length) ||   // father
-  (claims["P53"] && claims["P53"].length) ||   // mother
-  (claims["P54"] && claims["P54"].length) ||   // child
-  (claims["P56"] && claims["P56"].length);     // sibling
+  (claims["P53"] && claims["P53"].length) ||   // father
+  (claims["P55"] && claims["P55"].length) ||   // mother
+  (claims["P52"] && claims["P52"].length) ||   // sibling
+  (claims["P56"] && claims["P56"].length) ||   // spouse
+  (claims["P54"] && claims["P54"].length);     // child
 
 window.currentHasFamily = hasFamily;
 
