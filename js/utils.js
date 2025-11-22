@@ -28,8 +28,8 @@ window.Utils = (() => {
 case "string":
 case "url":
 case "external-id":
-  // Only P2 needs QID extraction from a full Wikidata URL
-  if (snak.property === "P2" && typeof value === "string") {
+  // Only P62 needs QID extraction from a full Wikidata URL
+  if (snak.property === "P62" && typeof value === "string") {
     const qMatch = value.match(/Q\d+/i);
     if (qMatch) return qMatch[0];  // return just the QID
   }
