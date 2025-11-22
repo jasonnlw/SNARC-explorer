@@ -57,33 +57,22 @@ window.Templates = (() => {
     return ids;
   }
 
-// ------- SNARC Date Formatter -------
-function formatSnarcDate(value) {
-  if (!value) return "";
+function formatSnarcDateFromSnak(stmt) {
+  if (!stmt?.mainsnak?.datavalue?.value) return "";
 
-  // value can be: { time: '+1913-01-01T00:00:00Z', precision: 11 }
-  // or it may already be a string '1913-01-01'
-  const time = value.time || value.value || value;
-  const precision = value.precision || value.prec || 11;
+  const dv = stmt.mainsnak.datavalue.value;
+  const time = dv.time || dv.value || "";
+  const precision = dv.precision || 11;
 
-  // Extract YYYY-MM-DD
   const match = String(time).match(/(\d{4})-(\d{2})-(\d{2})/);
   if (!match) return String(time);
+  const [, y, m, d] = match;
 
-  const [, year, month, day] = match;
-
-  // Precision rules:
-  // 11 = day precision
-  // 10 = month precision
-  // 9  = year precision
-  if (precision >= 11) {
-    return `${day}-${month}-${year}`;         // dd-mm-yyyy
-  }
-  if (precision === 10) {
-    return `${month}-${year}`;                // mm-yyyy
-  }
-  return year;                                // yyyy
+  if (precision >= 11) return `${d}-${m}-${y}`;  // day precision
+  if (precision === 10) return `${m}-${y}`;      // month precision
+  return y;                                      // year precision
 }
+
    
   // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
@@ -154,11 +143,19 @@ function formatSnarcDate(value) {
       : cleanPid;
     const datatype = propInfo?.datatype || "String";
 
-    const values = statements
-      .map(stmt => Utils.firstValue(stmt))
-      .filter(v => v !== undefined && v !== null && v !== "")
-      .map(v => renderValue(datatype, v, labelMap, lang, cleanPid))
-      .join(", ");
+const values = statements
+  .map(stmt => {
+    // precision-aware date formatting
+    if (datatype === "time" || normalizeDatatype(datatype) === "time") {
+      return formatSnarcDateFromSnak(stmt);
+    }
+
+    const v = Utils.firstValue(stmt);
+    return renderValue(datatype, v, labelMap, lang, cleanPid);
+  })
+  .filter(v => v !== undefined && v !== null && v !== "")
+  .join(", ");
+
 
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
   }
@@ -274,11 +271,21 @@ function formatSnarcDate(value) {
 
       if (!label) continue;
 
-      const values = stmts
-        .map(stmt => Utils.firstValue(stmt))
-        .filter(v => v !== undefined && v !== null && v !== "")
-        .map(v => renderProfileValue(cleanPid, v, labelMap, lang))
-        .join(", ");
+const values = stmts
+  .map(stmt => {
+    const propInfo = window.PROPERTY_INFO?.[cleanPid];
+    const datatype = propInfo?.datatype || "String";
+
+    // precision-aware date handling
+    if (datatype === "time" || normalizeDatatype(datatype) === "time") {
+      return formatSnarcDateFromSnak(stmt);
+    }
+
+    const v = Utils.firstValue(stmt);
+    return renderProfileValue(cleanPid, v, labelMap, lang);
+  })
+  .filter(v => v !== undefined && v !== null && v !== "")
+  .join(", ");
 
       if (!values) continue;
 
