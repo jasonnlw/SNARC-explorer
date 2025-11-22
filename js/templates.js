@@ -77,12 +77,25 @@ function formatSnarcDateFromSnak(stmt) {
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-     // Force some properties to use ID_URL even if value is a QID
+// --- URL-overrides must run before QID logic ---
 if (ID_URL[pid]) {
+
+  // Special case: P2 returns a full Wikidata URL
+  if (pid === "P2") {
+    const q = String(value).match(/Q\\d+/i);
+    if (q) {
+      const qid = q[0];
+      const url = ID_URL["P2"].replace(/\$1/g, qid);
+      return `<a href="${url}" target="_blank" rel="noopener">${qid}</a>`;
+    }
+  }
+
+  // Default case for P108 and others
   const encoded = encodeURIComponent(String(value).trim());
   const url = ID_URL[pid].replace(/\$1/g, encoded);
   return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
 }
+
 
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
