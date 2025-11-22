@@ -72,6 +72,95 @@ function formatSnarcDateFromSnak(stmt) {
   return y;                                      // year precision
 }
 
+
+function renderHeroHeader(entity, lang, labelMap = {}) {
+  const claims = entity.claims || {};
+
+  // === 1. Base label ===
+  const baseLabel =
+    entity.labels?.[lang]?.value ||
+    entity.labels?.en?.value ||
+    entity.id;
+
+  let displayLabel = baseLabel;
+
+  // === 2. Description ===
+  const desc =
+    entity.descriptions?.[lang]?.value ||
+    entity.descriptions?.en?.value ||
+    "";
+
+  // === 3. Hero Image (P31 file) ===
+  let heroImgHTML = "";
+  if (claims["P31"] && claims["P31"].length) {
+    const imgVal = Utils.firstValue(claims["P31"][0]);
+    if (typeof imgVal === "string") {
+      const filename = imgVal.replace(/^File:/i, "").trim();
+      const thumb = `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(filename)}?width=300`;
+      heroImgHTML = `
+        <div class="hero-image">
+          <img src="${thumb}" alt="${filename}" loading="lazy">
+        </div>`;
+    }
+  }
+
+  // === 4. Instance-of tagging (Option C) ===
+  let tagsHTML = "";
+  let instanceQids = [];
+
+  if (claims["P7"] && claims["P7"].length) {
+    instanceQids = claims["P7"]
+      .map(stmt => Utils.firstValue(stmt))
+      .filter(q => typeof q === "string" && /^Q\d+$/i.test(q));
+
+    if (instanceQids.length) {
+      const primary = instanceQids[0];
+      const tagLabel = labelMap[primary] || primary;
+      tagsHTML += `<span class="hero-tag">${tagLabel}</span>`;
+    }
+  }
+
+  // === Detect humans ===
+  const isHuman = instanceQids.includes("Q947");
+
+  // === 5. Pseudonym (P24) for humans ===
+  if (isHuman && claims["P24"] && claims["P24"].length) {
+    const pseudoStmt = claims["P24"][0];
+    const pseudoQid = Utils.firstValue(pseudoStmt);
+    if (pseudoQid && labelMap[pseudoQid]) {
+      displayLabel = `${baseLabel} (${labelMap[pseudoQid]})`;
+    }
+  }
+
+  // === 6. Place coordinate tag (P26) ===
+  let coordsHTML = "";
+  if (claims["P26"] && claims["P26"].length) {
+    const cStmt = claims["P26"][0];
+    const v = Utils.firstValue(cStmt);
+    const parts = typeof v === "string" ? v.split(",") : [];
+    const lat = parseFloat(parts[0]);
+    const lon = parseFloat(parts[1]);
+    if (!isNaN(lat) && !isNaN(lon)) {
+      coordsHTML = `<span class="hero-coords">📍 ${lat.toFixed(3)}, ${lon.toFixed(3)}</span>`;
+    }
+  }
+
+  // === 7. Render hero block ===
+  return `
+    <div class="hero-header">
+      ${heroImgHTML}
+      <div class="hero-text">
+        <h1>${displayLabel}</h1>
+        ${desc ? `<p class="hero-desc">${desc}</p>` : ""}
+        <div class="hero-tags">
+          ${tagsHTML}
+          ${coordsHTML}
+        </div>
+      </div>
+    </div>
+  `;
+}
+   
    
   // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
