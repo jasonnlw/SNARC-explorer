@@ -583,11 +583,8 @@ const values = stmts
     // --- HTML layout -------------------------------------------------
     return `
       <section class="card entity-layout">
-        <h2>${title}</h2>
-        ${desc ? `<p>${desc}</p>` : ""}
-
+        ${renderHeroHeader(entity, lang, labelMap)}
         ${tilesHTML}
-
         <!-- 2. Family tree (only for humans; content injected in postRender) -->
         ${isHuman ? `
           <div id="familyChartContainer" class="family-tree-container"></div>
