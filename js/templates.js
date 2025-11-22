@@ -21,7 +21,8 @@ window.Templates = (() => {
     P9:   "https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A$1",
     P91:  "https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/$1",
     P97:  "https://discovery.nationalarchives.gov.uk/details/c/$1",
-    P62:  "https://www.wikidata.org/wiki/$1"
+    P62:  "https://www.wikidata.org/wiki/$1",
+    P2:  "https://www.wikidata.org/wiki/$1" 
   };
 
   // ---------- Helpers ----------
