@@ -11,20 +11,42 @@ window.Utils = (() => {
     const snak = claim.mainsnak;
     if (!snak.datavalue) return undefined;
     const { type, value } = snak.datavalue;
+
     switch (type) {
-      case "wikibase-entityid": return "Q" + value["numeric-id"];
-      case "time": return value.time;
-      case "monolingualtext": return value.text;
+
+      case "wikibase-entityid":
+        // Standard QID extraction
+        return "Q" + value["numeric-id"];
+
+      case "time":
+        // Return raw time string (+1950-01-01T00:00:00Z)
+        return value.time;
+
+      case "monolingualtext":
+        return value.text;
+
       case "string":
       case "url":
-      case "external-id": return value;
-      case "quantity": return value.amount;
-      case "globecoordinate": return `${value.lat},${value.lon}`;
-      default: return undefined;
+      case "external-id":
+        // --- FIX: extract QID if the string contains a Wikidata URL ---
+        if (typeof value === "string") {
+          const qMatch = value.match(/Q\d+/i);
+          if (qMatch) return qMatch[0]; // Return 'Q12345'
+        }
+        return value;
+
+      case "quantity":
+        return value.amount;
+
+      case "globecoordinate":
+        return `${value.lat},${value.lon}`;
+
+      default:
+        return undefined;
     }
   }
 
-  // --- Format time string (e.g., +1953-05-12T00:00:00Z → 1953-05-12) ---
+  // --- Format time string (legacy, used only when needed) ---
   const formatTime = (t) =>
     typeof t === "string" && t.startsWith("+") ? t.slice(1, 11) : t;
 
