@@ -78,11 +78,12 @@ function formatSnarcDateFromSnak(stmt) {
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
 
-    const qid = normalizeQid(value);
-    if (qid) {
-      const label = labelMap[qid] || qid;
-      return `<a href="#/item/${qid}">${label}</a>`;
-    }
+     // Force some properties to use ID_URL even if value is a QID
+if (ID_URL[pid]) {
+  const encoded = encodeURIComponent(String(value).trim());
+  const url = ID_URL[pid].replace(/\$1/g, encoded);
+  return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
+}
 
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
