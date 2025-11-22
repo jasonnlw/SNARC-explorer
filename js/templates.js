@@ -359,111 +359,212 @@ const values = statements
     return strVal;
   }
 
-  function renderProfileBox(claims, labelMap, lang) {
-    const items = [];
+// =======================================
+// === BOX 1 — PROFILE INFORMATION =======
+// =======================================
 
-    for (const pid of PROFILE_ORDER) {
-      const stmts = claims[pid];
-      if (!stmts || !stmts.length) continue;
+function renderProfileBox(entity, lang, labelMap) {
+  const claims = entity.claims || {};
+  const rows = [];
 
-      const cleanPid = pid.replace(/^.*[\/#]/, "");
-      const propInfo = window.PROPERTY_INFO?.[cleanPid];
-      const label = propInfo
-        ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
-        : cleanPid;
+  // Helper: extract one value, respecting datatype
+  function getValue(pid) {
+    if (!claims[pid] || !claims[pid].length) return null;
 
-      if (!label) continue;
+    const stmt = claims[pid][0];
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const datatype = (propInfo?.datatype || "").toLowerCase();
 
-const values = stmts
-  .map(stmt => {
-    const propInfo = window.PROPERTY_INFO?.[cleanPid];
-    const datatype = propInfo?.datatype || "String";
+    // time → precision-aware format
+    if (datatype === "time") return formatSnarcDateFromSnak(stmt);
 
-    // precision-aware date handling
-    if (datatype === "time" || normalizeDatatype(datatype) === "time") {
-      return formatSnarcDateFromSnak(stmt);
-    }
-
+    // wikibase item
     const v = Utils.firstValue(stmt);
-    return renderProfileValue(cleanPid, v, labelMap, lang);
-  })
-  .filter(v => v !== undefined && v !== null && v !== "")
-  .join(", ");
-
-      if (!values) continue;
-
-      items.push(`<dt>${label}</dt><dd>${values}</dd>`);
+    if (typeof v === "string" && /^Q\d+$/i.test(v)) {
+      return labelMap[v] || v;
     }
 
-    if (!items.length) return "";
-
-    const heading = lang === "cy" ? "Manylion" : "Details";
-
-    return `
-      <div class="entity-tile entity-vals">
-        <h3>${heading}</h3>
-        <dl>
-          ${items.join("\n")}
-        </dl>
-      </div>`;
+    // normal strings
+    return v;
   }
 
-  // ---------- Box 2: Collections & identifiers ----------
-  function renderCollectionsBox(claims, labelMap, lang) {
-    const sections = [];
+  // =======================================
+  // 1. MERGED BIRTH / DEATH (Humans Only)
+  // =======================================
 
-    for (const group of COLLECTION_GROUPS) {
-      const rows = [];
+  const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947");
 
-      for (const pid of group.pids) {
-        const stmts = claims[pid];
-        if (!stmts || !stmts.length) continue;
+  if (isHuman) {
+    // Birth row
+    const dob = getValue("P17");
+    const pob = getValue("P21");
 
-        const labels = COLLECTION_LABELS[pid] || {};
-        const rowLabel = lang === "cy"
-          ? (labels.cy || labels.en || pid)
-          : (labels.en || labels.cy || pid);
+    let bornLine = "";
+    if (dob && pob) bornLine = `${dob} (${pob})`;
+    else if (dob) bornLine = dob;
+    else if (pob) bornLine = pob;
 
-        const propInfo = window.PROPERTY_INFO?.[pid];
-        const datatype = propInfo?.datatype || "String";
+    if (bornLine) {
+      rows.push(
+        `<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${bornLine}</dd>`
+      );
+    }
 
-        const values = stmts
-          .map(stmt => Utils.firstValue(stmt))
-          .filter(v => v !== undefined && v !== null && v !== "")
-          .map(v => renderValue(datatype, v, labelMap, lang, pid))
-          .join(", ");
+    // Death row
+    const dod = getValue("P18");
+    const pod = getValue("P22");
 
-        if (!values) continue;
+    let diedLine = "";
+    if (dod && pod) diedLine = `${dod} (${pod})`;
+    else if (dod) diedLine = dod;
+    else if (pod) diedLine = pod;
 
-        rows.push(`<dt>${rowLabel}</dt><dd>${values}</dd>`);
-      }
+    if (diedLine) {
+      rows.push(
+        `<dt>${lang === "cy" ? "Bu farw" : "Died"}</dt><dd>${diedLine}</dd>`
+      );
+    }
+  }
 
-      if (!rows.length) continue;
+  // ==================================================
+  // 2. STANDARD PROFILE PROPERTIES FOR BOX 1
+  // ==================================================
 
-      const title = lang === "cy" ? group.label_cy : group.label_en;
+  const PROFILE_ORDER = [
+    "P45","P13","P24","P20","P25","P23",
+    "P56","P53","P55","P54","P52",
+    "P76","P78","P81","P28","P72","P73",
+    "P27","P38","P63","P66","P70","P71",
+    "P65","P64","P88","P77","P79",
+    "P40","P41","P46","P47","P87","P89","P93","P95","P96"
+  ];
 
-      sections.push(`
-        <div class="collection-section">
-          <div class="collection-section-title">${title}</div>
-          <dl>
-            ${rows.join("\n")}
-          </dl>
-        </div>
+  for (const pid of PROFILE_ORDER) {
+    if (!claims[pid] || !claims[pid].length) continue;
+
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const label = (lang === "cy" ? propInfo?.label_cy : propInfo?.label_en) || pid;
+
+    const values = claims[pid]
+      .map(stmt => {
+        const v = Utils.firstValue(stmt);
+
+        // WikibaseItem
+        if (typeof v === "string" && /^Q\d+$/i.test(v)) {
+          return labelMap[v] || v;
+        }
+
+        // Literal string value (dates, pseudonym text, etc.)
+        return v;
+      })
+      .filter(Boolean)
+      .join(", ");
+
+    if (values) {
+      rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
+    }
+  }
+
+  // ============================================
+  // 3. MINI-MAP PREVIEW FOR PLACES (P26)
+  // ============================================
+
+  if (claims["P26"] && claims["P26"].length) {
+    const v = Utils.firstValue(claims["P26"][0]);
+    const [lat, lon] = (typeof v === "string" ? v.split(",") : []).map(Number);
+
+    if (!isNaN(lat) && !isNaN(lon)) {
+      const mapId = "map-" + Math.random().toString(36).slice(2);
+
+      rows.push(`
+        <dt>${lang === "cy" ? "Lleoliad" : "Location"}</dt>
+        <dd>
+          <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${mapId}">
+            <div id="${mapId}" class="map-thumb-canvas"></div>
+          </div>
+        </dd>
       `);
     }
-
-    if (!sections.length) return "";
-
-    const heading = lang === "cy"
-      ? "Casgliadau a dynodwyr"
-      : "Collections & identifiers";
-
-    return `
-      <div class="entity-tile entity-vals">
-        <h3>${heading}</h3>
-        ${sections.join("\n")}
-      </div>`;
   }
+
+  return `<div class="profile-box"><dl>${rows.join("")}</dl></div>`;
+}
+
+
+
+
+
+// =======================================
+// === BOX 2 — COLLECTIONS & IDENTIFIERS
+// =======================================
+
+function renderCollectionsBox(entity, lang, labelMap) {
+  const claims = entity.claims || {};
+  const groupsHTML = [];
+
+  for (const group of COLLECTION_GROUPS) {
+    const sectionRows = [];
+
+    for (const pid of group.pids) {
+      if (!claims[pid] || !claims[pid].length) continue;
+
+      const info = COLLECTION_LABELS[pid];
+      const rowLabel = info ? (lang === "cy" ? info.cy : info.en) : pid;
+
+      const links = claims[pid]
+        .map(stmt => {
+          const raw = Utils.firstValue(stmt);
+
+          // identifier link
+          if (ID_URL[pid]) {
+            const encoded = encodeURIComponent(String(raw));
+            const url = ID_URL[pid].replace(/\$1/g, encoded);
+            return `<a href="${url}" target="_blank" rel="noopener">${raw}</a>`;
+          }
+
+          // plain value
+          return raw;
+        })
+        .join(", ");
+
+      sectionRows.push(`<dt>${rowLabel}</dt><dd>${links}</dd>`);
+    }
+
+    if (sectionRows.length) {
+      const sectionTitle = lang === "cy" ? group.label_cy : group.label_en;
+
+      groupsHTML.push(`
+        <section class="collection-group">
+          <h3>${sectionTitle}</h3>
+          <dl>${sectionRows.join("")}</dl>
+        </section>
+      `);
+    }
+  }
+
+  return `<div class="collections-box">${groupsHTML.join("")}</div>`;
+}
+
+
+
+
+
+// =================================================
+// === MASTER RENDERER FOR BOX 1 + BOX 2 LAYOUT ====
+// =================================================
+
+function renderBoxes(entity, lang, labelMap) {
+  const profile = renderProfileBox(entity, lang, labelMap);
+  const collections = renderCollectionsBox(entity, lang, labelMap);
+
+  return `
+    <div class="box-wrapper">
+      <div class="box-col box-left">${profile}</div>
+      <div class="box-col box-right">${collections}</div>
+    </div>
+  `;
+}
+
 
   // ---------- Generic entity render ----------
   async function renderGeneric(entity, lang, labelMap = {}) {
@@ -577,16 +678,8 @@ const values = stmts
     } // end mediaStmts check
 
     // --- Profile + collections tiles ---------------------------------
-    const profileBoxHTML = renderProfileBox(claims, labelMap, lang);
-    const collectionsBoxHTML = renderCollectionsBox(claims, labelMap, lang);
+const tilesHTML = renderBoxes(entity, lang, labelMap);
 
-    const tilesHTML = (profileBoxHTML || collectionsBoxHTML)
-      ? `
-        <div class="entity-two-col">
-          ${profileBoxHTML || ""}
-          ${collectionsBoxHTML || ""}
-        </div>`
-      : "";
 
     // --- HTML layout -------------------------------------------------
     return `
