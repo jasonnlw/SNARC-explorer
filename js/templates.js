@@ -147,7 +147,7 @@ window.Templates = (() => {
   ];
 
   // Only these Box 1 properties get hyperlinks for non-image/non-map values
-  const PROFILE_LINKABLE = new Set(["P7","P45","P13","P20","P25","P81","P26"]);
+  const PROFILE_LINKABLE = new Set(["P96","P89","P79","P77","P88","P64","P65","P71","P70","P66","P63","P38","P27","P73","P78","P76","P52","P54","P55","P53","P56","P23","P21","P22"]);
 
   const COLLECTION_LABELS = {
     P12: { en: "Archives and Manuscripts Authority", cy: "Awdurdod Archifau a Llawysgrifau" },
