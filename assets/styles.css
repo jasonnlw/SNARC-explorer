@@ -623,22 +623,34 @@ a { color: #0645ad; }
   color: #444;
 }
 
-/* === mobile HEADER === */
+
+/* mobile header */
+
 @media (max-width: 600px) {
   .hero-header {
+    display: flex;
     flex-direction: column;
+    align-items: center;
     text-align: center;
-    padding: 20px 16px; /* reduced padding for compact look */
+    padding: 20px 16px; /* slightly reduced vertical padding */
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centers everything inside hero-text */
+  }
+
+  .hero-tags {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
   }
 
   .hero-image img {
     width: 110px;
     height: 110px;
   }
-
-  /* Center the tags on mobile */
-  .hero-tags {
-    justify-content: center;
-  }
 }
-
