@@ -570,3 +570,67 @@ a { color: #0645ad; }
   padding-left: .5rem;
 }
 
+/* === HERO HEADER === */
+
+.hero-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 32px 16px;
+}
+
+.hero-image img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.hero-text h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.hero-desc {
+  margin: 4px 0 12px;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-tag {
+  background: #EEE;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.hero-tag.place {
+  background: #d0e8ff;
+  color: #045396;
+}
+
+.hero-coords {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* === Mobile version === */
+@media (max-width: 600px) {
+  .hero-header {
+    flex-direction: column;
+    text-align: center;
+  }
+  .hero-image img {
+    width: 120px;
+    height: 120px;
+  }
+}
