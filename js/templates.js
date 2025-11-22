@@ -124,13 +124,21 @@ function renderHeroHeader(entity, lang, labelMap = {}) {
   const isHuman = instanceQids.includes("Q947");
 
   // === 5. Pseudonym (P24) for humans ===
-  if (isHuman && claims["P24"] && claims["P24"].length) {
-    const pseudoStmt = claims["P24"][0];
-    const pseudoQid = Utils.firstValue(pseudoStmt);
-    if (pseudoQid && labelMap[pseudoQid]) {
-      displayLabel = `${baseLabel} (${labelMap[pseudoQid]})`;
-    }
+if (isHuman && claims["P24"] && claims["P24"].length) {
+  const pseudoStmt = claims["P24"][0];
+  const v = Utils.firstValue(pseudoStmt);
+
+  // If literal string pseudonym → use it directly
+  if (typeof v === "string" && !/^Q\d+$/i.test(v)) {
+    displayLabel = `${baseLabel} (${v})`;
   }
+
+  // If the pseudonym is a QID → look up labelMap as before
+  else if (/^Q\d+$/i.test(v) && labelMap[v]) {
+    displayLabel = `${baseLabel} (${labelMap[v]})`;
+  }
+}
+
 
   // === 6. Place coordinate tag (P26) ===
   let coordsHTML = "";
