@@ -527,4 +527,46 @@ a { color: #0645ad; }
   }
 }
 
+/* === Entity profile tiles layout === */
+.entity-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+}
+
+@media (max-width: 768px) {
+  .entity-two-col {
+    grid-template-columns: 1fr;
+  }
+}
+
+.entity-tile {
+  border: 1px solid #e5e5e5;
+  border-radius: 12px;
+  padding: 1.25rem;
+  background: #fafafa;
+}
+
+.entity-vals dl {
+  margin: 0;
+}
+
+.entity-vals dt {
+  font-weight: 600;
+  margin-top: 0.75rem;
+}
+
+.entity-vals dd {
+  margin: 0.2rem 0 0.6rem 0;
+}
+
+/* Collection section headings */
+.collection-section-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 1rem;
+  border-left: 4px solid #0b7e5c;
+  padding-left: .5rem;
+}
 
