@@ -130,13 +130,6 @@ if (ID_URL[pid]) {
               </div>`;
     }
 
-    // 🔗 Identifier links
-    if (ID_URL[pid]) {
-      const encoded = encodeURIComponent(String(value).trim());
-      const url = ID_URL[pid].replace(/\$1/g, encoded);
-      return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
-    }
-
     if (dtNorm === "url") {
       const v = String(value).trim();
       return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
