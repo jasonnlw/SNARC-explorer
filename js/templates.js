@@ -140,7 +140,7 @@ window.Templates = (() => {
     "P24","P22","P20","P25","P23",
     "P56","P53","P55","P54","P52",
     "P76","P78","P81","P28","P72","P73",
-    "P26","P27","P38","P63","P66","P70","P71",
+    "P27","P38","P63","P66","P70","P71",
     "P65","P64","P88","P77","P79",
     "P40","P41","P46","P47","P87","P89","P93","P95","P96",
     "P31" // image
@@ -258,7 +258,7 @@ window.Templates = (() => {
 
     if (!items.length) return "";
 
-    const heading = lang === "cy" ? "Proffil" : "Profile";
+    const heading = lang === "cy" ? "Manylion" : "Details";
 
     return `
       <div class="entity-tile entity-vals">
