@@ -195,7 +195,7 @@ const values = statements
     P10: { en: "VIAF",                               cy: "VIAF" },
     P11: { en: "Library of Congress Authority",      cy: "Awdurdod Llyfrgell y Gyngres" },
     P97: { en: "National Archives Authority",        cy: "Awdurdod Archifau Cenedlaethol" },
-    P62: { en: "Wikidata",                           cy: "Wikidata" }
+    P2: { en: "Wikidata",                           cy: "Wikidata" }
   };
 
   const COLLECTION_GROUPS = [
