@@ -623,14 +623,22 @@ a { color: #0645ad; }
   color: #444;
 }
 
-/* === Mobile version === */
+/* === mobile HEADER === */
 @media (max-width: 600px) {
   .hero-header {
     flex-direction: column;
     text-align: center;
+    padding: 20px 16px; /* reduced padding for compact look */
   }
+
   .hero-image img {
-    width: 120px;
-    height: 120px;
+    width: 110px;
+    height: 110px;
+  }
+
+  /* Center the tags on mobile */
+  .hero-tags {
+    justify-content: center;
   }
 }
+
