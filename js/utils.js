@@ -25,15 +25,16 @@ window.Utils = (() => {
       case "monolingualtext":
         return value.text;
 
-      case "string":
-      case "url":
-      case "external-id":
-        // --- FIX: extract QID if the string contains a Wikidata URL ---
-        if (typeof value === "string") {
-          const qMatch = value.match(/Q\d+/i);
-          if (qMatch) return qMatch[0]; // Return 'Q12345'
-        }
-        return value;
+case "string":
+case "url":
+case "external-id":
+  // Only P2 needs QID extraction from a full Wikidata URL
+  if (snak.property === "P2" && typeof value === "string") {
+    const qMatch = value.match(/Q\d+/i);
+    if (qMatch) return qMatch[0];  // return just the QID
+  }
+  return value;
+
 
       case "quantity":
         return value.amount;
