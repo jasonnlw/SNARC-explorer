@@ -20,7 +20,8 @@ window.Templates = (() => {
     P83:  "https://historicplacenames.rcahmw.gov.uk/placenames/recordedname/$1",
     P9:   "https://isni.oclc.org/xslt/DB=1.2/CMD?ACT=SRCH&IKT=8006&TRM=ISN%3A$1",
     P91:  "https://www.comisiynyddygymraeg.cymru/rhestr-enwau-lleoedd-safonol-cymru/$1",
-    P97:  "https://discovery.nationalarchives.gov.uk/details/c/$1"
+    P97:  "https://discovery.nationalarchives.gov.uk/details/c/$1",
+    P62:  "https://www.wikidata.org/wiki/$1"
   };
 
   // ---------- Helpers ----------
@@ -34,6 +35,9 @@ window.Templates = (() => {
     if (typeof Utils?.firstValue === "function") {
       const v = Utils.firstValue(stmt);
       if (typeof v === "string" && /^Q\d+$/i.test(v)) return v;
+      if (v && typeof v === "object" && typeof v.id === "string" && /^Q\d+$/i.test(v.id)) {
+        return v.id;
+      }
     }
     const id = stmt?.mainsnak?.datavalue?.value?.id;
     if (typeof id === "string" && /^Q\d+$/i.test(id)) return id;
@@ -112,7 +116,7 @@ window.Templates = (() => {
     return String(value);
   }
 
-  // ---------- Property rows ----------
+  // ---------- Property rows (legacy, kept for compatibility) ----------
   function renderClaimRow(pid, statements, labelMap, lang) {
     const cleanPid = pid.replace(/^.*[\/#]/, "");
     const propInfo = window.PROPERTY_INFO?.[cleanPid];
@@ -123,11 +127,203 @@ window.Templates = (() => {
 
     const values = statements
       .map(stmt => Utils.firstValue(stmt))
-      .filter(v => v !== undefined)
+      .filter(v => v !== undefined && v !== null && v !== "")
       .map(v => renderValue(datatype, v, labelMap, lang, cleanPid))
       .join(", ");
 
     return `<tr><th>${label}</th><td>${values}</td></tr>`;
+  }
+
+  // ---------- Profile & collections configuration ----------
+  const PROFILE_ORDER = [
+    "P7","P45","P13","P17","P21","P18",
+    "P24","P22","P20","P25","P23",
+    "P56","P53","P55","P54","P52",
+    "P76","P78","P81","P28","P72","P73",
+    "P26","P27","P38","P63","P66","P70","P71",
+    "P65","P64","P88","P77","P79",
+    "P40","P41","P46","P47","P87","P89","P93","P95","P96",
+    "P31" // image
+  ];
+
+  // Only these Box 1 properties get hyperlinks for non-image/non-map values
+  const PROFILE_LINKABLE = new Set(["P7","P45","P13","P20","P25","P81","P26"]);
+
+  const COLLECTION_LABELS = {
+    P12: { en: "Archives and Manuscripts Authority", cy: "Awdurdod Archifau a Llawysgrifau" },
+    P102:{ en: "Published Works",                    cy: "Gweithiau Cyhoeddedig" },
+    P108:{ en: "Clip Cymru Content",                 cy: "Cynnwys Clip Cymru" },
+    P5:  { en: "Welsh Biography Article (English)",  cy: "Erthygl yn y Bywgraffiadur (Saesneg)" },
+    P6:  { en: "Welsh Biography Article (Welsh)",    cy: "Erthygl yn y Bywgraffiadur (Cymraeg)" },
+    P90: { en: "Repertory of Welsh Manuscripts: Place",
+           cy: "Repertory of Welsh Manuscripts: Lleoliad" },
+
+    P68: { en: "CADW Listed Buildings",              cy: "Adeiladau Rhestredig CADW" },
+    P69: { en: "Coflein",                             cy: "Coflein" },
+    P83: { en: "Historic Place Names of Wales",      cy: "Enwau Lleoedd Hanesyddol Cymru" },
+    P84: { en: "CADW Monuments",                     cy: "Henebion CADW" },
+    P91: { en: "Standard Welsh Place-names",         cy: "Enwau Lleoedd Safonol Cymru" },
+
+    P9:  { en: "ISNI",                               cy: "ISNI" },
+    P10: { en: "VIAF",                               cy: "VIAF" },
+    P11: { en: "Library of Congress Authority",      cy: "Awdurdod Llyfrgell y Gyngres" },
+    P97: { en: "National Archives Authority",        cy: "Awdurdod Archifau Cenedlaethol" },
+    P62: { en: "Wikidata",                           cy: "Wikidata" }
+  };
+
+  const COLLECTION_GROUPS = [
+    {
+      id: "nlw",
+      pids: ["P12","P102","P108","P5","P6","P90"],
+      label_en: "National Library of Wales",
+      label_cy: "Llyfrgell Genedlaethol Cymru"
+    },
+    {
+      id: "welsh",
+      pids: ["P68","P69","P83","P84","P91"],
+      label_en: "Other Welsh Sources",
+      label_cy: "Ffynonellau Cymraeg Eraill"
+    },
+    {
+      id: "ids",
+      pids: ["P9","P10","P11","P97","P62"],
+      label_en: "Other Identifiers",
+      label_cy: "Dynodwyr Eraill"
+    }
+  ];
+
+  // ---------- Box 1: Profile renderer ----------
+  function renderProfileValue(pid, value, labelMap, lang) {
+    const cleanPid = pid.replace(/^.*[\/#]/, "");
+    if (value == null) return "";
+
+    // Images (P31) and coordinates (P26) use the generic renderer so
+    // we keep the existing thumbnail + map behaviour.
+    if (cleanPid === "P31" || cleanPid === "P26") {
+      const propInfo = window.PROPERTY_INFO?.[cleanPid];
+      const datatype = propInfo?.datatype || "String";
+      return renderValue(datatype, value, labelMap, lang, cleanPid);
+    }
+
+    const qid = normalizeQid(value);
+    if (qid) {
+      const label = labelMap[qid] || qid;
+      if (PROFILE_LINKABLE.has(cleanPid)) {
+        return `<a href="#/item/${qid}">${label}</a>`;
+      }
+      return label;
+    }
+
+    const propInfo = window.PROPERTY_INFO?.[cleanPid];
+    const datatype = propInfo?.datatype || "String";
+    const dtNorm = normalizeDatatype(datatype);
+    const strVal = String(value);
+
+    // Only selected properties are hyperlinkable; for them we reuse
+    // the generic renderer so identifier/URL logic is preserved.
+    if (PROFILE_LINKABLE.has(cleanPid)) {
+      return renderValue(datatype, value, labelMap, lang, cleanPid);
+    }
+
+    if (dtNorm === "time") return Utils.formatTime(value);
+    if (dtNorm === "quantity") return strVal.replace(/^\+/, "");
+    return strVal;
+  }
+
+  function renderProfileBox(claims, labelMap, lang) {
+    const items = [];
+
+    for (const pid of PROFILE_ORDER) {
+      const stmts = claims[pid];
+      if (!stmts || !stmts.length) continue;
+
+      const cleanPid = pid.replace(/^.*[\/#]/, "");
+      const propInfo = window.PROPERTY_INFO?.[cleanPid];
+      const label = propInfo
+        ? (lang === "cy" && propInfo.label_cy ? propInfo.label_cy : propInfo.label_en)
+        : cleanPid;
+
+      if (!label) continue;
+
+      const values = stmts
+        .map(stmt => Utils.firstValue(stmt))
+        .filter(v => v !== undefined && v !== null && v !== "")
+        .map(v => renderProfileValue(cleanPid, v, labelMap, lang))
+        .join(", ");
+
+      if (!values) continue;
+
+      items.push(`<dt>${label}</dt><dd>${values}</dd>`);
+    }
+
+    if (!items.length) return "";
+
+    const heading = lang === "cy" ? "Proffil" : "Profile";
+
+    return `
+      <div class="entity-tile entity-vals">
+        <h3>${heading}</h3>
+        <dl>
+          ${items.join("\n")}
+        </dl>
+      </div>`;
+  }
+
+  // ---------- Box 2: Collections & identifiers ----------
+  function renderCollectionsBox(claims, labelMap, lang) {
+    const sections = [];
+
+    for (const group of COLLECTION_GROUPS) {
+      const rows = [];
+
+      for (const pid of group.pids) {
+        const stmts = claims[pid];
+        if (!stmts || !stmts.length) continue;
+
+        const labels = COLLECTION_LABELS[pid] || {};
+        const rowLabel = lang === "cy"
+          ? (labels.cy || labels.en || pid)
+          : (labels.en || labels.cy || pid);
+
+        const propInfo = window.PROPERTY_INFO?.[pid];
+        const datatype = propInfo?.datatype || "String";
+
+        const values = stmts
+          .map(stmt => Utils.firstValue(stmt))
+          .filter(v => v !== undefined && v !== null && v !== "")
+          .map(v => renderValue(datatype, v, labelMap, lang, pid))
+          .join(", ");
+
+        if (!values) continue;
+
+        rows.push(`<dt>${rowLabel}</dt><dd>${values}</dd>`);
+      }
+
+      if (!rows.length) continue;
+
+      const title = lang === "cy" ? group.label_cy : group.label_en;
+
+      sections.push(`
+        <div class="collection-section">
+          <div class="collection-section-title">${title}</div>
+          <dl>
+            ${rows.join("\n")}
+          </dl>
+        </div>
+      `);
+    }
+
+    if (!sections.length) return "";
+
+    const heading = lang === "cy"
+      ? "Casgliadau a dynodwyr"
+      : "Collections & identifiers";
+
+    return `
+      <div class="entity-tile entity-vals">
+        <h3>${heading}</h3>
+        ${sections.join("\n")}
+      </div>`;
   }
 
   // ---------- Generic entity render ----------
@@ -180,25 +376,6 @@ window.Templates = (() => {
     }
 
     window.currentWikidataId = wikidataId;
-    // Optional: debug
-    // console.log("DEBUG renderGeneric:", { isHuman, hasFamily, wikidataId, P62: claims["P62"] });
-
-    // --- Coordinates (P26) -------------------------------------------
-    let mapHTML = "";
-    const coordStmts = claims["P26"];
-    if (coordStmts && coordStmts.length) {
-      const dv = coordStmts[0]?.mainsnak?.datavalue;
-      if (dv?.type === "globecoordinate" && dv.value) {
-        const { latitude: lat, longitude: lon } = dv.value;
-        if (isFinite(lat) && isFinite(lon)) {
-          const id = `map-${Math.random().toString(36).slice(2)}`;
-          mapHTML = `
-            <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${id}">
-              <div id="${id}" class="map-thumb-canvas"></div>
-            </div>`;
-        }
-      }
-    }
 
     // --- IIIF image gallery (P50) ------------------------------------
     let galleryHTML = "";
@@ -260,10 +437,17 @@ window.Templates = (() => {
       }
     } // end mediaStmts check
 
-    // --- Property table (exclude family/map/media props) -------------
-    const rows = Object.keys(claims)
-      .filter(pid => !["P26","P50","P52","P53","P54","P55","P56"].includes(pid))
-      .map(pid => renderClaimRow(pid, claims[pid], labelMap, lang));
+    // --- Profile + collections tiles ---------------------------------
+    const profileBoxHTML = renderProfileBox(claims, labelMap, lang);
+    const collectionsBoxHTML = renderCollectionsBox(claims, labelMap, lang);
+
+    const tilesHTML = (profileBoxHTML || collectionsBoxHTML)
+      ? `
+        <div class="entity-two-col">
+          ${profileBoxHTML || ""}
+          ${collectionsBoxHTML || ""}
+        </div>`
+      : "";
 
     // --- HTML layout -------------------------------------------------
     return `
@@ -271,16 +455,12 @@ window.Templates = (() => {
         <h2>${title}</h2>
         ${desc ? `<p>${desc}</p>` : ""}
 
-        <!-- 1. Data table (moved to top) -->
-        <table class="wikidata"><tbody>${rows.join("")}</tbody></table>
+        ${tilesHTML}
 
         <!-- 2. Family tree (only for humans; content injected in postRender) -->
         ${isHuman ? `
           <div id="familyChartContainer" class="family-tree-container"></div>
         ` : ""}
-
-        <!-- 3. Map (if present) -->
-        ${mapHTML}
 
         <!-- 4. IIIF image gallery -->
         ${galleryHTML}
