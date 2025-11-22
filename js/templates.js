@@ -57,6 +57,34 @@ window.Templates = (() => {
     return ids;
   }
 
+// ------- SNARC Date Formatter -------
+function formatSnarcDate(value) {
+  if (!value) return "";
+
+  // value can be: { time: '+1913-01-01T00:00:00Z', precision: 11 }
+  // or it may already be a string '1913-01-01'
+  const time = value.time || value.value || value;
+  const precision = value.precision || value.prec || 11;
+
+  // Extract YYYY-MM-DD
+  const match = String(time).match(/(\d{4})-(\d{2})-(\d{2})/);
+  if (!match) return String(time);
+
+  const [, year, month, day] = match;
+
+  // Precision rules:
+  // 11 = day precision
+  // 10 = month precision
+  // 9  = year precision
+  if (precision >= 11) {
+    return `${day}-${month}-${year}`;         // dd-mm-yyyy
+  }
+  if (precision === 10) {
+    return `${month}-${year}`;                // mm-yyyy
+  }
+  return year;                                // yyyy
+}
+   
   // ---------- Value renderer ----------
   function renderValue(datatype, value, labelMap, lang, pid) {
     if (value == null) return "";
@@ -226,7 +254,7 @@ window.Templates = (() => {
       return renderValue(datatype, value, labelMap, lang, cleanPid);
     }
 
-    if (dtNorm === "time") return Utils.formatTime(value);
+    if (dtNorm === "time") return formatSnarcDate(value);
     if (dtNorm === "quantity") return strVal.replace(/^\+/, "");
     return strVal;
   }
