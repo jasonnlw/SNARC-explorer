@@ -904,28 +904,56 @@ a { color: #0645ad; }
   opacity: 0.75;
 }
 
-/* CATEGORY COLOURS — Brand-harmonised */
+/* ==========================================
+   BOX 1 — pill buttons (using user palette)
+   ========================================== */
+
+.box1-link-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  margin: 3px 6px 3px 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  white-space: nowrap;
+}
+
+.box1-link-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.box1-link-pill:active {
+  opacity: 0.75;
+}
+
+/* CATEGORY COLOURS — EXACT USER PALETTE */
 .box1-pill-family {
-  background: #1A9A77;   /* Teal-green (friendly) */
+  background: #FA0808;     /* RED */
 }
 
 .box1-pill-place {
-  background: #309898;   /* NLW Banner Green */
+  background: #309898;     /* DEEP TEAL */
 }
 
 .box1-pill-education {
-  background: #0A5F73;   /* Deep blue-green (academic) */
+  background: #FFB233;     /* AMBER */
 }
 
 .box1-pill-default {
-  background: #6A8E7F;   /* Muted sage supporting tone */
+  background: #5FCD96;     /* SOFT GREEN */
 }
 
-/* Right-arrow icon */
+/* Arrow icon */
 .box1-link-pill::after {
   content: "›";
   margin-left: 10px;
   font-weight: 700;
 }
+
 
 
