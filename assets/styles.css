@@ -904,27 +904,28 @@ a { color: #0645ad; }
   opacity: 0.75;
 }
 
-/* CATEGORY COLOURS — FLAT SOLID VERSIONS */
+/* CATEGORY COLOURS — Brand-harmonised */
 .box1-pill-family {
-  background: #3B82F6;     /* blue */
+  background: #1A9A77;   /* Teal-green (friendly) */
 }
 
 .box1-pill-place {
-  background: #0B7E5C;     /* NLW green */
+  background: #0B7E5C;   /* NLW Banner Green */
 }
 
 .box1-pill-education {
-  background: #8B5CF6;     /* purple */
+  background: #0A5F73;   /* Deep blue-green (academic) */
 }
 
 .box1-pill-default {
-  background: #14B8A6;     /* teal */
+  background: #6A8E7F;   /* Muted sage supporting tone */
 }
 
-/* Optional arrow icon */
+/* Right-arrow icon */
 .box1-link-pill::after {
   content: "›";
   margin-left: 10px;
   font-weight: 700;
 }
+
 
