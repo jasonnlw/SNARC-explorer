@@ -876,3 +876,55 @@ a { color: #0645ad; }
   margin-bottom: 0.75rem; /* subtle but compact */
   font-size: 1.15rem;     /* slightly smaller if desired */
 }
+
+/* ==========================================
+   BOX 1 — pill buttons for entity links (flat colours)
+   ========================================== */
+
+.box1-link-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  margin: 3px 6px 3px 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  white-space: nowrap;
+}
+
+.box1-link-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.box1-link-pill:active {
+  opacity: 0.75;
+}
+
+/* CATEGORY COLOURS — FLAT SOLID VERSIONS */
+.box1-pill-family {
+  background: #3B82F6;     /* blue */
+}
+
+.box1-pill-place {
+  background: #0B7E5C;     /* NLW green */
+}
+
+.box1-pill-education {
+  background: #8B5CF6;     /* purple */
+}
+
+.box1-pill-default {
+  background: #14B8A6;     /* teal */
+}
+
+/* Optional arrow icon */
+.box1-link-pill::after {
+  content: "›";
+  margin-left: 10px;
+  font-weight: 700;
+}
+
