@@ -369,28 +369,30 @@ function renderProfileBox(entity, lang, labelMap) {
 
   // Helper to format values with link logic
   function formatValue(pid, stmt) {
-  const propInfo = window.PROPERTY_INFO?.[pid];
-  const datatype = (propInfo?.datatype || "").toLowerCase();
-  const v = Utils.firstValue(stmt);
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const datatype = propInfo?.datatype || "String";
+    const dtNorm = normalizeDatatype(datatype);
 
-  // 1. Linkable PIDs always use the full renderValue logic
-  if (PROFILE_LINKABLE.has(pid)) {
-    return renderValue(datatype, v, labelMap, lang, pid);
-  }
+    // Extract raw value from snak
+    const raw = Utils.firstValue(stmt);
 
-  // 2. Date formatting
-  if (datatype === "time") {
-    return formatSnarcDateFromSnak(stmt);
-  }
+    // 1. If property is linkable → use full hyperlink logic
+    if (PROFILE_LINKABLE.has(pid)) {
+        return renderValue(datatype, raw, labelMap, lang, pid);
+    }
 
-  // 3. QID → always convert to label, but not hyperlink unless linkable
-  if (typeof v === "string" && /^Q\d+$/i.test(v)) {
-    const label = labelMap[v] || v;
-    return label; // plain label (non-clickable)
-  }
+    // 2. Dates (time) → precision-aware formatting
+    if (dtNorm === "time") {
+        return formatSnarcDateFromSnak(stmt);
+    }
 
-  // 4. Anything else stays as is
-  return v;
+    // 3. QID (wikibase item) → label only (not link)
+    if (typeof raw === "string" && /^Q\d+$/i.test(raw)) {
+        return labelMap[raw] || raw;
+    }
+
+    // 4. Everything else → return as plain value
+    return raw;
 }
 
 
