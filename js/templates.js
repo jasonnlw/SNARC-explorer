@@ -367,127 +367,103 @@ function renderProfileBox(entity, lang, labelMap) {
   const claims = entity.claims || {};
   const rows = [];
 
-  // Helper: extract one value, respecting datatype
-  function getValue(pid) {
-    if (!claims[pid] || !claims[pid].length) return null;
-
-    const stmt = claims[pid][0];
+  // Helper to format values with link logic
+  function formatValue(pid, stmt) {
     const propInfo = window.PROPERTY_INFO?.[pid];
-    const datatype = (propInfo?.datatype || "").toLowerCase();
-
-    // time → precision-aware format
-    if (datatype === "time") return formatSnarcDateFromSnak(stmt);
-
-    // wikibase item
+    const datatype = propInfo?.datatype || "String";
     const v = Utils.firstValue(stmt);
+
+    // If this PID is linkable, use renderValue()
+    if (PROFILE_LINKABLE.has(pid)) {
+      return renderValue(datatype, v, labelMap, lang, pid);
+    }
+
+    // Time → formatted date
+    if ((propInfo?.datatype || "").toLowerCase() === "time") {
+      return formatSnarcDateFromSnak(stmt);
+    }
+
+    // Q item
     if (typeof v === "string" && /^Q\d+$/i.test(v)) {
       return labelMap[v] || v;
     }
 
-    // normal strings
     return v;
   }
 
-  // =======================================
-  // 1. MERGED BIRTH / DEATH (Humans Only)
-  // =======================================
-
+  // ========================
+  // MERGED BIRTH / DEATH
+  // ========================
   const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947");
 
   if (isHuman) {
-    // Birth row
-    const dob = getValue("P17");
-    const pob = getValue("P21");
-
-    let bornLine = "";
-    if (dob && pob) bornLine = `${dob} (${pob})`;
-    else if (dob) bornLine = dob;
-    else if (pob) bornLine = pob;
-
-    if (bornLine) {
-      rows.push(
-        `<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${bornLine}</dd>`
-      );
+    // Birth
+    const dob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
+    const pob = claims["P21"]?.[0] ? formatValue("P21", claims["P21"][0]) : null;
+    if (dob || pob) {
+      const combined = dob && pob ? `${dob} (${pob})`
+                    : dob || pob;
+      rows.push(`<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${combined}</dd>`);
     }
 
-    // Death row
-    const dod = getValue("P18");
-    const pod = getValue("P22");
-
-    let diedLine = "";
-    if (dod && pod) diedLine = `${dod} (${pod})`;
-    else if (dod) diedLine = dod;
-    else if (pod) diedLine = pod;
-
-    if (diedLine) {
-      rows.push(
-        `<dt>${lang === "cy" ? "Bu farw" : "Died"}</dt><dd>${diedLine}</dd>`
-      );
+    // Death
+    const dod = claims["P18"]?.[0] ? formatValue("P18", claims["P18"][0]) : null;
+    const pod = claims["P22"]?.[0] ? formatValue("P22", claims["P22"][0]) : null;
+    if (dod || pod) {
+      const combined = dod && pod ? `${dod} (${pod})`
+                    : dod || pod;
+      rows.push(`<dt>${lang === "cy" ? "Bu farw" : "Died"}</dt><dd>${combined}</dd>`);
     }
   }
 
-  // ==================================================
-  // 2. STANDARD PROFILE PROPERTIES FOR BOX 1
-  // ==================================================
-
-  const PROFILE_ORDER = [
-    "P45","P13","P24","P20","P25","P23",
-    "P56","P53","P55","P54","P52",
-    "P76","P78","P81","P28","P72","P73",
-    "P27","P38","P63","P66","P70","P71",
-    "P65","P64","P88","P77","P79",
-    "P40","P41","P46","P47","P87","P89","P93","P95","P96"
-  ];
-
+  // =======================================
+  // STANDARD PROFILE PROPERTIES
+  // =======================================
   for (const pid of PROFILE_ORDER) {
     if (!claims[pid] || !claims[pid].length) continue;
 
     const propInfo = window.PROPERTY_INFO?.[pid];
-    const label = (lang === "cy" ? propInfo?.label_cy : propInfo?.label_en) || pid;
+    const label = lang === "cy" ? propInfo?.label_cy : propInfo?.label_en;
 
     const values = claims[pid]
-      .map(stmt => {
-        const v = Utils.firstValue(stmt);
-
-        // WikibaseItem
-        if (typeof v === "string" && /^Q\d+$/i.test(v)) {
-          return labelMap[v] || v;
-        }
-
-        // Literal string value (dates, pseudonym text, etc.)
-        return v;
-      })
+      .map(stmt => formatValue(pid, stmt))
       .filter(Boolean)
       .join(", ");
 
-    if (values) {
-      rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
-    }
+    rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
   }
 
-  // ============================================
-  // 3. MINI-MAP PREVIEW FOR PLACES (P26)
-  // ============================================
-
+  // ============================
+  // MINI-MAP AS A SEPARATE CELL
+  // ============================
+  let mapHTML = "";
   if (claims["P26"] && claims["P26"].length) {
     const v = Utils.firstValue(claims["P26"][0]);
-    const [lat, lon] = (typeof v === "string" ? v.split(",") : []).map(Number);
-
+    const [lat, lon] = v.split(",").map(Number);
     if (!isNaN(lat) && !isNaN(lon)) {
       const mapId = "map-" + Math.random().toString(36).slice(2);
-
-      rows.push(`
-        <dt>${lang === "cy" ? "Lleoliad" : "Location"}</dt>
-        <dd>
+      mapHTML = `
+        <div class="profile-map-container">
           <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${mapId}">
             <div id="${mapId}" class="map-thumb-canvas"></div>
           </div>
-        </dd>
-      `);
+        </div>`;
     }
   }
 
-  return `<div class="profile-box"><dl>${rows.join("")}</dl></div>`;
+  // ============================
+  // RETURN NEW BOX 1 LAYOUT
+  // ============================
+  const heading = lang === "cy" ? "Gwybodaeth" : "Information";
+
+  return `
+    <div class="profile-box">
+      <h3 class="profile-header">${heading}</h3>
+      <div class="profile-inner">
+         <dl>${rows.join("")}</dl>
+         ${mapHTML}
+      </div>
+    </div>`;
 }
 
 
