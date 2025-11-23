@@ -33,11 +33,23 @@ body {
 
 .lang-switch button.active { border-color: #000; }
 
+/* ===== Remove frame on desktop ===== */
 main {
   max-width: 2500px;
   margin: 1rem auto;
-  padding: 0 1rem;
+  padding: 0; /* no page frame */
 }
+
+/* ===== Full-width mobile layout ===== */
+@media (max-width: 768px) {
+  main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+  }
+}
+
+
 
 .card {
   border: 1px solid #e5e5e5;
