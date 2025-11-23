@@ -635,12 +635,14 @@ function renderBoxes(entity, lang, labelMap) {
   const profile = renderProfileBox(entity, lang, labelMap);
   const collections = renderCollectionsBox(entity, lang, labelMap);
 
-  return `
+return `
+  <div class="box-wrapper-outer">
     <div class="box-wrapper">
       <div class="box-col box-left">${profile}</div>
       <div class="box-col box-right">${collections}</div>
     </div>
-  `;
+  </div>
+`;
 }
 
 
