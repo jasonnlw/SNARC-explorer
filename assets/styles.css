@@ -955,5 +955,12 @@ a { color: #0645ad; }
   font-weight: 700;
 }
 
+.id-icon {
+  width: 18px;
+  height: 18px;
+  fill: #FF9F00;
+  margin-right: 6px;
+  vertical-align: middle;
+}
 
 
