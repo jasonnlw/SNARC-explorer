@@ -570,7 +570,8 @@ function renderCollectionsBox(entity, lang, labelMap) {
         })
         .join(", ");
    
-      sectionRows.push(`<dt>${rowLabel}</dt><dd>${links}</dd>`);
+      const icon = window.ID_ICONS.getIdentifierIcon(pid);
+sectionRows.push(`<dt>${icon}${rowLabel}</dt><dd>${links}</dd>`);
     }
 
     if (sectionRows.length) {
