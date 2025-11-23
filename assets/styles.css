@@ -540,7 +540,7 @@ a { color: #0645ad; }
   display: flex;
   align-items: center;
   gap: 24px;
-  padding: 32px 0px;
+  padding: 15px 0px;
 }
 
 .hero-image img {
