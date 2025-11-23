@@ -527,49 +527,6 @@ a { color: #0645ad; }
   }
 }
 
-/* === Entity profile tiles layout === */
-.entity-two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-}
-
-@media (max-width: 768px) {
-  .entity-two-col {
-    grid-template-columns: 1fr;
-  }
-}
-
-.entity-tile {
-  border: 1px solid #e5e5e5;
-  border-radius: 12px;
-  padding: 1.25rem;
-  background: #fafafa;
-}
-
-.entity-vals dl {
-  margin: 0;
-}
-
-.entity-vals dt {
-  font-weight: 600;
-  margin-top: 0.75rem;
-}
-
-.entity-vals dd {
-  margin: 0.2rem 0 0.6rem 0;
-}
-
-/* Collection section headings */
-.collection-section-title {
-  font-size: 1.1rem;
-  font-weight: 700;
-  margin-top: 1rem;
-  border-left: 4px solid #0b7e5c;
-  padding-left: .5rem;
-}
-
 /* === HERO HEADER === */
 
 .hero-header {
@@ -653,4 +610,116 @@ a { color: #0645ad; }
     width: 110px;
     height: 110px;
   }
+}
+
+/* ============================================
+   NEW BOX 1 + BOX 2 TWO-COLUMN LAYOUT (Option A)
+   ============================================ */
+
+.box-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem 1rem;
+  background: #f5f5f5;
+  border-radius: 12px;
+}
+
+/* MOBILE: stack vertically */
+@media (max-width: 768px) {
+  .box-wrapper {
+    grid-template-columns: 1fr;
+    padding: 1.5rem 1rem;
+  }
+}
+
+.box-col {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* ==========================
+   BOX 1 — PROFILE (DL Layout)
+   ========================== */
+
+.profile-box dl {
+  margin: 0;
+}
+
+.profile-box dt {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  color: #333;
+}
+
+.profile-box dd {
+  margin: 0.2rem 0 0.8rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* First row slight spacing fix */
+.profile-box dt:first-child {
+  margin-top: 0.2rem;
+}
+
+/* ==========================
+   MAP THUMBNAIL IN BOX 1
+   ========================== */
+
+.profile-box .map-thumb {
+  height: 180px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* ==========================
+   BOX 2 — COLLECTION GROUPS
+   ========================== */
+
+.collections-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.collection-group h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0b7e5c;
+}
+
+.collection-group dl {
+  margin: 0;
+}
+
+.collection-group dt {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 0.9rem;
+  color: #333;
+}
+
+.collection-group dd {
+  margin: 0.2rem 0 0.8rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Link layout inside collections */
+.collection-group dd a {
+  text-decoration: none;
+  color: #0645ad;
+}
+
+.collection-group dd a:hover {
+  text-decoration: underline;
 }
