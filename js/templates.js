@@ -485,7 +485,8 @@ function renderProfileBox(entity, lang, labelMap) {
       .join(", ");
 
     if (values) {
-      rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
+      const icon = window.ID_ICONS.getIdentifierIcon(pid);
+rows.push(`<dt>${icon}${label}</dt><dd>${valueHTML}</dd>`);
     }
   }
 
