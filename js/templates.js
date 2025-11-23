@@ -368,7 +368,9 @@ const values = statements
     if (qid) {
       const label = labelMap[qid] || qid;
       if (PROFILE_LINKABLE.has(cleanPid)) {
-        return `<a href="#/item/${qid}" class="box1-entity-link">${label}</a>`;
+        const categoryClass = getBox1CategoryClass(pid);
+return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
+
       }
       return label;
     }
@@ -388,6 +390,27 @@ const values = statements
     if (dtNorm === "quantity") return strVal.replace(/^\+/, "");
     return strVal;
   }
+
+function getBox1CategoryClass(pid) {
+
+  // FAMILY CONNECTIONS
+  if (["P56", "P53", "P55", "P54", "P52"].includes(pid)) {
+    return "box1-pill-family";
+  }
+
+  // PLACES
+  if (["P21", "P22", "P20", "P27", "P91", "P38"].includes(pid)) {
+    return "box1-pill-place";
+  }
+
+  // EDUCATION
+  if (pid === "P23") {
+    return "box1-pill-education";
+  }
+
+  // DEFAULT
+  return "box1-pill-default";
+}
 
 // =======================================
 // === BOX 1 — PROFILE INFORMATION =======
