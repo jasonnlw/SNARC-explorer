@@ -424,40 +424,41 @@ function renderProfileBox(entity, lang, labelMap) {
   // Helper: smart value rendering for Box 1
   // ----------------------------------------
   function formatValue(pid, stmt) {
-    const propInfo = window.PROPERTY_INFO?.[pid];
-    const datatype = propInfo?.datatype || "String";
-    const dtNorm = normalizeDatatype(datatype);
+  const propInfo = window.PROPERTY_INFO?.[pid];
+  const datatype = propInfo?.datatype || "String";
+  const dtNorm = normalizeDatatype(datatype);
 
-    // Raw value extracted from the snak
-    const raw = Utils.firstValue(stmt);
+  // Extract raw value
+  const raw = Utils.firstValue(stmt);
 
-    // 1. LINKABLE PROPERTIES (internal or external)
-    if (PROFILE_LINKABLE.has(pid)) {
-      const qid = normalizeQid(raw);
+  // 1. LINKABLE INTERNAL ENTITIES (Q-IDs)
+  if (PROFILE_LINKABLE.has(pid)) {
+    const qid = normalizeQid(raw);
 
-      // Internal SNARC item → hyperlink to #/item/Qxx
-      if (qid) {
-        const label = labelMap[qid] || qid;
-        return `<a href="#/item/${qid}">${label}</a>`;
-      }
-
-      // External ID / Identifier → delegate to renderValue()
-      return renderValue(datatype, raw, labelMap, lang, pid);
+    if (qid) {
+      // Internal entity → pill-button
+      const label = labelMap[qid] || qid;
+      const categoryClass = getBox1CategoryClass(pid);
+      return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
     }
 
-    // 2. DATE / TIME VALUES → precision-aware formatting
-    if (dtNorm === "time") {
-      return formatSnarcDateFromSnak(stmt);
-    }
-
-    // 3. QIDs (non-linkable) → plain label only
-    if (typeof raw === "string" && /^Q\d+$/i.test(raw)) {
-      return labelMap[raw] || raw;
-    }
-
-    // 4. Fallback → string
-    return raw;
+    // External ID fallback → normal identifier logic
+    return renderValue(datatype, raw, labelMap, lang, pid);
   }
+
+  // 2. DATE / TIME VALUES
+  if (dtNorm === "time") {
+    return formatSnarcDateFromSnak(stmt);
+  }
+
+  // 3. QIDs (non-linkable)
+  if (typeof raw === "string" && /^Q\d+$/i.test(raw)) {
+    return labelMap[raw] || raw;
+  }
+
+  // 4. Fallback
+  return raw;
+}
 
   // ----------------------------------------
   // MERGED BIRTH / DEATH LINES (only for humans)
