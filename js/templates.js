@@ -377,9 +377,19 @@ function renderProfileBox(entity, lang, labelMap) {
     const raw = Utils.firstValue(stmt);
 
     // 1. If property is linkable → use full hyperlink logic
-    if (PROFILE_LINKABLE.has(pid)) {
-        return renderValue(datatype, raw, labelMap, lang, pid);
+    // For linkable properties:
+if (PROFILE_LINKABLE.has(pid)) {
+    const qid = normalizeQid(raw);
+
+    // If value is a QID → link to internal SNARC page
+    if (qid) {
+        const label = labelMap[qid] || qid;
+        return `<a href="#/item/${qid}">${label}</a>`;
     }
+
+    // Otherwise → delegate to renderValue (identifiers / external IDs)
+    return renderValue(datatype, raw, labelMap, lang, pid);
+}
 
     // 2. Dates (time) → precision-aware formatting
     if (dtNorm === "time") {
