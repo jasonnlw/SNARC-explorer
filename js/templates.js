@@ -397,73 +397,73 @@ function renderProfileBox(entity, lang, labelMap) {
   const claims = entity.claims || {};
   const rows = [];
 
-  // Helper to format values with link logic
+  // ----------------------------------------
+  // Helper: smart value rendering for Box 1
+  // ----------------------------------------
   function formatValue(pid, stmt) {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const datatype = propInfo?.datatype || "String";
     const dtNorm = normalizeDatatype(datatype);
 
-    // Extract raw value from snak
+    // Raw value extracted from the snak
     const raw = Utils.firstValue(stmt);
 
-    // 1. If property is linkable → use full hyperlink logic
-    // For linkable properties:
-if (PROFILE_LINKABLE.has(pid)) {
-    const qid = normalizeQid(raw);
+    // 1. LINKABLE PROPERTIES (internal or external)
+    if (PROFILE_LINKABLE.has(pid)) {
+      const qid = normalizeQid(raw);
 
-    // If value is a QID → link to internal SNARC page
-    if (qid) {
+      // Internal SNARC item → hyperlink to #/item/Qxx
+      if (qid) {
         const label = labelMap[qid] || qid;
         return `<a href="#/item/${qid}">${label}</a>`;
+      }
+
+      // External ID / Identifier → delegate to renderValue()
+      return renderValue(datatype, raw, labelMap, lang, pid);
     }
 
-    // Otherwise → delegate to renderValue (identifiers / external IDs)
-    return renderValue(datatype, raw, labelMap, lang, pid);
-}
-
-    // 2. Dates (time) → precision-aware formatting
+    // 2. DATE / TIME VALUES → precision-aware formatting
     if (dtNorm === "time") {
-        return formatSnarcDateFromSnak(stmt);
+      return formatSnarcDateFromSnak(stmt);
     }
 
-    // 3. QID (wikibase item) → label only (not link)
+    // 3. QIDs (non-linkable) → plain label only
     if (typeof raw === "string" && /^Q\d+$/i.test(raw)) {
-        return labelMap[raw] || raw;
+      return labelMap[raw] || raw;
     }
 
-    // 4. Everything else → return as plain value
+    // 4. Fallback → string
     return raw;
-}
+  }
 
-
-  // ========================
-  // MERGED BIRTH / DEATH
-  // ========================
+  // ----------------------------------------
+  // MERGED BIRTH / DEATH LINES (only for humans)
+  // ----------------------------------------
   const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947");
 
   if (isHuman) {
     // Birth
     const dob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
     const pob = claims["P21"]?.[0] ? formatValue("P21", claims["P21"][0]) : null;
+
     if (dob || pob) {
-      const combined = dob && pob ? `${dob} (${pob})`
-                    : dob || pob;
+      const combined = dob && pob ? `${dob} (${pob})` : (dob || pob);
       rows.push(`<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${combined}</dd>`);
     }
 
     // Death
     const dod = claims["P18"]?.[0] ? formatValue("P18", claims["P18"][0]) : null;
     const pod = claims["P22"]?.[0] ? formatValue("P22", claims["P22"][0]) : null;
+
     if (dod || pod) {
-      const combined = dod && pod ? `${dod} (${pod})`
-                    : dod || pod;
+      const combined = dod && pod ? `${dod} (${pod})` : (dod || pod);
       rows.push(`<dt>${lang === "cy" ? "Bu farw" : "Died"}</dt><dd>${combined}</dd>`);
     }
   }
 
-  // =======================================
-  // STANDARD PROFILE PROPERTIES
-  // =======================================
+  // ----------------------------------------
+  // STANDARD PROFILE PROPERTIES (trimmed list)
+  // ----------------------------------------
   for (const pid of PROFILE_ORDER) {
     if (!claims[pid] || !claims[pid].length) continue;
 
@@ -475,42 +475,50 @@ if (PROFILE_LINKABLE.has(pid)) {
       .filter(Boolean)
       .join(", ");
 
-    rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
+    if (values) {
+      rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
+    }
   }
 
-  // ============================
-  // MINI-MAP AS A SEPARATE CELL
-  // ============================
+  // ----------------------------------------
+  // MINI-MAP (BOTTOM OF BOX 1)
+  // ----------------------------------------
   let mapHTML = "";
   if (claims["P26"] && claims["P26"].length) {
-    const v = Utils.firstValue(claims["P26"][0]);
-    const [lat, lon] = v.split(",").map(Number);
+    const raw = Utils.firstValue(claims["P26"][0]);
+    const [lat, lon] = raw.split(",").map(Number);
+
     if (!isNaN(lat) && !isNaN(lon)) {
       const mapId = "map-" + Math.random().toString(36).slice(2);
+
       mapHTML = `
         <div class="profile-map-container">
-          <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${mapId}">
+          <div class="map-thumb"
+               data-lat="${lat}"
+               data-lon="${lon}"
+               data-mapid="${mapId}">
             <div id="${mapId}" class="map-thumb-canvas"></div>
           </div>
         </div>`;
     }
   }
 
-  // ============================
-  // RETURN NEW BOX 1 LAYOUT
-  // ============================
+  // ----------------------------------------
+  // FINAL RENDER
+  // ----------------------------------------
   const heading = lang === "cy" ? "Gwybodaeth" : "Information";
 
   return `
     <div class="profile-box">
       <h3 class="profile-header">${heading}</h3>
+
       <div class="profile-inner">
-         <dl>${rows.join("")}</dl>
-         ${mapHTML}
+        <dl>${rows.join("")}</dl>
       </div>
+
+      ${mapHTML}
     </div>`;
 }
-
 
 
 
