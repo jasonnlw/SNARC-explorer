@@ -148,7 +148,6 @@ if (isHuman && claims["P24"] && claims["P24"].length) {
         ${desc ? `<p class="hero-desc">${desc}</p>` : ""}
         <div class="hero-tags">
           ${tagsHTML}
-          ${coordsHTML}
         </div>
       </div>
     </div>
