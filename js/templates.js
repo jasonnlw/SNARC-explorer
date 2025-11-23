@@ -368,7 +368,7 @@ const values = statements
     if (qid) {
       const label = labelMap[qid] || qid;
       if (PROFILE_LINKABLE.has(cleanPid)) {
-        return `<a href="#/item/${qid}">${label}</a>`;
+        return `<a href="#/item/${qid}" class="box1-entity-link">${label}</a>`;
       }
       return label;
     }
