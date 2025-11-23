@@ -115,10 +115,20 @@ const ICONS = {
 // Map PID to icon
 function getIdentifierIcon(pid) {
   switch (pid) {
-    case "P12": case "P102": case "P108": case "P5": case "P6": case "P90":
+    case "P12": case "P5": case "P6": case "P90":
       return ICONS.nlw;
+    case "P102":
+  return ICONS.book;
+
+case "P108":
+  return ICONS.film;
+
+case "P62":
+  return ICONS.barcode;
+  
     case "P68":
       return ICONS.cadwCastle;
+      
     case "P69":
       return ICONS.map;
     case "P83":
@@ -135,8 +145,6 @@ function getIdentifierIcon(pid) {
       return ICONS.building;
     case "P97":
       return ICONS.cabinet;
-    case "P62":
-      return ICONS.cube;
     default:
       return "";
   }
