@@ -38,11 +38,26 @@ const ICONS = {
   `,
 
   film: `
-    <svg viewBox="0 0 24 24" class="id-icon">
-    <rect x="3" y="4" width="18" height="16" rx="2"/>
-    <rect x="6" y="4" width="2" height="16"/>
-    <rect x="16" y="4" width="2" height="16"/>
-    <path d="M11 10l4 2-4 2z"/>
+      <svg viewBox="0 0 24 24" class="id-icon">
+    <!-- Bottom slate -->
+    <rect x="3" y="9" width="18" height="11" rx="2"/>
+
+    <!-- Top clapper -->
+    <path d="
+      M4 4
+      L20 4
+      C20.6 4 21 4.4 21 5
+      L21 7
+      L4 11
+      L3 9
+      L3 5
+      C3 4.4 3.4 4 4 4
+      Z
+    "/>
+
+    <!-- Stripes -->
+    <rect x="6" y="4.5" width="4" height="2" transform="rotate(-15 8 5.5)"/>
+    <rect x="12" y="3.5" width="4" height="2" transform="rotate(-15 14 4.5)"/>
   </svg>
   `,
 
