@@ -40,7 +40,7 @@ case "external-id":
         return value.amount;
 
       case "globecoordinate":
-        return `${value.lat},${value.lon}`;
+    return `${value.latitude},${value.longitude}`;
 
       default:
         return undefined;
