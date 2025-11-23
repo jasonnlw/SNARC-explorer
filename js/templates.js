@@ -139,20 +139,6 @@ if (isHuman && claims["P24"] && claims["P24"].length) {
   }
 }
 
-
-  // === 6. Place coordinate tag (P26) ===
-  let coordsHTML = "";
-  if (claims["P26"] && claims["P26"].length) {
-    const cStmt = claims["P26"][0];
-    const v = Utils.firstValue(cStmt);
-    const parts = typeof v === "string" ? v.split(",") : [];
-    const lat = parseFloat(parts[0]);
-    const lon = parseFloat(parts[1]);
-    if (!isNaN(lat) && !isNaN(lon)) {
-      coordsHTML = `<span class="hero-coords">📍 ${lat.toFixed(3)}, ${lon.toFixed(3)}</span>`;
-    }
-  }
-
   // === 7. Render hero block ===
   return `
     <div class="hero-header">
