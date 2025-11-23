@@ -482,7 +482,7 @@ function renderProfileBox(entity, lang, labelMap) {
     const values = claims[pid]
       .map(stmt => formatValue(pid, stmt))
       .filter(Boolean)
-      .join(", ");
+      .join(" ");
 
     if (values) {
       rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
