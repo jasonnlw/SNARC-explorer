@@ -485,8 +485,7 @@ function renderProfileBox(entity, lang, labelMap) {
       .join(", ");
 
     if (values) {
-      rows.push(`<dt>${label}</dt><dd>${valueHTML}</dd>`);
-
+      rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
     }
   }
 
