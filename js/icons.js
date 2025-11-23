@@ -11,18 +11,18 @@ const ICONS = {
   // ---- NEW ICONS ----
   book: `
     <svg viewBox="0 0 24 24" class="id-icon">
-      <path d="M3 4h7a4 4 0 0 1 4 4v12H7a4 4 0 0 0-4-4V4zM21 4h-7a4 4 0 0 0-4 4v12h7a4 4 0 0 1 4-4V4z"/>
-    </svg>
+    <path d="M2 4h8a4 4 0 0 1 4 4v12H6a4 4 0 0 0-4-4V4z"/>
+    <path d="M22 4h-8a4 4 0 0 0-4 4v12h8a4 4 0 0 1 4-4V4z"/>
+  </svg>
   `,
 
   film: `
     <svg viewBox="0 0 24 24" class="id-icon">
-      <circle cx="12" cy="12" r="9"/>
-      <circle cx="12" cy="7" r="2"/>
-      <circle cx="12" cy="17" r="2"/>
-      <circle cx="7" cy="12" r="2"/>
-      <circle cx="17" cy="12" r="2"/>
-    </svg>
+    <rect x="3" y="4" width="18" height="16" rx="2"/>
+    <rect x="6" y="4" width="2" height="16"/>
+    <rect x="16" y="4" width="2" height="16"/>
+    <path d="M11 10l4 2-4 2z"/>
+  </svg>
   `,
 
   barcode: `
