@@ -503,6 +503,8 @@ function renderProfileBox(entity, lang, labelMap) {
     }
   }
 
+console.log("Box1 map raw:", raw);
+   
   // ----------------------------------------
   // FINAL RENDER
   // ----------------------------------------
