@@ -507,7 +507,7 @@ a { color: #0645ad; }
 /* Desktop: limit width of entity content */
 @media (min-width: 769px) {
   .entity-layout {
-    max-width: 100%;       /* remove frame effect */
+    max-width: 80%;       
     margin-left: 0;
     margin-right: 0;
 
