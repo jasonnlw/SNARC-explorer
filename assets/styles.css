@@ -723,3 +723,39 @@ a { color: #0645ad; }
 .collection-group dd a:hover {
   text-decoration: underline;
 }
+
+/* Profile header matching Box 2 */
+.profile-header {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0b7e5c;
+}
+
+/* Layout: DL on left, map on right */
+.profile-inner {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Mobile: stack */
+@media (max-width: 768px) {
+  .profile-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-map-container {
+    width: 100%;
+  }
+}
+
+/* Map container */
+.profile-map-container .map-thumb {
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
