@@ -628,7 +628,7 @@ a { color: #0645ad; }
   width: 100vw;                   /* full screen width */
   margin-left: 50%;
   transform: translateX(-50%);   /* escape parent centering */
-  background: #f5f5f5;           /* same grey */
+  background: #f4a300;           /* same grey */
   padding: 2rem 0;               /* keep vertical space */
 }
 
