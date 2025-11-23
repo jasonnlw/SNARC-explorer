@@ -799,4 +799,39 @@ a { color: #0645ad; }
   height: 100%;
 }
 
+/* ==========================================
+   BOX 1: RENDER dt + dd ON THE SAME LINE
+   ========================================== */
+
+.profile-inner dl {
+  display: grid;
+  grid-template-columns: 180px 1fr; /* adjust width as needed */
+  grid-column-gap: 1rem;
+  align-items: start;
+}
+
+.profile-inner dt,
+.profile-inner dd {
+  margin: 0;              /* remove default browser spacing */
+  padding: 4px 0;         /* keep a little vertical rhythm */
+}
+
+.profile-inner dt {
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-inner dd {
+  color: #444;
+}
+
+/* Mobile: stack with full-width label */
+@media (max-width: 600px) {
+  .profile-inner dl {
+    grid-template-columns: 1fr; /* label above value on narrow screens */
+  }
+  .profile-inner dd {
+    margin-bottom: 0.5rem;
+  }
+}
 
