@@ -569,7 +569,7 @@ function renderCollectionsBox(entity, lang, labelMap) {
           return raw;
         })
         .join(", ");
-      const icon = window.ID_ICONS.getIdentifierIcon(pid);
+   
       sectionRows.push(`<dt>${rowLabel}</dt><dd>${links}</dd>`);
     }
 
