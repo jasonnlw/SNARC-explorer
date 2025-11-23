@@ -553,21 +553,46 @@ function renderCollectionsBox(entity, lang, labelMap) {
       const info = COLLECTION_LABELS[pid];
       const rowLabel = info ? (lang === "cy" ? info.cy : info.en) : pid;
 
-      const links = claims[pid]
-        .map(stmt => {
-          const raw = Utils.firstValue(stmt);
+const links = claims[pid]
+  .map(stmt => {
+    const raw = Utils.firstValue(stmt);
 
-          // identifier link
-          if (ID_URL[pid]) {
-            const encoded = encodeURIComponent(String(raw));
-            const url = ID_URL[pid].replace(/\$1/g, encoded);
-            return `<a href="${url}" target="_blank" rel="noopener">${raw}</a>`;
-          }
+    // ---------- SPECIAL CASE: P102 (Published Works) ----------
+    if (pid === "P102") {
+      // Try to get the title from qualifier P103
+      const qualifierTitle =
+        stmt.qualifiers?.P103?.[0]?.datavalue?.value;
 
-          // plain value
-          return raw;
-        })
-        .join(", ");
+      // Build the normal URL using raw value
+      if (ID_URL["P102"]) {
+        const encoded = encodeURIComponent(String(raw));
+        const url = ID_URL["P102"].replace(/\$1/g, encoded);
+
+        // If qualifier exists, use it as the visible label
+        if (qualifierTitle && typeof qualifierTitle === "string") {
+          return `<a href="${url}" target="_blank" rel="noopener">${qualifierTitle}</a>`;
+        }
+
+        // Fallback → original behaviour
+        return `<a href="${url}" target="_blank" rel="noopener">${raw}</a>`;
+      }
+
+      // Fallback if ID_URL missing
+      return qualifierTitle || raw;
+    }
+
+    // ---------- DEFAULT HANDLING FOR ALL OTHER PROPERTIES ----------
+    if (ID_URL[pid]) {
+      const encoded = encodeURIComponent(String(raw));
+      const url = ID_URL[pid].replace(/\$1/g, encoded);
+      return `<a href="${url}" target="_blank" rel="noopener">${raw}</a>`;
+    }
+
+    // Plain value
+    return raw;
+  })
+  .join("<br>");
+
    
       const icon = window.ID_ICONS.getIdentifierIcon(pid);
 sectionRows.push(`<dt>${icon}${rowLabel}</dt><dd>${links}</dd>`);
