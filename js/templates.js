@@ -447,7 +447,7 @@ function renderProfileBox(entity, lang, labelMap) {
     const pob = claims["P21"]?.[0] ? formatValue("P21", claims["P21"][0]) : null;
 
     if (dob || pob) {
-      const combined = dob && pob ? `${dob} (${pob})` : (dob || pob);
+      const combined = dob && pob ? `${dob}, ${pob}` : (dob || pob);
       rows.push(`<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${combined}</dd>`);
     }
 
@@ -456,7 +456,7 @@ function renderProfileBox(entity, lang, labelMap) {
     const pod = claims["P22"]?.[0] ? formatValue("P22", claims["P22"][0]) : null;
 
     if (dod || pod) {
-      const combined = dod && pod ? `${dod} (${pod})` : (dod || pod);
+      const combined = dod && pod ? `${dod}, ${pod}` : (dod || pod);
       rows.push(`<dt>${lang === "cy" ? "Bu farw" : "Died"}</dt><dd>${combined}</dd>`);
     }
   }
