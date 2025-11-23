@@ -485,8 +485,8 @@ function renderProfileBox(entity, lang, labelMap) {
       .join(", ");
 
     if (values) {
-      const icon = window.ID_ICONS.getIdentifierIcon(pid);
-rows.push(`<dt>${icon}${label}</dt><dd>${valueHTML}</dd>`);
+      rows.push(`<dt>${label}</dt><dd>${valueHTML}</dd>`);
+
     }
   }
 
@@ -569,7 +569,7 @@ function renderCollectionsBox(entity, lang, labelMap) {
           return raw;
         })
         .join(", ");
-
+      const icon = window.ID_ICONS.getIdentifierIcon(pid);
       sectionRows.push(`<dt>${rowLabel}</dt><dd>${links}</dd>`);
     }
 
