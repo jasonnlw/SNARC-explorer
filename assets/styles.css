@@ -835,3 +835,44 @@ a { color: #0645ad; }
   }
 }
 
+/* ==========================================
+   BOX 2: RENDER dt + dd ON THE SAME LINE
+   ========================================== */
+
+.collection-group dl {
+  display: grid;
+  grid-template-columns: 180px 1fr;  /* adjust width if needed */
+  grid-column-gap: 1rem;
+  align-items: start;
+}
+
+.collection-group dt,
+.collection-group dd {
+  margin: 0;
+  padding: 4px 0;   /* compact vertical rhythm */
+}
+
+.collection-group dt {
+  font-weight: 600;
+  color: #333;
+}
+
+.collection-group dd {
+  color: #444;
+}
+
+/* MOBILE: stack label above value */
+@media (max-width: 600px) {
+  .collection-group dl {
+    grid-template-columns: 1fr;
+  }
+  .collection-group dd {
+    margin-bottom: 0.5rem;
+  }
+}
+/* Tighten spacing for Box 2 subheadings */
+.collections-box h3 {
+  margin-top: 0.5rem;     /* was larger before */
+  margin-bottom: 0.75rem; /* subtle but compact */
+  font-size: 1.15rem;     /* slightly smaller if desired */
+}
