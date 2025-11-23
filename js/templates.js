@@ -369,27 +369,30 @@ function renderProfileBox(entity, lang, labelMap) {
 
   // Helper to format values with link logic
   function formatValue(pid, stmt) {
-    const propInfo = window.PROPERTY_INFO?.[pid];
-    const datatype = propInfo?.datatype || "String";
-    const v = Utils.firstValue(stmt);
+  const propInfo = window.PROPERTY_INFO?.[pid];
+  const datatype = (propInfo?.datatype || "").toLowerCase();
+  const v = Utils.firstValue(stmt);
 
-    // If this PID is linkable, use renderValue()
-    if (PROFILE_LINKABLE.has(pid)) {
-      return renderValue(datatype, v, labelMap, lang, pid);
-    }
-
-    // Time → formatted date
-    if ((propInfo?.datatype || "").toLowerCase() === "time") {
-      return formatSnarcDateFromSnak(stmt);
-    }
-
-    // Q item
-    if (typeof v === "string" && /^Q\d+$/i.test(v)) {
-      return labelMap[v] || v;
-    }
-
-    return v;
+  // 1. Linkable PIDs always use the full renderValue logic
+  if (PROFILE_LINKABLE.has(pid)) {
+    return renderValue(datatype, v, labelMap, lang, pid);
   }
+
+  // 2. Date formatting
+  if (datatype === "time") {
+    return formatSnarcDateFromSnak(stmt);
+  }
+
+  // 3. QID → always convert to label, but not hyperlink unless linkable
+  if (typeof v === "string" && /^Q\d+$/i.test(v)) {
+    const label = labelMap[v] || v;
+    return label; // plain label (non-clickable)
+  }
+
+  // 4. Anything else stays as is
+  return v;
+}
+
 
   // ========================
   // MERGED BIRTH / DEATH
