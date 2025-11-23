@@ -479,10 +479,20 @@ function renderProfileBox(entity, lang, labelMap) {
     const propInfo = window.PROPERTY_INFO?.[pid];
     const label = lang === "cy" ? propInfo?.label_cy : propInfo?.label_en;
 
-    const values = claims[pid]
-      .map(stmt => formatValue(pid, stmt))
-      .filter(Boolean)
-      .join(" ");
+    const renderedValues = claims[pid]
+  .map(stmt => formatValue(pid, stmt))
+  .filter(Boolean);
+
+// Detect if ANY value is a pill (linkable)
+const containsPill = renderedValues.some(v =>
+  v.includes("box1-link-pill")
+);
+
+// Smart-join logic
+const values = containsPill
+  ? renderedValues.join("")       // pills: no comma
+  : renderedValues.join(", ");    // plain text: comma-separated
+
 
     if (values) {
       rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
