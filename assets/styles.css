@@ -211,7 +211,7 @@ a { color: #0645ad; }
 
 .lang-switch button.active {
   background: #fff;
-  color: #0b7e5c;
+  color: #309898;
 }
 
 /* === Desktop layout for header === */
@@ -219,7 +219,7 @@ a { color: #0645ad; }
   position: sticky;
   top: 0;
   z-index: 1000;
-  background-color: #0b7e5c;
+  background-color: #309898;
   color: #fff;
   display: flex;
   align-items: center;
@@ -280,7 +280,7 @@ a { color: #0645ad; }
 
 .lang-switch button.active {
   background: #fff;
-  color: #0b7e5c;
+  color: #309898;
 }
 
 /* === Header: desktop default === */
@@ -288,7 +288,7 @@ a { color: #0645ad; }
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: #0b7e5c;
+  background: #309898;
   color: #fff;
   padding: 0.6rem 1rem;
   box-shadow: 0 2px 6px rgba(0,0,0,0.15);
@@ -342,7 +342,7 @@ a { color: #0645ad; }
   transition: background 0.3s ease;
 }
 .lang-switch button:hover { background: rgba(255,255,255,0.3); }
-.lang-switch button.active { background:#fff; color:#0b7e5c; }
+.lang-switch button.active { background:#fff; color:#309898; }
 
 /* Suggestions dropdown */
 #search-suggestions,
@@ -694,7 +694,7 @@ a { color: #0645ad; }
   margin: 0 0 0.75rem 0;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #0b7e5c;
+  color: #309898;
 }
 
 .collection-group dl {
@@ -729,7 +729,7 @@ a { color: #0645ad; }
   margin: 0 0 0.75rem;
   font-size: 1.2rem;
   font-weight: 700;
-  color: #0b7e5c;
+  color: #309898;
 }
 
 /* Layout: DL on left, map on right */
@@ -910,7 +910,7 @@ a { color: #0645ad; }
 }
 
 .box1-pill-place {
-  background: #0B7E5C;   /* NLW Banner Green */
+  background: #309898;   /* NLW Banner Green */
 }
 
 .box1-pill-education {
