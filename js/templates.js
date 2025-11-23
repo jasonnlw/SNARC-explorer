@@ -501,9 +501,11 @@ function renderProfileBox(entity, lang, labelMap) {
           </div>
         </div>`;
     }
+     console.log("Box1 map raw:", raw);
+
   }
 
-console.log("Box1 map raw:", raw);
+
    
   // ----------------------------------------
   // FINAL RENDER
