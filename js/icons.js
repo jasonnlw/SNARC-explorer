@@ -7,7 +7,7 @@
 const ICON_COLOR = "#FF9F00";
 
 const ICONS = {
-P0: `
+"P0": `
 <svg width="16" height="16" viewBox="0 0 24 24" fill="#FF9F00" xmlns="http://www.w3.org/2000/svg">
   <circle cx="6" cy="12" r="3"/>
   <circle cx="18" cy="6" r="3"/>
