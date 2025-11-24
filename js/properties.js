@@ -1,9 +1,5 @@
 window.PROPERTY_INFO = {
- "P0": {
-  "label_en": "SNARC Wikibase",
-  "label_cy": "Wikibase SNARC",
-  "datatype": "ExternalId"
-},
+ 
   "P10": {
     "label_en": "VIAF ID",
     "label_cy": "VIAF ID",
