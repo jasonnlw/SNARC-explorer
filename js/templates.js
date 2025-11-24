@@ -563,25 +563,30 @@ function renderCollectionsBox(entity, lang, labelMap) {
   for (const group of COLLECTION_GROUPS) {
     const sectionRows = [];
 
-// --- SPECIAL CASE: P0 = SNARC WIKIBASE SELF-LINK ---
-if (pid === "P0") {
-  const snarcId = getSnarcIdFromUrl();
-  if (snarcId) {
-    const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
-
-    sectionRows.push(`
-      <dt>${rowLabel}</dt>
-      <dd>
-        <a href="${url}" target="_blank" rel="noopener">
-          ${getIdentifierIcon("P0")} ${snarcId}
-        </a>
-      </dd>
-    `);
-  }
-  continue; // IMPORTANT: don't fall through to normal logic
-}
-
     for (const pid of group.pids) {
+
+  // --- SPECIAL CASE: P0 = SNARC WIKIBASE SELF-LINK ---
+  if (pid === "P0") {
+    const snarcId = getSnarcIdFromUrl();
+    if (snarcId) {
+      const rowLabel = (lang === "cy"
+        ? COLLECTION_LABELS["P0"].label_cy
+        : COLLECTION_LABELS["P0"].label_en);
+
+      const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
+      sectionRows.push(`
+        <dt>${rowLabel}</dt>
+        <dd>
+          <a href="${url}" target="_blank" rel="noopener">
+            ${getIdentifierIcon("P0")} ${snarcId}
+          </a>
+        </dd>
+      `);
+    }
+    continue; // 🔥 IMPORTANT — do NOT fall through to normal logic
+  }
+
+       
       if (!claims[pid] || !claims[pid].length) continue;
 
       const info = COLLECTION_LABELS[pid];
