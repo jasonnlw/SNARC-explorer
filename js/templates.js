@@ -563,30 +563,30 @@ function renderCollectionsBox(entity, lang, labelMap) {
   for (const group of COLLECTION_GROUPS) {
     const sectionRows = [];
 
+// --- SPECIAL CASE: P0 = SNARC WIKIBASE SELF-LINK ---
+if (pid === "P0") {
+  const snarcId = getSnarcIdFromUrl();
+  if (snarcId) {
+    const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
+
+    sectionRows.push(`
+      <dt>${rowLabel}</dt>
+      <dd>
+        <a href="${url}" target="_blank" rel="noopener">
+          ${getIdentifierIcon("P0")} ${snarcId}
+        </a>
+      </dd>
+    `);
+  }
+  continue; // IMPORTANT: don't fall through to normal logic
+}
+
     for (const pid of group.pids) {
       if (!claims[pid] || !claims[pid].length) continue;
 
       const info = COLLECTION_LABELS[pid];
       const rowLabel = info ? (lang === "cy" ? info.cy : info.en) : pid;
 
-// --------------------------------------
-// SPECIAL CASE: SNARC WIKIBASE SELF-LINK
-// --------------------------------------
-if (pid === "P0") {
-  const snarcId = getSnarcIdFromUrl();
-  if (!snarcId) return "";    // safety fallback
-
-  const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
-  const label = snarcId;
-  return `
-    <dt>${rowLabel}</dt>
-    <dd>
-      <a href="${url}" target="_blank" rel="noopener">
-        ${getIdentifierIcon("P0")} ${label}
-      </a>
-    </dd>
-  `;
-}
 
        
 const links = claims[pid]
