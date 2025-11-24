@@ -159,6 +159,8 @@ const ICONS = {
 // Map PID to icon
 function getIdentifierIcon(pid) {
   switch (pid) {
+      case "P0":
+  return ICONS["P0"];
     case "P12": case "P5": case "P6": case "P90":
       return ICONS.nlw;
     case "P102":
