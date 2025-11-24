@@ -301,6 +301,7 @@ const values = statements
     P6:  { en: "Welsh Biography Article (Welsh)",    cy: "Erthygl yn y Bywgraffiadur (Cymraeg)" },
     P90: { en: "Repertory of Welsh Manuscripts: Place",
            cy: "Repertory of Welsh Manuscripts: Lleoliad" },
+     P0: { en: "SNARC Wikibase", cy: "Wikibase SNARC" },
 
     P68: { en: "CADW Listed Buildings",              cy: "Adeiladau Rhestredig CADW" },
     P69: { en: "Coflein",                             cy: "Coflein" },
@@ -318,7 +319,7 @@ const values = statements
   const COLLECTION_GROUPS = [
     {
       id: "nlw",
-      pids: ["P12","P102","P108","P5","P6","P90"],
+      pids: ["P12","P102","P108","P5","P6","P90","P0"],
       label_en: "National Library of Wales",
       label_cy: "Llyfrgell Genedlaethol Cymru"
     },
@@ -544,6 +545,11 @@ const values = containsPill
 }
 
 
+function getSnarcIdFromUrl() {
+  const hash = window.location.hash || "";
+  const match = hash.match(/item\/(Q\d+)/i);
+  return match ? match[1] : null;
+}
 
 
 // =======================================
@@ -563,6 +569,26 @@ function renderCollectionsBox(entity, lang, labelMap) {
       const info = COLLECTION_LABELS[pid];
       const rowLabel = info ? (lang === "cy" ? info.cy : info.en) : pid;
 
+// --------------------------------------
+// SPECIAL CASE: SNARC WIKIBASE SELF-LINK
+// --------------------------------------
+if (pid === "P0") {
+  const snarcId = getSnarcIdFromUrl();
+  if (!snarcId) return "";    // safety fallback
+
+  const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
+  const label = snarcId;
+  return `
+    <dt>${rowLabel}</dt>
+    <dd>
+      <a href="${url}" target="_blank" rel="noopener">
+        ${getIdentifierIcon("P0")} ${label}
+      </a>
+    </dd>
+  `;
+}
+
+       
 const links = claims[pid]
   .map(stmt => {
     const raw = Utils.firstValue(stmt);
