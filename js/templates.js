@@ -301,7 +301,7 @@ const values = statements
     P6:  { en: "Welsh Biography Article (Welsh)",    cy: "Erthygl yn y Bywgraffiadur (Cymraeg)" },
     P90: { en: "Repertory of Welsh Manuscripts: Place",
            cy: "Repertory of Welsh Manuscripts: Lleoliad" },
-     P0: { en: "SNARC Wikibase", cy: "Wikibase SNARC" },
+     "P0": { en: "SNARC Wikibase", cy: "Wikibase SNARC" },
 
     P68: { en: "CADW Listed Buildings",              cy: "Adeiladau Rhestredig CADW" },
     P69: { en: "Coflein",                             cy: "Coflein" },
@@ -566,19 +566,19 @@ function renderCollectionsBox(entity, lang, labelMap) {
     for (const pid of group.pids) {
 
   // --- SPECIAL CASE: P0 = SNARC WIKIBASE SELF-LINK ---
-  if (pid === P0) {
+  if (pid === "P0") {
     const snarcId = getSnarcIdFromUrl();
     if (snarcId) {
       const rowLabel = (lang === "cy"
-        ? COLLECTION_LABELS[P0].label_cy
-        : COLLECTION_LABELS[P0].label_en);
+        ? COLLECTION_LABELS["P0"].label_cy
+        : COLLECTION_LABELS["P0"].label_en);
 
       const url = `https://snarc-llgc.wikibase.cloud/wiki/Item:${snarcId}`;
       sectionRows.push(`
         <dt>${rowLabel}</dt>
         <dd>
           <a href="${url}" target="_blank" rel="noopener">
-            ${getIdentifierIcon(P0)} ${snarcId}
+            ${getIdentifierIcon("P0")} ${snarcId}
           </a>
         </dd>
       `);
