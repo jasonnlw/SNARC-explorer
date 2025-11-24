@@ -301,7 +301,7 @@ const values = statements
     P6:  { en: "Welsh Biography Article (Welsh)",    cy: "Erthygl yn y Bywgraffiadur (Cymraeg)" },
     P90: { en: "Repertory of Welsh Manuscripts: Place",
            cy: "Repertory of Welsh Manuscripts: Lleoliad" },
-     "P0": { en: "SNARC Wikibase", cy: "Wikibase SNARC" },
+     "P0": { en: "SNARC Wikibase",   cy: "Wikibase SNARC" },
 
     P68: { en: "CADW Listed Buildings",              cy: "Adeiladau Rhestredig CADW" },
     P69: { en: "Coflein",                             cy: "Coflein" },
