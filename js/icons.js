@@ -8,13 +8,16 @@ const ICON_COLOR = "#FF9F00";
 
 const ICONS = {
 "P0": `
-<svg width="16" height="16" viewBox="0 0 24 24" fill="#FF9F00" xmlns="http://www.w3.org/2000/svg">
+<svg width="16" height="16" viewBox="0 0 24 24" fill="#FF9F00"
+     xmlns="http://www.w3.org/2000/svg"
+     style="margin-right:6px;">
   <circle cx="6" cy="12" r="3"/>
   <circle cx="18" cy="6" r="3"/>
   <circle cx="18" cy="18" r="3"/>
   <line x1="8.5" y1="10.5" x2="15.5" y2="7.5" stroke="#FF9F00" stroke-width="2"/>
   <line x1="8.5" y1="13.5" x2="15.5" y2="16.5" stroke="#FF9F00" stroke-width="2"/>
-</svg>`,
+</svg>
+`,
 
   // ---- NEW ICONS ----
   book: `
