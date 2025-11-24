@@ -1,4 +1,5 @@
 window.PROPERTY_INFO = {
+
  
   "P10": {
     "label_en": "VIAF ID",
