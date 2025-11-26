@@ -902,7 +902,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   const boxLeft = desktopRoot.querySelector(".box-left");
   const boxRight = desktopRoot.querySelector(".box-right");
   const treeDesktop = desktopRoot.querySelector("#familyChartContainer");
-  const galleryDesktop = desktopRoot.querySelector(".gallery-wrapper");
+  const galleryDesktop = desktopRoot.querySelector(".gallery");
 
   // MOBILE TARGETS
   const sections = document.querySelectorAll(".mobile-section");
