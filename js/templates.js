@@ -919,6 +919,27 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     if (type === "info" && boxLeft) {
       sec.appendChild(boxLeft.cloneNode(true));
     }
+   // Re-initialise maps inside cloned Box 1 (mobile only)
+if (type === "info") {
+  const mapEl = sec.querySelector("#map-large");
+  if (mapEl) {
+    // Clear any stale content inside placeholder
+    mapEl.innerHTML = "";
+
+    // Recreate Leaflet map instance
+    const map = L.map(mapEl).setView([52.415, -4.082], 8);
+
+    // Re-apply tile layer
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: "&copy; OpenStreetMap contributors"
+    }).addTo(map);
+
+    // If you add markers dynamically in renderGeneric/postRender,
+    // we can clone that logic here too — just tell me.
+  }
+}
+
     if (type === "collections" && boxRight) {
       sec.appendChild(boxRight.cloneNode(true));
     }
