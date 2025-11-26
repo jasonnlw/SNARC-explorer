@@ -849,6 +849,42 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
         treeContainer.innerHTML = "";
       }
     }
+// ---------------------------------------------------------
+// MOBILE-ONLY COLLAPSIBLE FAMILY TREE (safe, isolated)
+// ---------------------------------------------------------
+(function setupMobileTreeToggle() {
+  const container = document.getElementById("familyChartContainer");
+  if (!container) return;
+
+  // Only run on mobile AND only once per render cycle
+  if (window.innerWidth > 768 || container.dataset.toggleInit === "1") return;
+  container.dataset.toggleInit = "1";
+
+  // Wrap existing iframe container so we can collapse it
+  container.classList.add("family-tree-collapsible");
+
+  const lang = Utils.getLang();
+  const showLabel = lang === "cy" ? "Dangos y goeden deulu" : "Show family tree";
+  const hideLabel = lang === "cy" ? "Cuddio'r goeden deulu" : "Hide family tree";
+
+  // Create toggle button
+  const btn = document.createElement("button");
+  btn.className = "family-tree-toggle";
+  btn.type = "button";
+  btn.textContent = showLabel;
+
+  // Insert button BEFORE the container
+  container.parentNode.insertBefore(btn, container);
+
+  // Start collapsed
+  container.style.display = "none";
+
+  btn.addEventListener("click", () => {
+    const visible = container.style.display !== "none";
+    container.style.display = visible ? "none" : "block";
+    btn.textContent = visible ? showLabel : hideLabel;
+  });
+})();
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
     if (typeof L !== "undefined") {
