@@ -698,15 +698,28 @@ return `
     });
     window.currentIsHuman = isHuman;
 
-    // Determine if entity has any family relationships (SNARC properties)
-    const hasFamily =
-      (claims["P53"] && claims["P53"].length) ||   // father
-      (claims["P55"] && claims["P55"].length) ||   // mother
-      (claims["P52"] && claims["P52"].length) ||   // sibling
-      (claims["P56"] && claims["P56"].length) ||   // spouse
-      (claims["P54"] && claims["P54"].length);     // child
 
-    window.currentHasFamily = hasFamily;
+   // Check for parents
+const hasFather = claims["P53"] && claims["P53"].length;
+const hasMother = claims["P55"] && claims["P55"].length;
+const hasParent = hasFather || hasMother;
+
+// Check for other family relationships
+const hasSibling = claims["P52"] && claims["P52"].length;
+const hasSpouse  = claims["P56"] && claims["P56"].length;
+const hasChild   = claims["P54"] && claims["P54"].length;
+
+// New rule:
+// 1. If there are siblings but NO parent → do NOT count it as "family"
+// 2. All other cases work as before
+const hasFamily =
+  hasParent ||            // parents
+  hasSpouse ||            // spouses
+  hasChild  ||            // children
+  (hasSibling && hasParent); // siblings only if a parent exists
+
+window.currentHasFamily = hasFamily;
+
 
     // --- Extract Wikidata ID from P62 (URI or QID) -------------------
     let wikidataId = null;
