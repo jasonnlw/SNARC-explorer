@@ -916,9 +916,30 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     const type = sec.dataset.sectionType;
 
     // Inject the correct content depending on type
-    if (type === "info" && boxLeft) {
-      sec.appendChild(boxLeft.cloneNode(true));
-    }
+if (type === "info" && boxLeft) {
+  
+  // 1. Clone Box 1 content into the mobile section
+  sec.appendChild(boxLeft.cloneNode(true));
+
+  // 2. Re-bind map modal click handlers for cloned Box 1
+  const placeLinks = sec.querySelectorAll(".box1-pill-place, .box1-link-pill");
+
+  placeLinks.forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const href = link.getAttribute("href");
+      if (!href) return;
+
+      const qid = href.split("/").pop(); // extract item ID
+
+      // Call your existing modal logic (works for desktop)
+      if (window.openMapForItem) {
+        window.openMapForItem(qid);
+      }
+    });
+  });
+
+}
    // Re-initialise maps inside cloned Box 1 (mobile only)
 if (type === "info") {
   const mapEl = sec.querySelector("#map-large");
