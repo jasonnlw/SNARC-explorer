@@ -985,4 +985,40 @@ a { color: #0645ad; }
   vertical-align: middle;
 }
 
+/* MOBILE: make family tree collapsible */
+@media (max-width: 768px) {
+  .family-tree-toggle {
+    display: block;
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 1rem;
+    background: #FF9F00;     /* match your search banner */
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    margin: 1rem 0;
+    cursor: pointer;
+  }
+
+  .family-tree-collapsible {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height .35s ease;
+  }
+
+  .family-tree-collapsible.open {
+    max-height: 2000px; /* enough to reveal the tree */
+  }
+}
+
+/* DESKTOP: no changes — always visible */
+@media (min-width: 769px) {
+  .family-tree-toggle {
+    display: none;
+  }
+  .family-tree-collapsible {
+    max-height: none !important;
+    overflow: visible;
+  }
+}
 
