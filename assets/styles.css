@@ -1012,53 +1012,60 @@ a { color: #0645ad; }
   transition: all 0.3s ease;
 }
 
-/* -----------------------------------------
-   MOBILE FAMILY TREE RIBBON (brand-aligned)
------------------------------------------- */
+
+/* ============================================================
+   MOBILE COLLAPSIBLE RIBBONS (Unified for all sections)
+   ============================================================ */
 @media (max-width: 768px) {
 
-  .family-tree-toggle {
-    display: block;
+  /* Ribbons: full-width, flush, no rounding */
+  .mobile-section-toggle {
     width: 100%;
-    background: #FFB233;           /* amber brand colour */
-    color: #fff;                   /* white text for contrast */
     border: none;
-    border-radius: 10px;           /* match your pill rounding */
+    border-radius: 0;
     padding: 14px 16px;
+    margin: 0;                     /* no gaps between ribbons */
     font-size: 1.05rem;
     font-weight: 700;
-    text-align: center;
-    cursor: pointer;
-    letter-spacing: 0.3px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
-    transition: background 0.25s ease, transform 0.15s ease;
+    text-align: left;
+    color: #fff;
     position: relative;
+    cursor: pointer;
   }
 
-  .family-tree-toggle:hover {
-    background: #FFA600;           /* slightly stronger amber */
-  }
-
-  .family-tree-toggle:active {
-    transform: scale(0.98);
-  }
-
-  /* Arrow icon inside toggle */
-  .family-tree-toggle::after {
-    content: "▾";                  /* dropdown arrow */
+  /* Arrow */
+  .mobile-section-toggle::after {
+    content: "▾";
     position: absolute;
     right: 16px;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     transition: transform 0.25s ease;
   }
 
-  /* When open, rotate arrow */
-  .family-tree-collapsible[style*="display: block"] ~ .family-tree-toggle::after,
-  .family-tree-toggle.open::after {
+  .mobile-section-toggle.open::after {
     transform: translateY(-50%) rotate(180deg);
   }
-}
 
+  /* Section-specific colours */
+  .mobile-toggle-info {
+    background: #309898;   /* teal */
+  }
+  .mobile-toggle-collections {
+    background: #5FCD96;   /* green */
+  }
+  .mobile-toggle-family {
+    background: #FFB233;   /* amber */
+  }
+  .mobile-toggle-images {
+    background: #FA0808;   /* red */
+  }
+
+  /* Remove spacing between sections */
+  .mobile-section {
+    margin: 0;
+    padding: 0;
+  }
+}
 
