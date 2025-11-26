@@ -856,12 +856,43 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       const wikidataId = window.currentWikidataId;
       const lang = Utils.getLang();
 
-      if (isHuman && hasFamily && wikidataId) {
-        injectFamilyTree(wikidataId, lang);
-      } else {
-        treeContainer.innerHTML = "";
-      }
-    }
+if (isHuman && hasFamily && wikidataId) {
+
+  const wrapperHTML = `
+    <div class="family-tree-wrapper">
+      <button class="family-tree-toggle">
+        ${lang === "cy" ? "Dangos y goeden deulu" : "Show family tree"}
+      </button>
+
+      <div class="family-tree-collapsible">
+        <div id="familyChartContainer"></div>
+      </div>
+    </div>
+  `;
+
+  // Insert wrapper into the page
+  const container = document.getElementById("familyTreeOuter");
+  if (container) container.innerHTML = wrapperHTML;
+
+  // Now inject the actual family tree into the inner container
+  injectFamilyTree(wikidataId, lang);
+
+} else {
+  const container = document.getElementById("familyTreeOuter");
+  if (container) container.innerHTML = "";
+}
+       
+document.addEventListener("click", e => {
+  if (!e.target.classList.contains("family-tree-toggle")) return;
+
+  const panel = e.target.nextElementSibling;
+  panel.classList.toggle("open");
+
+  e.target.textContent = panel.classList.contains("open")
+    ? (lang === 'cy' ? "Cuddio'r goeden deulu" : "Hide family tree")
+    : (lang === 'cy' ? "Dangos y goeden deulu" : "Show family tree");
+});
+
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
     if (typeof L !== "undefined") {
