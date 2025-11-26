@@ -799,38 +799,52 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     return `
       <section class="card entity-layout">
         ${renderHeroHeader(entity, lang, labelMap)}
-        ${tilesHTML}
-        <!-- 2. Family tree (only for humans; content injected in postRender) -->
-        ${isHuman ? `
-          <!-- BOX 1 — INFORMATION -->
-<div class="mobile-section" data-section-type="info"
-     data-title-en="Information" data-title-cy="Gwybodaeth">
+
+  <!-- DESKTOP VERSION (unchanged) -->
+<div class="desktop-layout">
   ${tilesHTML}
-</div>
-
-<!-- BOX 2 — COLLECTIONS -->
-<div class="mobile-section" data-section-type="collections"
-     data-title-en="Collections" data-title-cy="Casgliadau">
-  ${collectionsHTML || ""}  <!-- already part of tilesHTML OR separate -->
-</div>
-
-<!-- FAMILY TREE -->
-${isHuman ? `
-  <div class="mobile-section" data-section-type="family"
-       data-title-en="Family Tree" data-title-cy="Coeden deulu">
-    <div id="familyChartContainer" class="family-tree-container"></div>
-  </div>
-` : ""}
-
-<!-- IMAGES -->
-<div class="mobile-section" data-section-type="images"
-     data-title-en="Images" data-title-cy="Delweddau">
+  ${isHuman ? `<div id="familyChartContainer" class="family-tree-container"></div>` : ""}
   ${galleryHTML}
 </div>
-        ` : ""}
 
-        <!-- 4. IIIF image gallery -->
-        ${galleryHTML}
+<!-- MOBILE VERSION — RIBBON SECTIONS -->
+<div class="mobile-layout">
+
+  <!-- BOX 1 — INFORMATION -->
+  <div class="mobile-section" 
+       data-section-type="info"
+       data-title-en="Information"
+       data-title-cy="Gwybodaeth">
+  </div>
+
+  <!-- BOX 2 — COLLECTIONS -->
+  <div class="mobile-section" 
+       data-section-type="collections"
+       data-title-en="Collections"
+       data-title-cy="Casgliadau">
+  </div>
+
+  <!-- FAMILY TREE -->
+  ${isHuman ? `
+    <div class="mobile-section" 
+         data-section-type="family"
+         data-title-en="Family Tree"
+         data-title-cy="Coeden deulu">
+      <div id="mobileFamilyTreeProxy"></div>
+    </div>
+  ` : ""}
+
+  <!-- IMAGES -->
+  <div class="mobile-section" 
+       data-section-type="images"
+       data-title-en="Images"
+       data-title-cy="Delweddau">
+  </div>
+
+</div>
+    
+
+  
 
       </section>`;
   }
@@ -873,37 +887,61 @@ ${isHuman ? `
         treeContainer.innerHTML = "";
       }
     }
-// ---------------------------------------------------------
-// MOBILE-ONLY COLLAPSIBLE FAMILY TREE (safe, isolated)
-// ---------------------------------------------------------
 // =====================================================================
 // MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
 // =====================================================================
-(function setupMobileCollapsibleSections() {
 
-  if (window.innerWidth > 768) return; // desktop unaffected
+(function setupMobileRibbonSystem() {
 
+  // Desktop unaffected
+  if (window.innerWidth > 768) return;
+
+  // DESKTOP CONTENT SOURCES
+  const desktopRoot = document.querySelector(".desktop-layout");
+
+  const boxLeft = desktopRoot.querySelector(".box-left");
+  const boxRight = desktopRoot.querySelector(".box-right");
+  const treeDesktop = desktopRoot.querySelector("#familyChartContainer");
+  const galleryDesktop = desktopRoot.querySelector(".gallery-wrapper");
+
+  // MOBILE TARGETS
   const sections = document.querySelectorAll(".mobile-section");
   const lang = Utils.getLang();
 
   sections.forEach(sec => {
+
     if (sec.dataset.mobileInit === "1") return;
     sec.dataset.mobileInit = "1";
 
     const type = sec.dataset.sectionType;
 
-    // Compute label
-    const label = (lang === "cy" ? sec.dataset.titleCy : sec.dataset.titleEn) || "Section";
+    // Inject the correct content depending on type
+    if (type === "info" && boxLeft) {
+      sec.appendChild(boxLeft.cloneNode(true));
+    }
+    if (type === "collections" && boxRight) {
+      sec.appendChild(boxRight.cloneNode(true));
+    }
+    if (type === "family" && treeDesktop) {
+      sec.querySelector("#mobileFamilyTreeProxy")
+         .replaceWith(treeDesktop.cloneNode(true));
+    }
+    if (type === "images" && galleryDesktop) {
+      sec.appendChild(galleryDesktop.cloneNode(true));
+    }
 
-    // Create ribbon button
+    // LABEL
+    const label = (lang === "cy" ? sec.dataset.titleCy : sec.dataset.titleEn);
+
+    // Ribbon button
     const btn = document.createElement("button");
     btn.className = `mobile-section-toggle mobile-toggle-${type}`;
     btn.textContent = label;
 
-    // Insert ribbon before the section
+    // Insert ribbon before section
     sec.parentNode.insertBefore(btn, sec);
 
-    // Collapse by default
+    // Default collapsed
     sec.style.display = "none";
 
     btn.addEventListener("click", () => {
@@ -914,6 +952,7 @@ ${isHuman ? `
   });
 
 })();
+     
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
