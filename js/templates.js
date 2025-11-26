@@ -981,5 +981,5 @@ document.addEventListener("click", e => {
 
   // ---------- Exports ----------
   return { renderGeneric, postRender };
-
+  }
 })(); // end window.Templates IIFE
