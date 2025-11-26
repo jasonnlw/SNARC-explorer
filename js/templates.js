@@ -164,7 +164,7 @@ if (ID_URL[pid]) {
 
   // Special case: P62 returns a full Wikidata URL
   if (pid === "P62") {
-    const q = String(value).match(/Q\\d+/i);
+    const q = String(value).match(/Q\d+/i);
     if (q) {
       const qid = q[0];
       const url = ID_URL["P62"].replace(/\$1/g, qid);
@@ -177,7 +177,7 @@ if (ID_URL[pid]) {
   const url = ID_URL[pid].replace(/\$1/g, encoded);
   return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
 }
-
+  
 
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
