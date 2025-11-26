@@ -906,10 +906,14 @@ document.addEventListener("click", e => {
   const panel = e.target.nextElementSibling;
   panel.classList.toggle("open");
 
+  // Fetch language safely inside the handler
+  const clickLang = Utils.getLang();
+
   e.target.textContent = panel.classList.contains("open")
-    ? (lang === 'cy' ? "Cuddio'r goeden deulu" : "Hide family tree")
-    : (lang === 'cy' ? "Dangos y goeden deulu" : "Show family tree");
+    ? (clickLang === 'cy' ? "Cuddio'r goeden deulu" : "Hide family tree")
+    : (clickLang === 'cy' ? "Dangos y goeden deulu" : "Show family tree");
 });
+
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
