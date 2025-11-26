@@ -512,14 +512,7 @@ a { color: #0645ad; }
   margin-bottom: 3rem;
 }
 
-/* Reduce spacing above family tree box */
-#familyChartContainer {
-  margin-top: -1rem;   /* reduce excessive gap */
-}
 
-.family-tree-toggle {
-  margin-top: -0.5rem; /* pull toggle closer to boxes */
-}
 
 .family-tree-wrapper {
   width: 100%;
