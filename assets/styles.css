@@ -1013,18 +1013,23 @@ a { color: #0645ad; }
 }
 
 
-/* ============================================================
-   MOBILE COLLAPSIBLE RIBBONS (Unified for all sections)
-   ============================================================ */
+/* ===============================================================
+   MOBILE COLLAPSIBLE RIBBONS
+   =============================================================== */
 @media (max-width: 768px) {
 
-  /* Ribbons: full-width, flush, no rounding */
+  /* hide desktop layout on mobile */
+  .desktop-layout { display: none; }
+
+  /* show mobile layout only on mobile */
+  .mobile-layout { display: block; }
+
   .mobile-section-toggle {
     width: 100%;
     border: none;
     border-radius: 0;
     padding: 14px 16px;
-    margin: 0;                     /* no gaps between ribbons */
+    margin: 0;
     font-size: 1.05rem;
     font-weight: 700;
     text-align: left;
@@ -1048,24 +1053,20 @@ a { color: #0645ad; }
     transform: translateY(-50%) rotate(180deg);
   }
 
-  /* Section-specific colours */
-  .mobile-toggle-info {
-    background: #309898;   /* teal */
-  }
-  .mobile-toggle-collections {
-    background: #5FCD96;   /* green */
-  }
-  .mobile-toggle-family {
-    background: #FFB233;   /* amber */
-  }
-  .mobile-toggle-images {
-    background: #FA0808;   /* red */
-  }
+  /* Colour themes */
+  .mobile-toggle-info         { background: #309898; }
+  .mobile-toggle-collections  { background: #5FCD96; }
+  .mobile-toggle-family       { background: #FFB233; }
+  .mobile-toggle-images       { background: #FA0808; }
 
-  /* Remove spacing between sections */
+  /* No spacing between sections */
   .mobile-section {
     margin: 0;
     padding: 0;
   }
 }
 
+/* Desktop: hide mobile layout entirely */
+@media (min-width: 769px) {
+  .mobile-layout { display: none; }
+}
