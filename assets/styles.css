@@ -512,6 +512,15 @@ a { color: #0645ad; }
   margin-bottom: 3rem;
 }
 
+/* Reduce spacing above family tree box */
+#familyChartContainer {
+  margin-top: -1rem;   /* reduce excessive gap */
+}
+
+.family-tree-toggle {
+  margin-top: -0.5rem; /* pull toggle closer to boxes */
+}
+
 .family-tree-wrapper {
   width: 100%;
   overflow: hidden;
@@ -991,8 +1000,9 @@ a { color: #0645ad; }
   display: block;
   width: 100%;
   margin: 12px 0;
-  padding: 10px;
-  font-size: 16px;
+  padding: 14px 16px;
+  font-size: 17px;
+  font-weight: 600;
   background: #eee;
   border-radius: 8px;
   border: none;
@@ -1001,4 +1011,54 @@ a { color: #0645ad; }
 .family-tree-collapsible {
   transition: all 0.3s ease;
 }
+
+/* -----------------------------------------
+   MOBILE FAMILY TREE RIBBON (brand-aligned)
+------------------------------------------ */
+@media (max-width: 768px) {
+
+  .family-tree-toggle {
+    display: block;
+    width: 100%;
+    background: #FFB233;           /* amber brand colour */
+    color: #fff;                   /* white text for contrast */
+    border: none;
+    border-radius: 10px;           /* match your pill rounding */
+    padding: 14px 16px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: center;
+    cursor: pointer;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    transition: background 0.25s ease, transform 0.15s ease;
+    position: relative;
+  }
+
+  .family-tree-toggle:hover {
+    background: #FFA600;           /* slightly stronger amber */
+  }
+
+  .family-tree-toggle:active {
+    transform: scale(0.98);
+  }
+
+  /* Arrow icon inside toggle */
+  .family-tree-toggle::after {
+    content: "▾";                  /* dropdown arrow */
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.25rem;
+    transition: transform 0.25s ease;
+  }
+
+  /* When open, rotate arrow */
+  .family-tree-collapsible[style*="display: block"] ~ .family-tree-toggle::after,
+  .family-tree-toggle.open::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+}
+
 
