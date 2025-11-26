@@ -1,5 +1,5 @@
 /* ===============================================================
-   SNARC Explorer Templates.js – cleaned + ready for family tree
+   SNARC Explorer Templates.js – cleaned + ready for family tre
    =============================================================== */
 
 window.Templates = (() => {
