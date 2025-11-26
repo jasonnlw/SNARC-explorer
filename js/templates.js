@@ -802,7 +802,31 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
         ${tilesHTML}
         <!-- 2. Family tree (only for humans; content injected in postRender) -->
         ${isHuman ? `
-          <div id="familyChartContainer" class="family-tree-container"></div>
+          <!-- BOX 1 — INFORMATION -->
+<div class="mobile-section" data-section-type="info"
+     data-title-en="Information" data-title-cy="Gwybodaeth">
+  ${tilesHTML}
+</div>
+
+<!-- BOX 2 — COLLECTIONS -->
+<div class="mobile-section" data-section-type="collections"
+     data-title-en="Collections" data-title-cy="Casgliadau">
+  ${collectionsHTML || ""}  <!-- already part of tilesHTML OR separate -->
+</div>
+
+<!-- FAMILY TREE -->
+${isHuman ? `
+  <div class="mobile-section" data-section-type="family"
+       data-title-en="Family Tree" data-title-cy="Coeden deulu">
+    <div id="familyChartContainer" class="family-tree-container"></div>
+  </div>
+` : ""}
+
+<!-- IMAGES -->
+<div class="mobile-section" data-section-type="images"
+     data-title-en="Images" data-title-cy="Delweddau">
+  ${galleryHTML}
+</div>
         ` : ""}
 
         <!-- 4. IIIF image gallery -->
@@ -852,39 +876,45 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 // ---------------------------------------------------------
 // MOBILE-ONLY COLLAPSIBLE FAMILY TREE (safe, isolated)
 // ---------------------------------------------------------
-(function setupMobileTreeToggle() {
-  const container = document.getElementById("familyChartContainer");
-  if (!container) return;
+// =====================================================================
+// MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
+// =====================================================================
+(function setupMobileCollapsibleSections() {
 
-  // Only run on mobile AND only once per render cycle
-  if (window.innerWidth > 768 || container.dataset.toggleInit === "1") return;
-  container.dataset.toggleInit = "1";
+  if (window.innerWidth > 768) return; // desktop unaffected
 
-  // Wrap existing iframe container so we can collapse it
-  container.classList.add("family-tree-collapsible");
-
+  const sections = document.querySelectorAll(".mobile-section");
   const lang = Utils.getLang();
-  const showLabel = lang === "cy" ? "Dangos y goeden deulu" : "Show family tree";
-  const hideLabel = lang === "cy" ? "Cuddio'r goeden deulu" : "Hide family tree";
 
-  // Create toggle button
-  const btn = document.createElement("button");
-  btn.className = "family-tree-toggle";
-  btn.type = "button";
-  btn.textContent = showLabel;
+  sections.forEach(sec => {
+    if (sec.dataset.mobileInit === "1") return;
+    sec.dataset.mobileInit = "1";
 
-  // Insert button BEFORE the container
-  container.parentNode.insertBefore(btn, container);
+    const type = sec.dataset.sectionType;
 
-  // Start collapsed
-  container.style.display = "none";
+    // Compute label
+    const label = (lang === "cy" ? sec.dataset.titleCy : sec.dataset.titleEn) || "Section";
 
-  btn.addEventListener("click", () => {
-    const visible = container.style.display !== "none";
-    container.style.display = visible ? "none" : "block";
-    btn.textContent = visible ? showLabel : hideLabel;
+    // Create ribbon button
+    const btn = document.createElement("button");
+    btn.className = `mobile-section-toggle mobile-toggle-${type}`;
+    btn.textContent = label;
+
+    // Insert ribbon before the section
+    sec.parentNode.insertBefore(btn, sec);
+
+    // Collapse by default
+    sec.style.display = "none";
+
+    btn.addEventListener("click", () => {
+      const open = sec.style.display !== "none";
+      sec.style.display = open ? "none" : "block";
+      btn.classList.toggle("open", !open);
+    });
   });
+
 })();
+
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
     if (typeof L !== "undefined") {
