@@ -857,29 +857,47 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       const lang = Utils.getLang();
 
 if (isHuman && hasFamily && wikidataId) {
-
-  const wrapperHTML = `
-    <div class="family-tree-wrapper">
-      <button class="family-tree-toggle">
-        ${lang === "cy" ? "Dangos y goeden deulu" : "Show family tree"}
-      </button>
-
-      <div class="family-tree-collapsible">
-        <div id="familyChartContainer"></div>
-      </div>
-    </div>
-  `;
-
-  // Insert wrapper into the page
-  const container = document.getElementById("familyTreeOuter");
-  if (container) container.innerHTML = wrapperHTML;
-
-  // Now inject the actual family tree into the inner container
+  // Render the tree as before
   injectFamilyTree(wikidataId, lang);
 
+  // MOBILE-ONLY: make the tree collapsible
+  if (
+    treeContainer &&
+    window.innerWidth <= 768 &&               // only on small screens
+    !treeContainer.dataset.toggleInit        // don’t re-init on rerender
+  ) {
+    treeContainer.dataset.toggleInit = "1";
+
+    const wrapper = treeContainer.parentNode || document.body;
+
+    // Create toggle button
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "family-tree-toggle";
+    btn.textContent =
+      lang === "cy"
+        ? "Dangos y goeden deulu"
+        : "Show family tree";
+
+    // Insert button just before the tree container
+    wrapper.insertBefore(btn, treeContainer);
+
+    // Mark the container as collapsible
+    treeContainer.classList.add("family-tree-collapsible");
+
+    // Start closed on mobile
+    treeContainer.classList.remove("open");
+
+    // Toggle behaviour
+    btn.addEventListener("click", () => {
+      const isOpen = treeContainer.classList.toggle("open");
+      btn.textContent = isOpen
+        ? (lang === "cy" ? "Cuddio'r goeden deulu" : "Hide family tree")
+        : (lang === "cy" ? "Dangos y goeden deulu" : "Show family tree");
+    });
+  }
 } else {
-  const container = document.getElementById("familyTreeOuter");
-  if (container) container.innerHTML = "";
+  if (treeContainer) treeContainer.innerHTML = "";
 }
        
 document.addEventListener("click", e => {
