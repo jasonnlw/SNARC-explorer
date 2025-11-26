@@ -164,7 +164,7 @@ if (ID_URL[pid]) {
 
   // Special case: P62 returns a full Wikidata URL
   if (pid === "P62") {
-    const q = String(value).match(/Q\d+/i);
+    const q = String(value).match(/Q\\d+/i);
     if (q) {
       const qid = q[0];
       const url = ID_URL["P62"].replace(/\$1/g, qid);
@@ -177,7 +177,7 @@ if (ID_URL[pid]) {
   const url = ID_URL[pid].replace(/\$1/g, encoded);
   return `<a href="${url}" target="_blank" rel="noopener">${String(value)}</a>`;
 }
-  
+
 
     const propInfo = window.PROPERTY_INFO?.[pid];
     const dtNorm = normalizeDatatype(datatype || propInfo?.datatype);
@@ -698,28 +698,15 @@ return `
     });
     window.currentIsHuman = isHuman;
 
+    // Determine if entity has any family relationships (SNARC properties)
+    const hasFamily =
+      (claims["P53"] && claims["P53"].length) ||   // father
+      (claims["P55"] && claims["P55"].length) ||   // mother
+      (claims["P52"] && claims["P52"].length) ||   // sibling
+      (claims["P56"] && claims["P56"].length) ||   // spouse
+      (claims["P54"] && claims["P54"].length);     // child
 
-   // Check for parents
-const hasFather = claims["P53"] && claims["P53"].length;
-const hasMother = claims["P55"] && claims["P55"].length;
-const hasParent = hasFather || hasMother;
-
-// Check for other family relationships
-const hasSibling = claims["P52"] && claims["P52"].length;
-const hasSpouse  = claims["P56"] && claims["P56"].length;
-const hasChild   = claims["P54"] && claims["P54"].length;
-
-// New rule:
-// 1. If there are siblings but NO parent → do NOT count it as "family"
-// 2. All other cases work as before
-const hasFamily =
-  hasParent ||            // parents
-  hasSpouse ||            // spouses
-  hasChild  ||            // children
-  (hasSibling && hasParent); // siblings only if a parent exists
-
-window.currentHasFamily = hasFamily;
-
+    window.currentHasFamily = hasFamily;
 
     // --- Extract Wikidata ID from P62 (URI or QID) -------------------
     let wikidataId = null;
@@ -856,65 +843,12 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       const wikidataId = window.currentWikidataId;
       const lang = Utils.getLang();
 
-if (isHuman && hasFamily && wikidataId) {
-  // Render the tree as before
-  injectFamilyTree(wikidataId, lang);
-
-  // MOBILE-ONLY: make the tree collapsible
-  if (
-    treeContainer &&
-    window.innerWidth <= 768 &&               // only on small screens
-    !treeContainer.dataset.toggleInit        // don’t re-init on rerender
-  ) {
-    treeContainer.dataset.toggleInit = "1";
-
-    const wrapper = treeContainer.parentNode || document.body;
-
-    // Create toggle button
-    const btn = document.createElement("button");
-    btn.type = "button";
-    btn.className = "family-tree-toggle";
-    btn.textContent =
-      lang === "cy"
-        ? "Dangos y goeden deulu"
-        : "Show family tree";
-
-    // Insert button just before the tree container
-    wrapper.insertBefore(btn, treeContainer);
-
-    // Mark the container as collapsible
-    treeContainer.classList.add("family-tree-collapsible");
-
-    // Start closed on mobile
-    treeContainer.classList.remove("open");
-
-    // Toggle behaviour
-    btn.addEventListener("click", () => {
-      const isOpen = treeContainer.classList.toggle("open");
-      btn.textContent = isOpen
-        ? (lang === "cy" ? "Cuddio'r goeden deulu" : "Hide family tree")
-        : (lang === "cy" ? "Dangos y goeden deulu" : "Show family tree");
-    });
-  }
-} else {
-  if (treeContainer) treeContainer.innerHTML = "";
-}
-       
-document.addEventListener("click", e => {
-  if (!e.target.classList.contains("family-tree-toggle")) return;
-
-  const panel = e.target.nextElementSibling;
-  panel.classList.toggle("open");
-
-  // Fetch language safely inside the handler
-  const clickLang = Utils.getLang();
-
-  e.target.textContent = panel.classList.contains("open")
-    ? (clickLang === 'cy' ? "Cuddio'r goeden deulu" : "Hide family tree")
-    : (clickLang === 'cy' ? "Dangos y goeden deulu" : "Show family tree");
-});
-
-
+      if (isHuman && hasFamily && wikidataId) {
+        injectFamilyTree(wikidataId, lang);
+      } else {
+        treeContainer.innerHTML = "";
+      }
+    }
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
     if (typeof L !== "undefined") {
@@ -981,5 +915,5 @@ document.addEventListener("click", e => {
 
   // ---------- Exports ----------
   return { renderGeneric, postRender };
-  }
+
 })(); // end window.Templates IIFE
