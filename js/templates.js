@@ -515,7 +515,7 @@ const values = containsPill
       <div class="profile-inner">
         <dl>${rows.join("")}</dl>
       </div>
-
+      ${mapHTML}
     </div>`;
 }
 
