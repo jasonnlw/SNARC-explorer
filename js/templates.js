@@ -918,6 +918,11 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
     const type = sec.dataset.sectionType;
 
+  // ADD THIS BLOCK: Refinement 2: Skip 'images' section if no gallery content exists
+  if (type === "images" && !galleryDesktop) {
+      return; // Skips the rest of the loop iteration for this section
+  }   
+
     // Inject the correct content depending on type
 if (type === "info" && boxLeft) {
 
