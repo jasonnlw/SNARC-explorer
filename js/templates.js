@@ -500,30 +500,6 @@ const values = containsPill
     }
   }
 
-  // ----------------------------------------
-  // MINI-MAP (BOTTOM OF BOX 1)
-  // ----------------------------------------
-  let mapHTML = "";
-  if (claims["P26"] && claims["P26"].length) {
-    const raw = Utils.firstValue(claims["P26"][0]);
-    const [lat, lon] = raw.split(",").map(Number);
-
-    if (!isNaN(lat) && !isNaN(lon)) {
-      const mapId = "map-" + Math.random().toString(36).slice(2);
-
-      mapHTML = `
-        <div class="profile-map-container">
-          <div class="map-thumb"
-               data-lat="${lat}"
-               data-lon="${lon}"
-               data-mapid="${mapId}">
-            <div id="${mapId}" class="map-thumb-canvas"></div>
-          </div>
-        </div>`;
-    }
-     console.log("Box1 map raw:", raw);
-
-  }
 
 
    
@@ -540,7 +516,6 @@ const values = containsPill
         <dl>${rows.join("")}</dl>
       </div>
 
-      ${mapHTML}
     </div>`;
 }
 
