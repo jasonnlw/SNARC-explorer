@@ -434,16 +434,24 @@ function renderProfileBox(entity, lang, labelMap) {
 
     // Extract raw value
     const raw = Utils.firstValue(stmt);
+    
+    // --- START FIX: Handle QID and Label Lookup ---
+    const qid = normalizeQid(raw);
+    
+    // If we have a QID, check the label map
+    if (qid) {
+        const label = labelMap[qid] || qid; // Get the label or use QID as fallback
 
-    // 1. LINKABLE INTERNAL ENTITIES (Q-IDs)
-    if (PROFILE_LINKABLE.has(pid)) {
-      const qid = normalizeQid(raw);
-      if (qid) {
-        const label = labelMap[qid] || qid;
-        const categoryClass = getBox1CategoryClass(pid);
-        return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
-      }
-      return String(raw);
+        // 1a. LINKABLE INTERNAL ENTITIES (Q-IDs)
+        if (PROFILE_LINKABLE.has(pid)) {
+            const categoryClass = getBox1CategoryClass(pid);
+            // Return link pill with the label
+            return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
+        }
+        
+        // 1b. NON-LINKABLE INTERNAL ENTITIES (Q-IDs)
+        // If not linkable, return the plain label string
+        return label;
     }
 
     // 2. COORDINATES IN BOX 1 ARE STILL RENDERED AS TEXT HERE
