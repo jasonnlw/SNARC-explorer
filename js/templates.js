@@ -915,9 +915,46 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     const type = sec.dataset.sectionType;
 
     // Inject the correct content depending on type
-    if (type === "info" && boxLeft) {
-      sec.appendChild(boxLeft.cloneNode(true));
-    }
+   if (type === "info" && boxLeft) {
+  const clone = boxLeft.cloneNode(true);
+  sec.appendChild(clone);
+
+  // --- REBUILD MAP THUMBNAILS FOR MOBILE ---
+  const placeLinks = clone.querySelectorAll("[data-lat][data-lon]");
+
+  placeLinks.forEach(link => {
+    const lat = link.dataset.lat;
+    const lon = link.dataset.lon;
+
+    if (!lat || !lon) return;
+
+    // Create a fresh mapId so desktop/mobile do not conflict
+    const mapId = "map-" + Math.random().toString(36).substring(2, 10);
+
+    // Rebuild the SAME HTML you use for desktop preview
+    const mapContainer = document.createElement("div");
+    mapContainer.className = "profile-map-container";
+
+    const thumb = document.createElement("div");
+    thumb.className = "map-thumb";
+    thumb.dataset.lat = lat;
+    thumb.dataset.lon = lon;
+    thumb.dataset.mapid = mapId;
+
+    const canvas = document.createElement("div");
+    canvas.id = mapId;
+    canvas.className = "map-thumb-canvas";
+
+    // Build hierarchy
+    thumb.appendChild(canvas);
+    mapContainer.appendChild(thumb);
+
+    // Insert map preview right after the place link
+    link.insertAdjacentElement("afterend", mapContainer);
+  });
+}
+
+
 
     if (type === "collections" && boxRight) {
       sec.appendChild(boxRight.cloneNode(true));
