@@ -950,21 +950,23 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     // Default collapsed
     sec.style.display = "none";
 
-    btn.addEventListener("click", () => {
-  const isOpen = sec.style.display !== "none";
+btn.addEventListener("click", () => {
+  const wasOpen = sec.style.display !== "none";
+  const nowOpen = !wasOpen;
 
   // Toggle visibility
-  sec.style.display = isOpen ? "none" : "block";
-  btn.classList.toggle("open", !isOpen);
+  sec.style.display = nowOpen ? "block" : "none";
+  btn.classList.toggle("open", nowOpen);
 
-  // --- FIX: Refresh Leaflet maps when section opens ---
-  if (!isOpen) {
-    // Wait for CSS layout to settle
+  // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
+  if (nowOpen && typeof L !== "undefined") {
+    // Let the browser apply the new layout first
     setTimeout(() => {
-      const maps = sec.querySelectorAll(".leaflet-container");
-      maps.forEach(m => {
-        if (m._leaflet_map_instance) {
-          m._leaflet_map_instance.invalidateSize();
+      const mapContainers = sec.querySelectorAll(".leaflet-container");
+      mapContainers.forEach(container => {
+        const map = container._leafletMap;
+        if (map && typeof map.invalidateSize === "function") {
+          map.invalidateSize();
         }
       });
     }, 50);
@@ -1013,6 +1015,7 @@ root.querySelectorAll(".map-thumb").forEach(thumb => {
   if (!mapDiv || mapDiv.dataset.initialized) return;
 
   // Small static map
+    // Small static map
   const map = L.map(mapId, {
     center: [lat, lon],
     zoom: 13,
@@ -1021,7 +1024,9 @@ root.querySelectorAll(".map-thumb").forEach(thumb => {
     zoomControl: false,
     attributionControl: false
   });
-map._container._leaflet_map_instance = map;
+
+  // 🔹 Store the map instance on its container
+  mapDiv._leafletMap = map;
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap"
@@ -1029,6 +1034,7 @@ map._container._leaflet_map_instance = map;
 
   L.marker([lat, lon]).addTo(map);
   mapDiv.dataset.initialized = "true";
+
 
   // Click → open modal with large map
   thumb.style.cursor = "pointer";
