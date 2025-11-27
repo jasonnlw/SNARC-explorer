@@ -1012,52 +1012,13 @@ btn.addEventListener("click", () => {
   // Toggle visibility
   sec.style.display = nowOpen ? "block" : "none";
   btn.classList.toggle("open", nowOpen);
+   
 
   // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
-if (nowOpen && typeof L !== "undefined") {
-  // Wait for layout to apply
-  setTimeout(() => {
-    const thumbs = sec.querySelectorAll(".map-thumb");
-
-    thumbs.forEach(thumb => {
-      const lat = parseFloat(thumb.dataset.lat);
-      const lon = parseFloat(thumb.dataset.lon);
-      const mapId = thumb.dataset.mapid;
-
-      const mapDiv = sec.querySelector(`#${mapId}`);
-      if (!mapDiv) return;
-
-      // If never initialised (because container was hidden at page load)
-      if (!mapDiv.dataset.initialized) {
-
-        const map = L.map(mapId, {
-          center: [lat, lon],
-          zoom: 13,
-          scrollWheelZoom: false,
-          dragging: false,
-          zoomControl: false,
-          attributionControl: false
-        });
-
-        mapDiv._leafletMap = map;
-
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "© OpenStreetMap"
-        }).addTo(map);
-
-        L.marker([lat, lon]).addTo(map);
-        mapDiv.dataset.initialized = "true";
-
-      } else {
-        // Already initialised → just resize
-        const map = mapDiv._leafletMap;
-        if (map && typeof map.invalidateSize === "function") {
-          map.invalidateSize();
-        }
-      }
-    });
-  }, 120);
+if (nowOpen) {
+  initLeafletMaps(sec);
 }
+
 
    
 });
@@ -1088,58 +1049,53 @@ if (nowOpen && typeof L !== "undefined") {
       }
 
 // Initialize all mini-maps on the page
-const root =
-  (window.innerWidth <= 768
-    ? document.querySelector(".mobile-layout")
-    : document.querySelector(".desktop-layout")) || document;
+function initLeafletMaps(root) {
+  if (!root) return;
 
-root.querySelectorAll(".map-thumb").forEach(thumb => {
-  const lat = parseFloat(thumb.dataset.lat);
-  const lon = parseFloat(thumb.dataset.lon);
-  const mapId = thumb.dataset.mapid;
-  if (!isFinite(lat) || !isFinite(lon)) return;
+  root.querySelectorAll(".map-thumb").forEach(thumb => {
+    const lat = parseFloat(thumb.dataset.lat);
+    const lon = parseFloat(thumb.dataset.lon);
+    const mapId = thumb.dataset.mapid;
+    if (!isFinite(lat) || !isFinite(lon)) return;
 
-  // Look for the map only inside the active layout
-  const mapDiv = root.querySelector(`#${mapId}`);
-  if (!mapDiv || mapDiv.dataset.initialized) return;
+    const mapDiv = root.querySelector(`#${mapId}`);
+    if (!mapDiv || mapDiv.dataset.initialized) return;
 
-  
-    // Small static map
-  const map = L.map(mapId, {
-    center: [lat, lon],
-    zoom: 13,
-    scrollWheelZoom: false,
-    dragging: false,
-    zoomControl: false,
-    attributionControl: false
+    const map = L.map(mapId, {
+      center: [lat, lon],
+      zoom: 13,
+      scrollWheelZoom: false,
+      dragging: false,
+      zoomControl: false,
+      attributionControl: false
+    });
+
+    mapDiv._leafletMap = map;
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "© OpenStreetMap"
+    }).addTo(map);
+
+    L.marker([lat, lon]).addTo(map);
+    mapDiv.dataset.initialized = "true";
+
+    thumb.style.cursor = "pointer";
+    thumb.addEventListener("click", () => {
+      const modal = document.getElementById("map-modal");
+      modal.style.display = "flex";
+      setTimeout(() => {
+        const largeMap = L.map("map-large", {
+          center: [lat, lon],
+          zoom: 15
+        });
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+          .addTo(largeMap);
+        L.marker([lat, lon]).addTo(largeMap);
+      }, 100);
+    });
   });
+}
 
-  // 🔹 Store the map instance on its container
-  mapDiv._leafletMap = map;
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    attribution: "© OpenStreetMap"
-  }).addTo(map);
-
-  L.marker([lat, lon]).addTo(map);
-  mapDiv.dataset.initialized = "true";
-
-
-  // Click → open modal with large map
-  thumb.style.cursor = "pointer";
-  thumb.addEventListener("click", () => {
-    const modal = document.getElementById("map-modal");
-    modal.style.display = "flex";
-    setTimeout(() => {
-      const largeMap = L.map("map-large", {
-        center: [lat, lon],
-        zoom: 15
-      });
-      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-        .addTo(largeMap);
-      L.marker([lat, lon]).addTo(largeMap);
-    }, 100);
-  });
 }); // end forEach
     } // end Leaflet guard
   }
