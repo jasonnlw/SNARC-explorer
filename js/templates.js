@@ -973,18 +973,52 @@ btn.addEventListener("click", () => {
   btn.classList.toggle("open", nowOpen);
 
   // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
-  if (nowOpen && typeof L !== "undefined") {
-    // Let the browser apply the new layout first
-    setTimeout(() => {
-      const mapContainers = sec.querySelectorAll(".leaflet-container");
-      mapContainers.forEach(container => {
-        const map = container._leafletMap;
+if (nowOpen && typeof L !== "undefined") {
+  // Wait for layout to apply
+  setTimeout(() => {
+    const thumbs = sec.querySelectorAll(".map-thumb");
+
+    thumbs.forEach(thumb => {
+      const lat = parseFloat(thumb.dataset.lat);
+      const lon = parseFloat(thumb.dataset.lon);
+      const mapId = thumb.dataset.mapid;
+
+      const mapDiv = sec.querySelector(`#${mapId}`);
+      if (!mapDiv) return;
+
+      // If never initialised (because container was hidden at page load)
+      if (!mapDiv.dataset.initialized) {
+
+        const map = L.map(mapId, {
+          center: [lat, lon],
+          zoom: 13,
+          scrollWheelZoom: false,
+          dragging: false,
+          zoomControl: false,
+          attributionControl: false
+        });
+
+        mapDiv._leafletMap = map;
+
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+          attribution: "© OpenStreetMap"
+        }).addTo(map);
+
+        L.marker([lat, lon]).addTo(map);
+        mapDiv.dataset.initialized = "true";
+
+      } else {
+        // Already initialised → just resize
+        const map = mapDiv._leafletMap;
         if (map && typeof map.invalidateSize === "function") {
           map.invalidateSize();
         }
-      });
-    }, 50);
-  }
+      }
+    });
+  }, 120);
+}
+
+   
 });
 
   });
