@@ -420,10 +420,6 @@ function getBox1CategoryClass(pid) {
   return "box1-pill-default";
 }
 
-// =======================================
-// === BOX 1 — PROFILE INFORMATION =======
-// =======================================
-
 function renderProfileBox(entity, lang, labelMap) {
   const claims = entity.claims || {};
   const rows = [];
@@ -432,58 +428,53 @@ function renderProfileBox(entity, lang, labelMap) {
   // Helper: smart value rendering for Box 1
   // ----------------------------------------
   function formatValue(pid, stmt) {
-  const propInfo = window.PROPERTY_INFO?.[pid];
-  const datatype = propInfo?.datatype || "String";
-  const dtNorm = normalizeDatatype(datatype);
+    const propInfo = window.PROPERTY_INFO?.[pid];
+    const datatype = propInfo?.datatype || "String";
+    const dtNorm = normalizeDatatype(datatype);
 
-  // Extract raw value
-  const raw = Utils.firstValue(stmt);
+    // Extract raw value
+    const raw = Utils.firstValue(stmt);
 
-  // 1. LINKABLE INTERNAL ENTITIES (Q-IDs)
-  if (PROFILE_LINKABLE.has(pid)) {
-    const qid = normalizeQid(raw);
-
-    if (qid) {
-      // Internal entity → pill-button
-      const label = labelMap[qid] || qid;
-      const categoryClass = getBox1CategoryClass(pid);
-      return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
+    // 1. LINKABLE INTERNAL ENTITIES (Q-IDs)
+    if (PROFILE_LINKABLE.has(pid)) {
+      const qid = normalizeQid(raw);
+      if (qid) {
+        const label = labelMap[qid] || qid;
+        const categoryClass = getBox1CategoryClass(pid);
+        return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}</a>`;
+      }
+      return String(raw);
     }
 
-    // External ID fallback → normal identifier logic
-    return renderValue(datatype, raw, labelMap, lang, pid);
-  }
+    // 2. COORDINATES IN BOX 1 ARE STILL RENDERED AS TEXT HERE
+    // (the actual mini-map is handled separately via mapHTML)
+    if (pid === "P26") {
+      return String(raw);
+    }
 
-  // 2. DATE / TIME VALUES
-  if (dtNorm === "time") {
-    return formatSnarcDateFromSnak(stmt);
-  }
+    // 3. FALLBACK: DATATYPE-SENSITIVE FORMAT
+    if (dtNorm === "time") return Utils.formatTime(raw);
+    if (dtNorm === "quantity") return String(raw).replace(/^\+/, "");
+    if (dtNorm === "url") {
+      const v = String(raw).trim();
+      return `<a href="${v}" target="_blank" rel="noopener">${v}</a>`;
+    }
 
-  // 3. QIDs (non-linkable)
-  if (typeof raw === "string" && /^Q\d+$/i.test(raw)) {
-    return labelMap[raw] || raw;
+    return String(raw);
   }
-
-  // 4. Fallback
-  return raw;
-}
 
   // ----------------------------------------
-  // MERGED BIRTH / DEATH LINES (only for humans)
+  // BIRTH / DEATH ROWS (custom layout)
   // ----------------------------------------
-  const isHuman = claims["P7"]?.some(stmt => Utils.firstValue(stmt) === "Q947");
-
-  if (isHuman) {
-    // Birth
-    const dob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
-    const pob = claims["P21"]?.[0] ? formatValue("P21", claims["P21"][0]) : null;
+  if (claims["P15"] || claims["P17"] || claims["P16"] || claims["P21"]) {
+    const dob = claims["P15"]?.[0] ? formatValue("P15", claims["P15"][0]) : null;
+    const pob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
 
     if (dob || pob) {
       const combined = dob && pob ? `${dob}, ${pob}` : (dob || pob);
       rows.push(`<dt>${lang === "cy" ? "Ganed" : "Born"}</dt><dd>${combined}</dd>`);
     }
 
-    // Death
     const dod = claims["P18"]?.[0] ? formatValue("P18", claims["P18"][0]) : null;
     const pod = claims["P22"]?.[0] ? formatValue("P22", claims["P22"][0]) : null;
 
@@ -503,28 +494,50 @@ function renderProfileBox(entity, lang, labelMap) {
     const label = lang === "cy" ? propInfo?.label_cy : propInfo?.label_en;
 
     const renderedValues = claims[pid]
-  .map(stmt => formatValue(pid, stmt))
-  .filter(Boolean);
+      .map(stmt => formatValue(pid, stmt))
+      .filter(Boolean);
 
-// Detect if ANY value is a pill (linkable)
-const containsPill = renderedValues.some(v =>
-  v.includes("box1-link-pill")
-);
+    // Detect if ANY value is a pill (linkable)
+    const containsPill = renderedValues.some(v =>
+      v.includes("box1-link-pill")
+    );
 
-// Smart-join logic
-const values = containsPill
-  ? renderedValues.join("")       // pills: no comma
-  : renderedValues.join(", ");    // plain text: comma-separated
-
+    // Smart-join logic
+    const values = containsPill
+      ? renderedValues.join(" ")           // pills: no comma
+      : renderedValues.join(", ");        // plain text: comma-separated
 
     if (values) {
       rows.push(`<dt>${label}</dt><dd>${values}</dd>`);
     }
   }
 
+  // ----------------------------------------
+  // MINI-MAP (BOTTOM OF BOX 1) — P26
+  // ----------------------------------------
+  let mapHTML = "";
+  if (claims["P26"] && claims["P26"].length) {
+    const raw = Utils.firstValue(claims["P26"][0]);
+    const parts = String(raw).split(",");
+    if (parts.length === 2) {
+      const lat = Number(parts[0]);
+      const lon = Number(parts[1]);
+      if (isFinite(lat) && isFinite(lon)) {
+        const mapId = "map-" + Math.random().toString(36).slice(2);
+        mapHTML = `
+        <div class="profile-map-container">
+          <div class="map-thumb"
+               data-lat="${lat}"
+               data-lon="${lon}"
+               data-mapid="${mapId}">
+            <div id="${mapId}" class="map-thumb-canvas"></div>
+          </div>
+        </div>`;
+        console.log("Box1 map raw:", raw);
+      }
+    }
+  }
 
-
-   
   // ----------------------------------------
   // FINAL RENDER
   // ----------------------------------------
@@ -537,6 +550,7 @@ const values = containsPill
       <div class="profile-inner">
         <dl>${rows.join("")}</dl>
       </div>
+      ${mapHTML}
     </div>`;
 }
 
@@ -911,45 +925,26 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     const type = sec.dataset.sectionType;
 
     // Inject the correct content depending on type
-   if (type === "info" && boxLeft) {
-  const clone = boxLeft.cloneNode(true);
-clone.querySelectorAll(".profile-map-container").forEach(el => el.remove());
-  sec.appendChild(clone);
+       // Inject the correct content depending on type
+    if (type === "info" && boxLeft) {
+      // Just clone Box 1 as-is, including its mapHTML
+      sec.appendChild(boxLeft.cloneNode(true));
+    }
 
-  // --- REBUILD MAP THUMBNAILS FOR MOBILE ---
-  const placeLinks = clone.querySelectorAll("[data-lat][data-lon]");
+    if (type === "collections" && boxRight) {
+      sec.appendChild(boxRight.cloneNode(true));
+    }
 
-  placeLinks.forEach(link => {
-    const lat = link.dataset.lat;
-    const lon = link.dataset.lon;
+    if (type === "family" && treeDesktop) {
+      const proxy = sec.querySelector("#mobileFamilyTreeProxy");
+      if (proxy) {
+        proxy.replaceWith(treeDesktop.cloneNode(true));
+      }
+    }
 
-    if (!lat || !lon) return;
-
-    // Create a fresh mapId so desktop/mobile do not conflict
-    const mapId = "map-" + Math.random().toString(36).substring(2, 10);
-
-    // Rebuild the SAME HTML you use for desktop preview
-    const mapContainer = document.createElement("div");
-    mapContainer.className = "profile-map-container";
-
-    const thumb = document.createElement("div");
-    thumb.className = "map-thumb";
-    thumb.dataset.lat = lat;
-    thumb.dataset.lon = lon;
-    thumb.dataset.mapid = mapId;
-
-    const canvas = document.createElement("div");
-    canvas.id = mapId;
-    canvas.className = "map-thumb-canvas";
-
-    // Build hierarchy
-    thumb.appendChild(canvas);
-    mapContainer.appendChild(thumb);
-
-    // Insert map preview right after the place link
-    link.insertAdjacentElement("afterend", mapContainer);
-  });
-}
+    if (type === "images" && galleryDesktop) {
+      sec.appendChild(galleryDesktop.cloneNode(true));
+    }
 
 
 
@@ -1048,7 +1043,7 @@ root.querySelectorAll(".map-thumb").forEach(thumb => {
   const mapDiv = root.querySelector(`#${mapId}`);
   if (!mapDiv || mapDiv.dataset.initialized) return;
 
-  // Small static map
+  
     // Small static map
   const map = L.map(mapId, {
     center: [lat, lon],
