@@ -951,10 +951,26 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     sec.style.display = "none";
 
     btn.addEventListener("click", () => {
-      const open = sec.style.display !== "none";
-      sec.style.display = open ? "none" : "block";
-      btn.classList.toggle("open", !open);
-    });
+  const isOpen = sec.style.display !== "none";
+
+  // Toggle visibility
+  sec.style.display = isOpen ? "none" : "block";
+  btn.classList.toggle("open", !isOpen);
+
+  // --- FIX: Refresh Leaflet maps when section opens ---
+  if (!isOpen) {
+    // Wait for CSS layout to settle
+    setTimeout(() => {
+      const maps = sec.querySelectorAll(".leaflet-container");
+      maps.forEach(m => {
+        if (m._leaflet_map_instance) {
+          m._leaflet_map_instance.invalidateSize();
+        }
+      });
+    }, 50);
+  }
+});
+
   });
 })();
   
@@ -1005,6 +1021,7 @@ root.querySelectorAll(".map-thumb").forEach(thumb => {
     zoomControl: false,
     attributionControl: false
   });
+map._container._leaflet_map_instance = map;
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution: "© OpenStreetMap"
