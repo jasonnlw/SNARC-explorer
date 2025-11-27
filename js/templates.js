@@ -810,31 +810,26 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       <section class="card entity-layout">
         ${renderHeroHeader(entity, lang, labelMap)}
 
-  <!-- DESKTOP VERSION (unchanged) -->
-<div class="desktop-layout">
+  <div class="desktop-layout">
   ${tilesHTML}
   ${isHuman ? `<div id="familyChartContainer" class="family-tree-container"></div>` : ""}
   ${galleryHTML}
 </div>
 
-<!-- MOBILE VERSION — RIBBON SECTIONS -->
 <div class="mobile-layout">
 
-  <!-- BOX 1 — INFORMATION -->
   <div class="mobile-section" 
        data-section-type="info"
        data-title-en="Information"
        data-title-cy="Gwybodaeth">
   </div>
 
-  <!-- BOX 2 — COLLECTIONS -->
   <div class="mobile-section" 
        data-section-type="collections"
        data-title-en="Collections"
        data-title-cy="Casgliadau">
   </div>
 
-  <!-- FAMILY TREE -->
   ${isHuman ? `
     <div class="mobile-section" 
          data-section-type="family"
@@ -844,7 +839,6 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     </div>
   ` : ""}
 
-  <!-- IMAGES -->
   <div class="mobile-section" 
        data-section-type="images"
        data-title-en="Images"
@@ -929,29 +923,22 @@ if (type === "info" && boxLeft) {
 
   const cleanClone = boxLeft.cloneNode(true);
 
-  // Remove the desktop-leaflet version so mobile does not inherit it
-  const oldMap = cleanClone.querySelector(".profile-map-container");
-  if (oldMap) oldMap.remove();
-
-  // Extract P26 directly from the CLONED content (always reliable)
-  const coordRow = cleanClone.querySelector("dd"); 
-  // OPTIONAL: Replace with a stricter match:
-  // const coordRow = cleanClone.querySelector("dt:contains('coordinates') + dd")
-
+  // --- REVISED MOBILE MAP LOGIC ---
+  // 1. Get the original P26 value from the desktop map-thumb element's data attributes.
+  const desktopMapThumb = boxLeft.querySelector(".map-thumb");
   let lat = null;
   let lon = null;
 
-  if (coordRow) {
-    const text = coordRow.textContent.trim();
-    // Look for simple "lat,lon"
-    const parts = text.split(",");
-    if (parts.length === 2) {
-      lat = parseFloat(parts[0]);
-      lon = parseFloat(parts[1]);
-    }
+  if (desktopMapThumb) {
+    lat = parseFloat(desktopMapThumb.dataset.lat);
+    lon = parseFloat(desktopMapThumb.dataset.lon);
   }
 
-  // If valid coordinates found, add a brand new mobile map container
+  // 2. Remove the desktop map container from the cloned content if it exists
+  const oldMap = cleanClone.querySelector(".profile-map-container");
+  if (oldMap) oldMap.remove();
+
+  // 3. If valid coordinates found, add a brand new mobile map container
   if (isFinite(lat) && isFinite(lon)) {
     const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
     const mobileMapHTML = `
@@ -979,7 +966,33 @@ if (type === "info" && boxLeft) {
     if (type === "family" && treeDesktop) {
       const proxy = sec.querySelector("#mobileFamilyTreeProxy");
       if (proxy) {
-        proxy.replaceWith(treeDesktop.cloneNode(true));
+        // Clone the desktop family chart container for mobile
+        const clonedTree = treeDesktop.cloneNode(true);
+        clonedTree.removeAttribute('id'); // Ensure only one element has the ID
+        proxy.replaceWith(clonedTree);
+        
+        // Re-inject the family tree iframe into the new container
+        const newContainer = clonedTree.querySelector("#familyChartContainer");
+        if(newContainer) {
+            newContainer.id = "mobileFamilyChartContainer"; // Use a new ID
+            // Trigger the injection logic again pointing to the new container
+            const wikidataId = window.currentWikidataId;
+            const lang = Utils.getLang();
+            if (wikidataId) {
+                // Simplified injection to use the mobile container
+                const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
+                newContainer.innerHTML = `
+                    <div class="family-tree-wrapper">
+                        <iframe
+                        src="${treeUrl}"
+                        class="family-tree-iframe"
+                        loading="lazy"
+                        frameborder="0"
+                        style="width:100vw; max-width:100%; display:block; border:0;"
+                        ></iframe>
+                    </div>`;
+            }
+        }
       }
     }
 
@@ -1024,7 +1037,7 @@ if (nowOpen) {
 });
 
   });
-})();
+})(); // <-- Closes setupMobileRibbonSystem IIFE
   
 
 
@@ -1047,7 +1060,7 @@ if (nowOpen) {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
-    }
+    
 // Initialize all mini-maps on the page
 function initLeafletMaps(root) {
   if (!root) return;
@@ -1084,6 +1097,11 @@ function initLeafletMaps(root) {
       const modal = document.getElementById("map-modal");
       modal.style.display = "flex";
       setTimeout(() => {
+        // Important: Always re-create the map object when opening the modal
+        // to avoid issues with hidden container size
+        const existingMap = document.getElementById("map-large")._leafletMap;
+        if (existingMap) existingMap.remove(); // Dispose of the old map
+
         const largeMap = L.map("map-large", {
           center: [lat, lon],
           zoom: 15
@@ -1091,13 +1109,18 @@ function initLeafletMaps(root) {
         L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
           .addTo(largeMap);
         L.marker([lat, lon]).addTo(largeMap);
+        document.getElementById("map-large")._leafletMap = largeMap; // Store reference
       }, 100);
     });
   });
 }
-    } // end Leaflet guard
 
-}
+// Ensure initLeafletMaps is called for any maps rendered during initial load
+initLeafletMaps(document);
+
+} // <-- Closes Leaflet guard 'if (typeof L !== "undefined")'
+
+} // <-- Closes postRender function
 
   // ---------- Exports ----------
   return { renderGeneric, postRender };
