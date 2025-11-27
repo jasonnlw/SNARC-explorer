@@ -1063,3 +1063,28 @@ a { color: #0645ad; }
 @media (min-width: 769px) {
   .mobile-layout { display: none; }
 }
+/* MOBILE FIX: Prevent map collapse in ribbon layout */
+@media (max-width: 768px) {
+
+  /* Stop Box 1 using desktop flex layout */
+  .profile-inner {
+    display: block !important;
+  }
+
+  /* Map container must size naturally */
+  .profile-map-container {
+    min-width: auto !important;
+    width: 100% !important;
+  }
+
+  /* Map thumbnail must fill available width */
+  .profile-map-container .map-thumb {
+    width: 100% !important;
+    height: 200px !important;
+  }
+
+  .profile-map-container .map-thumb-canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
