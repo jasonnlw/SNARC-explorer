@@ -887,21 +887,21 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
         treeContainer.innerHTML = "";
       }
     }
-// =====================================================================
+
+   // =====================================================================
 // MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
 // =====================================================================
-
 (function setupMobileRibbonSystem() {
-
   // Desktop unaffected
   if (window.innerWidth > 768) return;
 
-  // DESKTOP CONTENT SOURCES
   const desktopRoot = document.querySelector(".desktop-layout");
+  if (!desktopRoot) return;
 
-  const boxLeft = desktopRoot.querySelector(".box-left");
-  const boxRight = desktopRoot.querySelector(".box-right");
-  const treeDesktop = desktopRoot.querySelector("#familyChartContainer");
+  // DESKTOP CONTENT SOURCES
+  const boxLeft       = desktopRoot.querySelector(".box-left");
+  const boxRight      = desktopRoot.querySelector(".box-right");
+  const treeDesktop   = desktopRoot.querySelector("#familyChartContainer");
   const galleryDesktop = desktopRoot.querySelector(".gallery");
 
   // MOBILE TARGETS
@@ -909,47 +909,35 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   const lang = Utils.getLang();
 
   sections.forEach(sec => {
-
     if (sec.dataset.mobileInit === "1") return;
     sec.dataset.mobileInit = "1";
 
     const type = sec.dataset.sectionType;
 
     // Inject the correct content depending on type
-if (type === "info" && boxLeft) {
-  
-  // 1. Clone Box 1 content into the mobile section
-  sec.appendChild(boxLeft.cloneNode(true));
-
-}
-
-    // Recreate Leaflet map instance
-    const map = L.map(mapEl).setView([52.415, -4.082], 8);
-
-    // Re-apply tile layer
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      maxZoom: 19,
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
-
-    // If you add markers dynamically in renderGeneric/postRender,
-    // we can clone that logic here too — just tell me.
-  }  
-}
+    if (type === "info" && boxLeft) {
+      sec.appendChild(boxLeft.cloneNode(true));
+    }
 
     if (type === "collections" && boxRight) {
       sec.appendChild(boxRight.cloneNode(true));
     }
+
     if (type === "family" && treeDesktop) {
-      sec.querySelector("#mobileFamilyTreeProxy")
-         .replaceWith(treeDesktop.cloneNode(true));
+      const proxy = sec.querySelector("#mobileFamilyTreeProxy");
+      if (proxy) {
+        proxy.replaceWith(treeDesktop.cloneNode(true));
+      }
     }
+
     if (type === "images" && galleryDesktop) {
       sec.appendChild(galleryDesktop.cloneNode(true));
     }
 
     // LABEL
-    const label = (lang === "cy" ? sec.dataset.titleCy : sec.dataset.titleEn);
+    const label = (lang === "cy"
+      ? sec.dataset.titleCy
+      : sec.dataset.titleEn);
 
     // Ribbon button
     const btn = document.createElement("button");
@@ -968,9 +956,8 @@ if (type === "info" && boxLeft) {
       btn.classList.toggle("open", !open);
     });
   });
-
 })();
-     
+  
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
