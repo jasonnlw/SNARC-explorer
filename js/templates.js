@@ -921,31 +921,7 @@ if (type === "info" && boxLeft) {
   // 1. Clone Box 1 content into the mobile section
   sec.appendChild(boxLeft.cloneNode(true));
 
-  // 2. Re-bind map modal click handlers for cloned Box 1
-  const placeLinks = sec.querySelectorAll(".box1-pill-place, .box1-link-pill");
-
-  placeLinks.forEach(link => {
-    link.addEventListener("click", e => {
-      e.preventDefault();
-      const href = link.getAttribute("href");
-      if (!href) return;
-
-      const qid = href.split("/").pop(); // extract item ID
-
-      // Call your existing modal logic (works for desktop)
-      if (window.openMapForItem) {
-        window.openMapForItem(qid);
-      }
-    });
-  });
-
 }
-   // Re-initialise maps inside cloned Box 1 (mobile only)
-if (type === "info") {
-  const mapEl = sec.querySelector("#map-large");
-  if (mapEl) {
-    // Clear any stale content inside placeholder
-    mapEl.innerHTML = "";
 
     // Recreate Leaflet map instance
     const map = L.map(mapEl).setView([52.415, -4.082], 8);
@@ -1017,46 +993,55 @@ if (type === "info") {
         });
       }
 
-      // Initialize all mini-maps on the page
-      document.querySelectorAll(".map-thumb").forEach(thumb => {
-        const lat = parseFloat(thumb.dataset.lat);
-        const lon = parseFloat(thumb.dataset.lon);
-        const mapId = thumb.dataset.mapid;
-        if (!isFinite(lat) || !isFinite(lon)) return;
+// Initialize all mini-maps on the page
+const root =
+  (window.innerWidth <= 768
+    ? document.querySelector(".mobile-layout")
+    : document.querySelector(".desktop-layout")) || document;
 
-        const mapDiv = document.getElementById(mapId);
-        if (!mapDiv || mapDiv.dataset.initialized) return;
+root.querySelectorAll(".map-thumb").forEach(thumb => {
+  const lat = parseFloat(thumb.dataset.lat);
+  const lon = parseFloat(thumb.dataset.lon);
+  const mapId = thumb.dataset.mapid;
+  if (!isFinite(lat) || !isFinite(lon)) return;
 
-        // Small static map
-        const map = L.map(mapId, {
-          center: [lat, lon],
-          zoom: 13,
-          scrollWheelZoom: false,
-          dragging: false,
-          zoomControl: false,
-          attributionControl: false
-        });
+  // Look for the map only inside the active layout
+  const mapDiv = root.querySelector(`#${mapId}`);
+  if (!mapDiv || mapDiv.dataset.initialized) return;
 
-        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-          attribution: "© OpenStreetMap"
-        }).addTo(map);
+  // Small static map
+  const map = L.map(mapId, {
+    center: [lat, lon],
+    zoom: 13,
+    scrollWheelZoom: false,
+    dragging: false,
+    zoomControl: false,
+    attributionControl: false
+  });
 
-        L.marker([lat, lon]).addTo(map);
-        mapDiv.dataset.initialized = "true";
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: "© OpenStreetMap"
+  }).addTo(map);
 
-        // Click → open modal with large map
-        thumb.style.cursor = "pointer";
-        thumb.addEventListener("click", () => {
-          const modal = document.getElementById("map-modal");
-          modal.style.display = "flex";
-          setTimeout(() => {
-            const largeMap = L.map("map-large", { center: [lat, lon], zoom: 15 });
-            L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
-              .addTo(largeMap);
-            L.marker([lat, lon]).addTo(largeMap);
-          }, 100);
-        });
-      }); // end forEach
+  L.marker([lat, lon]).addTo(map);
+  mapDiv.dataset.initialized = "true";
+
+  // Click → open modal with large map
+  thumb.style.cursor = "pointer";
+  thumb.addEventListener("click", () => {
+    const modal = document.getElementById("map-modal");
+    modal.style.display = "flex";
+    setTimeout(() => {
+      const largeMap = L.map("map-large", {
+        center: [lat, lon],
+        zoom: 15
+      });
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png")
+        .addTo(largeMap);
+      L.marker([lat, lon]).addTo(largeMap);
+    }, 100);
+  });
+}); // end forEach
     } // end Leaflet guard
   }
 
