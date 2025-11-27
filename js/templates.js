@@ -948,21 +948,6 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
 
 
-    if (type === "collections" && boxRight) {
-      sec.appendChild(boxRight.cloneNode(true));
-    }
-
-    if (type === "family" && treeDesktop) {
-      const proxy = sec.querySelector("#mobileFamilyTreeProxy");
-      if (proxy) {
-        proxy.replaceWith(treeDesktop.cloneNode(true));
-      }
-    }
-
-    if (type === "images" && galleryDesktop) {
-      sec.appendChild(galleryDesktop.cloneNode(true));
-    }
-
     // LABEL
     const label = (lang === "cy"
       ? sec.dataset.titleCy
