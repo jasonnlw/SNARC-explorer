@@ -1095,8 +1095,6 @@ function initLeafletMaps(root) {
     });
   });
 }
-
-}); // end forEach
     } // end Leaflet guard
   }
 
