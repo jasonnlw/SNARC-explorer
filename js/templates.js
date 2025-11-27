@@ -926,31 +926,49 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
     // Inject the correct content depending on type
 if (type === "info" && boxLeft) {
+
   const cleanClone = boxLeft.cloneNode(true);
 
-  // Remove DESKTOP map container so mobile doesn't get the grey map
+  // Remove the desktop-leaflet version so mobile does not inherit it
   const oldMap = cleanClone.querySelector(".profile-map-container");
   if (oldMap) oldMap.remove();
 
-  // Add fresh mobile-only map container using the same logic as renderProfileBox
-  const claims = window.currentClaims || {};   // <-- THIS WILL WORK
-  if (claims.P26 && claims.P26.length) {
-    const raw = Utils.firstValue(claims.P26[0]);
-    const [lat, lon] = raw.split(",");
-    if (isFinite(lat) && isFinite(lon)) {
-      const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
-      const mobileMapHTML = `
-        <div class="profile-map-container">
-          <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${mapId}">
-            <div id="${mapId}" class="map-thumb-canvas"></div>
-          </div>
-        </div>`;
-      cleanClone.insertAdjacentHTML("beforeend", mobileMapHTML);
+  // Extract P26 directly from the CLONED content (always reliable)
+  const coordRow = cleanClone.querySelector("dd"); 
+  // OPTIONAL: Replace with a stricter match:
+  // const coordRow = cleanClone.querySelector("dt:contains('coordinates') + dd")
+
+  let lat = null;
+  let lon = null;
+
+  if (coordRow) {
+    const text = coordRow.textContent.trim();
+    // Look for simple "lat,lon"
+    const parts = text.split(",");
+    if (parts.length === 2) {
+      lat = parseFloat(parts[0]);
+      lon = parseFloat(parts[1]);
     }
+  }
+
+  // If valid coordinates found, add a brand new mobile map container
+  if (isFinite(lat) && isFinite(lon)) {
+    const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
+    const mobileMapHTML = `
+      <div class="profile-map-container">
+        <div class="map-thumb" 
+             data-lat="${lat}" 
+             data-lon="${lon}"
+             data-mapid="${mapId}">
+          <div id="${mapId}" class="map-thumb-canvas"></div>
+        </div>
+      </div>`;
+    cleanClone.insertAdjacentHTML("beforeend", mobileMapHTML);
   }
 
   sec.appendChild(cleanClone);
 }
+
 
  
 
