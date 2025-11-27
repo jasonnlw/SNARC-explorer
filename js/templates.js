@@ -934,7 +934,7 @@ if (type === "info" && boxLeft) {
 
     // If you add markers dynamically in renderGeneric/postRender,
     // we can clone that logic here too — just tell me.
-  }
+  
 }
 
     if (type === "collections" && boxRight) {
