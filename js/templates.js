@@ -892,6 +892,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     // Inject the correct content depending on type
    if (type === "info" && boxLeft) {
   const clone = boxLeft.cloneNode(true);
+clone.querySelectorAll(".profile-map-container").forEach(el => el.remove());
   sec.appendChild(clone);
 
   // --- REBUILD MAP THUMBNAILS FOR MOBILE ---
