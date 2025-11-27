@@ -171,6 +171,28 @@ if (ID_URL[pid]) {
       return `<a href="${url}" target="_blank" rel="noopener">${qid}</a>`;
     }
   }
+   
+// -----------------------------
+// MAP PREVIEW (P26)
+// -----------------------------
+if (pid === "P26") {
+  const raw = String(value);
+  const [lat, lon] = raw.split(",").map(Number);
+
+  if (!isNaN(lat) && !isNaN(lon)) {
+    const mapId = "map-" + Math.random().toString(36).slice(2);
+
+    return `
+      <div class="profile-map-container">
+        <div class="map-thumb"
+             data-lat="${lat}"
+             data-lon="${lon}"
+             data-mapid="${mapId}">
+          <div id="${mapId}" class="map-thumb-canvas"></div>
+        </div>
+      </div>`;
+  }
+}
 
   // Default case for P108 and others
   const encoded = encodeURIComponent(String(value).trim());
