@@ -1047,7 +1047,7 @@ if (nowOpen) {
           if (e.target.id === "map-modal") e.currentTarget.style.display = "none";
         });
       }
-
+    }
 // Initialize all mini-maps on the page
 function initLeafletMaps(root) {
   if (!root) return;
