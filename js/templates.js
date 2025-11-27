@@ -925,11 +925,32 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
     const type = sec.dataset.sectionType;
 
     // Inject the correct content depending on type
-       // Inject the correct content depending on type
-    if (type === "info" && boxLeft) {
-      // Just clone Box 1 as-is, including its mapHTML
-      sec.appendChild(boxLeft.cloneNode(true));
+ if (type === "info" && boxLeft) {
+  const cleanClone = boxLeft.cloneNode(true);
+
+  // Remove DESKTOP map container so mobile doesn't get the grey map
+  const oldMap = cleanClone.querySelector(".profile-map-container");
+  if (oldMap) oldMap.remove();
+
+  // Add fresh mobile-only map container
+  if (window.currentEntity?.claims?.P26?.length) {
+    const raw = Utils.firstValue(window.currentEntity.claims.P26[0]);
+    const [lat, lon] = raw.split(",");
+    if (isFinite(lat) && isFinite(lon)) {
+      const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
+      const mobileMapHTML = `
+        <div class="profile-map-container">
+          <div class="map-thumb" data-lat="${lat}" data-lon="${lon}" data-mapid="${mapId}">
+            <div id="${mapId}" class="map-thumb-canvas"></div>
+          </div>
+        </div>`;
+      cleanClone.insertAdjacentHTML("beforeend", mobileMapHTML);
     }
+  }
+
+  sec.appendChild(cleanClone);
+}
+ 
 
     if (type === "collections" && boxRight) {
       sec.appendChild(boxRight.cloneNode(true));
