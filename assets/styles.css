@@ -1088,3 +1088,13 @@ a { color: #0645ad; }
     height: 100% !important;
   }
 }
+
+/* --- Refinement 1: Desktop Map Full Width --- */
+/* Override max-width constraint for desktop (min-width: 769px) */
+@media (min-width: 769px) {
+  /* Target the map thumb inside the left box column */
+  .box-left .profile-map-container .map-thumb {
+    max-width: 100%; /* Allow map to fill the entire width of Box 1 */
+    height: 300px;   /* Optional: increase height for a more prominent desktop map */
+  }
+}
