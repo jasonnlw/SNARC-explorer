@@ -877,6 +877,8 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
   // ---------- Post-render ----------
   function postRender() {
+     window.scrollTo(0, 0);
+     
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
     const treeContainer = document.getElementById("familyChartContainer");
     if (treeContainer) {
