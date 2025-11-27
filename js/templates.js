@@ -1096,7 +1096,8 @@ function initLeafletMaps(root) {
   });
 }
     } // end Leaflet guard
-  }
+
+}
 
   // ---------- Exports ----------
   return { renderGeneric, postRender };
