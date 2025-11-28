@@ -918,6 +918,11 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   mobileSections.forEach(sec => {
     const type = sec.dataset.sectionType;
 
+    // --- FIX 2: Skip 'images' section if no gallery content exists (i.e., galleryDesktop is null) ---
+    if (type === "images" && !galleryDesktop) {
+        return; // Skip this mobile section entirely
+    }
+
     // --- 1. INFORMATION BOX (with Map Fix) ---
     if (type === "info" && boxLeft) {
       const cleanClone = boxLeft.cloneNode(true);
