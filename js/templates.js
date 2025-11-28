@@ -918,10 +918,11 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   mobileSections.forEach(sec => {
     const type = sec.dataset.sectionType;
 
-    // --- FIX: Gallery Ribbon ---
-    // If the images section and no gallery content, skip the entire ribbon setup.
+    // --- 🎯 FIX: Gallery Ribbon (Ensures ribbon is not displayed if no images exist) ---
     if (type === "images" && !galleryDesktop) {
-        return; 
+        // Since the element exists in the initial HTML, remove it from the DOM
+        sec.remove(); 
+        return; // Skip the rest of the ribbon setup for this section
     }
     
     // --- 1. INFORMATION BOX (with Map Fix) ---
@@ -939,13 +940,9 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
         lon = parseFloat(desktopMapThumb.dataset.lon);
       }
 
-      // 1c. CRITICAL FIX: Aggressively remove all map elements from the clone.
-      // This is necessary to purge the element, even if it was mistakenly created 
-      // with no coordinates, or if a previous bug left it in the cloned content.
-      const oldMapContainer = cleanClone.querySelector(".profile-map-container");
-      if (oldMapContainer) {
-          oldMapContainer.remove();
-      }
+      // 1c. CRITICAL MAP FIX: Aggressively remove all map container elements from the clone.
+      // This is necessary to purge the element, even if it's empty, due to the CSS height.
+      cleanClone.querySelectorAll(".profile-map-container").forEach(el => el.remove());
 
       // 1d. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
       if (isFinite(lat) && isFinite(lon)) {
@@ -1042,7 +1039,6 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
   }); // <-- Closes mobileSections.forEach
 })(); // <-- Closes setupMobileRibbonSystem IIFE
-  
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
