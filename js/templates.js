@@ -912,17 +912,18 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   const boxLeft = boxWrapper?.querySelector(".box-left");
   const boxRight = boxWrapper?.querySelector(".box-right");
   const treeDesktop = document.getElementById("familyChartContainer");
-  const galleryDesktop = document.querySelector(".gallery");
+  const galleryDesktop = document.querySelector(".gallery"); 
   const lang = Utils.getLang();
 
   mobileSections.forEach(sec => {
     const type = sec.dataset.sectionType;
 
-    // --- FIX 2: Skip 'images' section if no gallery content exists (i.e., galleryDesktop is null) ---
+    // --- FIX: Gallery Ribbon ---
+    // If the images section and no gallery content, skip the entire ribbon setup.
     if (type === "images" && !galleryDesktop) {
-        return; // Skip this mobile section entirely
+        return; 
     }
-
+    
     // --- 1. INFORMATION BOX (with Map Fix) ---
     if (type === "info" && boxLeft) {
       const cleanClone = boxLeft.cloneNode(true);
@@ -938,7 +939,9 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
         lon = parseFloat(desktopMapThumb.dataset.lon);
       }
 
-      // 1c. Always remove the original desktop map container from the cloned content
+      // 1c. CRITICAL FIX: Aggressively remove all map elements from the clone.
+      // This is necessary to purge the element, even if it was mistakenly created 
+      // with no coordinates, or if a previous bug left it in the cloned content.
       const oldMapContainer = cleanClone.querySelector(".profile-map-container");
       if (oldMapContainer) {
           oldMapContainer.remove();
@@ -967,7 +970,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       sec.appendChild(boxRight.cloneNode(true));
     }
 
-    // --- 3. FAMILY TREE (Restored Mobile Injection Logic) ---
+    // --- 3. FAMILY TREE (Injects the actual tree) ---
     if (type === "family" && treeDesktop) {
       const proxy = sec.querySelector("#mobileFamilyTreeProxy");
       if (proxy) {
