@@ -402,12 +402,12 @@ return `<a href="#/item/${qid}" class="box1-link-pill ${categoryClass}">${label}
 function getBox1CategoryClass(pid) {
 
   // FAMILY CONNECTIONS
-  if (["P56", "P53", "P55", "P54", "P52"].includes(pid)) {
+  if (["P56", "P53", "P55", "P54", "P52","P89","P79","P77"].includes(pid)) {
     return "box1-pill-family";
   }
 
   // PLACES
-  if (["P21", "P22", "P20", "P27", "P91", "P38"].includes(pid)) {
+  if (["P21", "P22", "P27", "P91", "P38","P71","P66","P70","P88","P78","P63"].includes(pid)) {
     return "box1-pill-place";
   }
 
@@ -474,9 +474,9 @@ function renderProfileBox(entity, lang, labelMap) {
   // ----------------------------------------
   // BIRTH / DEATH ROWS (custom layout)
   // ----------------------------------------
-  if (claims["P15"] || claims["P17"] || claims["P16"] || claims["P21"]) {
-    const dob = claims["P15"]?.[0] ? formatValue("P15", claims["P15"][0]) : null;
-    const pob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
+  if (claims["P17"] || claims["P18"] || claims["P21"] || claims["P22"]) {
+    const dob = claims["P17"]?.[0] ? formatValue("P17", claims["P17"][0]) : null;
+    const pob = claims["P21"]?.[0] ? formatValue("P21", claims["P21"][0]) : null;
 
     if (dob || pob) {
       const combined = dob && pob ? `${dob}, ${pob}` : (dob || pob);
