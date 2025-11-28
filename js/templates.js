@@ -905,57 +905,28 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
    // =====================================================================
 // MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
 // =====================================================================
-(function setupMobileRibbonSystem() {
-  // Desktop unaffected
-  if (window.innerWidth > 768) return;
-
-  const desktopRoot = document.querySelector(".desktop-layout");
-  if (!desktopRoot) return;
-
-  // DESKTOP CONTENT SOURCES
-  const boxLeft       = desktopRoot.querySelector(".box-left");
-  const boxRight      = desktopRoot.querySelector(".box-right");
-  const treeDesktop   = desktopRoot.querySelector("#familyChartContainer");
-  const galleryDesktop = desktopRoot.querySelector(".gallery");
-
-  // MOBILE TARGETS
-  const sections = document.querySelectorAll(".mobile-section");
-  const lang = Utils.getLang();
-
-  sections.forEach(sec => {
-    if (sec.dataset.mobileInit === "1") return;
-    sec.dataset.mobileInit = "1";
-
-    const type = sec.dataset.sectionType;
-
-  // ADD THIS BLOCK: Refinement 2: Skip 'images' section if no gallery content exists
-  if (type === "images" && !galleryDesktop) {
-      return; // Skips the rest of the loop iteration for this section
-  }   
-
-    // Inject the correct content depending on type
-
+// Replace the existing block for type === "info" with this:
 if (type === "info" && boxLeft) {
   const cleanClone = boxLeft.cloneNode(true);
-  
-  // 1. Identify the map thumbnail, which holds the coordinates (data-lat/data-lon) on desktop.
+
+  // 1. Find the desktop map thumbnail which holds the coordinates (data-lat/data-lon)
   const desktopMapThumb = cleanClone.querySelector(".profile-map-container .map-thumb");
   let lat = null;
   let lon = null;
 
-  // 2. ONLY extract coordinates if the map thumbnail element exists AND has data attributes.
+  // 2. Extract coordinates ONLY IF the element exists AND has data attributes
   if (desktopMapThumb && desktopMapThumb.dataset.lat && desktopMapThumb.dataset.lon) {
     lat = parseFloat(desktopMapThumb.dataset.lat);
     lon = parseFloat(desktopMapThumb.dataset.lon);
   }
 
-  // 3. Always remove the original desktop map container, regardless of whether it contained coordinates.
+  // 3. Always remove the original desktop map container from the cloned content
   const oldMapContainer = cleanClone.querySelector(".profile-map-container");
   if (oldMapContainer) {
       oldMapContainer.remove();
   }
-  
-  // 4. If valid, finite coordinates were extracted (i.e., not null/NaN), inject the NEW mobile map container.
+
+  // 4. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
   if (isFinite(lat) && isFinite(lon)) {
     const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
     const mobileMapHTML = `
@@ -972,7 +943,6 @@ if (type === "info" && boxLeft) {
 
   sec.appendChild(cleanClone);
 }
-
  
 
     if (type === "collections" && boxRight) {
