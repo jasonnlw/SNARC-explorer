@@ -838,7 +838,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
        data-title-cy="Casgliadau">
   </div>
 
-  ${isHuman ? `
+  ${isHuman && hasFamily ? `
     <div class="mobile-section" 
          data-section-type="family"
          data-title-en="Family Tree"
@@ -935,25 +935,25 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
     // Inject the correct content depending on type
 if (type === "info" && boxLeft) {
-
   const cleanClone = boxLeft.cloneNode(true);
-
-  // --- REVISED MOBILE MAP LOGIC ---
-  // 1. Get the original P26 value from the desktop map-thumb element's data attributes.
-  const desktopMapThumb = boxLeft.querySelector(".map-thumb");
+  
+  // 1. Identify the desktop map container in the clone
+  const oldMapContainer = cleanClone.querySelector(".profile-map-container");
   let lat = null;
   let lon = null;
 
-  if (desktopMapThumb) {
-    lat = parseFloat(desktopMapThumb.dataset.lat);
-    lon = parseFloat(desktopMapThumb.dataset.lon);
+  // 2. If the container exists (meaning coordinates were present), extract coordinates
+  if (oldMapContainer) {
+    const mapThumb = oldMapContainer.querySelector(".map-thumb");
+    if (mapThumb) {
+      lat = parseFloat(mapThumb.dataset.lat);
+      lon = parseFloat(mapThumb.dataset.lon);
+    }
+    // 3. Remove the desktop map container *after* extracting data
+    oldMapContainer.remove();
   }
-
-  // 2. Remove the desktop map container from the cloned content if it exists
-  const oldMap = cleanClone.querySelector(".profile-map-container");
-  if (oldMap) oldMap.remove();
-
-  // 3. If valid coordinates found, add a brand new mobile map container
+  
+  // 4. If valid coordinates were extracted, inject the new mobile map container
   if (isFinite(lat) && isFinite(lon)) {
     const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
     const mobileMapHTML = `
