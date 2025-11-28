@@ -902,53 +902,67 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       }
     }
 
-   // =====================================================================
+// =====================================================================
 // MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
 // =====================================================================
-// Replace the existing block for type === "info" with this:
-if (type === "info" && boxLeft) {
-  const cleanClone = boxLeft.cloneNode(true);
+(function setupMobileRibbonSystem() {
+  const mobileSections = document.querySelectorAll(".mobile-layout .mobile-section");
+  const boxWrapper = document.querySelector(".box-wrapper");
+  // Get content elements from the desktop layout
+  const boxLeft = boxWrapper?.querySelector(".box-left");
+  const boxRight = boxWrapper?.querySelector(".box-right");
+  const treeDesktop = document.getElementById("familyChartContainer");
+  const galleryDesktop = document.querySelector(".gallery");
+  const lang = Utils.getLang();
 
-  // 1. Find the desktop map thumbnail which holds the coordinates (data-lat/data-lon)
-  const desktopMapThumb = cleanClone.querySelector(".profile-map-container .map-thumb");
-  let lat = null;
-  let lon = null;
+  mobileSections.forEach(sec => {
+    const type = sec.dataset.sectionType;
 
-  // 2. Extract coordinates ONLY IF the element exists AND has data attributes
-  if (desktopMapThumb && desktopMapThumb.dataset.lat && desktopMapThumb.dataset.lon) {
-    lat = parseFloat(desktopMapThumb.dataset.lat);
-    lon = parseFloat(desktopMapThumb.dataset.lon);
-  }
+    // --- 1. INFORMATION BOX (with Map Fix) ---
+    if (type === "info" && boxLeft) {
+      const cleanClone = boxLeft.cloneNode(true);
 
-  // 3. Always remove the original desktop map container from the cloned content
-  const oldMapContainer = cleanClone.querySelector(".profile-map-container");
-  if (oldMapContainer) {
-      oldMapContainer.remove();
-  }
+      // 1a. Find the map thumbnail which holds the coordinates (data-lat/data-lon)
+      const desktopMapThumb = cleanClone.querySelector(".profile-map-container .map-thumb");
+      let lat = null;
+      let lon = null;
 
-  // 4. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
-  if (isFinite(lat) && isFinite(lon)) {
-    const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
-    const mobileMapHTML = `
-      <div class="profile-map-container">
-        <div class="map-thumb" 
-             data-lat="${lat}" 
-             data-lon="${lon}"
-             data-mapid="${mapId}">
-          <div id="${mapId}" class="map-thumb-canvas"></div>
-        </div>
-      </div>`;
-    cleanClone.insertAdjacentHTML("beforeend", mobileMapHTML);
-  }
+      // 1b. Extract coordinates ONLY IF the element exists AND has data attributes
+      if (desktopMapThumb && desktopMapThumb.dataset.lat && desktopMapThumb.dataset.lon) {
+        lat = parseFloat(desktopMapThumb.dataset.lat);
+        lon = parseFloat(desktopMapThumb.dataset.lon);
+      }
 
-  sec.appendChild(cleanClone);
-}
- 
+      // 1c. Always remove the original desktop map container from the cloned content
+      const oldMapContainer = cleanClone.querySelector(".profile-map-container");
+      if (oldMapContainer) {
+          oldMapContainer.remove();
+      }
 
+      // 1d. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
+      if (isFinite(lat) && isFinite(lon)) {
+        const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
+        const mobileMapHTML = `
+          <div class="profile-map-container">
+            <div class="map-thumb" 
+                 data-lat="${lat}" 
+                 data-lon="${lon}"
+                 data-mapid="${mapId}">
+              <div id="${mapId}" class="map-thumb-canvas"></div>
+            </div>
+          </div>`;
+        cleanClone.insertAdjacentHTML("beforeend", mobileMapHTML);
+      }
+
+      sec.appendChild(cleanClone);
+    }
+    
+    // --- 2. COLLECTIONS BOX ---
     if (type === "collections" && boxRight) {
       sec.appendChild(boxRight.cloneNode(true));
     }
 
+    // --- 3. FAMILY TREE (Restored Mobile Injection Logic) ---
     if (type === "family" && treeDesktop) {
       const proxy = sec.querySelector("#mobileFamilyTreeProxy");
       if (proxy) {
@@ -982,13 +996,12 @@ if (type === "info" && boxLeft) {
       }
     }
 
+    // --- 4. IMAGES/GALLERY ---
     if (type === "images" && galleryDesktop) {
       sec.appendChild(galleryDesktop.cloneNode(true));
     }
 
-
-
-    // LABEL
+    // --- 5. RIBBON/BUTTON SETUP (Applies to all sections) ---
     const label = (lang === "cy"
       ? sec.dataset.titleCy
       : sec.dataset.titleEn);
@@ -1004,25 +1017,22 @@ if (type === "info" && boxLeft) {
     // Default collapsed
     sec.style.display = "none";
 
-btn.addEventListener("click", () => {
-  const wasOpen = sec.style.display !== "none";
-  const nowOpen = !wasOpen;
+    btn.addEventListener("click", () => {
+      const wasOpen = sec.style.display !== "none";
+      const nowOpen = !wasOpen;
 
-  // Toggle visibility
-  sec.style.display = nowOpen ? "block" : "none";
-  btn.classList.toggle("open", nowOpen);
-   
+      // Toggle visibility
+      sec.style.display = nowOpen ? "block" : "none";
+      btn.classList.toggle("open", nowOpen);
+      
 
-  // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
-if (nowOpen) {
-  initLeafletMaps(sec);
-}
+      // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
+      if (nowOpen) {
+        initLeafletMaps(sec);
+      }
+    });
 
-
-   
-});
-
-  });
+  }); // <-- Closes mobileSections.forEach
 })(); // <-- Closes setupMobileRibbonSystem IIFE
   
 
