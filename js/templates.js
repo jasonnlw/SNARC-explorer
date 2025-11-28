@@ -934,26 +934,28 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   }   
 
     // Inject the correct content depending on type
+
 if (type === "info" && boxLeft) {
   const cleanClone = boxLeft.cloneNode(true);
   
-  // 1. Identify the desktop map container in the clone
-  const oldMapContainer = cleanClone.querySelector(".profile-map-container");
+  // 1. Identify the map thumbnail, which holds the coordinates (data-lat/data-lon) on desktop.
+  const desktopMapThumb = cleanClone.querySelector(".profile-map-container .map-thumb");
   let lat = null;
   let lon = null;
 
-  // 2. If the container exists (meaning coordinates were present), extract coordinates
+  // 2. ONLY extract coordinates if the map thumbnail element exists AND has data attributes.
+  if (desktopMapThumb && desktopMapThumb.dataset.lat && desktopMapThumb.dataset.lon) {
+    lat = parseFloat(desktopMapThumb.dataset.lat);
+    lon = parseFloat(desktopMapThumb.dataset.lon);
+  }
+
+  // 3. Always remove the original desktop map container, regardless of whether it contained coordinates.
+  const oldMapContainer = cleanClone.querySelector(".profile-map-container");
   if (oldMapContainer) {
-    const mapThumb = oldMapContainer.querySelector(".map-thumb");
-    if (mapThumb) {
-      lat = parseFloat(mapThumb.dataset.lat);
-      lon = parseFloat(mapThumb.dataset.lon);
-    }
-    // 3. Remove the desktop map container *after* extracting data
-    oldMapContainer.remove();
+      oldMapContainer.remove();
   }
   
-  // 4. If valid coordinates were extracted, inject the new mobile map container
+  // 4. If valid, finite coordinates were extracted (i.e., not null/NaN), inject the NEW mobile map container.
   if (isFinite(lat) && isFinite(lon)) {
     const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
     const mobileMapHTML = `
@@ -970,7 +972,6 @@ if (type === "info" && boxLeft) {
 
   sec.appendChild(cleanClone);
 }
-
 
  
 
