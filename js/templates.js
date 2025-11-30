@@ -944,6 +944,13 @@ if (desktopMapThumb) {
   const rawLat = desktopMapThumb.dataset.lat;
   const rawLon = desktopMapThumb.dataset.lon;
 
+   lat = Number(lat);
+lon = Number(lon);
+
+if (!isFinite(lat) || !isFinite(lon)) {
+  lat = null;
+  lon = null;
+}
   // Reject invalid values BEFORE parsing
   if (
     rawLat &&
@@ -967,7 +974,13 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
 
 
       // 1d. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
-      if (isFinite(lat) && isFinite(lon)) {
+      if (
+  typeof lat === "number" &&
+  typeof lon === "number" &&
+  isFinite(lat) &&
+  isFinite(lon)
+) {
+
         const mapId = "map-mobile-" + Math.random().toString(36).slice(2);
         const mobileMapHTML = `
           <div class="profile-map-container">
