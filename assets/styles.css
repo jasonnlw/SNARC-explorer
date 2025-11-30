@@ -1098,3 +1098,59 @@ a { color: #0645ad; }
     height: 300px;   /* Optional: increase height for a more prominent desktop map */
   }
 }
+/* ===============================================================
+   IMAGE GALLERY: Adaptive, No-Crop Layout (Desktop Only)
+   =============================================================== */
+
+@media (min-width: 769px) {
+    /* 1. Container for the adaptive layout */
+    .gallery.adaptive-gallery-container {
+        display: flex;
+        flex-wrap: wrap; /* Allows images to flow into new rows */
+        gap: 5px;        /* Spacing between images */
+        margin: 0;
+        padding: 0;
+        line-height: 0;  /* Helps eliminate tiny vertical gaps between rows */
+        width: 100%;
+        min-height: 200px; /* Optional: ensures box is visible even with few images */
+    }
+
+    /* 2. Individual image wrapper (the link) */
+    .gallery-link {
+        flex-grow: 1;    /* CRITICAL: Allows the image/link to grow and fill the row */
+        height: 300px;   /* Sets the target row height for the justified effect */
+        overflow: hidden; /* Ensures scaling images don't break the container */
+    }
+    
+    /* 3. The actual image */
+    .gallery-image {
+        /* CRITICAL: object-fit: contain prevents cropping */
+        object-fit: contain; 
+        width: 100%;     /* Must fill the wrapper's width */
+        height: 100%;    /* Must fill the wrapper's height */
+        display: block;  /* Ensures it behaves well in the flex container */
+    }
+}
+
+
+/* ===============================================================
+   MOBILE: Ensure basic functionality (full width, no crop)
+   =============================================================== */
+
+@media (max-width: 768px) {
+    /* Set images to stack on mobile */
+    .gallery.adaptive-gallery-container {
+        display: block; 
+        padding: 0;
+    }
+    .gallery.adaptive-gallery-container .gallery-link {
+        display: block;
+        margin-bottom: 5px; /* Add spacing between stacked images */
+        height: auto; /* Let images determine their height on mobile */
+    }
+    .gallery-image {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+}
