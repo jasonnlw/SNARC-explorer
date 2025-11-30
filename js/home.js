@@ -3,13 +3,12 @@
 // Dedicated logic for the SNARC Explorer home page
 // ---------------------------------------------
 
-import { api } from "./api.js";        // Your Wikibase API helper
-import { sparqlQuery } from "./sparql.js"; // Your SPARQL helper if you have one
+window.Home = {};
 
 console.log("Home page JS loaded.");
 
 // Run when homepage is shown
-export async function initHomePage(lang = "en") {
+Home.initHomePage = async function(lang = "en") {
   const container = document.getElementById("homeContainer");
   if (!container) return;
 
