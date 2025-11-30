@@ -25,19 +25,6 @@ window.Templates = (() => {
   };
 
   // ---------- Helpers ----------
-
-Templates.loadGalleryImages = function() {
-  const imgs = document.querySelectorAll("img.lazy-thumb");
-
-  imgs.forEach(img => {
-    const src = img.dataset.src;
-    if (!src) return;
-
-    img.src = src;        // triggers real IIIF download
-    img.removeAttribute("data-src");
-    img.classList.remove("lazy-thumb");
-  });
-};
    
   const normalizeQid = value =>
     (value && /Q\d+/i.test(value)) ? value.match(/Q\d+/i)[0].toUpperCase() : null;
@@ -45,6 +32,20 @@ Templates.loadGalleryImages = function() {
   const normalizeDatatype = dt =>
     dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
+function loadGalleryImages() {
+  const imgs = document.querySelectorAll("img.lazy-thumb");
+
+  imgs.forEach(img => {
+    const src = img.dataset.src;
+    if (!src) return;
+
+    img.src = src;
+    img.removeAttribute("data-src");
+    img.classList.remove("lazy-thumb");
+  });
+}
+
+   
   function extractQidFromSnak(stmt) {
     if (typeof Utils?.firstValue === "function") {
       const v = Utils.firstValue(stmt);
@@ -920,7 +921,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       } else {
         treeContainer.innerHTML = "";
       }
-       setTimeout(() => Templates.loadGalleryImages(), 0);
+       setTimeout(() => loadGalleryImages(), 0);
     }
 
 // =====================================================================
@@ -1174,6 +1175,6 @@ initLeafletMaps(document);
 } // <-- Closes postRender function
 
   // ---------- Exports ----------
-  return { renderGeneric, postRender };
+  return { renderGeneric, postRender, loadGalleryImages };
 
 })(); // end window.Templates IIFE
