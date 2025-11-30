@@ -1,3 +1,4 @@
+
 /* ===============================================================
    SNARC Explorer Templates.js – cleaned + ready for family tre
    =============================================================== */
@@ -25,27 +26,12 @@ window.Templates = (() => {
   };
 
   // ---------- Helpers ----------
-   
   const normalizeQid = value =>
     (value && /Q\d+/i.test(value)) ? value.match(/Q\d+/i)[0].toUpperCase() : null;
 
   const normalizeDatatype = dt =>
     dt ? String(dt).toLowerCase().replace(/_/g, "-").replace(/\s+/g, "") : "";
 
-function loadGalleryImages() {
-  const imgs = document.querySelectorAll("img.lazy-thumb");
-
-  imgs.forEach(img => {
-    const src = img.dataset.src;
-    if (!src) return;
-
-    img.src = src;
-    img.removeAttribute("data-src");
-    img.classList.remove("lazy-thumb");
-  });
-}
-
-   
   function extractQidFromSnak(stmt) {
     if (typeof Utils?.firstValue === "function") {
       const v = Utils.firstValue(stmt);
@@ -228,10 +214,9 @@ if (pid === "P26") {
       const filePage =
         `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
       return `<a href="${filePage}" target="_blank" rel="noopener">
-  <img data-src="${thumbUrl}" alt="${filename}" class="lazy-thumb"
-       style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
-</a>`;
-
+                <img src="${thumbUrl}" alt="${filename}" loading="lazy"
+                     style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
+              </a>`;
     }
 
     // 🗺️ Coordinates (P26)
@@ -788,9 +773,9 @@ return `
         return `
           <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
             <div class="thumb-wrapper">
-  <img data-src="${thumbUrl}" alt="Image ${id}" class="lazy-thumb">
-  ${iconHTML}
-</div>
+              <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
+              ${iconHTML}
+            </div>
           </a>`;
       };
 
@@ -921,7 +906,6 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       } else {
         treeContainer.innerHTML = "";
       }
-       setTimeout(() => loadGalleryImages(), 0);
     }
 
 // =====================================================================
@@ -1175,6 +1159,6 @@ initLeafletMaps(document);
 } // <-- Closes postRender function
 
   // ---------- Exports ----------
-  return { renderGeneric, postRender, loadGalleryImages };
+  return { renderGeneric, postRender };
 
 })(); // end window.Templates IIFE
