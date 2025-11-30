@@ -1184,3 +1184,29 @@ a { color: #0645ad; }
     color: #444; /* Dark color for the icon graphic */
     z-index: 10;
 }
+.home-search-wrapper {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.home-card {
+  padding: 16px;
+  border-radius: 8px;
+  background: #efefef;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.home-card:hover {
+  background: #ddd;
+}
+
+.recent-line {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+}
+.recent-line:hover {
+  color: #0a6;
+}
