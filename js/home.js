@@ -42,10 +42,9 @@ Home.initHomePage = async function(lang = "en") {
   `;
 
   // Attach search handlers
-  document.getElementById("homeContainer").style.display = "block";
-document.getElementById("itemContainer").style.display = "none";
-document.getElementById("homeContainer").style.display = "none";
-document.getElementById("itemContainer").style.display = "block";
+document.getElementById("homeContainer").style.display = "block";
+document.getElementById("app").style.display = "none";
+
   document.getElementById("homeSearchBtn").addEventListener("click", runHomeSearch);
   document.getElementById("homeSearchInput").addEventListener("keydown", e => {
     if (e.key === "Enter") runHomeSearch();
