@@ -773,11 +773,14 @@ const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
       : "";
     return `
       <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
-        <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+        <img 
+          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
+          data-src="${thumbUrl}" 
+          alt="Image ${id}" 
+          class="gallery-image lazy-load-image">
         ${iconHTML}
       </a>`;
   };
-
       const imagePromises = mediaStmts.map(async stmt => {
         const v = Utils.firstValue(stmt);
         if (!v || typeof v !== "string") return "";
@@ -891,6 +894,19 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   // ---------- Post-render ----------
   function postRender() {
      window.scrollTo(0, 0);
+    // 🎯 FIX: DEFERRED GALLERY LOADING
+    // This executes after a brief delay, allowing the main content to render first.
+    setTimeout(() => {
+      document.querySelectorAll('.gallery-image.lazy-load-image').forEach(img => {
+        const realSrc = img.getAttribute('data-src');
+        if (realSrc) {
+          // Swap data-src content into src attribute to trigger image download
+          img.src = realSrc;
+          img.removeAttribute('data-src');
+          img.classList.remove('lazy-load-image');
+        }
+      });
+    }, 100); // 100ms delay ensures the main page thread is complete
      
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
     const treeContainer = document.getElementById("familyChartContainer");
