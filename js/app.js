@@ -12,6 +12,17 @@ window.App = (() => {
     langButtons().forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
   }
 
+async function renderHome() {
+  $app().innerHTML = `
+    <section class="card">
+      <h2>${Utils.getLang() === "cy" ? "Chwilio" : "Search"}</h2>
+      <p>${Utils.getLang() === "cy"
+        ? "Teipiwch ym mlwch chwilio uchod."
+        : "Type in the search box above."}</p>
+    </section>
+  `;
+  searchInput().focus();
+}
 
   
   // ----------------------------------------------------------
