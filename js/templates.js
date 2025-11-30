@@ -790,8 +790,8 @@ const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
 
         // Two IIIF patterns – fallback logic
         return new Promise(resolve => {
-          const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-          const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+          const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/400,/0/default.jpg`;
+          const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/400,/0/default.jpg`;
           const rootUrl = `https://viewer.library.wales/${baseId}`;
 
           const tryLoad = (urlList) => {
