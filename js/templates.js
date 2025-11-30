@@ -25,6 +25,20 @@ window.Templates = (() => {
   };
 
   // ---------- Helpers ----------
+
+Templates.loadGalleryImages = function() {
+  const imgs = document.querySelectorAll("img.lazy-thumb");
+
+  imgs.forEach(img => {
+    const src = img.dataset.src;
+    if (!src) return;
+
+    img.src = src;        // triggers real IIIF download
+    img.removeAttribute("data-src");
+    img.classList.remove("lazy-thumb");
+  });
+};
+   
   const normalizeQid = value =>
     (value && /Q\d+/i.test(value)) ? value.match(/Q\d+/i)[0].toUpperCase() : null;
 
@@ -213,9 +227,10 @@ if (pid === "P26") {
       const filePage =
         `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(filename)}`;
       return `<a href="${filePage}" target="_blank" rel="noopener">
-                <img src="${thumbUrl}" alt="${filename}" loading="lazy"
-                     style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
-              </a>`;
+  <img data-src="${thumbUrl}" alt="${filename}" class="lazy-thumb"
+       style="max-width:300px;border-radius:8px;box-shadow:0 2px 5px rgba(0,0,0,0.15);margin:4px;">
+</a>`;
+
     }
 
     // 🗺️ Coordinates (P26)
@@ -772,9 +787,9 @@ return `
         return `
           <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
             <div class="thumb-wrapper">
-              <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
-              ${iconHTML}
-            </div>
+  <img data-src="${thumbUrl}" alt="Image ${id}" class="lazy-thumb">
+  ${iconHTML}
+</div>
           </a>`;
       };
 
@@ -905,6 +920,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       } else {
         treeContainer.innerHTML = "";
       }
+       setTimeout(() => Templates.loadGalleryImages(), 0);
     }
 
 // =====================================================================
