@@ -943,6 +943,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       // 1c. CRITICAL MAP FIX: Aggressively remove all map container elements from the clone.
       // This is necessary to purge the element, even if it's empty, due to the CSS height.
       cleanClone.querySelectorAll(".profile-map-container").forEach(el => el.remove());
+       cleanClone.querySelectorAll(".map-thumb").forEach(el => el.remove());
 
       // 1d. If valid, finite coordinates were successfully extracted, inject the NEW mobile map container
       if (isFinite(lat) && isFinite(lon)) {
