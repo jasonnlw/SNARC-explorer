@@ -16,7 +16,8 @@ window.Router = (() => {
     }
 
     // Fallback to app.js homepage (NOT new home.js for now)
-    App.renderHome();
+    Home.initHomePage(Utils.getLang());
+
   }
 
   function go(path) {
