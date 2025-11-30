@@ -761,21 +761,22 @@ return `
 
     if (mediaStmts && mediaStmts.length) {
 const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
-        const iconHTML = isMulti
-          ? `<span class="multi-icon" title="Multiple images">
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#444">
-                <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="#444" stroke-width="1.5" fill="none"/>
-                <line x1="3" y1="9" x2="21" y2="9" stroke="#444" stroke-width="1.5"/>
-                <line x1="3" y1="13" x2="21" y2="13" stroke="#444" stroke-width="1.5"/>
-              </svg>
-            </span>`
-          : "";
-        return `
-          <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
-            <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
-            ${iconHTML}
-          </a>`;
-      };
+    // RE-ENSTATED MULTI-IMAGE ICON LOGIC
+    const iconHTML = isMulti
+      ? `<span class="multi-icon" title="Multiple images">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </span>`
+      : "";
+    return `
+      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
+        <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+        ${iconHTML}
+      </a>`;
+  };
 
       const imagePromises = mediaStmts.map(async stmt => {
         const v = Utils.firstValue(stmt);
