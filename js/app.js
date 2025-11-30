@@ -12,20 +12,6 @@ window.App = (() => {
     langButtons().forEach(b => b.classList.toggle("active", b.dataset.lang === lang));
   }
 
-  // ----------------------------------------------------------
-  // Home screen
-  // ----------------------------------------------------------
-  async function renderHome() {
-    $app().innerHTML = `
-      <section class="card">
-        <h2>${Utils.getLang() === "cy" ? "Chwilio" : "Search"}</h2>
-        <p>${Utils.getLang() === "cy"
-          ? "Teipiwch ym mlwch chwilio uchod."
-          : "Type in the search box above."}</p>
-      </section>
-    `;
-    searchInput().focus();
-  }
 
   
   // ----------------------------------------------------------
@@ -135,6 +121,9 @@ window.App = (() => {
       $app().innerHTML = `<p class="error">Failed to render entity ${qid}</p>`;
 
     }
+    document.getElementById("homeContainer").style.display = "none";
+document.getElementById("app").style.display = "block";
+
   }
 
   // ----------------------------------------------------------
