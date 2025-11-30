@@ -1,3 +1,6 @@
+import { initHomePage } from "./home.js";
+
+
 window.Router = (() => {
   const routes = [];
 
@@ -12,7 +15,7 @@ window.Router = (() => {
       const m = hashForMatch.match(pattern);
       if (m) return handler(m, query);
     }
-    App.renderHome();
+    initHomePage(window.currentLang || "en");
   }
 
   function go(path) { location.hash = path; }
