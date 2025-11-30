@@ -1111,10 +1111,14 @@ a { color: #0645ad; }
         /* Sets the even spacing between the columns */
         column-gap: 5px; 
         
+        /* FIX: Add padding at the very top of the gallery element */
+        padding-top: 20px; 
+        
         /* Ensure display is block for multi-column to work */
         display: block; 
         margin: 0;
-        padding: 0;
+        padding-left: 0;
+        padding-right: 0;
         width: 100%;
     }
 
@@ -1164,4 +1168,19 @@ a { color: #0645ad; }
         height: auto;
         object-fit: contain;
     }
+}
+/* --- Multi-Image Icon Styling --- */
+.gallery-link {
+    position: relative; /* Ensures multi-icon is positioned relative to the link */
+}
+.multi-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+    border-radius: 3px;
+    line-height: 1;
+    color: #444; /* Dark color for the icon graphic */
+    z-index: 10;
 }
