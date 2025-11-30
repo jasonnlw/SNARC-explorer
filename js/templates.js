@@ -530,7 +530,12 @@ function renderProfileBox(entity, lang, labelMap) {
     if (parts.length === 2) {
       const lat = Number(parts[0]);
       const lon = Number(parts[1]);
-      if (isFinite(lat) && isFinite(lon)) {
+      if (
+  typeof lat === "number" &&
+  typeof lon === "number" &&
+  isFinite(lat) &&
+  isFinite(lon)
+) {
         const mapId = "map-" + Math.random().toString(36).slice(2);
         mapHTML = `
         <div class="profile-map-container">
