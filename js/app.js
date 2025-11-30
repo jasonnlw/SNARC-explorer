@@ -91,6 +91,8 @@ window.App = (() => {
   // Render single entity page
   // ----------------------------------------------------------
   async function renderItem(match) {
+      document.getElementById("homeContainer").style.display = "none";
+  document.getElementById("app").style.display = "block";
     const qid = match[1].toUpperCase();
     const lang = Utils.getLang();
 
@@ -121,8 +123,6 @@ window.App = (() => {
       $app().innerHTML = `<p class="error">Failed to render entity ${qid}</p>`;
 
     }
-    document.getElementById("homeContainer").style.display = "none";
-document.getElementById("app").style.display = "block";
 
   }
 
