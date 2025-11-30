@@ -277,7 +277,7 @@ setTimeout(() => {
   // Routing
   // ----------------------------------------------------------
   function initRoutes() {
-    Router.add(/^\/$/, renderHome);
+    Router.add(/^\/$/, () => Home.initHomePage(Utils.getLang()));
     Router.add(/^\/search(?:\?.*)?$/, renderSearch);
     Router.add(/^\/item\/(Q\d+)$/, renderItem);
     Router.parse();
