@@ -1099,19 +1099,20 @@ a { color: #0645ad; }
   }
 }
 /* ===============================================================
-   IMAGE GALLERY: Adaptive, No-Crop Layout (Desktop Only)
+   IMAGE GALLERY: Multi-Column/Masonry Layout (Desktop Only)
    =============================================================== */
 
 @media (min-width: 769px) {
-    /* 1. Container using CSS Grid */
+    /* 1. Container using Multi-Column Layout (Masonry effect) */
     .gallery.adaptive-gallery-container {
-        display: grid;
-        /* CRITICAL: Dynamically create as many columns as fit. 
-           Columns will be at least 250px wide and share remaining space equally (1fr). */
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); 
+        /* CRITICAL: Sets up the columns (adjust '3' to change density) */
+        column-count: 3; 
         
-        /* Ensures even spacing (the border) between all items */
-        gap: 5px; 
+        /* Sets the even spacing between the columns */
+        column-gap: 5px; 
+        
+        /* Ensure display is block for multi-column to work */
+        display: block; 
         margin: 0;
         padding: 0;
         width: 100%;
@@ -1119,24 +1120,29 @@ a { color: #0645ad; }
 
     /* 2. Individual image wrapper (the link) */
     .gallery-link {
+        /* CRITICAL: Prevents an image from being split across two columns */
         display: block;
-        overflow: hidden; 
-        height: auto; /* Let aspect ratio and padding/gap define spacing */
-        line-height: 0; /* Prevents stray spacing issues */
+        break-inside: avoid; 
+        
+        /* Spacing between images stacked vertically in the column */
+        margin-bottom: 5px; 
+        
+        height: auto;
+        line-height: 0; 
     }
     
     /* 3. The actual image */
     .gallery-image {
-        /* CRITICAL: object-fit: contain prevents cropping */
-        object-fit: contain; 
-        width: 100%;     /* Fills the grid column */
-        height: auto;    /* Maintains aspect ratio */
+        /* Fills the full width of the column */
+        width: 100%;     
+        /* Maintains aspect ratio (NO CROP) */
+        height: auto;    
+        
+        /* Remove object-fit properties, which were introducing gaps */
+        object-fit: unset; 
         display: block;
-        /* Optional: set a max height to prevent extremely large vertical images */
-        max-height: 400px; 
     }
 }
-
 
 /* ===============================================================
    MOBILE: Ensure basic functionality (full width, no crop)
