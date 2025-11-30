@@ -1,4 +1,4 @@
-import { initHomePage } from "./home.js";
+const initHomePage = Home.initHomePage;
 
 
 window.Router = (() => {
