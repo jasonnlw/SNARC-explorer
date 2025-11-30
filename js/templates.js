@@ -755,67 +755,16 @@ return `
 
     window.currentWikidataId = wikidataId;
 
-    // --- IIIF image gallery (P50) ------------------------------------
+// --- IIIF image gallery (P50) - DEFERRED LOAD ---
+    // 1. Store the raw statements to process later (in postRender)
+    window.currentMediaStmts = claims["P50"];
+    
+    // 2. Render a placeholder immediately so the layout is stable
     let galleryHTML = "";
-    const mediaStmts = claims["P50"];
-
-    if (mediaStmts && mediaStmts.length) {
-const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
-    // RE-ENSTATED MULTI-IMAGE ICON LOGIC
-    const iconHTML = isMulti
-      ? `<span class="multi-icon" title="Multiple images">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
-          </svg>
-        </span>`
-      : "";
-    return `
-      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
-        <img 
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" 
-          data-src="${thumbUrl}" 
-          alt="Image ${id}" 
-          class="gallery-image lazy-load-image">
-        ${iconHTML}
-      </a>`;
-  };
-      const imagePromises = mediaStmts.map(async stmt => {
-        const v = Utils.firstValue(stmt);
-        if (!v || typeof v !== "string") return "";
-
-        const idMatch = v.match(/(\d{6,})/);
-        if (!idMatch) return "";
-        const baseId = parseInt(idMatch[1], 10);
-        const isMulti = baseId >= 1448577 && baseId <= 1588867;
-        const imageId = isMulti ? baseId + 1 : baseId;
-
-        // Two IIIF patterns – fallback logic
-        return new Promise(resolve => {
-          const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/400,/0/default.jpg`;
-          const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/400,/0/default.jpg`;
-          const rootUrl = `https://viewer.library.wales/${baseId}`;
-
-          const tryLoad = (urlList) => {
-            if (!urlList.length) return resolve(""); // all attempts failed
-            const url = urlList.shift();
-            const img = new Image();
-            img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
-            img.onerror = () => tryLoad(urlList); // try next pattern
-            img.src = url;
-          };
-
-          tryLoad([baseUrl1, baseUrl2]);
-        });
-      });
-
-      const images = await Promise.all(imagePromises);
-      const validImages = images.filter(Boolean);
-      if (validImages.length) {
-        galleryHTML = `<div class="gallery adaptive-gallery-container">${validImages.join("")}</div>`;
-      }
-    } // end mediaStmts check
+    if (window.currentMediaStmts && window.currentMediaStmts.length) {
+       // We add the classes so it occupies space and the mobile ribbon finds it
+       galleryHTML = `<div class="gallery adaptive-gallery-container loading-placeholder" style="min-height:100px;"></div>`;
+    }
 
     // --- Profile + collections tiles ---------------------------------
 const tilesHTML = renderBoxes(entity, lang, labelMap);
@@ -894,19 +843,11 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   // ---------- Post-render ----------
   function postRender() {
      window.scrollTo(0, 0);
-    // 🎯 FIX: DEFERRED GALLERY LOADING
-    // This executes after a brief delay, allowing the main content to render first.
-    setTimeout(() => {
-      document.querySelectorAll('.gallery-image.lazy-load-image').forEach(img => {
-        const realSrc = img.getAttribute('data-src');
-        if (realSrc) {
-          // Swap data-src content into src attribute to trigger image download
-          img.src = realSrc;
-          img.removeAttribute('data-src');
-          img.classList.remove('lazy-load-image');
-        }
-      });
-    }, 100); // 100ms delay ensures the main page thread is complete
+   // --- 1. Trigger Async Gallery Load (Background Process) ---
+    if (window.currentMediaStmts && window.currentMediaStmts.length) {
+      // This runs in parallel and updates the DOM when images are ready
+      loadGalleryAsync(window.currentMediaStmts);
+    }
      
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
     const treeContainer = document.getElementById("familyChartContainer");
@@ -1173,6 +1114,76 @@ initLeafletMaps(document);
 
 } // <-- Closes postRender function
 
+// ---------- Async Gallery Loader ----------
+  async function loadGalleryAsync(mediaStmts) {
+    // 1. Define the HTML builder (Logic preserved from previous versions)
+    const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+      const iconHTML = isMulti
+        ? `<span class="multi-icon" title="Multiple images">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </span>`
+        : "";
+        
+      // Use standard src with loading="lazy" for best performance after async injection
+      return `
+        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
+          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+          ${iconHTML}
+        </a>`;
+    };
+
+    // 2. Process URLs (Check for valid IIIF paths)
+    const imagePromises = mediaStmts.map(async stmt => {
+      const v = Utils.firstValue(stmt);
+      if (!v || typeof v !== "string") return "";
+
+      const idMatch = v.match(/(\d{6,})/);
+      if (!idMatch) return "";
+      const baseId = parseInt(idMatch[1], 10);
+      const isMulti = baseId >= 1448577 && baseId <= 1588867;
+      const imageId = isMulti ? baseId + 1 : baseId;
+
+      return new Promise(resolve => {
+        const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+        const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+        const rootUrl = `https://viewer.library.wales/${baseId}`;
+
+        const tryLoad = (urlList) => {
+          if (!urlList.length) return resolve(""); 
+          const url = urlList.shift();
+          const img = new Image();
+          img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
+          img.onerror = () => tryLoad(urlList); 
+          img.src = url;
+        };
+
+        tryLoad([baseUrl1, baseUrl2]);
+      });
+    });
+
+    // 3. Wait for all checks to finish
+    const images = await Promise.all(imagePromises);
+    const validImages = images.filter(Boolean);
+
+    // 4. Update the DOM (Target both Desktop placeholder and Mobile Clone)
+    if (validImages.length) {
+       const html = validImages.join("");
+       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => {
+           el.innerHTML = html;
+           el.classList.remove('loading-placeholder');
+           el.style.minHeight = ""; // Remove placeholder height
+       });
+    } else {
+       // If no valid images found after check, hide the containers
+       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => el.remove());
+       // Hide mobile ribbon buttons if empty
+       document.querySelectorAll('.mobile-toggle-images').forEach(btn => btn.style.display = 'none');
+    }
+  }   
   // ---------- Exports ----------
   return { renderGeneric, postRender };
 
