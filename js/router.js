@@ -1,10 +1,9 @@
-const initHomePage = Home.initHomePage;
-
-
 window.Router = (() => {
   const routes = [];
 
-  function add(pattern, handler) { routes.push({ pattern, handler }); }
+  function add(pattern, handler) {
+    routes.push({ pattern, handler });
+  }
 
   function parse() {
     const raw = location.hash.slice(1) || "/";
@@ -15,10 +14,14 @@ window.Router = (() => {
       const m = hashForMatch.match(pattern);
       if (m) return handler(m, query);
     }
-    initHomePage(window.currentLang || "en");
+
+    // Fallback to app.js homepage (NOT new home.js for now)
+    App.renderHome();
   }
 
-  function go(path) { location.hash = path; }
+  function go(path) {
+    location.hash = path;
+  }
 
   window.addEventListener("hashchange", parse);
 
