@@ -28,26 +28,11 @@ async function renderHome() {
   // ----------------------------------------------------------
   // Search results
   // ----------------------------------------------------------
-  async function renderSearch(_match, queryStr = "") {
-    const qp = new URLSearchParams(queryStr);
-    const q = (qp.get("q") || "").trim();
-    if (!q) return renderHome();
+async function renderSearch(_match, queryStr = "") {
+  // Force users to choose from autocomplete
+  Home.initHomePage(Utils.getLang());
+}
 
-    try {
-      const results = await API.searchEntities(q);
-      const items = results.map(r => `
-        <a class="card" href="#/item/${r.id}">
-          <strong>${r.label || r.id}</strong><br>
-          <small>${r.description || ""}</small>
-        </a>
-      `);
-
-      $app().innerHTML = `<div class="list">${items.join("") || "<p>No results.</p>"}</div>`;
-    } catch (err) {
-      console.error("Search render error:", err);
-      $app().innerHTML = `<p class="error">Search failed. Please try again.</p>`;
-    }
-  }
 
   // ----------------------------------------------------------
   // Collect all linked QIDs
