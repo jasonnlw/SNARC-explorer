@@ -760,7 +760,7 @@ return `
     const mediaStmts = claims["P50"];
 
     if (mediaStmts && mediaStmts.length) {
-      const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
         const iconHTML = isMulti
           ? `<span class="multi-icon" title="Multiple images">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="#444">
@@ -771,11 +771,9 @@ return `
             </span>`
           : "";
         return `
-          <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-item" title="View image ${id}">
-            <div class="thumb-wrapper">
-              <img src="${thumbUrl}" alt="Image ${id}" loading="lazy">
-              ${iconHTML}
-            </div>
+          <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
+            <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+            ${iconHTML}
           </a>`;
       };
 
@@ -811,7 +809,7 @@ return `
       const images = await Promise.all(imagePromises);
       const validImages = images.filter(Boolean);
       if (validImages.length) {
-        galleryHTML = `<div class="gallery">${validImages.join("")}</div>`;
+        galleryHTML = `<div class="gallery adaptive-gallery-container">${validImages.join("")}</div>`;
       }
     } // end mediaStmts check
 
