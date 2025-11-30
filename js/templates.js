@@ -935,10 +935,24 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
       let lon = null;
 
       // 1b. Extract coordinates ONLY IF the element exists AND has data attributes
-      if (desktopMapThumb && desktopMapThumb.dataset.lat && desktopMapThumb.dataset.lon) {
-        lat = parseFloat(desktopMapThumb.dataset.lat);
-        lon = parseFloat(desktopMapThumb.dataset.lon);
-      }
+if (desktopMapThumb) {
+  const rawLat = desktopMapThumb.dataset.lat;
+  const rawLon = desktopMapThumb.dataset.lon;
+
+  // Reject invalid values BEFORE parsing
+  if (
+    rawLat &&
+    rawLon &&
+    rawLat !== "null" &&
+    rawLon !== "null" &&
+    rawLat.trim() !== "" &&
+    rawLon.trim() !== ""
+  ) {
+    lat = parseFloat(rawLat);
+    lon = parseFloat(rawLon);
+  }
+}
+
 
       // 1c. CRITICAL MAP FIX: Aggressively remove all map container elements from the clone.
 // REMOVE ALL MAP ELEMENTS OF ANY KIND
