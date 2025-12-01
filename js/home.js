@@ -35,18 +35,12 @@ Home.initHomePage = async function (lang = "en") {
         </p>
       </section>
 
-      <section class="home-featured">
-        <h2>${lang === "cy" ? "Categorïau" : "Categories"}</h2>
-        <div class="home-cards">
-          <button class="home-card" data-type="person">
-            ${lang === "cy" ? "Pobl" : "People"}
-          </button>
-          <button class="home-card" data-type="place">
-            ${lang === "cy" ? "Llefydd" : "Places"}
-          </button>
-          <button class="home-card" data-type="org">
-            ${lang === "cy" ? "Sefydliadau" : "Organisations"}
-          </button>
+// Inside home.innerHTML = ` ... `
+<section class="map-block">
+   <h2>${lang === "cy" ? "Archwilio'r Map" : "Explore the Map"}</h2>
+   <div id="homeMap"></div>
+</section>
+
         </div>
       </section>
 
