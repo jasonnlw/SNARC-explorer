@@ -143,6 +143,7 @@ function updateSearchPlaceholder() {
       if (!btn) return;
       Utils.setLang(btn.dataset.lang);
       setActiveLangButton();
+      updateSearchPlaceholder();
       Router.parse();
 // After rerender, reload the family tree iframe
 setTimeout(() => {
