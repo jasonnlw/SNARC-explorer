@@ -33,6 +33,18 @@ async function renderSearch(_match, queryStr = "") {
   Home.initHomePage(Utils.getLang());
 }
 
+function updateSearchPlaceholder() {
+  const lang = Utils.getLang();
+  const input = document.getElementById("search-input");
+
+  if (!input) return;
+
+  if (lang === "cy") {
+    input.placeholder = "Chwiliwch am Bobl, Lleoedd, Sefydliadau...";
+  } else {
+    input.placeholder = "Search People, Places, Organisations...";
+  }
+}
 
   // ----------------------------------------------------------
   // Collect all linked QIDs
