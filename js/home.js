@@ -53,8 +53,10 @@ Home.initHomePage = async function (lang = "en") {
       const type = card.dataset.type;
       window.location.hash = `#/search/${type}`;
     });
-  });
+  })
 
+MapExplorer.initHomeMap(lang);
+  
   // Random Item → temporary simple random QID
   const randomBtn = document.getElementById("randomBtn");
   if (randomBtn) {
