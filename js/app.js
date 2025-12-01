@@ -286,6 +286,7 @@ setTimeout(() => {
 function start() {
   if (!localStorage.getItem("lang")) Utils.setLang(CONFIG.DEFAULT_LANG);
   setActiveLangButton();
+  updateSearchPlaceholder();   
   initEvents();
   initLiveSearch();
   initRoutes();
