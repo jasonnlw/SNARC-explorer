@@ -40,16 +40,6 @@ Home.initHomePage = async function (lang = "en") {
    <h2>${lang === "cy" ? "Archwilio'r Map" : "Explore the Map"}</h2>
    <div id="homeMap"></div>
 </section>
-
-        </div>
-      </section>
-
-      <section class="home-random">
-        <button id="randomBtn" class="home-random-btn">
-          ${lang === "cy" ? "Eitem ar Hap" : "Random Item"}
-        </button>
-      </section>
-
     </div>
   `;
 
