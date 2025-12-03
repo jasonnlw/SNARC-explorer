@@ -517,9 +517,15 @@ const SNARC_SPARQL_ENDPOINT =
   // INIT
   // ---------------------------------------------------------------------------
 
-  function initAdvancedPersonSearch() {
-    const container = document.getElementById("advanced-person-search");
-    if (!container) return;
+function initAdvancedPersonSearch() {
+  const container = document.getElementById("advanced-person-search");
+  if (!container) return;
+
+  // Prevent double-initialisation if home page is rendered again
+  if (container.dataset.apsInit === "1") {
+    return;
+  }
+  container.dataset.apsInit = "1";
 
     // Initial text
     updateAdvancedSearchLabels();
@@ -593,17 +599,9 @@ const SNARC_SPARQL_ENDPOINT =
     });
   }
 
-  // Expose globally for debugging
+  // Expose globally so Home.initHomePage can call it
   window.initAdvancedPersonSearch = initAdvancedPersonSearch;
 
-  // Self-initialise regardless of what else fails on the page
-  document.addEventListener("DOMContentLoaded", () => {
-    try {
-      initAdvancedPersonSearch();
-    } catch (err) {
-      console.error("Advanced person search failed to init:", err);
-    }
-  });
-
 })();
+
 
