@@ -518,14 +518,20 @@ const SNARC_SPARQL_ENDPOINT =
   // ---------------------------------------------------------------------------
 
 function initAdvancedPersonSearch() {
+  console.log("APS: init started");
+
   const container = document.getElementById("advanced-person-search");
+  console.log("APS: container found?", !!container);
+  
   if (!container) return;
 
   // Prevent double-initialisation if home page is rendered again
   if (container.dataset.apsInit === "1") {
+    console.log("APS: AP already initialised?", container.dataset.apsInit);
     return;
   }
   container.dataset.apsInit = "1";
+console.log("APS: Init flagged");
 
     // Initial text
     updateAdvancedSearchLabels();
