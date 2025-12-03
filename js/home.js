@@ -219,6 +219,15 @@ Home.initHomePage = async function (lang = "en") {
     </div>
   `;
 
+ // Initialise advanced person search (now that the DOM is in place)
+  if (window.initAdvancedPersonSearch) {
+    try {
+      window.initAdvancedPersonSearch();
+    } catch (err) {
+      console.error("initAdvancedPersonSearch failed:", err);
+    }
+  }
+
   // Category button behaviour
   document.querySelectorAll(".home-card").forEach(card => {
     card.addEventListener("click", () => {
@@ -236,6 +245,3 @@ Home.initHomePage = async function (lang = "en") {
     console.error("MapExplorer.initHomeMap() not found.");
   }
 };
-
-
-
