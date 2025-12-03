@@ -533,14 +533,19 @@ function initAdvancedPersonSearch() {
   container.dataset.apsInit = "1";
 console.log("APS: Init flagged");
 
-    // Initial text
-    updateAdvancedSearchLabels();
+ console.log("APS: updating labels");
+updateAdvancedSearchLabels();
+console.log("APS: labels updated");
 
-    // Setup dropdowns
-    Object.keys(FACETS).forEach(setupFacetDropdown);
+console.log("APS: setting up dropdowns");
+Object.keys(FACETS).forEach(setupFacetDropdown);
+console.log("APS: dropdowns setup done");
 
     // Form submit
+  console.log("APS: form?", form);
     const form = document.getElementById("aps-form");
+  console.log("APS: form?", form);
+
     if (form) {
       form.addEventListener("submit", (evt) => {
         evt.preventDefault();
@@ -551,6 +556,7 @@ console.log("APS: Init flagged");
 
     // Reset
     const resetBtn = document.getElementById("aps-reset");
+  console.log("APS: reset button?", resetBtn);
     if (resetBtn) {
       resetBtn.addEventListener("click", () => {
         container.querySelectorAll(".aps-field").forEach((field) => {
@@ -575,8 +581,13 @@ console.log("APS: Init flagged");
     }
 
     // Pagination buttons
-    const prevBtn = document.getElementById("aps-prev-page");
-    const nextBtn = document.getElementById("aps-next-page");
+const prevBtn = document.getElementById("aps-prev-page");
+console.log("APS: prev button?", prevBtn);
+
+const nextBtn = document.getElementById("aps-next-page");
+console.log("APS: next button?", nextBtn);
+console.log("APS: init complete");
+
 
     if (prevBtn) {
       prevBtn.addEventListener("click", () => {
