@@ -236,3 +236,10 @@ Home.initHomePage = async function (lang = "en") {
     console.error("MapExplorer.initHomeMap() not found.");
   }
 };
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (window.initAdvancedPersonSearch) {
+    window.initAdvancedPersonSearch();
+  }
+});
+
