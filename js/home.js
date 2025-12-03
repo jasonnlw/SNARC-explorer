@@ -220,9 +220,10 @@ Home.initHomePage = async function (lang = "en") {
   `;
 
  // Initialise advanced person search (now that the DOM is in place)
-  if (window.initAdvancedPersonSearch) {
+ if (window.initAdvancedPersonSearch) {
     try {
-      window.initAdvancedPersonSearch();
+      // CHANGE THIS LINE: Pass 'lang' into the function
+      window.initAdvancedPersonSearch(lang); 
     } catch (err) {
       console.error("initAdvancedPersonSearch failed:", err);
     }
