@@ -1,4 +1,14 @@
+// advanced-person-search.js
+// SNARC Explorer – Advanced Person Search (dropdown query builder)
+// Uses wbsearchentities (JSONP) for facet autocompletion
+// and SPARQL for fetching matching people.
 
+/* global document, window */
+
+(function () {
+  // ---------------------------------------------------------------------------
+  // CONFIG
+  // ---------------------------------------------------------------------------
 
   // Try to reuse globals if your site already defines them
   const SNARC_API = window.SNARC_API || "https://snarc-llgc.wikibase.cloud/w/api.php";
