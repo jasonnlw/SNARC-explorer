@@ -541,11 +541,9 @@ console.log("APS: setting up dropdowns");
 Object.keys(FACETS).forEach(setupFacetDropdown);
 console.log("APS: dropdowns setup done");
 
-    // Form submit
-  console.log("APS: form?", form);
-    const form = document.getElementById("aps-form");
-  console.log("APS: form?", form);
-
+// Form submit
+const form = document.getElementById("aps-form");
+console.log("APS: form found:", form); // Log AFTER defining
     if (form) {
       form.addEventListener("submit", (evt) => {
         evt.preventDefault();
