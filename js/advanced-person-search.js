@@ -11,10 +11,10 @@
   // ---------------------------------------------------------------------------
 
   // Try to reuse globals if your site already defines them
-  const SNARC_API = window.SNARC_API || "https://snarc-llgc.wikibase.cloud/w/api.php";
-  const SNARC_SPARQL_ENDPOINT =
-    window.SNARC_SPARQL_ENDPOINT ||
-    "https://snarc-llgc.wikibase.cloud/query/sparql";
+const SNARC_API = "https://snarc-proxy.onrender.com/w/api.php";
+const SNARC_SPARQL_ENDPOINT =
+  "https://snarc-proxy.onrender.com/query";
+
 
   // Where to send users when they click a result
   // Override globally with window.SNARC_ENTITY_BASE_URL if you have a custom Explorer route
