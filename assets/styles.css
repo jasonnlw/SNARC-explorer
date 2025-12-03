@@ -1239,3 +1239,282 @@ a { color: #0645ad; }
 .map-block h2 {
   margin-bottom: 0.6rem;
 }
+
+
+
+/* Advanced Person Search section */
+
+.aps-section {
+  margin-top: 2rem;
+}
+
+.aps-inner {
+  border-radius: 1rem;
+  padding: 1.25rem 1rem;
+  background: #ffffff;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+}
+
+@media (min-width: 768px) {
+  .aps-inner {
+    padding: 1.5rem 1.5rem;
+  }
+}
+
+.aps-header {
+  margin-bottom: 1rem;
+}
+
+.aps-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem;
+}
+
+.aps-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.85;
+}
+
+/* Fields grid */
+
+.aps-form {
+  margin-top: 1rem;
+}
+
+.aps-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .aps-fields-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.aps-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.aps-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.aps-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.aps-input {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.4rem 2rem 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  outline: none;
+}
+
+.aps-input:focus {
+  border-color: rgba(0,0,0,0.25);
+}
+
+.aps-clear {
+  position: absolute;
+  right: 0.3rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+.aps-clear:hover {
+  opacity: 0.9;
+}
+
+/* Options dropdown */
+
+.aps-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  margin: 0.1rem 0 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+.aps-options-hidden {
+  display: none;
+}
+
+.aps-option {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.aps-option:hover,
+.aps-option.aps-option-selected {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Actions */
+
+.aps-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.aps-btn {
+  border-radius: 999px;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.aps-btn-primary {
+  /* Use your primary brand colour here */
+  background: #0b7e5c;
+  color: #ffffff;
+}
+
+.aps-btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.aps-btn-secondary {
+  background: #f3f3f3;
+  border-color: rgba(0,0,0,0.08);
+}
+
+.aps-btn-secondary:hover {
+  background: #e9e9e9;
+}
+
+.aps-btn-ghost {
+  background: transparent;
+  border-color: rgba(0,0,0,0.12);
+}
+
+.aps-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Results */
+
+.aps-results {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 0.75rem;
+}
+
+.aps-results-hidden {
+  display: none;
+}
+
+.aps-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.aps-results-summary {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.aps-results-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  max-height: 420px;      /* prevents the block getting huge */
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .aps-results-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.aps-result-card {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 0.6rem 0.7rem;
+  background: #fafafa;
+}
+
+.aps-result-title {
+  margin: 0 0 0.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.aps-result-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.aps-result-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.aps-result-tags {
+  margin: 0.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.aps-tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* Pagination */
+
+.aps-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.aps-pagination-hidden {
+  display: none;
+}
+
+.aps-page-indicator {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
