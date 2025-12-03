@@ -237,9 +237,5 @@ Home.initHomePage = async function (lang = "en") {
   }
 };
 
-document.addEventListener("DOMContentLoaded", () => {
-  if (window.initAdvancedPersonSearch) {
-    window.initAdvancedPersonSearch();
-  }
-});
+
 
