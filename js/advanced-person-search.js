@@ -593,14 +593,17 @@
     });
   }
 
-  // Expose init to global so your main script can call it
+  // Expose globally for debugging
   window.initAdvancedPersonSearch = initAdvancedPersonSearch;
+
+  // Self-initialise regardless of what else fails on the page
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      initAdvancedPersonSearch();
+    } catch (err) {
+      console.error("Advanced person search failed to init:", err);
+    }
+  });
+
 })();
 
-// Call this from your homepage JS once DOM is ready, e.g.:
-//
-// document.addEventListener("DOMContentLoaded", () => {
-//   if (window.initAdvancedPersonSearch) {
-//     window.initAdvancedPersonSearch();
-//   }
-// });
