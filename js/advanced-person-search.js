@@ -164,7 +164,30 @@ const SNARC_SPARQL_ENDPOINT =
       ul.classList.add("aps-options-hidden");
     });
   }
+function getFacetListName(facetKey) {
+  switch (facetKey) {
+    case "gender":
+      return "gender";
 
+    case "occupation":
+      return "occupation";
+
+    case "educationPlace":
+      return "education_place";
+
+    case "birthPlace":
+    case "deathPlace":
+      return "places";
+
+    case "relatedContent":
+      return "content_type";
+
+    default:
+      return facetKey;
+  }
+}
+
+  
   function setupFacetDropdown(facetKey) {
     const facet = FACETS[facetKey];
     if (!facet) return;
@@ -227,9 +250,8 @@ function searchAndShowOptions() {
   const lang = getCurrentLang();
 
   // Determine which facet list to use
-const list = LocalFacets[facetKey]
-
-
+const facetListName = getFacetListName(facetKey);
+const list = LocalFacets[facetListName] || [];
 
   // Require minimum characters for large lists
   const minChars = getFacetListName(facetKey) === "places" ? 2 : 1;
