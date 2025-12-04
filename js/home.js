@@ -63,7 +63,9 @@ home.innerHTML = `
 
   <div class="aps-dropdown aps-dropdown-select"> 
     <select id="aps-gender-select" class="aps-input aps-select">
-      <option value="">--</option>
+          <option value="" data-i18n-en="Any gender" data-i18n-cy="Unrhyw ryw">
+      Any gender
+    </option>
     </select>
   </div>
 </div>
