@@ -227,8 +227,8 @@ function searchAndShowOptions() {
   const lang = getCurrentLang();
 
   // Determine which facet list to use
-const facetName = getFacetListName(facetKey);
-const list = LocalFacets[facetName] || [];
+const list = LocalFacets[facetKey]
+
 
 
   // Require minimum characters for large lists
