@@ -571,15 +571,17 @@ function initAdvancedPersonSearch(langArg) {
     return;
   }
   container.dataset.apsInit = "1";
-console.log("APS: Init flagged");
 
- console.log("APS: updating labels");
+
 updateAdvancedSearchLabels();
-console.log("APS: labels updated");
 
-console.log("APS: setting up dropdowns");
-Object.keys(FACETS).forEach(setupFacetDropdown);
-console.log("APS: dropdowns setup done");
+
+
+Object.keys(FACETS)
+  .filter((facetKey) => facetKey !== "gender")   // ← EXCLUDE gender
+  .forEach(setupFacetDropdown);
+
+
 
 // Form submit
 const form = document.getElementById("aps-form");
