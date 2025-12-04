@@ -54,21 +54,20 @@ home.innerHTML = `
       <div class="aps-fields-grid">
 
         <!-- Gender -->
-        <div class="aps-field" data-facet="gender">
-          <label class="aps-label" for="aps-gender-input"
-                 data-i18n-en="Gender" data-i18n-cy="Rhyw">
-            Gender
-          </label>
-          <div class="aps-dropdown">
-            <input id="aps-gender-input" type="text" class="aps-input"
-                   autocomplete="off"
-                   data-i18n-placeholder-en="Any gender"
-                   data-i18n-placeholder-cy="Unrhyw ryw"
-                   placeholder="Any gender"/>
-            <button type="button" class="aps-clear" aria-label="Clear">×</button>
-            <ul class="aps-options aps-options-hidden"></ul>
-          </div>
-        </div>
+<div class="aps-field" data-facet="gender">
+  <label class="aps-label"
+         data-i18n-en="Gender"
+         data-i18n-cy="Rhyw">
+    Gender
+  </label>
+
+  <select id="aps-gender-select" class="aps-select" data-facet-input="gender">
+    <option value="" data-i18n-en="Any gender" data-i18n-cy="Unrhyw ryw">
+      Any gender
+    </option>
+    <!-- Options inserted dynamically from gender.json -->
+  </select>
+</div>
 
         <!-- Occupation -->
         <div class="aps-field" data-facet="occupation">
