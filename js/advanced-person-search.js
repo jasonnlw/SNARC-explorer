@@ -19,15 +19,14 @@ function getFacetListName(facetKey) {
       return "occupation";
 
     case "educationPlace":
-      return "education_place";
+      return "education_place"; // correct mapping
 
-    // BOTH birthPlace and deathPlace should use the SAME list
     case "birthPlace":
     case "deathPlace":
-      return "places";
+      return "places"; // shared 60k list
 
     case "relatedContent":
-      return "content_type";
+      return "content_type"; // correct mapping
 
     default:
       return facetKey;
