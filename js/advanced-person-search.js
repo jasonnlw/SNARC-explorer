@@ -637,13 +637,26 @@ console.log("APS: init complete");
       });
     }
 
-    // Respond to your site-wide language switch if it fires a "langchange" event
-    document.addEventListener("langchange", () => {
+  
+//-----------------------------------------------------------------------
+// Detect real language changes in the site
+//-----------------------------------------------------------------------
+const htmlEl = document.documentElement;
+
+const observer = new MutationObserver((mutations) => {
+  for (const m of mutations) {
+    if (m.attributeName === "lang") {
       updateAdvancedSearchLabels();
       if (lastSearchHasResults && lastSearchSelection) {
         executeSearch(currentPage);
       }
-    });
+    }
+  }
+});
+
+// Observe changes to <html lang="en|cy">
+observer.observe(htmlEl, { attributes: true });
+
   }
 
   // Expose globally so Home.initHomePage can call it
