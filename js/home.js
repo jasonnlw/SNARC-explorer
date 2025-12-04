@@ -36,21 +36,6 @@ home.innerHTML = `
         <div id="homeMap"></div>
       </section>
 
-      <section class="home-featured">
-        <h2>${lang === "cy" ? "Categorïau" : "Categories"}</h2>
-        <div class="home-cards">
-          <button class="home-card" data-type="person">
-            ${lang === "cy" ? "Pobl" : "People"}
-          </button>
-          <button class="home-card" data-type="place">
-            ${lang === "cy" ? "Llefydd" : "Places"}
-          </button>
-          <button class="home-card" data-type="org">
-            ${lang === "cy" ? "Sefydliadau" : "Organisations"}
-          </button>
-        </div>
-      </section>
-
 <!-- Advanced Person Search (below map placeholder) -->
 <section id="advanced-person-search" class="aps-section">
   <div class="aps-inner">
