@@ -269,8 +269,8 @@ const list = LocalFacets[facetListName] || [];
     id: item.id,
     label:
       lang === "cy" ? item.label_cy : item.label_en,
-    desc:
-      item.desc_en || item.desc_cy || ""
+    desc: lang === "cy" ? item.desc_cy : item.desc_en
+
   }));
 
   renderOptions(items);
