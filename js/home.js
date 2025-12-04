@@ -53,7 +53,7 @@ home.innerHTML = `
     <form id="aps-form" class="aps-form" novalidate>
       <div class="aps-fields-grid">
 
-        <!-- Gender -->
+<!-- Gender -->
 <div class="aps-field" data-facet="gender">
   <label class="aps-label"
          data-i18n-en="Gender"
@@ -61,13 +61,13 @@ home.innerHTML = `
     Gender
   </label>
 
-  <select id="aps-gender-select" class="aps-select" data-facet-input="gender">
-    <option value="" data-i18n-en="Any gender" data-i18n-cy="Unrhyw ryw">
-      Any gender
-    </option>
-    <!-- Options inserted dynamically from gender.json -->
-  </select>
+  <div class="aps-dropdown aps-dropdown-select"> 
+    <select id="aps-gender-select" class="aps-input aps-select">
+      <option value="">--</option>
+    </select>
+  </div>
 </div>
+
 
         <!-- Occupation -->
         <div class="aps-field" data-facet="occupation">
