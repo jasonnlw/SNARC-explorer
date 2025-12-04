@@ -69,10 +69,7 @@ const SNARC_SPARQL_ENDPOINT =
     if (!container) return;
 
     const lang = getCurrentLang();
-    function getCurrentLang() {
-  // Return the variable we set during init
-  return activeLang;
-}
+
     const textAttr = lang === "cy" ? "data-i18n-cy" : "data-i18n-en";
     const phAttr =
       lang === "cy" ? "data-i18n-placeholder-cy" : "data-i18n-placeholder-en";
