@@ -15,7 +15,7 @@ const SNARC_API = "https://snarc-proxy.onrender.com/w/api.php";
 const SNARC_SPARQL_ENDPOINT =
   "https://snarc-proxy.onrender.com/query";
 
-
+  let activeLang = "en";
   // Where to send users when they click a result
   // Override globally with window.SNARC_ENTITY_BASE_URL if you have a custom Explorer route
   const SNARC_ENTITY_BASE_URL =
@@ -45,6 +45,10 @@ const SNARC_SPARQL_ENDPOINT =
     if (!container) return;
 
     const lang = getCurrentLang();
+    function getCurrentLang() {
+  // Return the variable we set during init
+  return activeLang;
+}
     const textAttr = lang === "cy" ? "data-i18n-cy" : "data-i18n-en";
     const phAttr =
       lang === "cy" ? "data-i18n-placeholder-cy" : "data-i18n-placeholder-en";
@@ -517,8 +521,12 @@ const SNARC_SPARQL_ENDPOINT =
   // INIT
   // ---------------------------------------------------------------------------
 
-function initAdvancedPersonSearch() {
-  console.log("APS: init started");
+// Update the function signature to accept 'langArg'
+function initAdvancedPersonSearch(langArg) {
+  console.log("APS: init started with lang:", langArg);
+
+  // Set the active language immediately
+  activeLang = langArg || "en";
 
   const container = document.getElementById("advanced-person-search");
   console.log("APS: container found?", !!container);
