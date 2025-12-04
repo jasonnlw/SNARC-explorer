@@ -1,6 +1,5 @@
 // advanced-person-search.js
 // SNARC Explorer – Advanced Person Search (dropdown query builder)
-// Uses wbsearchentities (JSONP) for facet autocompletion
 // and SPARQL for fetching matching people.
 
 /* global document, window */
@@ -9,6 +8,7 @@
   // ---------------------------------------------------------------------------
   // CONFIG
   // ---------------------------------------------------------------------------
+const LocalFacets = window.Facets; // use the loaded JSON lists
 
   // Try to reuse globals if your site already defines them
 const SNARC_API = "https://snarc-proxy.onrender.com/w/api.php";
@@ -72,7 +72,6 @@ const SNARC_SPARQL_ENDPOINT =
 
   // Each facet describes:
   // - which property will be used in SPARQL
-  // - how to bias wbsearchentities results (searchHintEn / searchHintCy)
   const FACETS = {
     gender: {
       id: "gender",
@@ -117,46 +116,7 @@ const SNARC_SPARQL_ENDPOINT =
   // API HELPERS
   // ---------------------------------------------------------------------------
 
-  // wbsearchentities via JSONP
-  function wbSearchEntitiesJsonp(searchText, lang) {
-    return new Promise((resolve, reject) => {
-      const callbackName = "wbsearch_cb_" + Math.random().toString(36).slice(2);
-      const limit = 50;
 
-      const params = new URLSearchParams({
-        action: "wbsearchentities",
-        format: "json",
-        language: lang,
-        uselang: lang,
-        type: "item",
-        search: searchText,
-        limit: String(limit),
-        origin: "*", // CORS helper
-        callback: callbackName,
-      });
-
-      const url = `${SNARC_API}?${params.toString()}`;
-
-      window[callbackName] = (data) => {
-        try {
-          resolve((data && data.search) || []);
-        } finally {
-          delete window[callbackName];
-          script.remove();
-        }
-      };
-
-      const script = document.createElement("script");
-      script.src = url;
-      script.onerror = (err) => {
-        delete window[callbackName];
-        script.remove();
-        reject(err);
-      };
-
-      document.body.appendChild(script);
-    });
-  }
 
   // SPARQL fetch (CORS must be enabled on the endpoint)
   async function runSparql(query) {
@@ -195,63 +155,90 @@ const SNARC_SPARQL_ENDPOINT =
     field.dataset.valueId = "";
     field.dataset.valueLabel = "";
 
-    function renderOptions(items) {
-      optionsList.innerHTML = "";
+function renderOptions(items) {
+  optionsList.innerHTML = "";
 
-      if (!items.length) {
-        const li = document.createElement("li");
-        li.className = "aps-option";
-        li.textContent = getCurrentLang() === "cy" ? "Dim canlyniadau" : "No matches";
-        li.style.opacity = "0.7";
-        li.style.cursor = "default";
-        optionsList.appendChild(li);
-        return;
-      }
+  if (!items.length) {
+    const li = document.createElement("li");
+    li.className = "aps-option";
+    li.textContent =
+      getCurrentLang() === "cy" ? "Dim canlyniadau" : "No matches";
+    li.style.opacity = "0.7";
+    li.style.cursor = "default";
+    optionsList.appendChild(li);
+    return;
+  }
 
-      items.forEach((item) => {
-        const li = document.createElement("li");
-        li.className = "aps-option";
-        li.textContent = item.label;
-        li.dataset.valueId = item.id;
-        li.addEventListener("click", () => {
-          input.value = item.label;
-          field.dataset.valueId = item.id;
-          field.dataset.valueLabel = item.label;
-          closeAllOptionLists();
-        });
-        optionsList.appendChild(li);
-      });
+  items.forEach((item) => {
+    const li = document.createElement("li");
+    li.className = "aps-option";
+
+    // Places have descriptions
+    if (facetKey === "birth_place" || facetKey === "death_place") {
+      li.innerHTML = `
+        <div class="aps-opt-label">${item.label}</div>
+        <div class="aps-opt-desc">${item.desc || ""}</div>
+      `;
+    } else {
+      li.textContent = item.label;
     }
 
-    async function searchAndShowOptions() {
-      const text = input.value.trim();
-      if (text.length < 2) {
-        optionsList.classList.add("aps-options-hidden");
-        return;
-      }
+    li.dataset.valueId = item.id;
 
-      const lang = getCurrentLang();
-      const hint =
-        lang === "cy" ? facet.searchHintCy || "" : facet.searchHintEn || "";
-      const searchText = (hint + " " + text).trim();
+    li.addEventListener("click", () => {
+      input.value = item.label;
+      field.dataset.valueId = item.id;
+      field.dataset.valueLabel = item.label;
+      closeAllOptionLists();
+    });
 
-      try {
-        const apiResults = await wbSearchEntitiesJsonp(searchText, lang);
-        const items = apiResults.map((r) => ({
-          id: r.id,
-          label: r.label || r.id,
-        }));
-        // Sort alphabetically by label
-        items.sort((a, b) => a.label.localeCompare(b.label));
-        renderOptions(items);
-        optionsList.classList.remove("aps-options-hidden");
-      } catch (e) {
-        console.error("wbsearchentities failed for facet", facetKey, e);
-        renderOptions([]);
-        optionsList.classList.remove("aps-options-hidden");
-      }
-    }
+    optionsList.appendChild(li);
+  });
+}
 
+
+function searchAndShowOptions() {
+  const text = input.value.trim().toLowerCase();
+  const lang = getCurrentLang();
+
+  // Determine which facet list to use
+  const facetName =
+    facetKey === "birth_place" || facetKey === "death_place"
+      ? "places"        // Both use the same list
+      : facetKey;
+
+  const list = LocalFacets[facetName] || [];
+
+  // Require minimum characters for large lists
+  const minChars = facetName === "places" ? 2 : 1;
+  if (text.length < minChars) {
+    optionsList.classList.add("aps-options-hidden");
+    return;
+  }
+
+  // Filter the local list
+  const results = list
+    .filter((item) => {
+      const label = lang === "cy" ? item.label_cy : item.label_en;
+      return label && label.toLowerCase().includes(text);
+    })
+    .slice(0, 40); // limit to avoid huge dropdown
+
+  // Convert results to expected render format
+  const items = results.map((item) => ({
+    id: item.id,
+    label:
+      lang === "cy" ? item.label_cy : item.label_en,
+    desc:
+      item.desc_en || item.desc_cy || ""
+  }));
+
+  renderOptions(items);
+  optionsList.classList.remove("aps-options-hidden");
+}
+
+
+    
     input.addEventListener("focus", () => {
       // Only search if there is enough text
       if (input.value.trim().length >= 2) {
