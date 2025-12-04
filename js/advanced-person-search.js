@@ -314,18 +314,42 @@ const list = LocalFacets[facetListName] || [];
     });
   }
 
-  function getCurrentFacetSelections() {
-    const selection = {};
-    Object.keys(FACETS).forEach((key) => {
-      const field = document.querySelector(`.aps-field[data-facet="${key}"]`);
-      if (!field) return;
-      const id = field.dataset.valueId || "";
-      if (id) {
-        selection[key] = id;
+function getCurrentFacetSelections() {
+  const selection = {};
+
+  Object.keys(FACETS).forEach((key) => {
+
+    // --- SPECIAL CASE: RELATED CONTENT (new <select>)
+    if (key === "relatedContent") {
+      const sel = document.getElementById("aps-relatedContent-select");
+      if (!sel) return;
+
+      const value = sel.value;
+
+      if (value === "ALL") {
+        // User selected "All"
+        selection.relatedContent = "ALL";
+      } else if (value) {
+        // User selected a single property (P12, P50, etc.)
+        selection.relatedContent = value;
       }
-    });
-    return selection;
-  }
+
+      return; // <-- Skip normal processing
+    }
+
+    // --- DEFAULT HANDLING FOR ALL OTHER FACETS (unchanged)
+    const field = document.querySelector(`.aps-field[data-facet="${key}"]`);
+    if (!field) return;
+
+    const id = field.dataset.valueId || "";
+    if (id) {
+      selection[key] = id;
+    }
+  });
+
+  return selection;
+}
+
 
   // ---------------------------------------------------------------------------
   // SPARQL QUERY BUILDER
@@ -369,13 +393,24 @@ const list = LocalFacets[facetListName] || [];
         ?item wdt:P22 wd:${selection.deathPlace} .
       `;
     }
-    if (selection.relatedContent) {
-      // Related content across multiple properties:
-      whereClauses += `
-        VALUES ?relatedProp { wdt:P12 wdt:P50 wdt:P102 wdt:P108 wdt:P5 wdt:P6 }
-        ?item ?relatedProp wd:${selection.relatedContent} .
-      `;
-    }
+if (selection.relatedContent) {
+  const props = ["P12","P50","P102","P108","P5","P6"];
+
+  if (selection.relatedContent === "ALL") {
+    // All collections (UNION across all wdt:P…)
+    const unions = props.map((p) => `{ ?item wdt:${p} ?anyVal }`).join(" UNION ");
+    whereClauses += unions + "\n";
+  } else if (Array.isArray(selection.relatedContent)) {
+    // Selected subset
+    const unions = selection.relatedContent.map((p) => {
+      return props.includes(p)
+        ? `{ ?item wdt:${p} ?anyVal }`
+        : "";
+    }).join(" UNION ");
+    whereClauses += unions + "\n";
+  }
+}
+
 
     return `
       PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
@@ -593,7 +628,7 @@ function initStaticGenderDropdown() {
     opt.textContent = lang === "cy" ? g.label_cy : g.label_en;
     sel.appendChild(opt);
   });
-
+  
   // Store selection like other facets do
   sel.addEventListener("change", () => {
     const field = document.querySelector('.aps-field[data-facet="gender"]');
@@ -604,11 +639,34 @@ function initStaticGenderDropdown() {
   });
 }
 
+function initStaticRelatedContentDropdown() {
+  const sel = document.getElementById("aps-relatedContent-select");
+  if (!sel) return;
+
+  const lang = getCurrentLang();
+  const list = LocalFacets.content_type || [];
+
+  // Add the new “All” option
+  const allOpt = document.createElement("option");
+  allOpt.value = "ALL";
+  allOpt.textContent = lang === "cy" ? "Popeth" : "All";
+  sel.appendChild(allOpt);
+
+  // Add each content type
+  list.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c.id; // P12, P50...
+    opt.textContent = lang === "cy" ? c.label_cy : c.label_en;
+    sel.appendChild(opt);
+  });
+}
+  
 initStaticGenderDropdown();
+initStaticRelatedContentDropdown();
 
 
 Object.keys(FACETS)
-  .filter((facetKey) => facetKey !== "gender")   // ← EXCLUDE gender
+  .filter((facetKey) => facetKey !== "gender" && facetKey !== "relatedContent")
   .forEach(setupFacetDropdown);
 
 
