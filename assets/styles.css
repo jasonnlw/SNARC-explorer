@@ -1518,38 +1518,3 @@ a { color: #0645ad; }
   font-size: 0.8rem;
   opacity: 0.8;
 }
-
-/* Make <select> visually match inputs */
-.aps-dropdown-select {
-  display: flex;
-  align-items: center;
-  height: 44px;              /* match your .aps-input height */
-}
-
-.aps-dropdown-select select.aps-select {
-  width: 100%;
-  height: 100%;
-  border: 1px solid var(--aps-border, #ccc);
-  background: #fff;
-  padding: 0 12px;
-  font-size: 16px;
-  border-radius: 6px;
-  appearance: none;          /* remove native arrow */
-}
-
-.aps-dropdown-select {
-  position: relative;
-}
-
-/* Add custom dropdown arrow */
-.aps-dropdown-select::after {
-  content: "▾";
-  position: absolute;
-  right: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  pointer-events: none;
-  font-size: 14px;
-  opacity: 0.6;
-}
-
