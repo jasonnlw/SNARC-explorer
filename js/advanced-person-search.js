@@ -10,6 +10,31 @@
   // ---------------------------------------------------------------------------
 const LocalFacets = window.Facets; // use the loaded JSON lists
 
+function getFacetListName(facetKey) {
+  switch (facetKey) {
+    case "gender":
+      return "gender";
+
+    case "occupation":
+      return "occupation";
+
+    case "educationPlace":
+      return "education_place";
+
+    // BOTH birthPlace and deathPlace should use the SAME list
+    case "birthPlace":
+    case "deathPlace":
+      return "places";
+
+    case "relatedContent":
+      return "content_type";
+
+    default:
+      return facetKey;
+  }
+}
+
+  
   // Try to reuse globals if your site already defines them
 const SNARC_API = "https://snarc-proxy.onrender.com/w/api.php";
 const SNARC_SPARQL_ENDPOINT =
@@ -174,7 +199,7 @@ function renderOptions(items) {
     li.className = "aps-option";
 
     // Places have descriptions
-    if (facetKey === "birth_place" || facetKey === "death_place") {
+    if (facetKey === "birthPlace" || facetKey === "deathPlace") {
       li.innerHTML = `
         <div class="aps-opt-label">${item.label}</div>
         <div class="aps-opt-desc">${item.desc || ""}</div>
@@ -202,15 +227,12 @@ function searchAndShowOptions() {
   const lang = getCurrentLang();
 
   // Determine which facet list to use
-  const facetName =
-    facetKey === "birth_place" || facetKey === "death_place"
-      ? "places"        // Both use the same list
-      : facetKey;
+const facetName = getFacetListName(facetKey);
+const list = LocalFacets[facetName] || [];
 
-  const list = LocalFacets[facetName] || [];
 
   // Require minimum characters for large lists
-  const minChars = facetName === "places" ? 2 : 1;
+  const minChars = getFacetListName(facetKey) === "places" ? 2 : 1;
   if (text.length < minChars) {
     optionsList.classList.add("aps-options-hidden");
     return;
