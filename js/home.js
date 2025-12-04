@@ -22,29 +22,6 @@ Home.initHomePage = async function (lang = "en") {
   // ---------------------------------------------------------
   home.innerHTML = 
     
-      // ---------------------------------------------------------
-  // NEW: Load facet JSON data and initialise Advanced Search
-  // ---------------------------------------------------------
-  if (window.loadFacetData) {
-    try {
-      await window.loadFacetData();
-    } catch (err) {
-      console.error("Failed to load facet JSON lists:", err);
-    }
-  } else {
-    console.warn("loadFacetData() not found – facet lists will be empty.");
-  }
-
-  if (window.initAdvancedPersonSearch) {
-    try {
-      window.initAdvancedPersonSearch();
-    } catch (err) {
-      console.error("initAdvancedPersonSearch() failed:", err);
-    }
-  } else {
-    console.warn("initAdvancedPersonSearch() not found.");
-  }
-`
     <div class="home-wrapper">
 
       <section class="home-header">
@@ -242,7 +219,28 @@ Home.initHomePage = async function (lang = "en") {
 
     </div>
   `;
+     // ---------------------------------------------------------
+  // NEW: Load facet JSON data and initialise Advanced Search
+  // ---------------------------------------------------------
+  if (window.loadFacetData) {
+    try {
+      await window.loadFacetData();
+    } catch (err) {
+      console.error("Failed to load facet JSON lists:", err);
+    }
+  } else {
+    console.warn("loadFacetData() not found – facet lists will be empty.");
+  }
 
+  if (window.initAdvancedPersonSearch) {
+    try {
+      window.initAdvancedPersonSearch();
+    } catch (err) {
+      console.error("initAdvancedPersonSearch() failed:", err);
+    }
+  } else {
+    console.warn("initAdvancedPersonSearch() not found.");
+  }
  // Initialise advanced person search (now that the DOM is in place)
  if (window.initAdvancedPersonSearch) {
     try {
