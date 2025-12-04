@@ -31,4 +31,4 @@ window.loadFacetData = async function () {
     console.error("Failed to load facet data:", err);
     return false;
   }
-}
+};
