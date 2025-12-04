@@ -10,13 +10,13 @@ window.Facets = {
 
 window.loadFacetData = async function () {
   try {
-    const files = {
-      gender: "js/gender.json",
-      occupation: "js/occupation.json",
-      education_place: "js/education_place.json",
-      places: "js/places.json",
-      content_type: "js/content_type.json"
-    };
+const files = {
+  gender: "js/gender.js",
+  occupation: "js/occupation.js",
+  education_place: "js/education_place.js",
+  places: "js/places.js",
+  content_type: "js/content_type.js"
+};
 
     for (const [key, path] of Object.entries(files)) {
       const res = await fetch(path);
