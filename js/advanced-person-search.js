@@ -372,7 +372,7 @@ const list = LocalFacets[facetListName] || [];
     if (selection.relatedContent) {
       // Related content across multiple properties:
       whereClauses += `
-        VALUES ?relatedProp { wd:P12 wd:P50 wd:P102 wd:P108 wd:P5 wd:P6 }
+        VALUES ?relatedProp { wdt:P12 wdt:P50 wdt:P102 wdt:P108 wdt:P5 wdt:P6 }
         ?item ?relatedProp wd:${selection.relatedContent} .
       `;
     }
