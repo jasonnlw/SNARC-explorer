@@ -550,12 +550,20 @@ const list = LocalFacets[facetListName] || [];
 
 // Update the function signature to accept 'langArg'
 function initAdvancedPersonSearch(langArg) {
-  
+  // Work out which language to use for this initialisation
+  const initialLang = (langArg === "cy" || langArg === "en")
+    ? langArg
+    : getCurrentLang();
 
+  // Sync to the global state that getCurrentLang() reads
+  window.currentLang = initialLang;
+  document.documentElement.lang = initialLang;
+
+  console.log("APS: init started with lang:", initialLang);
 
   const container = document.getElementById("advanced-person-search");
-  
   if (!container) return;
+
 
   // Prevent double-initialisation if home page is rendered again
   if (container.dataset.apsInit === "1") {
