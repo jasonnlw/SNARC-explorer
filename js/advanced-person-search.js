@@ -336,50 +336,50 @@ const list = LocalFacets[facetListName] || [];
     const langPref = lang === "cy" ? "cy,en" : "en,cy";
 
     let whereClauses = `
-      ?item snarcp:P7 wd:Q947 .  # instance of human
+      ?item wdt:P7 wd:Q947 .  # instance of human
     `;
 
     if (selection.gender) {
       // P13 gender
       whereClauses += `
-        ?item snarcp:P13 wd:${selection.gender} .
+        ?item wdt:P13 wd:${selection.gender} .
       `;
     }
     if (selection.occupation) {
       // P25 occupation
       whereClauses += `
-        ?item snarcp:P25 wd:${selection.occupation} .
+        ?item wdt:P25 wd:${selection.occupation} .
       `;
     }
     if (selection.educationPlace) {
       // P23 place of education
       whereClauses += `
-        ?item snarcp:P23 wd:${selection.educationPlace} .
+        ?item wdt:P23 wd:${selection.educationPlace} .
       `;
     }
     if (selection.birthPlace) {
       // P21 place of birth
       whereClauses += `
-        ?item snarcp:P21 wd:${selection.birthPlace} .
+        ?item wdt:P21 wd:${selection.birthPlace} .
       `;
     }
     if (selection.deathPlace) {
       // P22 place of death
       whereClauses += `
-        ?item snarcp:P22 wd:${selection.deathPlace} .
+        ?item wdt:P22 wd:${selection.deathPlace} .
       `;
     }
     if (selection.relatedContent) {
       // Related content across multiple properties:
       whereClauses += `
-        VALUES ?relatedProp { snarcp:P12 snarcp:P50 snarcp:P102 snarcp:P108 snarcp:P5 snarcp:P6 }
+        VALUES ?relatedProp { wd:P12 wd:P50 wd:P102 wd:P108 wd:P5 wd:P6 }
         ?item ?relatedProp wd:${selection.relatedContent} .
       `;
     }
 
     return `
       PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-      PREFIX snarcp: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+      PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
       PREFIX wikibase: <http://wikiba.se/ontology#>
       PREFIX bd: <http://www.bigdata.com/rdf#>
       PREFIX schema: <http://schema.org/>
@@ -671,5 +671,4 @@ observer.observe(htmlEl, { attributes: true });
   window.initAdvancedPersonSearch = initAdvancedPersonSearch;
 
 })();
-
 
