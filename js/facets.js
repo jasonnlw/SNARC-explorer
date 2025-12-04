@@ -1,3 +1,5 @@
+console.log("FACETS.JS LOADED");
+
 window.Facets = {
   gender: [],
   occupation: [],
