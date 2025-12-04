@@ -1,4 +1,4 @@
-export const Facets = {
+window.Facets = {
   gender: [],
   occupation: [],
   education_place: [],
@@ -6,7 +6,7 @@ export const Facets = {
   content_type: []
 };
 
-export async function loadFacetData() {
+window.loadFacetData = async function () {
   try {
     const files = {
       gender: "js/gender.json",
@@ -19,10 +19,10 @@ export async function loadFacetData() {
     for (const [key, path] of Object.entries(files)) {
       const res = await fetch(path);
       const data = await res.json();
-      Facets[key] = data;
+      window.Facets[key] = data;
     }
 
-    console.log("Facet lists loaded:", Facets);
+    console.log("Facet lists loaded:", window.Facets);
     return true;
 
   } catch (err) {
