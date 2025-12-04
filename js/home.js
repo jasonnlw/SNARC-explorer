@@ -139,23 +139,33 @@ home.innerHTML = `
           </div>
         </div>
 
-        <!-- Related Content -->
-        <div class="aps-field" data-facet="relatedContent">
-          <label class="aps-label" for="aps-relatedContent-input"
-                 data-i18n-en="Related content / collections"
-                 data-i18n-cy="Cynnwys / casgliadau cysylltiedig">
-            Related content / collections
-          </label>
-          <div class="aps-dropdown">
-            <input id="aps-relatedContent-input" type="text" class="aps-input"
-                   autocomplete="off"
-                   data-i18n-placeholder-en="Any collection"
-                   data-i18n-placeholder-cy="Unrhyw gasgliad"
-                   placeholder="Any collection"/>
-            <button type="button" class="aps-clear" aria-label="Clear">×</button>
-            <ul class="aps-options aps-options-hidden"></ul>
-          </div>
-        </div>
+<!-- Related Content -->
+<div class="aps-field" data-facet="relatedContent">
+  <label class="aps-label"
+         data-i18n-en="Related content / collections"
+         data-i18n-cy="Cynnwys / casgliadau cysylltiedig">
+    Related content / collections
+  </label>
+
+  <!-- STATIC SELECT (not a search box) -->
+  <div class="aps-static-select-wrapper">
+    <select id="aps-relatedContent-select" class="aps-static-select">
+
+      <!-- Default empty option -->
+      <option value="" data-i18n-en="Any collection" data-i18n-cy="Unrhyw gasgliad">
+        Any collection
+      </option>
+
+      <!-- "ALL" OPTION -->
+      <option value="__ALL__" data-i18n-en="All" data-i18n-cy="Popeth">
+        All
+      </option>
+
+      <!-- JS will append the real facet options here -->
+    </select>
+  </div>
+</div>
+
 
       </div>
 
