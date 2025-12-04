@@ -574,7 +574,37 @@ function initAdvancedPersonSearch(langArg) {
 
 
 updateAdvancedSearchLabels();
+// ---------------------------------------------------------------------------
+// STATIC GENDER DROPDOWN
+// ---------------------------------------------------------------------------
+function initStaticGenderDropdown() {
+  const sel = document.getElementById("aps-gender-select");
+  if (!sel) return;
 
+  // Clear any dynamic options except the first placeholder
+  sel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
+
+  const list = LocalFacets.gender || [];
+  const lang = getCurrentLang();
+
+  list.forEach((g) => {
+    const opt = document.createElement("option");
+    opt.value = g.id;
+    opt.textContent = lang === "cy" ? g.label_cy : g.label_en;
+    sel.appendChild(opt);
+  });
+
+  // Store selection like other facets do
+  sel.addEventListener("change", () => {
+    const field = document.querySelector('.aps-field[data-facet="gender"]');
+    if (field) {
+      field.dataset.valueId = sel.value;
+      field.dataset.valueLabel = sel.options[sel.selectedIndex].textContent;
+    }
+  });
+}
+
+initStaticGenderDropdown();
 
 
 Object.keys(FACETS)
@@ -657,6 +687,7 @@ const observer = new MutationObserver((mutations) => {
   for (const m of mutations) {
     if (m.attributeName === "lang") {
       updateAdvancedSearchLabels();
+      initStaticGenderDropdown();
       if (lastSearchHasResults && lastSearchSelection) {
         executeSearch(currentPage);
       }
