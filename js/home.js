@@ -20,8 +20,7 @@ Home.initHomePage = async function (lang = "en") {
   // ---------------------------------------------------------
   // Render homepage content (map block included)
   // ---------------------------------------------------------
-  home.innerHTML = 
-    
+home.innerHTML = `
     <div class="home-wrapper">
 
       <section class="home-header">
@@ -214,8 +213,6 @@ Home.initHomePage = async function (lang = "en") {
 
   </div>
 </section>
-
-
 
     </div>
   `;
