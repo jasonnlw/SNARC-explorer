@@ -147,24 +147,28 @@ home.innerHTML = `
     Related content / collections
   </label>
 
-  <!-- STATIC SELECT (not a search box) -->
-  <div class="aps-static-select-wrapper">
-    <select id="aps-relatedContent-select" class="aps-static-select">
+  <div class="aps-dropdown aps-dropdown-select"> 
+    <select id="aps-relatedContent-select" class="aps-input aps-select">
 
-      <!-- Default empty option -->
-      <option value="" data-i18n-en="Any collection" data-i18n-cy="Unrhyw gasgliad">
+      <!-- Default "Any collection" -->
+      <option value="" 
+              data-i18n-en="Any collection" 
+              data-i18n-cy="Unrhyw gasgliad">
         Any collection
       </option>
 
-      <!-- "ALL" OPTION -->
-      <option value="__ALL__" data-i18n-en="All" data-i18n-cy="Popeth">
+      <!-- ONE single ALL option -->
+      <option value="__ALL__" 
+              data-i18n-en="All" 
+              data-i18n-cy="Popeth">
         All
       </option>
 
-      <!-- JS will append the real facet options here -->
+      <!-- JS will append the real content-type options here -->
     </select>
   </div>
 </div>
+
 
 
       </div>
