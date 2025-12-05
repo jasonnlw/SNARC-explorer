@@ -757,6 +757,7 @@ console.log("APS SPARQL converted results:", results);
       
 // Detect extra row for pagination
 bindings = dedupeByQid(bindings);
+rawBindings = [...bindings];
 lastPageHasMore = bindings.length > pageSize;
 if (lastPageHasMore && viewMode === "list") {
   bindings = bindings.slice(0, pageSize);
@@ -766,11 +767,16 @@ lastSearchHasResults = bindings.length > 0;
 lastSearchSelection = selection;
 
 // STORE results for GRAPH MODE
+// Store full results BEFORE pagination for graph mode
+if (!lastFullResults) lastFullResults = rawBindings;
+
+// This remains the per-page bindings for list view
 lastBindings = bindings;
+
 
 // Render depending on view mode
 if (viewMode === "graph") {
-  renderGraph(bindings);
+  renderGraph(rawBindings);
 } else {
   renderResultsList(bindings);
 }
