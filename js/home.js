@@ -201,7 +201,23 @@ home.innerHTML = `
           No results yet
         </p>
       </div>
-      <div class="aps-results-list"></div>
+    <div class="aps-results-view-toggle">
+  <button type="button" id="aps-view-list" class="aps-view-btn aps-view-active"
+          data-i18n-en="List view" data-i18n-cy="Golygfa rhestr">
+    List view
+  </button>
+  <button type="button" id="aps-view-graph" class="aps-view-btn"
+          data-i18n-en="Graph view" data-i18n-cy="Golygfa graff">
+    Graph view
+  </button>
+</div>
+
+<!-- LIST RESULTS -->
+<div class="aps-results-list"></div>
+
+<!-- GRAPH RESULTS -->
+<div id="aps-results-graph" class="aps-results-graph aps-hidden"></div>
+
 
       <div class="aps-pagination aps-pagination-hidden">
         <button type="button" class="aps-btn aps-btn-ghost" id="aps-prev-page">&larr;</button>
