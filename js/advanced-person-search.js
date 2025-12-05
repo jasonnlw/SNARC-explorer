@@ -10,7 +10,7 @@
   // ---------------------------------------------------------------------------
 const LocalFacets = window.Facets; // use the loaded JSON lists
   
-let viewMode = "graph"; // "graph" or "list"
+let viewMode = "list"; // "graph" or "list"
 let lastBindings = [];  // store last SPARQL results for re-rendering
 
 function getFacetListName(facetKey) {
