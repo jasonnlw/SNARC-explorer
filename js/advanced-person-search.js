@@ -9,6 +9,9 @@
   // CONFIG
   // ---------------------------------------------------------------------------
 const LocalFacets = window.Facets; // use the loaded JSON lists
+  
+let viewMode = "graph"; // "graph" or "list"
+let lastBindings = [];  // store last SPARQL results for re-rendering
 
 function getFacetListName(facetKey) {
   switch (facetKey) {
@@ -235,6 +238,38 @@ function renderOptions(items) {
       field.dataset.valueLabel = item.label;
       closeAllOptionLists();
     });
+const graphBtn = container.querySelector(".aps-view-graph");
+const listBtn = container.querySelector(".aps-view-list");
+const graphEl = document.getElementById("aps-graph");
+const listEl = container.querySelector(".aps-results-list");
+
+if (graphBtn && listBtn && graphEl && listEl) {
+  graphBtn.addEventListener("click", () => {
+    viewMode = "graph";
+    graphBtn.classList.add("aps-view-active");
+    listBtn.classList.remove("aps-view-active");
+    graphEl.style.display = "";
+    listEl.style.display = "none";
+    if (lastBindings.length) {
+      renderGraph(lastBindings);
+    }
+  });
+
+  listBtn.addEventListener("click", () => {
+    viewMode = "list";
+    listBtn.classList.add("aps-view-active");
+    graphBtn.classList.remove("aps-view-active");
+    listEl.style.display = "";
+    graphEl.style.display = "none";
+    if (lastBindings.length) {
+      renderResultsList(lastBindings);
+    }
+  });
+
+  // Default: graph
+  graphEl.style.display = "";
+  listEl.style.display = "none";
+}
 
     optionsList.appendChild(li);
   });
