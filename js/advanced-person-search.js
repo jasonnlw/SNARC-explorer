@@ -759,34 +759,58 @@ console.log("APS SPARQL converted results:", results);
 
       
 // Detect extra row for pagination
-bindings = dedupeByQid(bindings);
-rawBindings = [...bindings];
-lastPageHasMore = bindings.length > pageSize;
-if (lastPageHasMore && viewMode === "list") {
-  bindings = bindings.slice(0, pageSize);
+// Always store full raw results BEFORE any dedupe or pagination
+const rawBindings = [...bindings];
+
+// ----- LIST VIEW LOGIC -----
+if (viewMode === "list") {
+
+  // 1. Deduplicate results for list view only
+  const deduped = dedupeByQid(rawBindings);
+
+  // 2. Determine whether more pages exist
+  lastPageHasMore = deduped.length > pageSize;
+
+  // 3. Slice page for list view
+  const paged = deduped.slice(0, pageSize);
+
+  // 4. Track state
+  lastSearchHasResults = paged.length > 0;
+  lastSearchSelection = selection;
+
+  lastBindings = paged;          // list view
+  lastFullResults = deduped;     // full deduped set for list pagination
+
+  // 5. Render list
+  renderResultsList(paged);
+
+  // 6. Update UI
+  updateResultsSummary(paged.length, lastPageHasMore, page);
+  updatePaginationControls(lastPageHasMore, page);
+
+  return;
 }
 
-lastSearchHasResults = bindings.length > 0;
-lastSearchSelection = selection;
-
-// STORE results for GRAPH MODE
-// Store full results BEFORE pagination for graph mode
-if (!lastFullResults) lastFullResults = rawBindings;
-
-// This remains the per-page bindings for list view
-lastBindings = bindings;
-
-
-// Render depending on view mode
+// ----- GRAPH VIEW LOGIC -----
 if (viewMode === "graph") {
+
+  // NO dedupe — duplicates represent edges
+  // NO slice — graph must show all returned rows
+  lastFullResults = rawBindings;
+
+  lastSearchHasResults = rawBindings.length > 0;
+  lastSearchSelection = selection;
+
+  // Render full graph
   renderGraph(rawBindings);
-} else {
-  renderResultsList(bindings);
+
+  // Graph view does not use list pagination UI
+  updateResultsSummary(rawBindings.length, false, page);
+  updatePaginationControls(false, page);
+
+  return;
 }
-
-updateResultsSummary(bindings.length, lastPageHasMore, page);
-updatePaginationControls(lastPageHasMore, page);
-
+      
     } catch (e) {
       console.error("Error executing people search", e);
       if (msgEl) {
