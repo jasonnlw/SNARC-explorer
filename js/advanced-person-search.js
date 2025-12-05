@@ -56,6 +56,8 @@ const SNARC_SPARQL_ENDPOINT =
   let lastPageHasMore = false;
   let lastSearchHasResults = false;
   let lastSearchSelection = null;
+  let lastFullResults = [];
+
 
   // ---------------------------------------------------------------------------
   // LANGUAGE HELPERS
