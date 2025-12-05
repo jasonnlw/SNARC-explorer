@@ -490,7 +490,7 @@ if (selection.relatedContent) {
   }
 
 function renderGraph(bindings) {
-  const container = document.getElementById("aps-graph");
+  const container = document.getElementById("aps-results-graph");
   if (!container) return;
 
   // If D3 is missing, don’t silently fail – fall back to list view
