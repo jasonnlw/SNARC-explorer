@@ -158,11 +158,10 @@ home.innerHTML = `
       </option>
 
       <!-- ONE single ALL option -->
-      <option value="__ALL__" 
-              data-i18n-en="All" 
-              data-i18n-cy="Popeth">
-        All
-      </option>
+<option value="ALL" data-i18n-en="All" data-i18n-cy="Popeth">
+    All
+</option>
+
 
       <!-- JS will append the real content-type options here -->
     </select>
