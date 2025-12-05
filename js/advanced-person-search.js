@@ -692,6 +692,32 @@ function renderGraph(bindings) {
 const data = await runSparql(query);
 let bindings = (data.results && data.results.bindings) || [];
 
+//---------------------------------------------------------
+// Convert SPARQL bindings → APS-friendly result objects
+//---------------------------------------------------------
+const results = bindings.map(b => {
+  const get = (x) => (b[x] ? b[x].value : "");
+
+  return {
+    id: get("item").replace("https://snarc-llgc.wikibase.cloud/entity/", ""),
+    uri: get("item"),
+    label: get("itemLabel"),
+    description: get("description"),
+    occupation: get("occupationLabel"),
+    birthPlace: get("birthPlaceLabel"),
+    deathPlace: get("deathPlaceLabel"),
+    eduPlace: get("eduPlaceLabel")
+  };
+});
+
+// Save for global usage (graph or list)
+lastSearchResults = results;
+
+// Debug:
+console.log("APS SPARQL converted results:", results);
+
+
+      
 // Detect extra row for pagination
 lastPageHasMore = bindings.length > pageSize;
 if (lastPageHasMore) {
