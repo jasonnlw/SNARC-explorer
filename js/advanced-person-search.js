@@ -742,7 +742,7 @@ console.log("APS SPARQL converted results:", results);
       
 // Detect extra row for pagination
 lastPageHasMore = bindings.length > pageSize;
-if (lastPageHasMore) {
+if (lastPageHasMore && viewMode === "list") {
   bindings = bindings.slice(0, pageSize);
 }
 
