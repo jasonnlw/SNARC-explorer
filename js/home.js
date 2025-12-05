@@ -142,8 +142,8 @@ home.innerHTML = `
 <!-- Related Content -->
 <div class="aps-field" data-facet="relatedContent">
   <label class="aps-label"
-         data-i18n-en="Related content / collections"
-         data-i18n-cy="Cynnwys / casgliadau cysylltiedig">
+         data-i18n-en="Has Related Collections"
+         data-i18n-cy="Efo Casgliadau Perthnasol">
     Related content / collections
   </label>
 
@@ -152,8 +152,8 @@ home.innerHTML = `
 
       <!-- Default "Any collection" -->
       <option value="" 
-              data-i18n-en="Any collection" 
-              data-i18n-cy="Unrhyw gasgliad">
+              data-i18n-en="Select Collection" 
+              data-i18n-cy="Dewis Casgliad">
         Any collection
       </option>
 
