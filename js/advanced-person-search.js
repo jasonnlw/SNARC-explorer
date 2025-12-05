@@ -489,6 +489,130 @@ if (selection.relatedContent) {
     });
   }
 
+function renderGraph(bindings) {
+  const container = document.getElementById("aps-graph");
+  if (!container) return;
+
+  container.innerHTML = ""; // clear old graph
+
+  const width = container.clientWidth || 800;
+  const height = 500;
+
+  const svg = d3.select(container)
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+  // Build nodes & links
+  const nodesById = new Map();
+  const links = [];
+
+  function addNode(id, label, type) {
+    if (!id) return null;
+    if (!nodesById.has(id)) {
+      nodesById.set(id, { id, label: label || id, type });
+    }
+    return nodesById.get(id);
+  }
+
+  bindings.forEach((b) => {
+    const personUri = b.item.value;
+    const personMatch = personUri.match(/(Q[0-9]+)$/);
+    const personId = personMatch ? personMatch[1] : personUri;
+    const personLabel = b.itemLabel && b.itemLabel.value;
+    const personNode = addNode(personId, personLabel, "person");
+
+    const occ = b.occupation && b.occupation.value;
+    const occLabel = b.occupationLabel && b.occupationLabel.value;
+    const edu = b.eduPlace && b.eduPlace.value;
+    const eduLabel = b.eduPlaceLabel && b.eduPlaceLabel.value;
+    const birth = b.birthPlace && b.birthPlace.value;
+    const birthLabel = b.birthPlaceLabel && b.birthPlaceLabel.value;
+    const death = b.deathPlace && b.deathPlace.value;
+    const deathLabel = b.deathPlaceLabel && b.deathPlaceLabel.value;
+
+    function addEdge(targetUri, targetLabel, type) {
+      if (!personNode || !targetUri) return;
+      const m = targetUri.match(/(Q[0-9]+)$/);
+      const id = m ? m[1] : targetUri;
+      const targetNode = addNode(id, targetLabel, type);
+      if (targetNode) {
+        links.push({ source: personNode, target: targetNode, type });
+      }
+    }
+
+    addEdge(occ, occLabel, "occupation");
+    addEdge(edu, eduLabel, "education");
+    addEdge(birth, birthLabel, "birthPlace");
+    addEdge(death, deathLabel, "deathPlace");
+  });
+
+  const nodes = Array.from(nodesById.values());
+
+  const simulation = d3.forceSimulation(nodes)
+    .force("link", d3.forceLink(links).id(d => d.id).distance(80))
+    .force("charge", d3.forceManyBody().strength(-120))
+    .force("center", d3.forceCenter(width / 2, height / 2));
+
+  const link = svg.append("g")
+    .attr("stroke", "#ccc")
+    .selectAll("line")
+    .data(links)
+    .enter()
+    .append("line")
+    .attr("stroke-width", 1.2);
+
+  const node = svg.append("g")
+    .selectAll("g")
+    .data(nodes)
+    .enter()
+    .append("g")
+    .call(d3.drag()
+      .on("start", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0.3).restart();
+        d.fx = d.x; d.fy = d.y;
+      })
+      .on("drag", (event, d) => {
+        d.fx = event.x; d.fy = event.y;
+      })
+      .on("end", (event, d) => {
+        if (!event.active) simulation.alphaTarget(0);
+        d.fx = null; d.fy = null;
+      })
+    );
+
+  node.append("circle")
+    .attr("r", d => d.type === "person" ? 8 : 5)
+    .attr("fill", d => d.type === "person" ? "#0b7e5c" : "#888")
+    .on("click", (event, d) => {
+      // click through to SNARC Explorer item if it's a Q-id
+      if (/^Q[0-9]+$/.test(d.id)) {
+        window.open(
+          `${SNARC_ENTITY_BASE_URL}${d.id}`,
+          "_blank",
+          "noopener"
+        );
+      }
+    });
+
+  node.append("text")
+    .attr("x", 10)
+    .attr("y", 3)
+    .attr("font-size", "10px")
+    .text(d => d.label);
+
+  simulation.on("tick", () => {
+    link
+      .attr("x1", d => d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    node.attr("transform", d => `translate(${d.x},${d.y})`);
+  });
+}
+
+  
   function updateResultsSummary(totalVisible, hasMore, page) {
     const summaryEl = document.querySelector(".aps-results-summary");
     if (!summaryEl) return;
