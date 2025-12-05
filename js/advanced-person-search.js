@@ -858,10 +858,12 @@ initStaticRelatedContentDropdown();
 // ---------------------------------------------------------------------------
 // VIEW MODE SWITCHING (Graph / List)
 // ---------------------------------------------------------------------------
-const graphBtn = container.querySelector(".aps-view-graph");
-const listBtn = container.querySelector(".aps-view-list");
-const graphEl = document.getElementById("aps-graph");
-const listEl = container.querySelector(".aps-results-list");
+const graphBtn = container.querySelector("#aps-view-graph");
+const listBtn  = container.querySelector("#aps-view-list");
+
+const graphEl = container.querySelector("#aps-results-graph");  // <--- FIXED
+const listEl  = container.querySelector(".aps-results-list");
+
 
 // Only activate if all elements exist
 if (graphBtn && listBtn && graphEl && listEl) {
