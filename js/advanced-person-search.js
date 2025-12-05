@@ -660,10 +660,24 @@ function renderGraph(bindings) {
   }
 
   async function executeSearch(page) {
-    const resultsContainer = document.getElementById("aps-results");
-    if (resultsContainer) {
-      resultsContainer.classList.remove("aps-results-hidden");
-    }
+// Main wrapper
+const resultsWrapper = document.getElementById("aps-results");
+if (resultsWrapper) {
+  resultsWrapper.classList.remove("aps-results-hidden");
+}
+
+// List container (if in list mode)
+const listWrapper = document.getElementById("aps-results-list-wrapper");
+if (listWrapper) {
+  listWrapper.classList.remove("aps-results-hidden");
+}
+
+// Graph container (if in graph mode)
+const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+if (graphWrapper) {
+  graphWrapper.classList.remove("aps-results-hidden");
+}
+
 
     const lang = getCurrentLang();
     const selection = lastSearchSelection || getCurrentFacetSelections();
