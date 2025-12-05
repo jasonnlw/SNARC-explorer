@@ -419,7 +419,11 @@ if (selection.relatedContent) {
       PREFIX bd: <http://www.bigdata.com/rdf#>
       PREFIX schema: <http://schema.org/>
 
-      SELECT ?item ?itemLabel ?description WHERE {
+      SELECT ?item ?itemLabel ?description
+       ?occupation ?occupationLabel
+       ?eduPlace ?eduPlaceLabel
+       ?birthPlace ?birthPlaceLabel
+       ?deathPlace ?deathPlaceLabel WHERE {
         ${whereClauses}
         OPTIONAL {
           ?item schema:description ?description .
@@ -427,6 +431,11 @@ if (selection.relatedContent) {
         }
         SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
       }
+        OPTIONAL { ?item wdt:P25 ?occupation . }
+        OPTIONAL { ?item wdt:P23 ?eduPlace . }
+        OPTIONAL { ?item wdt:P21 ?birthPlace . }
+        OPTIONAL { ?item wdt:P22 ?deathPlace . }
+
       ORDER BY LCASE(STR(?itemLabel))
       LIMIT ${pageSize + 1}  # one extra to check if there is a next page
       OFFSET ${offset}
