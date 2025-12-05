@@ -646,11 +646,6 @@ function initStaticRelatedContentDropdown() {
   const lang = getCurrentLang();
   const list = LocalFacets.content_type || [];
 
-  // Add the new “All” option
-  const allOpt = document.createElement("option");
-  allOpt.value = "ALL";
-  allOpt.textContent = lang === "cy" ? "Popeth" : "All";
-  sel.appendChild(allOpt);
 
   // Add each content type
   list.forEach((c) => {
