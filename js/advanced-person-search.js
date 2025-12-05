@@ -457,8 +457,10 @@ if (selection.relatedContent) {
       }
 
       ORDER BY LCASE(STR(?itemLabel))
-      LIMIT ${pageSize + 1}  # one extra to check if there is a next page
-      OFFSET ${offset}
+      ${viewMode === "list"
+        ? `LIMIT ${pageSize + 1}  # one extra to check if there is a next page
+      OFFSET ${offset}`
+        : ``}
     `;
   }
 
