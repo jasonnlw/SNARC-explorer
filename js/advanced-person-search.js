@@ -493,6 +493,14 @@ function renderGraph(bindings) {
   const container = document.getElementById("aps-graph");
   if (!container) return;
 
+  // If D3 is missing, don’t silently fail – fall back to list view
+  if (typeof d3 === "undefined") {
+    console.warn("APS: d3 not loaded, falling back to list view");
+    viewMode = "list";
+    renderResultsList(bindings);
+    return;
+  }
+
   container.innerHTML = ""; // clear old graph
 
   const width = container.clientWidth || 800;
