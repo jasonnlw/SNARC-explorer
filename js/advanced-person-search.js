@@ -238,38 +238,6 @@ function renderOptions(items) {
       field.dataset.valueLabel = item.label;
       closeAllOptionLists();
     });
-const graphBtn = container.querySelector(".aps-view-graph");
-const listBtn = container.querySelector(".aps-view-list");
-const graphEl = document.getElementById("aps-graph");
-const listEl = container.querySelector(".aps-results-list");
-
-if (graphBtn && listBtn && graphEl && listEl) {
-  graphBtn.addEventListener("click", () => {
-    viewMode = "graph";
-    graphBtn.classList.add("aps-view-active");
-    listBtn.classList.remove("aps-view-active");
-    graphEl.style.display = "";
-    listEl.style.display = "none";
-    if (lastBindings.length) {
-      renderGraph(lastBindings);
-    }
-  });
-
-  listBtn.addEventListener("click", () => {
-    viewMode = "list";
-    listBtn.classList.add("aps-view-active");
-    graphBtn.classList.remove("aps-view-active");
-    listEl.style.display = "";
-    graphEl.style.display = "none";
-    if (lastBindings.length) {
-      renderResultsList(lastBindings);
-    }
-  });
-
-  // Default: graph
-  graphEl.style.display = "";
-  listEl.style.display = "none";
-}
 
     optionsList.appendChild(li);
   });
@@ -596,20 +564,32 @@ if (selection.relatedContent) {
     const query = buildSearchQuery(selection, page, lang);
 
     try {
-      const data = await runSparql(query);
-      let bindings = (data.results && data.results.bindings) || [];
+// Run query
+const data = await runSparql(query);
+let bindings = (data.results && data.results.bindings) || [];
 
-      lastPageHasMore = bindings.length > pageSize;
-      if (lastPageHasMore) {
-        bindings = bindings.slice(0, pageSize);
-      }
+// Detect extra row for pagination
+lastPageHasMore = bindings.length > pageSize;
+if (lastPageHasMore) {
+  bindings = bindings.slice(0, pageSize);
+}
 
-      lastSearchHasResults = bindings.length > 0;
-      lastSearchSelection = selection;
+lastSearchHasResults = bindings.length > 0;
+lastSearchSelection = selection;
 
-      renderResultsList(bindings);
-      updateResultsSummary(bindings.length, lastPageHasMore, page);
-      updatePaginationControls(lastPageHasMore, page);
+// STORE results for GRAPH MODE
+lastBindings = bindings;
+
+// Render depending on view mode
+if (viewMode === "graph") {
+  renderGraph(bindings);
+} else {
+  renderResultsList(bindings);
+}
+
+updateResultsSummary(bindings.length, lastPageHasMore, page);
+updatePaginationControls(lastPageHasMore, page);
+
     } catch (e) {
       console.error("Error executing people search", e);
       if (msgEl) {
@@ -703,6 +683,45 @@ function initStaticRelatedContentDropdown() {
 initStaticGenderDropdown();
 initStaticRelatedContentDropdown();
 
+// ---------------------------------------------------------------------------
+// VIEW MODE SWITCHING (Graph / List)
+// ---------------------------------------------------------------------------
+const graphBtn = container.querySelector(".aps-view-graph");
+const listBtn = container.querySelector(".aps-view-list");
+const graphEl = document.getElementById("aps-graph");
+const listEl = container.querySelector(".aps-results-list");
+
+// Only activate if all elements exist
+if (graphBtn && listBtn && graphEl && listEl) {
+
+  graphBtn.addEventListener("click", () => {
+    viewMode = "graph";
+    graphBtn.classList.add("aps-view-active");
+    listBtn.classList.remove("aps-view-active");
+    graphEl.style.display = "";
+    listEl.style.display = "none";
+
+    if (lastBindings.length) {
+      renderGraph(lastBindings); // defined later
+    }
+  });
+
+  listBtn.addEventListener("click", () => {
+    viewMode = "list";
+    listBtn.classList.add("aps-view-active");
+    graphBtn.classList.remove("aps-view-active");
+    listEl.style.display = "";
+    graphEl.style.display = "none";
+
+    if (lastBindings.length) {
+      renderResultsList(lastBindings);
+    }
+  });
+
+  // Default mode = graph
+  graphEl.style.display = "";
+  listEl.style.display = "none";
+}
 
 Object.keys(FACETS)
   .filter((facetKey) => facetKey !== "gender" && facetKey !== "relatedContent")
