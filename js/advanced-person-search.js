@@ -428,16 +428,16 @@ if (selection.relatedContent) {
        ?birthPlace ?birthPlaceLabel
        ?deathPlace ?deathPlaceLabel WHERE {
         ${whereClauses}
+                OPTIONAL { ?item wdt:P25 ?occupation . }
+        OPTIONAL { ?item wdt:P23 ?eduPlace . }
+        OPTIONAL { ?item wdt:P21 ?birthPlace . }
+        OPTIONAL { ?item wdt:P22 ?deathPlace . }
         OPTIONAL {
           ?item schema:description ?description .
           FILTER (LANG(?description) = "${lang}")
         }
         SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
       }
-        OPTIONAL { ?item wdt:P25 ?occupation . }
-        OPTIONAL { ?item wdt:P23 ?eduPlace . }
-        OPTIONAL { ?item wdt:P21 ?birthPlace . }
-        OPTIONAL { ?item wdt:P22 ?deathPlace . }
 
       ORDER BY LCASE(STR(?itemLabel))
       LIMIT ${pageSize + 1}  # one extra to check if there is a next page
