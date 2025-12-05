@@ -91,6 +91,21 @@ const SNARC_SPARQL_ENDPOINT =
   }
 
   // ---------------------------------------------------------------------------
+  // Sparql de-dupe helper
+  // ---------------------------------------------------------------------------
+  function dedupeByQid(bindings) {
+  const seen = new Set();
+  return bindings.filter(b => {
+    if (!b.item || !b.item.value) return false;
+    const qid = b.item.value;
+    if (seen.has(qid)) return false;
+    seen.add(qid);
+    return true;
+  });
+}
+
+
+  // ---------------------------------------------------------------------------
   // FACET CONFIG
   // ---------------------------------------------------------------------------
 
@@ -741,6 +756,7 @@ console.log("APS SPARQL converted results:", results);
 
       
 // Detect extra row for pagination
+bindings = dedupeByQid(bindings);
 lastPageHasMore = bindings.length > pageSize;
 if (lastPageHasMore && viewMode === "list") {
   bindings = bindings.slice(0, pageSize);
