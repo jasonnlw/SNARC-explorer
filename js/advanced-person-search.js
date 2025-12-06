@@ -902,30 +902,7 @@
     }
 
 
-        const resultsEl = document.getElementById("aps-results");
-        if (resultsEl) {
-          resultsEl.classList.add("aps-results-hidden");
-          const listEl2 = resultsEl.querySelector(".aps-results-list");
-          if (listEl2) listEl2.innerHTML = "";
-          const graphEl2 = resultsEl.querySelector("#aps-results-graph");
-          if (graphEl2) graphEl2.innerHTML = "";
-        }
-
-        lastSearchHasResults = false;
-        lastSearchSelection = null;
-        listState.full = [];
-        listState.page = [];
-        listState.currentPage = 1;
-        listState.hasMore = false;
-        graphState.full = [];
-
-        const pagEl = document.querySelector(".aps-pagination");
-        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
-
-        const summaryEl = document.querySelector(".aps-results-summary");
-        if (summaryEl) summaryEl.textContent = "";
-      });
-    }
+       
 
     // Pagination buttons (LIST ONLY)
     const prevBtn = document.getElementById("aps-prev-page");
