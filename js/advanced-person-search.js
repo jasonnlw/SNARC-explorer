@@ -456,7 +456,6 @@ if (selection.relatedContent) {
         SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
       }
 
-      ORDER BY LCASE(STR(?itemLabel))
 ${viewMode === "list"
   ? `LIMIT 1000 OFFSET 0`
   : `LIMIT 1000`}
