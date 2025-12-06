@@ -196,8 +196,8 @@ home.innerHTML = `
     <div id="aps-results" class="aps-results aps-results-hidden">
       <div class="aps-results-header">
         <p class="aps-results-summary"
-           data-i18n-en="No results yet"
-           data-i18n-cy="Dim canlyniadau eto">
+           data-i18n-en="Loading..."
+           data-i18n-cy="Llwytho...">
           No results yet
         </p>
       </div>
