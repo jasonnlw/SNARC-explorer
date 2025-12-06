@@ -804,8 +804,15 @@ if (viewMode === "graph") {
   renderGraph(rawBindings);
 
   // Graph view does not use list pagination UI
-  updateResultsSummary(rawBindings.length, false, page);
-  updatePaginationControls(false, page);
+  if (viewMode === "list") {
+  updateResultsSummary(bindings.length, lastPageHasMore, page);
+  updatePaginationControls(lastPageHasMore, page);
+} else {
+  // GRAPH MODE — hide pagination completely
+  updateResultsSummary(rawBindings.length, false, 1);
+  updatePaginationControls(false, 1);
+}
+
 
   return;
 }
