@@ -1010,23 +1010,30 @@ console.log("APS: next button?", nextBtn);
 console.log("APS: init complete");
 
 
-    if (prevBtn) {
-      prevBtn.addEventListener("click", () => {
-        if (currentPage > 1) {
-          currentPage -= 1;
-          executeSearch(currentPage);
-        }
-      });
-    }
+if (prevBtn) {
+  prevBtn.addEventListener("click", () => {
+    // BLOCK pagination in graph mode
+    if (viewMode === "graph") return;
 
-    if (nextBtn) {
-      nextBtn.addEventListener("click", () => {
-        if (lastPageHasMore) {
-          currentPage += 1;
-          executeSearch(currentPage);
-        }
-      });
+    if (currentPage > 1) {
+      currentPage -= 1;
+      executeSearch(currentPage);
     }
+  });
+}
+
+if (nextBtn) {
+  nextBtn.addEventListener("click", () => {
+    // BLOCK pagination in graph mode
+    if (viewMode === "graph") return;
+
+    if (lastPageHasMore) {
+      currentPage += 1;
+      executeSearch(currentPage);
+    }
+  });
+}
+
 
   
 //-----------------------------------------------------------------------
