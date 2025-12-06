@@ -931,6 +931,7 @@ if (graphBtn && listBtn && graphEl && listEl) {
 
   graphBtn.addEventListener("click", () => {
     viewMode = "graph";
+    currentPage = 1;
     graphBtn.classList.add("aps-view-active");
     listBtn.classList.remove("aps-view-active");
     graphEl.style.display = "";
