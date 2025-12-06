@@ -901,17 +901,6 @@
       });
     }
 
-    // Reset
-    const resetBtn = document.getElementById("aps-reset");
-    console.log("APS: reset button?", resetBtn);
-    if (resetBtn) {
-      resetBtn.addEventListener("click", () => {
-        container.querySelectorAll(".aps-field").forEach((field) => {
-          field.dataset.valueId = "";
-          field.dataset.valueLabel = "";
-          const input = field.querySelector(".aps-input");
-          if (input) input.value = "";
-        });
 
         const resultsEl = document.getElementById("aps-results");
         if (resultsEl) {
