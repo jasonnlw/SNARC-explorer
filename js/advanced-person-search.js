@@ -708,7 +708,8 @@ if (graphWrapper) {
 
 
     const lang = getCurrentLang();
-    const selection = lastSearchSelection || getCurrentFacetSelections();
+    const selection = getCurrentFacetSelections();
+lastSearchSelection = selection;
     const selectedKeys = Object.keys(selection);
 
     const msgEl = document.querySelector(".aps-results-summary");
@@ -932,6 +933,10 @@ if (graphBtn && listBtn && graphEl && listEl) {
   graphBtn.addEventListener("click", () => {
     viewMode = "graph";
     currentPage = 1;
+    lastPageHasMore = false;
+    lastBindings = [];
+     // Clear list-specific cache to avoid reuse
+    lastFullResults = [];
     graphBtn.classList.add("aps-view-active");
     listBtn.classList.remove("aps-view-active");
     graphEl.style.display = "";
