@@ -763,6 +763,8 @@ const rawBindings = [...bindings];
 
 // ----- LIST VIEW LOGIC -----
 if (viewMode === "list") {
+ // a. 
+  document.querySelector(".aps-pagination").classList.remove("aps-pagination-hidden");
 
   // 1. Deduplicate results for list view only
   const deduped = dedupeByQid(rawBindings);
@@ -799,6 +801,7 @@ if (viewMode === "graph") {
 
   lastSearchHasResults = rawBindings.length > 0;
   lastSearchSelection = selection;
+document.querySelector(".aps-pagination").classList.add("aps-pagination-hidden");
 
   // Render full graph
   renderGraph(rawBindings);
