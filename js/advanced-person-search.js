@@ -685,6 +685,9 @@ function renderGraph(bindings) {
   }
 
   async function executeSearch(page) {
+    if (viewMode === "graph") {
+  page = 1;
+}
 // Main wrapper
 const resultsWrapper = document.getElementById("aps-results");
 if (resultsWrapper) {
