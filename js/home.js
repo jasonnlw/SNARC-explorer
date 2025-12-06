@@ -179,11 +179,6 @@ home.innerHTML = `
           Search people
         </button>
 
-        <button type="button" class="aps-btn aps-btn-secondary" id="aps-reset"
-                data-i18n-en="Reset filters"
-                data-i18n-cy="Ailosod hidlwyr">
-          Reset filters
-        </button>
 
         <p class="aps-hint"
            data-i18n-en="Choose at least one filter to see results."
