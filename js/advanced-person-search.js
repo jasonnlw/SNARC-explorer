@@ -416,8 +416,8 @@
         }
         SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
       }
-      ORDER BY LCASE(STR(?itemLabel))
-      LIMIT 1000
+     
+      LIMIT 5000
     `;
   }
 
