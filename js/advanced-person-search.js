@@ -8,56 +8,39 @@
   // ---------------------------------------------------------------------------
   // CONFIG
   // ---------------------------------------------------------------------------
-const LocalFacets = window.Facets; // use the loaded JSON lists
-  
-let viewMode = "list"; // "graph" or "list"
-let lastBindings = [];  // store last SPARQL results for re-rendering
+  const LocalFacets = window.Facets; // use the loaded JSON lists
 
-function getFacetListName(facetKey) {
-  switch (facetKey) {
-    case "gender":
-      return "gender";
+  // "list" or "graph"
+  let viewMode = "graph";
 
-    case "occupation":
-      return "occupation";
-
-    case "educationPlace":
-      return "education_place"; // correct mapping
-
-    case "birthPlace":
-    case "deathPlace":
-      return "places"; // shared 60k list
-
-    case "relatedContent":
-      return "content_type"; // correct mapping
-
-    default:
-      return facetKey;
-  }
-}
-
-  
-  // Try to reuse globals if your site already defines them
-const SNARC_API = "https://snarc-proxy.onrender.com/w/api.php";
-const SNARC_SPARQL_ENDPOINT =
-  "https://snarc-proxy.onrender.com/query";
-
-  
   // Where to send users when they click a result
   // Override globally with window.SNARC_ENTITY_BASE_URL if you have a custom Explorer route
   const SNARC_ENTITY_BASE_URL =
-    window.SNARC_ENTITY_BASE_URL || "https://jasonnlw.github.io/SNARC-explorer/#/item/";
+    window.SNARC_ENTITY_BASE_URL ||
+    "https://jasonnlw.github.io/SNARC-explorer/#/item/";
 
-  // Page size for results
+  // SPARQL endpoint (via proxy)
+  const SNARC_SPARQL_ENDPOINT = "https://snarc-proxy.onrender.com/query";
+
+  // Page size for *list* pagination
   const pageSize = 24;
 
-  // Pagination + state
-  let currentPage = 1;
-  let lastPageHasMore = false;
+  // List-only state
+  const listState = {
+    currentPage: 1,
+    hasMore: false,
+    full: [], // full de-duplicated bindings (SPARQL results)
+    page: [], // current page slice
+  };
+
+  // Graph-only state
+  const graphState = {
+    full: [], // full raw SPARQL bindings (no dedupe, no slice)
+  };
+
+  // Shared “last search” flags
   let lastSearchHasResults = false;
   let lastSearchSelection = null;
-  let lastFullResults = [];
-
 
   // ---------------------------------------------------------------------------
   // LANGUAGE HELPERS
@@ -93,26 +76,23 @@ const SNARC_SPARQL_ENDPOINT =
   }
 
   // ---------------------------------------------------------------------------
-  // Sparql de-dupe helper
+  // SPARQL de-dupe helper (LIST VIEW ONLY)
   // ---------------------------------------------------------------------------
   function dedupeByQid(bindings) {
-  const seen = new Set();
-  return bindings.filter(b => {
-    if (!b.item || !b.item.value) return false;
-    const qid = b.item.value;
-    if (seen.has(qid)) return false;
-    seen.add(qid);
-    return true;
-  });
-}
-
+    const seen = new Set();
+    return bindings.filter((b) => {
+      if (!b.item || !b.item.value) return false;
+      const qid = b.item.value;
+      if (seen.has(qid)) return false;
+      seen.add(qid);
+      return true;
+    });
+  }
 
   // ---------------------------------------------------------------------------
   // FACET CONFIG
   // ---------------------------------------------------------------------------
 
-  // Each facet describes:
-  // - which property will be used in SPARQL
   const FACETS = {
     gender: {
       id: "gender",
@@ -146,20 +126,39 @@ const SNARC_SPARQL_ENDPOINT =
     },
     relatedContent: {
       id: "relatedContent",
-      // Multiple properties in SPARQL, handled separately
-      property: null,
+      property: null, // multiple properties handled specially
       searchHintEn: "collection",
       searchHintCy: "casgliad",
     },
   };
 
+  function getFacetListName(facetKey) {
+    switch (facetKey) {
+      case "gender":
+        return "gender";
+
+      case "occupation":
+        return "occupation";
+
+      case "educationPlace":
+        return "education_place"; // correct mapping
+
+      case "birthPlace":
+      case "deathPlace":
+        return "places"; // shared 60k list
+
+      case "relatedContent":
+        return "content_type"; // correct mapping
+
+      default:
+        return facetKey;
+    }
+  }
+
   // ---------------------------------------------------------------------------
   // API HELPERS
   // ---------------------------------------------------------------------------
 
-
-
-  // SPARQL fetch (CORS must be enabled on the endpoint)
   async function runSparql(query) {
     const url =
       SNARC_SPARQL_ENDPOINT +
@@ -172,7 +171,7 @@ const SNARC_SPARQL_ENDPOINT =
   }
 
   // ---------------------------------------------------------------------------
-  // DROPDOWNS
+  // DROPDOWNS / FACETS
   // ---------------------------------------------------------------------------
 
   function closeAllOptionLists() {
@@ -180,30 +179,7 @@ const SNARC_SPARQL_ENDPOINT =
       ul.classList.add("aps-options-hidden");
     });
   }
-function getFacetListName(facetKey) {
-  switch (facetKey) {
-    case "gender":
-      return "gender";
 
-    case "occupation":
-      return "occupation";
-
-    case "educationPlace":
-      return "education_place";
-
-    case "birthPlace":
-    case "deathPlace":
-      return "places";
-
-    case "relatedContent":
-      return "content_type";
-
-    default:
-      return facetKey;
-  }
-}
-
-  
   function setupFacetDropdown(facetKey) {
     const facet = FACETS[facetKey];
     if (!facet) return;
@@ -219,88 +195,78 @@ function getFacetListName(facetKey) {
     field.dataset.valueId = "";
     field.dataset.valueLabel = "";
 
-function renderOptions(items) {
-  optionsList.innerHTML = "";
+    function renderOptions(items) {
+      optionsList.innerHTML = "";
 
-  if (!items.length) {
-    const li = document.createElement("li");
-    li.className = "aps-option";
-    li.textContent =
-      getCurrentLang() === "cy" ? "Dim canlyniadau" : "No matches";
-    li.style.opacity = "0.7";
-    li.style.cursor = "default";
-    optionsList.appendChild(li);
-    return;
-  }
+      if (!items.length) {
+        const li = document.createElement("li");
+        li.className = "aps-option";
+        li.textContent =
+          getCurrentLang() === "cy" ? "Dim canlyniadau" : "No matches";
+        li.style.opacity = "0.7";
+        li.style.cursor = "default";
+        optionsList.appendChild(li);
+        return;
+      }
 
-  items.forEach((item) => {
-    const li = document.createElement("li");
-    li.className = "aps-option";
+      items.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "aps-option";
 
-    // Places have descriptions
-    if (facetKey === "birthPlace" || facetKey === "deathPlace") {
-      li.innerHTML = `
-        <div class="aps-opt-label">${item.label}</div>
-        <div class="aps-opt-desc">${item.desc || ""}</div>
-      `;
-    } else {
-      li.textContent = item.label;
+        // Places have descriptions
+        if (facetKey === "birthPlace" || facetKey === "deathPlace") {
+          li.innerHTML = `
+            <div class="aps-opt-label">${item.label}</div>
+            <div class="aps-opt-desc">${item.desc || ""}</div>
+          `;
+        } else {
+          li.textContent = item.label;
+        }
+
+        li.dataset.valueId = item.id;
+
+        li.addEventListener("click", () => {
+          input.value = item.label;
+          field.dataset.valueId = item.id;
+          field.dataset.valueLabel = item.label;
+          closeAllOptionLists();
+        });
+
+        optionsList.appendChild(li);
+      });
     }
 
-    li.dataset.valueId = item.id;
+    function searchAndShowOptions() {
+      const text = input.value.trim().toLowerCase();
+      const lang = getCurrentLang();
 
-    li.addEventListener("click", () => {
-      input.value = item.label;
-      field.dataset.valueId = item.id;
-      field.dataset.valueLabel = item.label;
-      closeAllOptionLists();
-    });
+      const facetListName = getFacetListName(facetKey);
+      const list = LocalFacets[facetListName] || [];
 
-    optionsList.appendChild(li);
-  });
-}
+      const minChars = facetListName === "places" ? 2 : 1;
+      if (text.length < minChars) {
+        optionsList.classList.add("aps-options-hidden");
+        return;
+      }
 
+      const results = list
+        .filter((item) => {
+          const label = lang === "cy" ? item.label_cy : item.label_en;
+          return label && label.toLowerCase().includes(text);
+        })
+        .slice(0, 40);
 
-function searchAndShowOptions() {
-  const text = input.value.trim().toLowerCase();
-  const lang = getCurrentLang();
+      const items = results.map((item) => ({
+        id: item.id,
+        label: lang === "cy" ? item.label_cy : item.label_en,
+        desc: lang === "cy" ? item.desc_cy : item.desc_en,
+      }));
 
-  // Determine which facet list to use
-const facetListName = getFacetListName(facetKey);
-const list = LocalFacets[facetListName] || [];
+      renderOptions(items);
+      optionsList.classList.remove("aps-options-hidden");
+    }
 
-  // Require minimum characters for large lists
-  const minChars = getFacetListName(facetKey) === "places" ? 2 : 1;
-  if (text.length < minChars) {
-    optionsList.classList.add("aps-options-hidden");
-    return;
-  }
-
-  // Filter the local list
-  const results = list
-    .filter((item) => {
-      const label = lang === "cy" ? item.label_cy : item.label_en;
-      return label && label.toLowerCase().includes(text);
-    })
-    .slice(0, 40); // limit to avoid huge dropdown
-
-  // Convert results to expected render format
-  const items = results.map((item) => ({
-    id: item.id,
-    label:
-      lang === "cy" ? item.label_cy : item.label_en,
-    desc: lang === "cy" ? item.desc_cy : item.desc_en
-
-  }));
-
-  renderOptions(items);
-  optionsList.classList.remove("aps-options-hidden");
-}
-
-
-    
     input.addEventListener("focus", () => {
-      // Only search if there is enough text
       if (input.value.trim().length >= 2) {
         searchAndShowOptions();
       }
@@ -334,49 +300,43 @@ const list = LocalFacets[facetListName] || [];
     });
   }
 
-function getCurrentFacetSelections() {
-  const selection = {};
+  function getCurrentFacetSelections() {
+    const selection = {};
 
-  Object.keys(FACETS).forEach((key) => {
+    Object.keys(FACETS).forEach((key) => {
+      // SPECIAL CASE: RELATED CONTENT (static <select>)
+      if (key === "relatedContent") {
+        const sel = document.getElementById("aps-relatedContent-select");
+        if (!sel) return;
 
-    // --- SPECIAL CASE: RELATED CONTENT (new <select>)
-    if (key === "relatedContent") {
-      const sel = document.getElementById("aps-relatedContent-select");
-      if (!sel) return;
+        const value = sel.value;
 
-      const value = sel.value;
+        if (value === "ALL") {
+          selection.relatedContent = "ALL";
+        } else if (value) {
+          selection.relatedContent = value; // P12, P50, ...
+        }
 
-      if (value === "ALL") {
-        // User selected "All"
-        selection.relatedContent = "ALL";
-      } else if (value) {
-        // User selected a single property (P12, P50, etc.)
-        selection.relatedContent = value;
+        return;
       }
 
-      return; // <-- Skip normal processing
-    }
+      const field = document.querySelector(`.aps-field[data-facet="${key}"]`);
+      if (!field) return;
 
-    // --- DEFAULT HANDLING FOR ALL OTHER FACETS (unchanged)
-    const field = document.querySelector(`.aps-field[data-facet="${key}"]`);
-    if (!field) return;
+      const id = field.dataset.valueId || "";
+      if (id) {
+        selection[key] = id;
+      }
+    });
 
-    const id = field.dataset.valueId || "";
-    if (id) {
-      selection[key] = id;
-    }
-  });
-
-  return selection;
-}
-
+    return selection;
+  }
 
   // ---------------------------------------------------------------------------
   // SPARQL QUERY BUILDER
   // ---------------------------------------------------------------------------
 
-  function buildSearchQuery(selection, page, lang) {
-    const offset = (page - 1) * pageSize;
+  function buildSearchQuery(selection, lang) {
     const langPref = lang === "cy" ? "cy,en" : "en,cy";
 
     let whereClauses = `
@@ -384,53 +344,53 @@ function getCurrentFacetSelections() {
     `;
 
     if (selection.gender) {
-      // P13 gender
       whereClauses += `
         ?item wdt:P13 wd:${selection.gender} .
       `;
     }
     if (selection.occupation) {
-      // P25 occupation
       whereClauses += `
         ?item wdt:P25 wd:${selection.occupation} .
       `;
     }
     if (selection.educationPlace) {
-      // P23 place of education
       whereClauses += `
         ?item wdt:P23 wd:${selection.educationPlace} .
       `;
     }
     if (selection.birthPlace) {
-      // P21 place of birth
       whereClauses += `
         ?item wdt:P21 wd:${selection.birthPlace} .
       `;
     }
     if (selection.deathPlace) {
-      // P22 place of death
       whereClauses += `
         ?item wdt:P22 wd:${selection.deathPlace} .
       `;
     }
-if (selection.relatedContent) {
-  const props = ["P12","P50","P102","P108","P5","P6"];
 
-  if (selection.relatedContent === "ALL") {
-    // All collections (UNION across all wdt:P…)
-    const unions = props.map((p) => `{ ?item wdt:${p} ?anyVal }`).join(" UNION ");
-    whereClauses += unions + "\n";
-  } else if (Array.isArray(selection.relatedContent)) {
-    // Selected subset
-    const unions = selection.relatedContent.map((p) => {
-      return props.includes(p)
-        ? `{ ?item wdt:${p} ?anyVal }`
-        : "";
-    }).join(" UNION ");
-    whereClauses += unions + "\n";
-  }
-}
+    if (selection.relatedContent) {
+      const props = ["P12", "P50", "P102", "P108", "P5", "P6"];
 
+      if (selection.relatedContent === "ALL") {
+        const unions = props
+          .map((p) => `{ ?item wdt:${p} ?anyVal }`)
+          .join(" UNION ");
+        whereClauses += unions + "\n";
+      } else if (Array.isArray(selection.relatedContent)) {
+        const unions = selection.relatedContent
+          .map((p) => {
+            return props.includes(p) ? `{ ?item wdt:${p} ?anyVal }` : "";
+          })
+          .join(" UNION ");
+        whereClauses += unions + "\n";
+      } else {
+        // Single property like P12, P50...
+        if (props.includes(selection.relatedContent)) {
+          whereClauses += `{ ?item wdt:${selection.relatedContent} ?anyVal }\n`;
+        }
+      }
+    }
 
     return `
       PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
@@ -440,12 +400,13 @@ if (selection.relatedContent) {
       PREFIX schema: <http://schema.org/>
 
       SELECT ?item ?itemLabel ?description
-       ?occupation ?occupationLabel
-       ?eduPlace ?eduPlaceLabel
-       ?birthPlace ?birthPlaceLabel
-       ?deathPlace ?deathPlaceLabel WHERE {
+             ?occupation ?occupationLabel
+             ?eduPlace ?eduPlaceLabel
+             ?birthPlace ?birthPlaceLabel
+             ?deathPlace ?deathPlaceLabel
+      WHERE {
         ${whereClauses}
-                OPTIONAL { ?item wdt:P25 ?occupation . }
+        OPTIONAL { ?item wdt:P25 ?occupation . }
         OPTIONAL { ?item wdt:P23 ?eduPlace . }
         OPTIONAL { ?item wdt:P21 ?birthPlace . }
         OPTIONAL { ?item wdt:P22 ?deathPlace . }
@@ -455,10 +416,8 @@ if (selection.relatedContent) {
         }
         SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
       }
-
-${viewMode === "list"
-  ? `LIMIT 1000 OFFSET 0`
-  : `LIMIT 1000`}
+      ORDER BY LCASE(STR(?itemLabel))
+      LIMIT 1000
     `;
   }
 
@@ -506,138 +465,141 @@ ${viewMode === "list"
     });
   }
 
-function renderGraph(bindings) {
-  const container = document.getElementById("aps-results-graph");
-  if (!container) return;
+  function renderGraph(bindings) {
+    const container = document.getElementById("aps-results-graph");
+    if (!container) return;
 
-  // If D3 is missing, don’t silently fail – fall back to list view
-  if (typeof d3 === "undefined") {
-    console.warn("APS: d3 not loaded, falling back to list view");
-    viewMode = "list";
-    renderResultsList(bindings);
-    return;
-  }
-
-  container.innerHTML = ""; // clear old graph
-
-  const width = container.clientWidth || 800;
-  const height = 500;
-
-  const svg = d3.select(container)
-    .append("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-  // Build nodes & links
-  const nodesById = new Map();
-  const links = [];
-
-  function addNode(id, label, type) {
-    if (!id) return null;
-    if (!nodesById.has(id)) {
-      nodesById.set(id, { id, label: label || id, type });
-    }
-    return nodesById.get(id);
-  }
-
-  bindings.forEach((b) => {
-    const personUri = b.item.value;
-    const personMatch = personUri.match(/(Q[0-9]+)$/);
-    const personId = personMatch ? personMatch[1] : personUri;
-    const personLabel = b.itemLabel && b.itemLabel.value;
-    const personNode = addNode(personId, personLabel, "person");
-
-    const occ = b.occupation && b.occupation.value;
-    const occLabel = b.occupationLabel && b.occupationLabel.value;
-    const edu = b.eduPlace && b.eduPlace.value;
-    const eduLabel = b.eduPlaceLabel && b.eduPlaceLabel.value;
-    const birth = b.birthPlace && b.birthPlace.value;
-    const birthLabel = b.birthPlaceLabel && b.birthPlaceLabel.value;
-    const death = b.deathPlace && b.deathPlace.value;
-    const deathLabel = b.deathPlaceLabel && b.deathPlaceLabel.value;
-
-    function addEdge(targetUri, targetLabel, type) {
-      if (!personNode || !targetUri) return;
-      const m = targetUri.match(/(Q[0-9]+)$/);
-      const id = m ? m[1] : targetUri;
-      const targetNode = addNode(id, targetLabel, type);
-      if (targetNode) {
-        links.push({ source: personNode, target: targetNode, type });
-      }
+    if (typeof d3 === "undefined") {
+      console.warn("APS: d3 not loaded, falling back to list view");
+      viewMode = "list";
+      renderResultsList(bindings);
+      return;
     }
 
-    addEdge(occ, occLabel, "occupation");
-    addEdge(edu, eduLabel, "education");
-    addEdge(birth, birthLabel, "birthPlace");
-    addEdge(death, deathLabel, "deathPlace");
-  });
+    container.innerHTML = "";
 
-  const nodes = Array.from(nodesById.values());
+    const width = container.clientWidth || 800;
+    const height = 500;
 
-  const simulation = d3.forceSimulation(nodes)
-    .force("link", d3.forceLink(links).id(d => d.id).distance(80))
-    .force("charge", d3.forceManyBody().strength(-120))
-    .force("center", d3.forceCenter(width / 2, height / 2));
+    const svg = d3
+      .select(container)
+      .append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-  const link = svg.append("g")
-    .attr("stroke", "#ccc")
-    .selectAll("line")
-    .data(links)
-    .enter()
-    .append("line")
-    .attr("stroke-width", 1.2);
+    const nodesById = new Map();
+    const links = [];
 
-  const node = svg.append("g")
-    .selectAll("g")
-    .data(nodes)
-    .enter()
-    .append("g")
-    .call(d3.drag()
-      .on("start", (event, d) => {
-        if (!event.active) simulation.alphaTarget(0.3).restart();
-        d.fx = d.x; d.fy = d.y;
-      })
-      .on("drag", (event, d) => {
-        d.fx = event.x; d.fy = event.y;
-      })
-      .on("end", (event, d) => {
-        if (!event.active) simulation.alphaTarget(0);
-        d.fx = null; d.fy = null;
-      })
-    );
-
-  node.append("circle")
-    .attr("r", d => d.type === "person" ? 8 : 5)
-    .attr("fill", d => d.type === "person" ? "#0b7e5c" : "#888")
-    .on("click", (event, d) => {
-      // click through to SNARC Explorer item if it's a Q-id
-      if (/^Q[0-9]+$/.test(d.id)) {
-        window.open(
-          `${SNARC_ENTITY_BASE_URL}${d.id}`,
-          "_blank",
-          "noopener"
-        );
+    function addNode(id, label, type) {
+      if (!id) return null;
+      if (!nodesById.has(id)) {
+        nodesById.set(id, { id, label: label || id, type });
       }
+      return nodesById.get(id);
+    }
+
+    bindings.forEach((b) => {
+      const personUri = b.item.value;
+      const personMatch = personUri.match(/(Q[0-9]+)$/);
+      const personId = personMatch ? personMatch[1] : personUri;
+      const personLabel = b.itemLabel && b.itemLabel.value;
+      const personNode = addNode(personId, personLabel, "person");
+
+      const occ = b.occupation && b.occupation.value;
+      const occLabel = b.occupationLabel && b.occupationLabel.value;
+      const edu = b.eduPlace && b.eduPlace.value;
+      const eduLabel = b.eduPlaceLabel && b.eduPlaceLabel.value;
+      const birth = b.birthPlace && b.birthPlace.value;
+      const birthLabel = b.birthPlaceLabel && b.birthPlaceLabel.value;
+      const death = b.deathPlace && b.deathPlace.value;
+      const deathLabel = b.deathPlaceLabel && b.deathPlaceLabel.value;
+
+      function addEdge(targetUri, targetLabel, type) {
+        if (!personNode || !targetUri) return;
+        const m = targetUri.match(/(Q[0-9]+)$/);
+        const id = m ? m[1] : targetUri;
+        const targetNode = addNode(id, targetLabel, type);
+        if (targetNode) {
+          links.push({ source: personNode, target: targetNode, type });
+        }
+      }
+
+      addEdge(occ, occLabel, "occupation");
+      addEdge(edu, eduLabel, "education");
+      addEdge(birth, birthLabel, "birthPlace");
+      addEdge(death, deathLabel, "deathPlace");
     });
 
-  node.append("text")
-    .attr("x", 10)
-    .attr("y", 3)
-    .attr("font-size", "10px")
-    .text(d => d.label);
+    const nodes = Array.from(nodesById.values());
 
-  simulation.on("tick", () => {
-    link
-      .attr("x1", d => d.source.x)
-      .attr("y1", d => d.source.y)
-      .attr("x2", d => d.target.x)
-      .attr("y2", d => d.target.y);
+    const simulation = d3
+      .forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id((d) => d.id).distance(80))
+      .force("charge", d3.forceManyBody().strength(-120))
+      .force("center", d3.forceCenter(width / 2, height / 2));
 
-    node.attr("transform", d => `translate(${d.x},${d.y})`);
-  });
-}
+    const link = svg
+      .append("g")
+      .attr("stroke", "#ccc")
+      .selectAll("line")
+      .data(links)
+      .enter()
+      .append("line")
+      .attr("stroke-width", 1.2);
 
-  
+    const node = svg
+      .append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter()
+      .append("g")
+      .call(
+        d3
+          .drag()
+          .on("start", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0.3).restart();
+            d.fx = d.x;
+            d.fy = d.y;
+          })
+          .on("drag", (event, d) => {
+            d.fx = event.x;
+            d.fy = event.y;
+          })
+          .on("end", (event, d) => {
+            if (!event.active) simulation.alphaTarget(0);
+            d.fx = null;
+            d.fy = null;
+          })
+      );
+
+    node
+      .append("circle")
+      .attr("r", (d) => (d.type === "person" ? 8 : 5))
+      .attr("fill", (d) => (d.type === "person" ? "#0b7e5c" : "#888"))
+      .on("click", (event, d) => {
+        if (/^Q[0-9]+$/.test(d.id)) {
+          window.open(`${SNARC_ENTITY_BASE_URL}${d.id}`, "_blank", "noopener");
+        }
+      });
+
+    node
+      .append("text")
+      .attr("x", 10)
+      .attr("y", 3)
+      .attr("font-size", "10px")
+      .text((d) => d.label);
+
+    simulation.on("tick", () => {
+      link
+        .attr("x1", (d) => d.source.x)
+        .attr("y1", (d) => d.source.y)
+        .attr("x2", (d) => d.target.x)
+        .attr("y2", (d) => d.target.y);
+
+      node.attr("transform", (d) => `translate(${d.x},${d.y})`);
+    });
+  }
+
   function updateResultsSummary(totalVisible, hasMore, page) {
     const summaryEl = document.querySelector(".aps-results-summary");
     if (!summaryEl) return;
@@ -654,7 +616,9 @@ function renderGraph(bindings) {
     const end = start + totalVisible - 1;
 
     const base =
-      lang === "cy" ? `Yn dangos ${start}–${end}` : `Showing ${start}–${end}`;
+      lang === "cy"
+        ? `Yn dangos ${start}–${end}`
+        : `Showing ${start}–${end}`;
 
     summaryEl.textContent = hasMore ? base + "+" : base;
   }
@@ -684,34 +648,59 @@ function renderGraph(bindings) {
     pagEl.classList.remove("aps-pagination-hidden");
   }
 
-  async function executeSearch(page) {
-    if (viewMode === "graph") {
-  page = 1;
-}
-// Main wrapper
-const resultsWrapper = document.getElementById("aps-results");
-if (resultsWrapper) {
-  resultsWrapper.classList.remove("aps-results-hidden");
-}
+  // Recompute / render current list page from listState.full
+  function renderCurrentListPage() {
+    const full = listState.full || [];
+    if (!full.length) {
+      lastSearchHasResults = false;
+      updatePaginationControls(false, 1);
+      renderResultsList([]);
+      updateResultsSummary(0, false, 1);
+      return;
+    }
 
-// List container (if in list mode)
-const listWrapper = document.getElementById("aps-results-list-wrapper");
-if (listWrapper) {
-  listWrapper.classList.remove("aps-results-hidden");
-}
+    const startIndex = (listState.currentPage - 1) * pageSize;
+    const endIndex = startIndex + pageSize;
+    const pageBindings = full.slice(startIndex, endIndex);
 
-// Graph container (if in graph mode)
-const graphWrapper = document.getElementById("aps-results-graph-wrapper");
-if (graphWrapper) {
-  graphWrapper.classList.remove("aps-results-hidden");
-}
+    const hasMore = full.length > endIndex;
 
+    listState.page = pageBindings;
+    listState.hasMore = hasMore;
+
+    lastSearchHasResults = pageBindings.length > 0;
+
+    renderResultsList(pageBindings);
+    updateResultsSummary(pageBindings.length, hasMore, listState.currentPage);
+    updatePaginationControls(hasMore, listState.currentPage);
+  }
+
+  // ---------------------------------------------------------------------------
+  // MAIN SEARCH EXECUTION (fetch + state update)
+  // ---------------------------------------------------------------------------
+
+  async function executeSearch() {
+    // Reveal results wrapper
+    const resultsWrapper = document.getElementById("aps-results");
+    if (resultsWrapper) {
+      resultsWrapper.classList.remove("aps-results-hidden");
+    }
+
+    const listWrapper = document.getElementById("aps-results-list-wrapper");
+    if (listWrapper) {
+      listWrapper.classList.remove("aps-results-hidden");
+    }
+
+    const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+    if (graphWrapper) {
+      graphWrapper.classList.remove("aps-results-hidden");
+    }
 
     const lang = getCurrentLang();
     const selection = getCurrentFacetSelections();
-lastSearchSelection = selection;
-    const selectedKeys = Object.keys(selection);
+    lastSearchSelection = selection;
 
+    const selectedKeys = Object.keys(selection);
     const msgEl = document.querySelector(".aps-results-summary");
 
     if (!selectedKeys.length) {
@@ -722,108 +711,44 @@ lastSearchSelection = selection;
             : "Choose at least one filter to see results.";
       }
       lastSearchHasResults = false;
-      updatePaginationControls(false, page);
+      updatePaginationControls(false, 1);
       const listEl = document.querySelector("#aps-results .aps-results-list");
       if (listEl) listEl.innerHTML = "";
+      const graphEl = document.getElementById("aps-results-graph");
+      if (graphEl) graphEl.innerHTML = "";
       return;
     }
 
-    const query = buildSearchQuery(selection, page, lang);
+    const query = buildSearchQuery(selection, lang);
 
     try {
-// Run query
-const data = await runSparql(query);
-let bindings = (data.results && data.results.bindings) || [];
+      const data = await runSparql(query);
+      const bindings = (data.results && data.results.bindings) || [];
 
-//---------------------------------------------------------
-// Convert SPARQL bindings → APS-friendly result objects
-//---------------------------------------------------------
-const results = bindings.map(b => {
-  const get = (x) => (b[x] ? b[x].value : "");
+      const rawBindings = [...bindings];
 
-  return {
-    id: get("item").replace("https://snarc-llgc.wikibase.cloud/entity/", ""),
-    uri: get("item"),
-    label: get("itemLabel"),
-    description: get("description"),
-    occupation: get("occupationLabel"),
-    birthPlace: get("birthPlaceLabel"),
-    deathPlace: get("deathPlaceLabel"),
-    eduPlace: get("eduPlaceLabel")
-  };
-});
+      // GRAPH: store FULL raw bindings (no dedupe)
+      graphState.full = rawBindings;
 
-// Save for global usage (graph or list)
-lastSearchResults = results;
+      // LIST: de-duplicate by QID
+      const deduped = dedupeByQid(rawBindings);
+      listState.full = deduped;
+      listState.currentPage = 1;
+      listState.hasMore = deduped.length > pageSize;
 
-// Debug:
-console.log("APS SPARQL converted results:", results);
+      lastSearchHasResults = deduped.length > 0;
 
+      // Render according to current mode
+      if (viewMode === "graph") {
+        // Hide pagination; graph ignores paging
+        const pagEl = document.querySelector(".aps-pagination");
+        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
-      
-// Detect extra row for pagination
-// Always store full raw results BEFORE any dedupe or pagination
-const rawBindings = [...bindings];
-
-// ----- LIST VIEW LOGIC -----
-if (viewMode === "list") {
- // a. 
-  document.querySelector(".aps-pagination").classList.remove("aps-pagination-hidden");
-
-  // 1. Deduplicate results for list view only
-  const deduped = dedupeByQid(rawBindings);
-
-  // 2. Determine whether more pages exist
-  lastPageHasMore = deduped.length > pageSize;
-
-  // 3. Slice page for list view
-  const paged = deduped.slice(0, pageSize);
-
-  // 4. Track state
-  lastSearchHasResults = paged.length > 0;
-  lastSearchSelection = selection;
-
-  lastBindings = paged;          // list view
-  lastFullResults = deduped;     // full deduped set for list pagination
-
-  // 5. Render list
-  renderResultsList(paged);
-
-  // 6. Update UI
-  updateResultsSummary(paged.length, lastPageHasMore, page);
-  updatePaginationControls(lastPageHasMore, page);
-
-  return;
-}
-
-// ----- GRAPH VIEW LOGIC -----
-if (viewMode === "graph") {
-
-  // NO dedupe — duplicates represent edges
-  // NO slice — graph must show all returned rows
-  lastFullResults = rawBindings;
-
-  lastSearchHasResults = rawBindings.length > 0;
-  lastSearchSelection = selection;
-document.querySelector(".aps-pagination").classList.add("aps-pagination-hidden");
-
-  // Render full graph
-  renderGraph(rawBindings);
-
-  // Graph view does not use list pagination UI
-  if (viewMode === "list") {
-  updateResultsSummary(bindings.length, lastPageHasMore, page);
-  updatePaginationControls(lastPageHasMore, page);
-} else {
-  // GRAPH MODE — hide pagination completely
-  updateResultsSummary(rawBindings.length, false, 1);
-  updatePaginationControls(false, 1);
-}
-
-
-  return;
-}
-      
+        renderGraph(graphState.full);
+        updateResultsSummary(graphState.full.length, false, 1);
+      } else {
+        renderCurrentListPage();
+      }
     } catch (e) {
       console.error("Error executing people search", e);
       if (msgEl) {
@@ -833,7 +758,7 @@ document.querySelector(".aps-pagination").classList.add("aps-pagination-hidden")
             : "Error loading results.";
       }
       lastSearchHasResults = false;
-      updatePaginationControls(false, page);
+      updatePaginationControls(false, 1);
     }
   }
 
@@ -841,149 +766,144 @@ document.querySelector(".aps-pagination").classList.add("aps-pagination-hidden")
   // INIT
   // ---------------------------------------------------------------------------
 
-// Update the function signature to accept 'langArg'
-function initAdvancedPersonSearch(langArg) {
-  // Work out which language to use for this initialisation
-  const initialLang = (langArg === "cy" || langArg === "en")
-    ? langArg
-    : getCurrentLang();
+  function initAdvancedPersonSearch(langArg) {
+    const initialLang =
+      langArg === "cy" || langArg === "en" ? langArg : getCurrentLang();
 
-  // Sync to the global state that getCurrentLang() reads
-  window.currentLang = initialLang;
-  document.documentElement.lang = initialLang;
+    window.currentLang = initialLang;
+    document.documentElement.lang = initialLang;
 
-  console.log("APS: init started with lang:", initialLang);
+    console.log("APS: init started with lang:", initialLang);
 
-  const container = document.getElementById("advanced-person-search");
-  if (!container) return;
+    const container = document.getElementById("advanced-person-search");
+    if (!container) return;
 
-
-  // Prevent double-initialisation if home page is rendered again
-  if (container.dataset.apsInit === "1") {
-    console.log("APS: AP already initialised?", container.dataset.apsInit);
-    return;
-  }
-  container.dataset.apsInit = "1";
-
-
-updateAdvancedSearchLabels();
-// ---------------------------------------------------------------------------
-// STATIC GENDER DROPDOWN
-// ---------------------------------------------------------------------------
-function initStaticGenderDropdown() {
-  const sel = document.getElementById("aps-gender-select");
-  if (!sel) return;
-
-  // Clear any dynamic options except the first placeholder
-  sel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
-
-  const list = LocalFacets.gender || [];
-  const lang = getCurrentLang();
-
-  list.forEach((g) => {
-    const opt = document.createElement("option");
-    opt.value = g.id;
-    opt.textContent = lang === "cy" ? g.label_cy : g.label_en;
-    sel.appendChild(opt);
-  });
-  
-  // Store selection like other facets do
-  sel.addEventListener("change", () => {
-    const field = document.querySelector('.aps-field[data-facet="gender"]');
-    if (field) {
-      field.dataset.valueId = sel.value;
-      field.dataset.valueLabel = sel.options[sel.selectedIndex].textContent;
+    if (container.dataset.apsInit === "1") {
+      console.log("APS: AP already initialised?", container.dataset.apsInit);
+      return;
     }
-  });
-}
+    container.dataset.apsInit = "1";
 
-function initStaticRelatedContentDropdown() {
-  const sel = document.getElementById("aps-relatedContent-select");
-  if (!sel) return;
+    updateAdvancedSearchLabels();
 
-  const lang = getCurrentLang();
-  const list = LocalFacets.content_type || [];
+    // -------------------------------------------------------------------------
+    // STATIC GENDER DROPDOWN
+    // -------------------------------------------------------------------------
+    function initStaticGenderDropdown() {
+      const sel = document.getElementById("aps-gender-select");
+      if (!sel) return;
 
+      sel.querySelectorAll("option:not(:first-child)").forEach((o) => o.remove());
 
-  // Add each content type
-  list.forEach((c) => {
-    const opt = document.createElement("option");
-    opt.value = c.id; // P12, P50...
-    opt.textContent = lang === "cy" ? c.label_cy : c.label_en;
-    sel.appendChild(opt);
-  });
-}
-  
-initStaticGenderDropdown();
-initStaticRelatedContentDropdown();
+      const list = LocalFacets.gender || [];
+      const lang = getCurrentLang();
 
-// ---------------------------------------------------------------------------
-// VIEW MODE SWITCHING (Graph / List)
-// ---------------------------------------------------------------------------
-const graphBtn = container.querySelector("#aps-view-graph");
-const listBtn  = container.querySelector("#aps-view-list");
+      list.forEach((g) => {
+        const opt = document.createElement("option");
+        opt.value = g.id;
+        opt.textContent = lang === "cy" ? g.label_cy : g.label_en;
+        sel.appendChild(opt);
+      });
 
-const graphEl = container.querySelector("#aps-results-graph");  // <--- FIXED
-const listEl  = container.querySelector(".aps-results-list");
-
-
-// Only activate if all elements exist
-if (graphBtn && listBtn && graphEl && listEl) {
-
-  graphBtn.addEventListener("click", () => {
-    viewMode = "graph";
-    currentPage = 1;
-    lastPageHasMore = false;
-    lastBindings = [];
-     // Clear list-specific cache to avoid reuse
-    lastFullResults = [];
-    graphBtn.classList.add("aps-view-active");
-    listBtn.classList.remove("aps-view-active");
-    graphEl.style.display = "";
-    listEl.style.display = "none";
-
-    if (lastBindings.length) {
-      renderGraph(lastBindings); // defined later
+      sel.addEventListener("change", () => {
+        const field = document.querySelector('.aps-field[data-facet="gender"]');
+        if (field) {
+          field.dataset.valueId = sel.value;
+          field.dataset.valueLabel =
+            sel.options[sel.selectedIndex].textContent;
+        }
+      });
     }
-  });
 
-  listBtn.addEventListener("click", () => {
-    viewMode = "list";
-    listBtn.classList.add("aps-view-active");
-    graphBtn.classList.remove("aps-view-active");
-    listEl.style.display = "";
-    graphEl.style.display = "none";
+    function initStaticRelatedContentDropdown() {
+      const sel = document.getElementById("aps-relatedContent-select");
+      if (!sel) return;
 
-    if (lastBindings.length) {
-      renderResultsList(lastBindings);
+      const lang = getCurrentLang();
+      const list = LocalFacets.content_type || [];
+
+      list.forEach((c) => {
+        const opt = document.createElement("option");
+        opt.value = c.id; // P12, P50...
+        opt.textContent = lang === "cy" ? c.label_cy : c.label_en;
+        sel.appendChild(opt);
+      });
     }
-  });
 
-  // Default mode = graph
-  graphEl.style.display = "";
-  listEl.style.display = "none";
-}
+    initStaticGenderDropdown();
+    initStaticRelatedContentDropdown();
 
-Object.keys(FACETS)
-  .filter((facetKey) => facetKey !== "gender" && facetKey !== "relatedContent")
-  .forEach(setupFacetDropdown);
+    // -------------------------------------------------------------------------
+    // VIEW MODE SWITCHING (Graph / List)
+    // -------------------------------------------------------------------------
+    const graphBtn = container.querySelector("#aps-view-graph");
+    const listBtn = container.querySelector("#aps-view-list");
 
+    const graphEl = container.querySelector("#aps-results-graph");
+    const listEl = container.querySelector(".aps-results-list");
 
+    if (graphBtn && listBtn && graphEl && listEl) {
+      graphBtn.addEventListener("click", () => {
+        viewMode = "graph";
 
-// Form submit
-const form = document.getElementById("aps-form");
-console.log("APS: form found:", form); // Log AFTER defining
+        graphBtn.classList.add("aps-view-active");
+        listBtn.classList.remove("aps-view-active");
+
+        graphEl.style.display = "";
+        listEl.style.display = "none";
+
+        // Hide pagination in graph mode
+        const pagEl = document.querySelector(".aps-pagination");
+        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+        if (graphState.full.length) {
+          renderGraph(graphState.full);
+          updateResultsSummary(graphState.full.length, false, 1);
+        }
+      });
+
+      listBtn.addEventListener("click", () => {
+        viewMode = "list";
+
+        listBtn.classList.add("aps-view-active");
+        graphBtn.classList.remove("aps-view-active");
+
+        listEl.style.display = "";
+        graphEl.style.display = "none";
+
+        if (listState.full.length) {
+          renderCurrentListPage();
+        }
+      });
+
+      // Default mode = graph in UI
+      graphEl.style.display = "";
+      listEl.style.display = "none";
+      graphBtn.classList.add("aps-view-active");
+      listBtn.classList.remove("aps-view-active");
+      viewMode = "graph";
+    }
+
+    // Non-static facet dropdowns
+    Object.keys(FACETS)
+      .filter((facetKey) => facetKey !== "gender" && facetKey !== "relatedContent")
+      .forEach(setupFacetDropdown);
+
+    // Form submit (Search)
+    const form = document.getElementById("aps-form");
+    console.log("APS: form found:", form);
     if (form) {
       form.addEventListener("submit", (evt) => {
         evt.preventDefault();
-        currentPage = 1;
-        executeSearch(currentPage);
+        // Always reset list to page 1 for a new search
+        listState.currentPage = 1;
+        executeSearch();
       });
     }
 
     // Reset
     const resetBtn = document.getElementById("aps-reset");
-  console.log("APS: reset button?", resetBtn);
+    console.log("APS: reset button?", resetBtn);
     if (resetBtn) {
       resetBtn.addEventListener("click", () => {
         container.querySelectorAll(".aps-field").forEach((field) => {
@@ -996,76 +916,76 @@ console.log("APS: form found:", form); // Log AFTER defining
         const resultsEl = document.getElementById("aps-results");
         if (resultsEl) {
           resultsEl.classList.add("aps-results-hidden");
-          const listEl = resultsEl.querySelector(".aps-results-list");
-          if (listEl) listEl.innerHTML = "";
+          const listEl2 = resultsEl.querySelector(".aps-results-list");
+          if (listEl2) listEl2.innerHTML = "";
+          const graphEl2 = resultsEl.querySelector("#aps-results-graph");
+          if (graphEl2) graphEl2.innerHTML = "";
         }
 
         lastSearchHasResults = false;
         lastSearchSelection = null;
+        listState.full = [];
+        listState.page = [];
+        listState.currentPage = 1;
+        listState.hasMore = false;
+        graphState.full = [];
+
         const pagEl = document.querySelector(".aps-pagination");
         if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+        const summaryEl = document.querySelector(".aps-results-summary");
+        if (summaryEl) summaryEl.textContent = "";
       });
     }
 
-    // Pagination buttons
-const prevBtn = document.getElementById("aps-prev-page");
-console.log("APS: prev button?", prevBtn);
+    // Pagination buttons (LIST ONLY)
+    const prevBtn = document.getElementById("aps-prev-page");
+    console.log("APS: prev button?", prevBtn);
+    const nextBtn = document.getElementById("aps-next-page");
+    console.log("APS: next button?", nextBtn);
+    console.log("APS: init complete");
 
-const nextBtn = document.getElementById("aps-next-page");
-console.log("APS: next button?", nextBtn);
-console.log("APS: init complete");
-
-
-if (prevBtn) {
-  prevBtn.addEventListener("click", () => {
-    // BLOCK pagination in graph mode
-    if (viewMode === "graph") return;
-
-    if (currentPage > 1) {
-      currentPage -= 1;
-      executeSearch(currentPage);
+    if (prevBtn) {
+      prevBtn.addEventListener("click", () => {
+        if (viewMode !== "list") return;
+        if (listState.currentPage > 1) {
+          listState.currentPage -= 1;
+          renderCurrentListPage();
+        }
+      });
     }
-  });
-}
 
-if (nextBtn) {
-  nextBtn.addEventListener("click", () => {
-    // BLOCK pagination in graph mode
-    if (viewMode === "graph") return;
-
-    if (lastPageHasMore) {
-      currentPage += 1;
-      executeSearch(currentPage);
+    if (nextBtn) {
+      nextBtn.addEventListener("click", () => {
+        if (viewMode !== "list") return;
+        if (listState.hasMore) {
+          listState.currentPage += 1;
+          renderCurrentListPage();
+        }
+      });
     }
-  });
-}
 
+    // -------------------------------------------------------------------------
+    // Detect real language changes in the site
+    // -------------------------------------------------------------------------
+    const htmlEl = document.documentElement;
 
-  
-//-----------------------------------------------------------------------
-// Detect real language changes in the site
-//-----------------------------------------------------------------------
-const htmlEl = document.documentElement;
-
-const observer = new MutationObserver((mutations) => {
-  for (const m of mutations) {
-    if (m.attributeName === "lang") {
-      updateAdvancedSearchLabels();
-      initStaticGenderDropdown();
-      if (lastSearchHasResults && lastSearchSelection) {
-        executeSearch(currentPage);
+    const observer = new MutationObserver((mutations) => {
+      for (const m of mutations) {
+        if (m.attributeName === "lang") {
+          updateAdvancedSearchLabels();
+          initStaticGenderDropdown();
+          if (lastSearchHasResults && lastSearchSelection) {
+            // Rerun the search in new language, keep current mode
+            executeSearch();
+          }
+        }
       }
-    }
-  }
-});
+    });
 
-// Observe changes to <html lang="en|cy">
-observer.observe(htmlEl, { attributes: true });
-
+    observer.observe(htmlEl, { attributes: true });
   }
 
   // Expose globally so Home.initHomePage can call it
   window.initAdvancedPersonSearch = initAdvancedPersonSearch;
-
 })();
-
