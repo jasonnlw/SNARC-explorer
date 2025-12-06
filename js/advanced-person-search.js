@@ -601,28 +601,20 @@
   }
 
   function updateResultsSummary(totalVisible, hasMore, page) {
-    const summaryEl = document.querySelector(".aps-results-summary");
-    if (!summaryEl) return;
+  const summaryEl = document.querySelector(".aps-results-summary");
+  if (!summaryEl) return;
 
-    const lang = getCurrentLang();
+  const lang = getCurrentLang();
 
-    if (!totalVisible) {
-      summaryEl.textContent =
-        lang === "cy" ? "Dim canlyniadau" : "No results";
-      return;
-    }
-
-    const start = (page - 1) * pageSize + 1;
-    const end = start + totalVisible - 1;
-
-    const base =
-      lang === "cy"
-        ? `Yn dangos ${start}–${end}`
-        : `Showing ${start}–${end}`;
-
-    summaryEl.textContent = hasMore ? base + "+" : base;
+  if (!totalVisible) {
+    summaryEl.textContent =
+      lang === "cy" ? "Dim canlyniadau" : "No results";
+    return;
   }
 
+  // Minimal, clean interface: no item counts
+  summaryEl.textContent = "";
+}
   function updatePaginationControls(hasMore, page) {
     const pagEl = document.querySelector(".aps-pagination");
     if (!pagEl) return;
