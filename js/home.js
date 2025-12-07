@@ -179,14 +179,15 @@ home.innerHTML = `
       </div>
     </form>
 
-    <!-- NEW: Single unified toggle button -->
+
+    <!-- RESULTS WRAPPER -->
+    <div id="aps-results" class="aps-results aps-results-hidden">
+ <!-- NEW: Single unified toggle button -->
     <button id="aps-view-toggle" class="aps-view-toggle">
       <span class="icon"></span>
       <span class="label">Graph</span>
     </button>
 
-    <!-- RESULTS WRAPPER -->
-    <div id="aps-results" class="aps-results aps-results-hidden">
 
       <div class="aps-results-header">
         <p class="aps-results-summary"
