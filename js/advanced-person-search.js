@@ -41,9 +41,6 @@
   // Shared “last search” flags
   let lastSearchHasResults = false;
   let lastSearchSelection = null;
-  let apsGraphEl = null;
-  let apsListEl = null;
-
 
   // ---------------------------------------------------------------------------
   // LANGUAGE HELPERS
@@ -674,105 +671,88 @@
   // MAIN SEARCH EXECUTION (fetch + state update)
   // ---------------------------------------------------------------------------
 
-async function executeSearch() {
-  // Reveal results wrapper
-  const resultsWrapper = document.getElementById("aps-results");
-  if (resultsWrapper) {
-    resultsWrapper.classList.remove("aps-results-hidden");
-  }
-
-  const lang = getCurrentLang();
-  const selection = getCurrentFacetSelections();
-  lastSearchSelection = selection;
-
-  const selectedKeys = Object.keys(selection);
-  const msgEl = document.querySelector(".aps-results-summary");
-
-  // If no filters selected
-  if (!selectedKeys.length) {
-    if (msgEl) {
-      msgEl.textContent =
-        lang === "cy"
-          ? "Dewiswch o leiaf un hidlydd i weld canlyniadau."
-          : "Choose at least one filter to see results.";
+  async function executeSearch() {
+    // Reveal results wrapper
+    const resultsWrapper = document.getElementById("aps-results");
+    if (resultsWrapper) {
+      resultsWrapper.classList.remove("aps-results-hidden");
     }
 
-    lastSearchHasResults = false;
-    updatePaginationControls(false, 1);
-
-    if (apsListEl) apsListEl.innerHTML = "";
-    if (apsGraphEl) apsGraphEl.innerHTML = "";
-
-    return;
-  }
-
-  // Build and run SPARQL
-  const query = buildSearchQuery(selection, lang);
-
-  try {
-    const data = await runSparql(query);
-    const bindings = (data.results && data.results.bindings) || [];
-
-    const rawBindings = [...bindings];
-
-    // GRAPH: full results
-    graphState.full = rawBindings;
-
-    // LIST: dedupe results
-    const deduped = dedupeByQid(rawBindings);
-    listState.full = deduped;
-    listState.currentPage = 1;
-    listState.hasMore = deduped.length > pageSize;
-
-    lastSearchHasResults = deduped.length > 0;
-
-    // -------------------------------------------------------------
-    // RENDER BASED ON CURRENT MODE
-    // -------------------------------------------------------------
-    if (viewMode === "graph") {
-
-      // SHOW GRAPH
-      apsGraphEl.classList.remove("aps-hidden");
-      apsGraphEl.style.display = "";
-
-      // HIDE LIST
-      apsListEl.classList.add("aps-hidden");
-      apsListEl.style.display = "none";
-
-      // Hide pagination
-      const pagEl = document.querySelector(".aps-pagination");
-      if (pagEl) pagEl.classList.add("aps-pagination-hidden");
-
-      // Render graph
-      renderGraph(graphState.full);
-      updateResultsSummary(graphState.full.length, false, 1);
-
-    } else {
-
-      // SHOW LIST
-      apsListEl.classList.remove("aps-hidden");
-      apsListEl.style.display = "";
-
-      // HIDE GRAPH
-      apsGraphEl.classList.add("aps-hidden");
-      apsGraphEl.style.display = "none";
-
-      renderCurrentListPage();
+    const listWrapper = document.getElementById("aps-results-list-wrapper");
+    if (listWrapper) {
+      listWrapper.classList.remove("aps-results-hidden");
     }
 
-  } catch (e) {
-    console.error("Error executing people search", e);
-    if (msgEl) {
-      msgEl.textContent =
-        lang === "cy"
-          ? "Gwall wrth lwytho canlyniadau."
-          : "Error loading results.";
+    const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+    if (graphWrapper) {
+      graphWrapper.classList.remove("aps-results-hidden");
     }
-    lastSearchHasResults = false;
-    updatePaginationControls(false, 1);
-  }
-}
 
+    const lang = getCurrentLang();
+    const selection = getCurrentFacetSelections();
+    lastSearchSelection = selection;
+
+    const selectedKeys = Object.keys(selection);
+    const msgEl = document.querySelector(".aps-results-summary");
+
+    if (!selectedKeys.length) {
+      if (msgEl) {
+        msgEl.textContent =
+          lang === "cy"
+            ? "Dewiswch o leiaf un hidlydd i weld canlyniadau."
+            : "Choose at least one filter to see results.";
+      }
+      lastSearchHasResults = false;
+      updatePaginationControls(false, 1);
+      const listEl = document.querySelector("#aps-results .aps-results-list");
+      if (listEl) listEl.innerHTML = "";
+      const graphEl = document.getElementById("aps-results-graph");
+      if (graphEl) graphEl.innerHTML = "";
+      return;
+    }
+
+    const query = buildSearchQuery(selection, lang);
+
+    try {
+      const data = await runSparql(query);
+      const bindings = (data.results && data.results.bindings) || [];
+
+      const rawBindings = [...bindings];
+
+      // GRAPH: store FULL raw bindings (no dedupe)
+      graphState.full = rawBindings;
+
+      // LIST: de-duplicate by QID
+      const deduped = dedupeByQid(rawBindings);
+      listState.full = deduped;
+      listState.currentPage = 1;
+      listState.hasMore = deduped.length > pageSize;
+
+      lastSearchHasResults = deduped.length > 0;
+
+      // Render according to current mode
+      if (viewMode === "graph") {
+        // Hide pagination; graph ignores paging
+        const pagEl = document.querySelector(".aps-pagination");
+        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+        renderGraph(graphState.full);
+        updateResultsSummary(graphState.full.length, false, 1);
+      } else {
+        renderCurrentListPage();
+      }
+    } catch (e) {
+      console.error("Error executing people search", e);
+      if (msgEl) {
+        msgEl.textContent =
+          lang === "cy"
+            ? "Gwall wrth lwytho canlyniadau."
+            : "Error loading results.";
+      }
+      lastSearchHasResults = false;
+      updatePaginationControls(false, 1);
+    }
+  }
 
   // ---------------------------------------------------------------------------
   // INIT
@@ -852,8 +832,6 @@ async function executeSearch() {
 const graphEl = container.querySelector("#aps-results-graph");
 const listEl  = container.querySelector(".aps-results-list");
 const toggleBtn   = container.querySelector("#aps-view-toggle");
-apsListEl = listEl;
-apsGraphEl = graphEl;
 const toggleIcon  = toggleBtn.querySelector(".icon");
 const toggleLabel = toggleBtn.querySelector(".label");
 
@@ -891,37 +869,29 @@ updateToggleBtnUI();
 // Toggle behaviour
 toggleBtn.addEventListener("click", () => {
   const resultsWrapper = document.getElementById("aps-results");
-  const zoomControls = document.getElementById("aps-graph-zoom");
-  
-if (viewMode === "list") {
+
+  if (viewMode === "list") {
+    // → Switch to graph mode
     viewMode = "graph";
 
     // Hide list, show graph
     listEl.style.display = "none";
     graphEl.style.display = "";
 
-    // Remove/Apply hidden classes
-    listEl.classList.add("aps-hidden");
-    graphEl.classList.remove("aps-hidden");
-
-    // Hide pagination
+    // Hide pagination in graph mode
     const pagEl = document.querySelector(".aps-pagination");
     if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
     // Remove list-only spacing
-    resultsWrapper?.classList.remove("list-mode");
-
-    // Show zoom controls
-    zoomControls?.classList.remove("aps-hidden");
+    if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
 
     // Render graph
     if (graphState.full.length) {
-        renderGraph(graphState.full);
-        updateResultsSummary(graphState.full.length, false, 1);
+      renderGraph(graphState.full);
+      updateResultsSummary(graphState.full.length, false, 1);
     }
-}
- 
-   else {
+
+  } else {
     // → Switch to list mode
     viewMode = "list";
 
@@ -931,9 +901,6 @@ if (viewMode === "list") {
 
     // Add list spacing so toggle doesn't overlap first card
     if (resultsWrapper) resultsWrapper.classList.add("list-mode");
-
-    // ⭐ HIDE zoom controls
-    if (zoomControls) zoomControls.classList.add("aps-hidden");
 
     // Render list
     if (listState.full.length) {
