@@ -1599,4 +1599,6 @@ a { color: #0645ad; }
 .aps-zoom-btn:hover {
   background: #f3f3f3;
 }
-
+.aps-hidden {
+  display: none !important;
+}
