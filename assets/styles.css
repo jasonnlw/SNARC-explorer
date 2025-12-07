@@ -1249,6 +1249,7 @@ a { color: #0645ad; }
 }
 
 .aps-inner {
+  position: relative; 
   border-radius: 1rem;
   padding: 1.25rem 1rem;
   background: #ffffff;
