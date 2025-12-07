@@ -732,15 +732,27 @@
 
       // Render according to current mode
       if (viewMode === "graph") {
-        // Hide pagination; graph ignores paging
-        const pagEl = document.querySelector(".aps-pagination");
-        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
-        renderGraph(graphState.full);
-        updateResultsSummary(graphState.full.length, false, 1);
-      } else {
-        renderCurrentListPage();
-      }
+  // NEW: ensure graph is visible and list is hidden
+  graphEl.classList.remove("aps-hidden");
+  listEl.classList.add("aps-hidden");
+
+  graphEl.style.display = "";
+  listEl.style.display = "none";
+
+  // Hide pagination; graph ignores paging
+  const pagEl = document.querySelector(".aps-pagination");
+  if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+  renderGraph(graphState.full);
+  updateResultsSummary(graphState.full.length, false, 1);
+
+} else {
+  renderCurrentListPage();
+}
+
+
+      
     } catch (e) {
       console.error("Error executing people search", e);
       if (msgEl) {
@@ -870,32 +882,36 @@ updateToggleBtnUI();
 toggleBtn.addEventListener("click", () => {
   const resultsWrapper = document.getElementById("aps-results");
   const zoomControls = document.getElementById("aps-graph-zoom");
-
-  if (viewMode === "list") {
-    // → Switch to graph mode
+  
+if (viewMode === "list") {
     viewMode = "graph";
 
     // Hide list, show graph
     listEl.style.display = "none";
     graphEl.style.display = "";
 
-    // Hide pagination in graph mode
+    // Remove/Apply hidden classes
+    listEl.classList.add("aps-hidden");
+    graphEl.classList.remove("aps-hidden");
+
+    // Hide pagination
     const pagEl = document.querySelector(".aps-pagination");
     if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
     // Remove list-only spacing
-    if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
+    resultsWrapper?.classList.remove("list-mode");
 
-    // ⭐ SHOW zoom controls
-    if (zoomControls) zoomControls.classList.remove("aps-hidden");
+    // Show zoom controls
+    zoomControls?.classList.remove("aps-hidden");
 
     // Render graph
     if (graphState.full.length) {
-      renderGraph(graphState.full);
-      updateResultsSummary(graphState.full.length, false, 1);
+        renderGraph(graphState.full);
+        updateResultsSummary(graphState.full.length, false, 1);
     }
-
-  } else {
+}
+ 
+   else {
     // → Switch to list mode
     viewMode = "list";
 
