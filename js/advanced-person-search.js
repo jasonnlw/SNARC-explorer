@@ -825,48 +825,79 @@
     initStaticGenderDropdown();
     initStaticRelatedContentDropdown();
 
-    // -------------------------------------------------------------------------
-    // VIEW MODE SWITCHING (Graph / List)
-    // -------------------------------------------------------------------------
-    const graphBtn = container.querySelector("#aps-view-graph");
-    const listBtn = container.querySelector("#aps-view-list");
+  // -------------------------------------------------------------------------
+// UNIFIED VIEW MODE TOGGLE (List / Graph)
+// -------------------------------------------------------------------------
 
-    const graphEl = container.querySelector("#aps-results-graph");
-    const listEl = container.querySelector(".aps-results-list");
+const graphEl = container.querySelector("#aps-results-graph");
+const listEl  = container.querySelector(".aps-results-list");
+const toggleBtn   = container.querySelector("#aps-view-toggle");
+const toggleIcon  = toggleBtn.querySelector(".icon");
+const toggleLabel = toggleBtn.querySelector(".label");
 
-    if (graphBtn && listBtn && graphEl && listEl) {
-      graphBtn.addEventListener("click", () => {
-        viewMode = "graph";
+// SVG icons
+const listIconSVG = `
+<svg viewBox="0 0 16 16">
+  <rect x="2" y="3" width="12" height="2" rx="1"></rect>
+  <rect x="2" y="7" width="12" height="2" rx="1"></rect>
+  <rect x="2" y="11" width="12" height="2" rx="1"></rect>
+</svg>`;
 
-        graphBtn.classList.add("aps-view-active");
-        listBtn.classList.remove("aps-view-active");
+const graphIconSVG = `
+<svg viewBox="0 0 16 16">
+  <circle cx="4" cy="12" r="2"></circle>
+  <circle cx="12" cy="4" r="2"></circle>
+  <circle cx="12" cy="12" r="2"></circle>
+  <line x1="4" y1="12" x2="12" y2="4" stroke-width="1.5"></line>
+  <line x1="4" y1="12" x2="12" y2="12" stroke-width="1.5"></line>
+</svg>`;
 
-        graphEl.style.display = "";
-        listEl.style.display = "none";
+// Update button UI to reflect current view mode
+function updateToggleBtnUI() {
+  if (viewMode === "list") {
+    toggleIcon.innerHTML = graphIconSVG;
+    toggleLabel.textContent = "Graph";
+  } else {
+    toggleIcon.innerHTML = listIconSVG;
+    toggleLabel.textContent = "List";
+  }
+}
 
-        // Hide pagination in graph mode
-        const pagEl = document.querySelector(".aps-pagination");
-        if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+// Initialise button appearance
+updateToggleBtnUI();
 
-        if (graphState.full.length) {
-          renderGraph(graphState.full);
-          updateResultsSummary(graphState.full.length, false, 1);
-        }
-      });
+// Toggle behaviour
+toggleBtn.addEventListener("click", () => {
+  if (viewMode === "list") {
+    // → Switch to graph mode
+    viewMode = "graph";
 
-      listBtn.addEventListener("click", () => {
-        viewMode = "list";
+    listEl.style.display = "none";
+    graphEl.style.display = "";
 
-        listBtn.classList.add("aps-view-active");
-        graphBtn.classList.remove("aps-view-active");
+    const pagEl = document.querySelector(".aps-pagination");
+    if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
-        listEl.style.display = "";
-        graphEl.style.display = "none";
+    if (graphState.full.length) {
+      renderGraph(graphState.full);
+      updateResultsSummary(graphState.full.length, false, 1);
+    }
 
-        if (listState.full.length) {
-          renderCurrentListPage();
-        }
-      });
+  } else {
+    // → Switch to list mode
+    viewMode = "list";
+
+    graphEl.style.display = "none";
+    listEl.style.display = "";
+
+    if (listState.full.length) {
+      renderCurrentListPage();
+    }
+  }
+
+  updateToggleBtnUI();
+});
+
 
       // Default mode = graph in UI
       graphEl.style.display = "";
