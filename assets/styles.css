@@ -1249,7 +1249,6 @@ a { color: #0645ad; }
 }
 
 .aps-inner {
-  position: relative; 
   border-radius: 1rem;
   padding: 1.25rem 1rem;
   background: #ffffff;
@@ -1264,6 +1263,9 @@ a { color: #0645ad; }
 
 .aps-header {
   margin-bottom: 1rem;
+}
+#aps-results {
+  position: relative;   /* button will now be positioned inside results area */
 }
 
 .aps-title {
