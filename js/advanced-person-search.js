@@ -41,6 +41,9 @@
   // Shared “last search” flags
   let lastSearchHasResults = false;
   let lastSearchSelection = null;
+  let apsGraphEl = null;
+  let apsListEl = null;
+
 
   // ---------------------------------------------------------------------------
   // LANGUAGE HELPERS
@@ -672,99 +675,116 @@
   // ---------------------------------------------------------------------------
 
   async function executeSearch() {
-    // Reveal results wrapper
-    const resultsWrapper = document.getElementById("aps-results");
-    if (resultsWrapper) {
-      resultsWrapper.classList.remove("aps-results-hidden");
-    }
-
-    const listWrapper = document.getElementById("aps-results-list-wrapper");
-    if (listWrapper) {
-      listWrapper.classList.remove("aps-results-hidden");
-    }
-
-    const graphWrapper = document.getElementById("aps-results-graph-wrapper");
-    if (graphWrapper) {
-      graphWrapper.classList.remove("aps-results-hidden");
-    }
-
-    const lang = getCurrentLang();
-    const selection = getCurrentFacetSelections();
-    lastSearchSelection = selection;
-
-    const selectedKeys = Object.keys(selection);
-    const msgEl = document.querySelector(".aps-results-summary");
-
-    if (!selectedKeys.length) {
-      if (msgEl) {
-        msgEl.textContent =
-          lang === "cy"
-            ? "Dewiswch o leiaf un hidlydd i weld canlyniadau."
-            : "Choose at least one filter to see results.";
-      }
-      lastSearchHasResults = false;
-      updatePaginationControls(false, 1);
-      const listEl = document.querySelector("#aps-results .aps-results-list");
-      if (listEl) listEl.innerHTML = "";
-      const graphEl = document.getElementById("aps-results-graph");
-      if (graphEl) graphEl.innerHTML = "";
-      return;
-    }
-
-    const query = buildSearchQuery(selection, lang);
-
-    try {
-      const data = await runSparql(query);
-      const bindings = (data.results && data.results.bindings) || [];
-
-      const rawBindings = [...bindings];
-
-      // GRAPH: store FULL raw bindings (no dedupe)
-      graphState.full = rawBindings;
-
-      // LIST: de-duplicate by QID
-      const deduped = dedupeByQid(rawBindings);
-      listState.full = deduped;
-      listState.currentPage = 1;
-      listState.hasMore = deduped.length > pageSize;
-
-      lastSearchHasResults = deduped.length > 0;
-
-      // Render according to current mode
-      if (viewMode === "graph") {
-
-  // NEW: ensure graph is visible and list is hidden
-  graphEl.classList.remove("aps-hidden");
-  listEl.classList.add("aps-hidden");
-
-  graphEl.style.display = "";
-  listEl.style.display = "none";
-
-  // Hide pagination; graph ignores paging
-  const pagEl = document.querySelector(".aps-pagination");
-  if (pagEl) pagEl.classList.add("aps-pagination-hidden");
-
-  renderGraph(graphState.full);
-  updateResultsSummary(graphState.full.length, false, 1);
-
-} else {
-  renderCurrentListPage();
-}
-
-
-      
-    } catch (e) {
-      console.error("Error executing people search", e);
-      if (msgEl) {
-        msgEl.textContent =
-          lang === "cy"
-            ? "Gwall wrth lwytho canlyniadau."
-            : "Error loading results.";
-      }
-      lastSearchHasResults = false;
-      updatePaginationControls(false, 1);
-    }
+  // Reveal results wrapper
+  const resultsWrapper = document.getElementById("aps-results");
+  if (resultsWrapper) {
+    resultsWrapper.classList.remove("aps-results-hidden");
   }
+
+  const listWrapper = document.getElementById("aps-results-list-wrapper");
+  if (listWrapper) {
+    listWrapper.classList.remove("aps-results-hidden");
+  }
+
+  const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+  if (graphWrapper) {
+    graphWrapper.classList.remove("aps-results-hidden");
+  }
+
+  const lang = getCurrentLang();
+  const selection = getCurrentFacetSelections();
+  lastSearchSelection = selection;
+
+  const selectedKeys = Object.keys(selection);
+  const msgEl = document.querySelector(".aps-results-summary");
+
+  // If no filters selected
+  if (!selectedKeys.length) {
+    if (msgEl) {
+      msgEl.textContent =
+        lang === "cy"
+          ? "Dewiswch o leiaf un hidlydd i weld canlyniadau."
+          : "Choose at least one filter to see results.";
+    }
+    lastSearchHasResults = false;
+    updatePaginationControls(false, 1);
+
+    if (apsListEl) apsListEl.innerHTML = "";
+    if (apsGraphEl) apsGraphEl.innerHTML = "";
+    return;
+  }
+
+  const query = buildSearchQuery(selection, lang);
+
+  try {
+    const data = await runSparql(query);
+    const bindings = (data.results && data.results.bindings) || [];
+
+    const rawBindings = [...bindings];
+
+    // GRAPH: full results
+    graphState.full = rawBindings;
+
+    // LIST: dedupe + pagination state
+    const deduped = dedupeByQid(rawBindings);
+    listState.full = deduped;
+    listState.currentPage = 1;
+    listState.hasMore = deduped.length > pageSize;
+
+    lastSearchHasResults = deduped.length > 0;
+
+    // -------------------------------------------------------------
+    // RENDER BY MODE
+    // -------------------------------------------------------------
+    if (viewMode === "graph") {
+
+      // Make graph visible
+      if (apsGraphEl) {
+        apsGraphEl.classList.remove("aps-hidden");
+        apsGraphEl.style.display = "";
+      }
+
+      // Hide list
+      if (apsListEl) {
+        apsListEl.classList.add("aps-hidden");
+        apsListEl.style.display = "none";
+      }
+
+      // Hide pagination (graph has no paging)
+      const pagEl = document.querySelector(".aps-pagination");
+      if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+      // Render graph
+      renderGraph(graphState.full);
+      updateResultsSummary(graphState.full.length, false, 1);
+
+    } else {
+      // LIST MODE
+      if (apsListEl) {
+        apsListEl.classList.remove("aps-hidden");
+        apsListEl.style.display = "";
+      }
+
+      if (apsGraphEl) {
+        apsGraphEl.classList.add("aps-hidden");
+        apsGraphEl.style.display = "none";
+      }
+
+      renderCurrentListPage();
+    }
+
+  } catch (e) {
+    console.error("Error executing people search", e);
+    if (msgEl) {
+      msgEl.textContent =
+        lang === "cy"
+          ? "Gwall wrth lwytho canlyniadau."
+          : "Error loading results.";
+    }
+    lastSearchHasResults = false;
+    updatePaginationControls(false, 1);
+  }
+}
 
   // ---------------------------------------------------------------------------
   // INIT
@@ -844,6 +864,8 @@
 const graphEl = container.querySelector("#aps-results-graph");
 const listEl  = container.querySelector(".aps-results-list");
 const toggleBtn   = container.querySelector("#aps-view-toggle");
+apsListEl = listEl;
+apsGraphEl = graphEl;
 const toggleIcon  = toggleBtn.querySelector(".icon");
 const toggleLabel = toggleBtn.querySelector(".label");
 
