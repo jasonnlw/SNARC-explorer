@@ -179,7 +179,10 @@ home.innerHTML = `
           Search people
         </button>
 
-
+<button id="aps-view-toggle" class="aps-view-toggle">
+  <span class="icon"></span>
+  <span class="label">Graph</span>
+</button>
         <p class="aps-hint"
            data-i18n-en="Choose at least one filter to see results."
            data-i18n-cy="Dewiswch o leiaf un hidlydd i weld canlyniadau.">
@@ -196,12 +199,7 @@ home.innerHTML = `
           No results yet
         </p>
       </div>
-    <div class="aps-results-view-toggle">
-<button id="aps-view-toggle" class="aps-view-toggle">
-  <span class="icon"></span>
-  <span class="label">Graph</span>
-</button>
-</div>
+
 
 <!-- LIST RESULTS -->
 <div class="aps-results-list"></div>
