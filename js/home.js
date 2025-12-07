@@ -172,33 +172,46 @@ home.innerHTML = `
 
       </div>
 
-      <div class="aps-actions">
-        <button type="submit" class="aps-btn aps-btn-primary"
-                data-i18n-en="Search people"
-                data-i18n-cy="Chwilio pobl">
-          Search people
-        </button>
+ <div class="aps-actions">
+    <button type="submit" class="aps-btn aps-btn-primary">
+      Search people
+    </button>
+  </div>
 
+</form>
+
+<!-- NEW: Single unified toggle button -->
 <button id="aps-view-toggle" class="aps-view-toggle">
   <span class="icon"></span>
   <span class="label">Graph</span>
 </button>
-        <p class="aps-hint"
-           data-i18n-en="Choose at least one filter to see results."
-           data-i18n-cy="Dewiswch o leiaf un hidlydd i weld canlyniadau.">
-          Choose at least one filter to see results.
-        </p>
-      </div>
-    </form>
 
-    <div id="aps-results" class="aps-results aps-results-hidden">
-      <div class="aps-results-header">
-        <p class="aps-results-summary"
-           data-i18n-en="Loading..."
-           data-i18n-cy="Llwytho...">
-          No results yet
-        </p>
-      </div>
+<!-- RESULTS WRAPPER -->
+<div id="aps-results" class="aps-results aps-results-hidden">
+
+  <div class="aps-results-header">
+    <p class="aps-results-summary"
+       data-i18n-en="Loading..."
+       data-i18n-cy="Llwytho...">
+      No results yet
+    </p>
+  </div>
+
+  <!-- LIST RESULTS -->
+  <div class="aps-results-list"></div>
+
+  <!-- GRAPH RESULTS -->
+  <div id="aps-results-graph" class="aps-results-graph aps-hidden"></div>
+
+  <!-- Hint text -->
+  <p class="aps-hint"
+     data-i18n-en="Choose at least one filter to see results."
+     data-i18n-cy="Dewiswch o leiaf un hidlydd i weld canlyniadau.">
+    Choose at least one filter to see results.
+  </p>
+
+</div>
+
 
 
 <!-- LIST RESULTS -->
