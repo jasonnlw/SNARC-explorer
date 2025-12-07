@@ -197,14 +197,10 @@ home.innerHTML = `
         </p>
       </div>
     <div class="aps-results-view-toggle">
-  <button type="button" id="aps-view-list" class="aps-view-btn aps-view-active"
-          data-i18n-en="List view" data-i18n-cy="Golygfa rhestr">
-    List view
-  </button>
-  <button type="button" id="aps-view-graph" class="aps-view-btn"
-          data-i18n-en="Graph view" data-i18n-cy="Golygfa graff">
-    Graph view
-  </button>
+<button id="aps-view-toggle" class="aps-view-toggle">
+  <span class="icon"></span>
+  <span class="label">Graph</span>
+</button>
 </div>
 
 <!-- LIST RESULTS -->
