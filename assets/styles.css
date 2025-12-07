@@ -1566,39 +1566,5 @@ a { color: #0645ad; }
 .aps-results.list-mode .aps-results-list {
   padding-top: 3rem;   /* adjust as needed, 2.5–3rem usually ideal */
 }
-.aps-graph-zoom {
-  position: absolute;
-  top: 5rem;    /* directly below the toggle */
-  left: 0.75rem;
-  z-index: 50;
 
-  display: flex;
-  flex-direction: column;
-  gap: 0.25rem;
-}
 
-.aps-zoom-btn {
-  width: 32px;
-  height: 32px;
-
-  background: #fff;
-  border: 1px solid #ddd;
-  border-radius: 6px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  font-size: 1.2rem;
-  line-height: 1;
-  cursor: pointer;
-
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.aps-zoom-btn:hover {
-  background: #f3f3f3;
-}
-.aps-hidden {
-  display: none !important;
-}
