@@ -1568,7 +1568,7 @@ a { color: #0645ad; }
 }
 .aps-graph-zoom {
   position: absolute;
-  top: 3.5rem;   /* directly below the toggle */
+  top: 5rem;    /* directly below the toggle */
   left: 0.75rem;
   z-index: 50;
 
