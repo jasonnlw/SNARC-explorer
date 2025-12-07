@@ -37,7 +37,6 @@ home.innerHTML = `
       </section>
 
 <!-- Advanced Person Search (below map placeholder) -->
-<!-- Advanced Person Search (below map placeholder) -->
 <section id="advanced-person-search" class="aps-section">
   <div class="aps-inner">
     <header class="aps-header">
@@ -54,11 +53,126 @@ home.innerHTML = `
     <form id="aps-form" class="aps-form" novalidate>
       <div class="aps-fields-grid">
 
-        <!-- All your facet fields here -->
+<!-- Gender -->
+<div class="aps-field" data-facet="gender">
+  <label class="aps-label"
+         data-i18n-en="Gender"
+         data-i18n-cy="Rhyw">
+    Gender
+  </label>
+
+  <div class="aps-dropdown aps-dropdown-select"> 
+    <select id="aps-gender-select" class="aps-input aps-select">
+          <option value="" data-i18n-en="Any gender" data-i18n-cy="Unrhyw ryw">
+      Any gender
+    </option>
+    </select>
+  </div>
+</div>
+
+
+        <!-- Occupation -->
+        <div class="aps-field" data-facet="occupation">
+          <label class="aps-label" for="aps-occupation-input"
+                 data-i18n-en="Occupation" data-i18n-cy="Galwedigaeth">
+            Occupation
+          </label>
+          <div class="aps-dropdown">
+            <input id="aps-occupation-input" type="text" class="aps-input"
+                   autocomplete="off"
+                   data-i18n-placeholder-en="Any occupation"
+                   data-i18n-placeholder-cy="Unrhyw alwedigaeth"
+                   placeholder="Any occupation"/>
+            <button type="button" class="aps-clear" aria-label="Clear">×</button>
+            <ul class="aps-options aps-options-hidden"></ul>
+          </div>
+        </div>
+
+        <!-- Place of Education -->
+        <div class="aps-field" data-facet="educationPlace">
+          <label class="aps-label" for="aps-educationPlace-input"
+                 data-i18n-en="Place of education" data-i18n-cy="Lle addysg">
+            Place of education
+          </label>
+          <div class="aps-dropdown">
+            <input id="aps-educationPlace-input" type="text" class="aps-input"
+                   autocomplete="off"
+                   data-i18n-placeholder-en="Any place"
+                   data-i18n-placeholder-cy="Unrhyw le"
+                   placeholder="Any place"/>
+            <button type="button" class="aps-clear" aria-label="Clear">×</button>
+            <ul class="aps-options aps-options-hidden"></ul>
+          </div>
+        </div>
+
+        <!-- Place of Birth -->
+        <div class="aps-field" data-facet="birthPlace">
+          <label class="aps-label" for="aps-birthPlace-input"
+                 data-i18n-en="Place of birth" data-i18n-cy="Lle geni">
+            Place of birth
+          </label>
+          <div class="aps-dropdown">
+            <input id="aps-birthPlace-input" type="text" class="aps-input"
+                   autocomplete="off"
+                   data-i18n-placeholder-en="Any place"
+                   data-i18n-placeholder-cy="Unrhyw le"
+                   placeholder="Any place"/>
+            <button type="button" class="aps-clear" aria-label="Clear">×</button>
+            <ul class="aps-options aps-options-hidden"></ul>
+          </div>
+        </div>
+
+        <!-- Place of Death -->
+        <div class="aps-field" data-facet="deathPlace">
+          <label class="aps-label" for="aps-deathPlace-input"
+                 data-i18n-en="Place of death" data-i18n-cy="Lle marw">
+            Place of death
+          </label>
+          <div class="aps-dropdown">
+            <input id="aps-deathPlace-input" type="text" class="aps-input"
+                   autocomplete="off"
+                   data-i18n-placeholder-en="Any place"
+                   data-i18n-placeholder-cy="Unrhyw le"
+                   placeholder="Any place"/>
+            <button type="button" class="aps-clear" aria-label="Clear">×</button>
+            <ul class="aps-options aps-options-hidden"></ul>
+          </div>
+        </div>
+
+<!-- Related Content -->
+<div class="aps-field" data-facet="relatedContent">
+  <label class="aps-label"
+         data-i18n-en="Has Related Collections"
+         data-i18n-cy="Efo Casgliadau Perthnasol">
+    Related content / collections
+  </label>
+
+  <div class="aps-dropdown aps-dropdown-select"> 
+    <select id="aps-relatedContent-select" class="aps-input aps-select">
+
+      <!-- Default "Any collection" -->
+      <option value="" 
+              data-i18n-en="Select Collection" 
+              data-i18n-cy="Dewis Casgliad">
+        Any collection
+      </option>
+
+      <!-- ONE single ALL option -->
+<option value="ALL" data-i18n-en="All" data-i18n-cy="Popeth">
+    All
+</option>
+
+
+      <!-- JS will append the real content-type options here -->
+    </select>
+  </div>
+</div>
+
+
 
       </div>
 
-      <div class="aps-actions">
+<div class="aps-actions">
         <button type="submit" class="aps-btn aps-btn-primary">
           Search people
         </button>
@@ -105,7 +219,6 @@ home.innerHTML = `
 
   </div>
 </section>
-
 
     </div>
   `;
