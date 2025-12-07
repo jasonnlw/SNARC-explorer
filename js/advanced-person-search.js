@@ -868,28 +868,40 @@ updateToggleBtnUI();
 
 // Toggle behaviour
 toggleBtn.addEventListener("click", () => {
+  const resultsWrapper = document.getElementById("aps-results");
+
   if (viewMode === "list") {
-    // → Switch to graph mode
+    // SWITCH → GRAPH MODE
     viewMode = "graph";
+    toggleLabel.textContent = "List";
+    toggleIcon.classList.remove("list-icon");
+    toggleIcon.classList.add("graph-icon");
 
-    listEl.style.display = "none";
-    graphEl.style.display = "";
+    listContainer.classList.add("aps-hidden");
+    graphContainer.classList.remove("aps-hidden");
 
-    const pagEl = document.querySelector(".aps-pagination");
-    if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+    // ✨ Remove list-only spacing
+    if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
 
+    // Render graph from full results
     if (graphState.full.length) {
       renderGraph(graphState.full);
-      updateResultsSummary(graphState.full.length, false, 1);
     }
 
   } else {
-    // → Switch to list mode
+    // SWITCH → LIST MODE
     viewMode = "list";
+    toggleLabel.textContent = "Graph";
+    toggleIcon.classList.remove("graph-icon");
+    toggleIcon.classList.add("list-icon");
 
-    graphEl.style.display = "none";
-    listEl.style.display = "";
+    graphContainer.classList.add("aps-hidden");
+    listContainer.classList.remove("aps-hidden");
 
+    // ✨ Add spacing so the list doesn't overlap the toggle
+    if (resultsWrapper) resultsWrapper.classList.add("list-mode");
+
+    // Render first page of list
     if (listState.full.length) {
       renderCurrentListPage();
     }
