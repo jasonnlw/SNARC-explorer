@@ -1518,3 +1518,45 @@ a { color: #0645ad; }
   font-size: 0.8rem;
   opacity: 0.8;
 }
+
+.aps-view-toggle {
+  position: absolute;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 50;
+
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  transition: background 0.2s;
+}
+
+.aps-view-toggle:hover {
+  background: #f3f3f3;
+}
+
+.aps-view-toggle .icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.graph-icon svg line,
+.graph-icon svg circle {
+  stroke: #444;
+  fill: none;
+}
+
+.list-icon svg rect {
+  fill: #444;
+}
+
