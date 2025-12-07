@@ -187,7 +187,11 @@ home.innerHTML = `
       <span class="icon"></span>
       <span class="label">Graph</span>
     </button>
-
+    
+<div id="aps-graph-zoom" class="aps-graph-zoom aps-hidden">
+  <button id="aps-zoom-in" class="aps-zoom-btn">+</button>
+  <button id="aps-zoom-out" class="aps-zoom-btn">−</button>
+</div>
 
       <div class="aps-results-header">
         <p class="aps-results-summary"
