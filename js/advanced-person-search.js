@@ -869,6 +869,7 @@ updateToggleBtnUI();
 // Toggle behaviour
 toggleBtn.addEventListener("click", () => {
   const resultsWrapper = document.getElementById("aps-results");
+  const zoomControls = document.getElementById("aps-graph-zoom");
 
   if (viewMode === "list") {
     // → Switch to graph mode
@@ -884,6 +885,9 @@ toggleBtn.addEventListener("click", () => {
 
     // Remove list-only spacing
     if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
+
+    // ⭐ SHOW zoom controls
+    if (zoomControls) zoomControls.classList.remove("aps-hidden");
 
     // Render graph
     if (graphState.full.length) {
@@ -901,6 +905,9 @@ toggleBtn.addEventListener("click", () => {
 
     // Add list spacing so toggle doesn't overlap first card
     if (resultsWrapper) resultsWrapper.classList.add("list-mode");
+
+    // ⭐ HIDE zoom controls
+    if (zoomControls) zoomControls.classList.add("aps-hidden");
 
     // Render list
     if (listState.full.length) {
