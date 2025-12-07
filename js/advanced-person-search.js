@@ -871,44 +871,47 @@ toggleBtn.addEventListener("click", () => {
   const resultsWrapper = document.getElementById("aps-results");
 
   if (viewMode === "list") {
-    // SWITCH → GRAPH MODE
+    // → Switch to graph mode
     viewMode = "graph";
-    toggleLabel.textContent = "List";
-    toggleIcon.classList.remove("list-icon");
-    toggleIcon.classList.add("graph-icon");
 
-    listContainer.classList.add("aps-hidden");
-    graphContainer.classList.remove("aps-hidden");
+    // Hide list, show graph
+    listEl.style.display = "none";
+    graphEl.style.display = "";
 
-    // ✨ Remove list-only spacing
+    // Hide pagination in graph mode
+    const pagEl = document.querySelector(".aps-pagination");
+    if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+    // Remove list-only spacing
     if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
 
-    // Render graph from full results
+    // Render graph
     if (graphState.full.length) {
       renderGraph(graphState.full);
+      updateResultsSummary(graphState.full.length, false, 1);
     }
 
   } else {
-    // SWITCH → LIST MODE
+    // → Switch to list mode
     viewMode = "list";
-    toggleLabel.textContent = "Graph";
-    toggleIcon.classList.remove("graph-icon");
-    toggleIcon.classList.add("list-icon");
 
-    graphContainer.classList.add("aps-hidden");
-    listContainer.classList.remove("aps-hidden");
+    // Hide graph, show list
+    graphEl.style.display = "none";
+    listEl.style.display = "";
 
-    // ✨ Add spacing so the list doesn't overlap the toggle
+    // Add list spacing so toggle doesn't overlap first card
     if (resultsWrapper) resultsWrapper.classList.add("list-mode");
 
-    // Render first page of list
+    // Render list
     if (listState.full.length) {
       renderCurrentListPage();
     }
   }
 
+  // Update icon + label
   updateToggleBtnUI();
 });
+
 
 
     // Non-static facet dropdowns
