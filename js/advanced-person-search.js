@@ -674,21 +674,11 @@
   // MAIN SEARCH EXECUTION (fetch + state update)
   // ---------------------------------------------------------------------------
 
-  async function executeSearch() {
+async function executeSearch() {
   // Reveal results wrapper
   const resultsWrapper = document.getElementById("aps-results");
   if (resultsWrapper) {
     resultsWrapper.classList.remove("aps-results-hidden");
-  }
-
-  const listWrapper = document.getElementById("aps-results-list-wrapper");
-  if (listWrapper) {
-    listWrapper.classList.remove("aps-results-hidden");
-  }
-
-  const graphWrapper = document.getElementById("aps-results-graph-wrapper");
-  if (graphWrapper) {
-    graphWrapper.classList.remove("aps-results-hidden");
   }
 
   const lang = getCurrentLang();
@@ -706,14 +696,17 @@
           ? "Dewiswch o leiaf un hidlydd i weld canlyniadau."
           : "Choose at least one filter to see results.";
     }
+
     lastSearchHasResults = false;
     updatePaginationControls(false, 1);
 
     if (apsListEl) apsListEl.innerHTML = "";
     if (apsGraphEl) apsGraphEl.innerHTML = "";
+
     return;
   }
 
+  // Build and run SPARQL
   const query = buildSearchQuery(selection, lang);
 
   try {
@@ -725,7 +718,7 @@
     // GRAPH: full results
     graphState.full = rawBindings;
 
-    // LIST: dedupe + pagination state
+    // LIST: dedupe results
     const deduped = dedupeByQid(rawBindings);
     listState.full = deduped;
     listState.currentPage = 1;
@@ -734,23 +727,19 @@
     lastSearchHasResults = deduped.length > 0;
 
     // -------------------------------------------------------------
-    // RENDER BY MODE
+    // RENDER BASED ON CURRENT MODE
     // -------------------------------------------------------------
     if (viewMode === "graph") {
 
-      // Make graph visible
-      if (apsGraphEl) {
-        apsGraphEl.classList.remove("aps-hidden");
-        apsGraphEl.style.display = "";
-      }
+      // SHOW GRAPH
+      apsGraphEl.classList.remove("aps-hidden");
+      apsGraphEl.style.display = "";
 
-      // Hide list
-      if (apsListEl) {
-        apsListEl.classList.add("aps-hidden");
-        apsListEl.style.display = "none";
-      }
+      // HIDE LIST
+      apsListEl.classList.add("aps-hidden");
+      apsListEl.style.display = "none";
 
-      // Hide pagination (graph has no paging)
+      // Hide pagination
       const pagEl = document.querySelector(".aps-pagination");
       if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
@@ -759,16 +748,14 @@
       updateResultsSummary(graphState.full.length, false, 1);
 
     } else {
-      // LIST MODE
-      if (apsListEl) {
-        apsListEl.classList.remove("aps-hidden");
-        apsListEl.style.display = "";
-      }
 
-      if (apsGraphEl) {
-        apsGraphEl.classList.add("aps-hidden");
-        apsGraphEl.style.display = "none";
-      }
+      // SHOW LIST
+      apsListEl.classList.remove("aps-hidden");
+      apsListEl.style.display = "";
+
+      // HIDE GRAPH
+      apsGraphEl.classList.add("aps-hidden");
+      apsGraphEl.style.display = "none";
 
       renderCurrentListPage();
     }
@@ -785,6 +772,7 @@
     updatePaginationControls(false, 1);
   }
 }
+
 
   // ---------------------------------------------------------------------------
   // INIT
