@@ -1562,4 +1562,8 @@ a { color: #0645ad; }
 .list-icon svg rect {
   fill: #444;
 }
+/* When in LIST mode, give room for the floating toggle button */
+.aps-results.list-mode .aps-results-list {
+  padding-top: 3rem;   /* adjust as needed, 2.5–3rem usually ideal */
+}
 
