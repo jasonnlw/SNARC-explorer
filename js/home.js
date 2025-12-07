@@ -214,13 +214,6 @@ home.innerHTML = `
 
 
 
-<!-- LIST RESULTS -->
-<div class="aps-results-list"></div>
-
-<!-- GRAPH RESULTS -->
-<div id="aps-results-graph" class="aps-results-graph aps-hidden"></div>
-
-
       <div class="aps-pagination aps-pagination-hidden">
         <button type="button" class="aps-btn aps-btn-ghost" id="aps-prev-page">&larr;</button>
         <span class="aps-page-indicator"></span>
