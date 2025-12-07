@@ -899,14 +899,6 @@ toggleBtn.addEventListener("click", () => {
 });
 
 
-      // Default mode = graph in UI
-      graphEl.style.display = "";
-      listEl.style.display = "none";
-      graphBtn.classList.add("aps-view-active");
-      listBtn.classList.remove("aps-view-active");
-      viewMode = "graph";
-    }
-
     // Non-static facet dropdowns
     Object.keys(FACETS)
       .filter((facetKey) => facetKey !== "gender" && facetKey !== "relatedContent")
