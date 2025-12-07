@@ -193,6 +193,7 @@ home.innerHTML = `
   <button id="aps-zoom-out" class="aps-zoom-btn">−</button>
 </div>
 
+
       <div class="aps-results-header">
         <p class="aps-results-summary"
            data-i18n-en="Loading..."
