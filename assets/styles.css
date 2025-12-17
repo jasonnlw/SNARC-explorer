@@ -1568,3 +1568,45 @@ a { color: #0645ad; }
 }
 
 
+/* ===========================
+   APS GRAPH ZOOM (graph-only)
+   =========================== */
+
+/* Allow pinch-zoom + wheel zoom to be handled by d3.zoom cleanly */
+#aps-results-graph svg {
+  touch-action: none; /* critical for mobile pinch zoom */
+}
+
+/* On-screen +/- controls (only shown in graph mode by JS) */
+.aps-graph-zoom-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 60;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aps-graph-zoom-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+}
+
+.aps-graph-zoom-btn:active {
+  transform: translateY(1px);
+}
+
+
