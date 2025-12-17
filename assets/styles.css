@@ -1606,7 +1606,10 @@ a { color: #0645ad; }
 }
 
 .aps-graph-zoom-btn:active {
-  transform: translateY(1px);
+ /* Graph: only person nodes show pointer cursor */
+#aps-results-graph .aps-graph-node { cursor: default; }
+#aps-results-graph .aps-graph-node--person { cursor: pointer; }
+ transform: translateY(1px);
 }
 
 
