@@ -633,6 +633,11 @@
       .data(nodes)
       .enter()
       .append("g")
+      .attr("class", (d) =>
+    d.type === "person"
+      ? "aps-graph-node aps-graph-node--person"
+      : "aps-graph-node"
+  )
       .call(
         d3
           .drag()
@@ -653,15 +658,22 @@
           })
       );
 
-    node
-      .append("circle")
-      .attr("r", (d) => (d.type === "person" ? 8 : 5))
-      .attr("fill", (d) => (d.type === "person" ? "#0b7e5c" : "#888"))
-      .on("click", (event, d) => {
-        if (/^Q[0-9]+$/.test(d.id)) {
-          window.open(`${SNARC_ENTITY_BASE_URL}${d.id}`, "_blank", "noopener");
-        }
-      });
+    // Create circles (NO interaction here)
+node
+  .append("circle")
+  .attr("r", (d) => (d.type === "person" ? 8 : 5))
+  .attr("fill", (d) => (d.type === "person" ? "#0b7e5c" : "#888"));
+
+// Attach interaction ONLY to person nodes
+node
+  .filter((d) => d.type === "person")
+  .style("cursor", "pointer")
+  .on("click", (event, d) => {
+    if (/^Q[0-9]+$/.test(d.id)) {
+      window.open(`${SNARC_ENTITY_BASE_URL}${d.id}`, "_blank", "noopener");
+    }
+  });
+
 
     node
       .append("text")
