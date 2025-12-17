@@ -465,6 +465,66 @@
     });
   }
 
+  // ---------------------------------------------------------------------------
+  // GRAPH ZOOM HELPERS (GRAPH MODE ONLY)
+  // ---------------------------------------------------------------------------
+
+  function removeGraphZoomControls(container) {
+    if (!container) return;
+    const existing = container.querySelector(".aps-graph-zoom-controls");
+    if (existing) existing.remove();
+  }
+
+  function ensureGraphZoomControls(container, zoomBehavior, svgSelection) {
+    // container is #aps-results-graph (which sits inside #aps-results, already position:relative)
+    if (!container || !zoomBehavior || !svgSelection) return;
+
+    removeGraphZoomControls(container);
+
+    const controls = document.createElement("div");
+    controls.className = "aps-graph-zoom-controls";
+
+    const btnIn = document.createElement("button");
+    btnIn.type = "button";
+    btnIn.className = "aps-graph-zoom-btn";
+    btnIn.setAttribute("aria-label", "Zoom in");
+    btnIn.textContent = "+";
+
+    const btnOut = document.createElement("button");
+    btnOut.type = "button";
+    btnOut.className = "aps-graph-zoom-btn";
+    btnOut.setAttribute("aria-label", "Zoom out");
+    btnOut.textContent = "−";
+
+    controls.appendChild(btnIn);
+    controls.appendChild(btnOut);
+    container.appendChild(controls);
+
+    // Use d3.zoom programmatic scaling so wheel/pinch/buttons are consistent
+    btnIn.addEventListener("click", () => {
+      svgSelection
+        .transition()
+        .duration(180)
+        .call(zoomBehavior.scaleBy, 1.2);
+    });
+
+    btnOut.addEventListener("click", () => {
+      svgSelection
+        .transition()
+        .duration(180)
+        .call(zoomBehavior.scaleBy, 1 / 1.2);
+    });
+  }
+
+  function setGraphZoomControlsVisible(visible) {
+    const container = document.getElementById("aps-results-graph");
+    if (!container) return;
+    const controls = container.querySelector(".aps-graph-zoom-controls");
+    if (!controls) return;
+    controls.style.display = visible ? "" : "none";
+  }
+
+  
   function renderGraph(bindings) {
     const container = document.getElementById("aps-results-graph");
     if (!container) return;
@@ -476,16 +536,35 @@
       return;
     }
 
+    // Clear prior graph + controls
     container.innerHTML = "";
 
     const width = container.clientWidth || 800;
     const height = 500;
 
+    // Root SVG
     const svg = d3
       .select(container)
       .append("svg")
       .attr("width", width)
       .attr("height", height);
+
+    // Everything that should zoom/pan goes inside this group
+    const zoomLayer = svg.append("g").attr("class", "aps-graph-zoom-layer");
+
+    // d3 zoom behavior (pinch, wheel, trackpad) – GRAPH ONLY
+    const zoom = d3
+      .zoom()
+      .scaleExtent([0.25, 6]) // sensible limits
+      .on("zoom", (event) => {
+        zoomLayer.attr("transform", event.transform);
+      });
+
+    // Attach zoom to SVG
+    svg.call(zoom);
+
+    // Add +/- controls (we keep them always created, but you can choose to hide on desktop)
+    ensureGraphZoomControls(container, zoom, svg);
 
     const nodesById = new Map();
     const links = [];
@@ -538,7 +617,8 @@
       .force("charge", d3.forceManyBody().strength(-120))
       .force("center", d3.forceCenter(width / 2, height / 2));
 
-    const link = svg
+    // IMPORTANT: draw into zoomLayer (not directly into svg)
+    const link = zoomLayer
       .append("g")
       .attr("stroke", "#ccc")
       .selectAll("line")
@@ -547,7 +627,7 @@
       .append("line")
       .attr("stroke-width", 1.2);
 
-    const node = svg
+    const node = zoomLayer
       .append("g")
       .selectAll("g")
       .data(nodes)
@@ -557,6 +637,7 @@
         d3
           .drag()
           .on("start", (event, d) => {
+            // Prevent drag from fighting zoom gestures
             if (!event.active) simulation.alphaTarget(0.3).restart();
             d.fx = d.x;
             d.fy = d.y;
@@ -598,8 +679,13 @@
 
       node.attr("transform", (d) => `translate(${d.x},${d.y})`);
     });
+
+    // Optional: start centered with a slight zoom-out if graphs are dense
+    // svg.call(zoom.transform, d3.zoomIdentity.translate(0, 0).scale(1));
   }
 
+
+  
   function updateResultsSummary(totalVisible, hasMore, page) {
   const summaryEl = document.querySelector(".aps-results-summary");
   if (!summaryEl) return;
@@ -737,6 +823,7 @@
         if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
         renderGraph(graphState.full);
+        setGraphZoomControlsVisible(true);
         updateResultsSummary(graphState.full.length, false, 1);
       } else {
         renderCurrentListPage();
@@ -871,43 +958,38 @@ toggleBtn.addEventListener("click", () => {
   const resultsWrapper = document.getElementById("aps-results");
 
   if (viewMode === "list") {
-    // → Switch to graph mode
     viewMode = "graph";
-
-    // Hide list, show graph
     listEl.style.display = "none";
     graphEl.style.display = "";
 
-    // Hide pagination in graph mode
     const pagEl = document.querySelector(".aps-pagination");
     if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
-    // Remove list-only spacing
     if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
 
-    // Render graph
     if (graphState.full.length) {
       renderGraph(graphState.full);
       updateResultsSummary(graphState.full.length, false, 1);
     }
 
-  } else {
-    // → Switch to list mode
-    viewMode = "list";
+    setGraphZoomControlsVisible(true);
 
-    // Hide graph, show list
+  } else {
+    viewMode = "list";
     graphEl.style.display = "none";
     listEl.style.display = "";
 
-    // Add list spacing so toggle doesn't overlap first card
     if (resultsWrapper) resultsWrapper.classList.add("list-mode");
 
-    // Render list
     if (listState.full.length) {
       renderCurrentListPage();
     }
+
+    setGraphZoomControlsVisible(false);
   }
 
+
+  
   // Update icon + label
   updateToggleBtnUI();
 });
