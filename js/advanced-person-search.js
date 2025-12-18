@@ -1003,6 +1003,40 @@ if (container) container.dataset.apsPresetActive = "0";
     const container = document.getElementById("advanced-person-search");
     if (!container) return;
 
+    // -------------------------------------------------------------------------
+// FILTER PANEL COLLAPSE (NEW) — UI-only, does not alter search behaviour
+// -------------------------------------------------------------------------
+(function initFiltersCollapseUI() {
+  const toggleBtn = container.querySelector(".aps-filters-toggle");
+  const panel = container.querySelector("#aps-filters-panel");
+  if (!toggleBtn || !panel) return;
+
+  const setExpanded = (expanded) => {
+    toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+    panel.classList.toggle("aps-filters-collapsed", !expanded);
+
+    // Keep button label language-aware via your existing i18n swapper
+    // (updateAdvancedSearchLabels already handles data-i18n-*)
+    // but we must re-apply the correct visible text after toggles.
+    const lang = getCurrentLang();
+    const attr = lang === "cy" ? "data-i18n-cy" : "data-i18n-en";
+    const txt = toggleBtn.getAttribute(attr);
+    if (txt) toggleBtn.textContent = txt;
+  };
+
+  // Default: collapsed
+  setExpanded(false);
+
+  toggleBtn.addEventListener("click", () => {
+    const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
+    setExpanded(!expanded);
+  });
+
+  // If user focuses into any filter input, expand automatically (mobile-friendly)
+  panel.addEventListener("focusin", () => setExpanded(true));
+})();
+
+
     if (container.dataset.apsInit === "1") {
       console.log("APS: AP already initialised?", container.dataset.apsInit);
       return;
