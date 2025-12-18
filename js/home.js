@@ -48,9 +48,23 @@ home.innerHTML = `
          data-i18n-cy="Cyfunwch unrhyw un o’r hidlwyr isod i ddarganfod pobl yn ôl rhyw, galwedigaeth, lleoedd a chasgliadau cysylltiedig.">
         Combine any of the filters below to discover people by gender, occupation, places and related collections.
       </p>
-    </header>
+      </header>
 
-    <form id="aps-form" class="aps-form" novalidate>
+    <!-- APS filters toggle (NEW) -->
+    <button type="button"
+            class="aps-filters-toggle"
+            aria-expanded="false"
+            aria-controls="aps-filters-panel"
+            data-i18n-en="Show filters"
+            data-i18n-cy="Dangos hidlwyr">
+      Show filters
+    </button>
+
+    <!-- APS collapsible filters panel (NEW) -->
+    <div id="aps-filters-panel" class="aps-filters-panel aps-filters-collapsed">
+
+      <form id="aps-form" class="aps-form" novalidate>
+
       <div class="aps-fields-grid">
 
 <!-- Gender -->
@@ -178,7 +192,7 @@ home.innerHTML = `
         </button>
       </div>
     </form>
-
+</div>
 
     <!-- RESULTS WRAPPER -->
     <div id="aps-results" class="aps-results aps-results-hidden">
