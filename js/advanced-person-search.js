@@ -75,6 +75,44 @@
       });
   }
 
+// ---------------------------------------------------------------------------
+// PRESET GRAPH (loads on page launch)
+// ---------------------------------------------------------------------------
+const APS_PRESET_GRAPH_QUERY = `
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX schema: <http://schema.org/>
+
+SELECT ?item ?itemLabel ?description
+       ?occupation ?occupationLabel
+       ?eduPlace ?eduPlaceLabel
+       ?birthPlace ?birthPlaceLabel
+       ?deathPlace ?deathPlaceLabel
+WHERE {
+
+  ?item wdt:P7 wd:Q947 .  # instance of human
+
+  ?item wdt:P13 wd:Q34 .
+  ?item wdt:P25 wd:Q50180 .
+  { ?item wdt:P12 ?anyVal }
+
+  OPTIONAL { ?item wdt:P25 ?occupation . }
+  OPTIONAL { ?item wdt:P23 ?eduPlace . }
+  OPTIONAL { ?item wdt:P21 ?birthPlace . }
+  OPTIONAL { ?item wdt:P22 ?deathPlace . }
+  OPTIONAL {
+    ?item schema:description ?description .
+    FILTER (LANG(?description) = "en")
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,cy". }
+}
+LIMIT 5000
+`;
+
+
+  
   // ---------------------------------------------------------------------------
   // SPARQL de-dupe helper (LIST VIEW ONLY)
   // ---------------------------------------------------------------------------
@@ -765,6 +803,98 @@ node
     updatePaginationControls(hasMore, listState.currentPage);
   }
 
+// ---------------------------------------------------------------------------
+// PRESET GRAPH LOADER (runs once on page load)
+// ---------------------------------------------------------------------------
+async function loadPresetGraphOnLaunch() {
+  const container = document.getElementById("advanced-person-search");
+  if (!container) return;
+
+  // Prevent double-run
+  if (container.dataset.apsPresetLoaded === "1") return;
+  container.dataset.apsPresetLoaded = "1";
+
+  const resultsWrapper = document.getElementById("aps-results");
+  const listWrapper = document.getElementById("aps-results-list-wrapper");
+  const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+
+  // Show results UI (even though the form is blank)
+  if (resultsWrapper) resultsWrapper.classList.remove("aps-results-hidden");
+  if (listWrapper) listWrapper.classList.remove("aps-results-hidden");
+  if (graphWrapper) graphWrapper.classList.remove("aps-results-hidden");
+
+  // Force graph mode as the default view for the preset
+  viewMode = "graph";
+
+  // Ensure correct panels visible
+  const graphEl = container.querySelector("#aps-results-graph");
+  const listEl = container.querySelector(".aps-results-list");
+  if (listEl) listEl.style.display = "none";
+  if (graphEl) graphEl.style.display = "";
+
+  // Hide pagination in graph mode
+  const pagEl = document.querySelector(".aps-pagination");
+  if (pagEl) pagEl.classList.add("aps-pagination-hidden");
+
+  // Remove list-only spacing
+  if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
+
+  // Update the toggle button UI if your function exists in scope
+  // (Your file defines updateToggleBtnUI() in init; we safely call it if available.)
+  if (typeof updateToggleBtnUI === "function") {
+    updateToggleBtnUI();
+  }
+
+  const lang = getCurrentLang();
+  const msgEl = document.querySelector(".aps-results-summary");
+  if (msgEl) {
+    msgEl.textContent =
+      lang === "cy"
+        ? "Wrthi’n llwytho graff rhagosodedig…"
+        : "Loading default graph…";
+  }
+
+  try {
+    const data = await runSparql(APS_PRESET_GRAPH_QUERY);
+    const bindings = (data.results && data.results.bindings) || [];
+
+    // GRAPH: keep full bindings
+    graphState.full = [...bindings];
+
+    // LIST: keep deduped (so list mode still works if user toggles)
+    listState.full = dedupeByQid(graphState.full);
+    listState.currentPage = 1;
+
+    // Render graph (default)
+    renderGraph(graphState.full);
+
+    // Make sure zoom controls are visible in graph mode (if you added this helper)
+    if (typeof setGraphZoomControlsVisible === "function") {
+      setGraphZoomControlsVisible(true);
+    }
+
+    // Update summary using existing helper
+    updateResultsSummary(graphState.full.length, false, 1);
+
+    // Mark as "has results", but DO NOT set lastSearchSelection (so your form remains “blank search”)
+    lastSearchHasResults = graphState.full.length > 0;
+    lastSearchSelection = null;
+
+    // Keep pagination controls consistent (list mode only)
+    updatePaginationControls(false, 1);
+  } catch (e) {
+    console.error("APS: preset graph load failed", e);
+    if (msgEl) {
+      msgEl.textContent =
+        lang === "cy"
+          ? "Methwyd llwytho’r graff rhagosodedig."
+          : "Failed to load default graph.";
+    }
+    lastSearchHasResults = false;
+  }
+}
+
+  
   // ---------------------------------------------------------------------------
   // MAIN SEARCH EXECUTION (fetch + state update)
   // ---------------------------------------------------------------------------
@@ -1072,6 +1202,8 @@ toggleBtn.addEventListener("click", () => {
         }
       }
     });
+// Load a default graph on first page launch (keeps form inputs blank)
+loadPresetGraphOnLaunch();
 
     observer.observe(htmlEl, { attributes: true });
   }
