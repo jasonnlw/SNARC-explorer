@@ -250,15 +250,6 @@ home.innerHTML = `
     console.warn("loadFacetData() not found – facet lists will be empty.");
   }
 
-  if (window.initAdvancedPersonSearch) {
-    try {
-      window.initAdvancedPersonSearch();
-    } catch (err) {
-      console.error("initAdvancedPersonSearch() failed:", err);
-    }
-  } else {
-    console.warn("initAdvancedPersonSearch() not found.");
-  }
  // Initialise advanced person search (now that the DOM is in place)
  if (window.initAdvancedPersonSearch) {
     try {
