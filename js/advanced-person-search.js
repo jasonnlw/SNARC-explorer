@@ -810,31 +810,29 @@ node
   }
 
 // ---------------------------------------------------------------------------
-// PRESET GRAPH LOADER (runs once on page load)
+// PRESET GRAPH LOADER (runs on page load; can be forced on language change)
 // ---------------------------------------------------------------------------
 async function loadPresetGraphOnLaunch(forceReload = false) {
   const container = document.getElementById("advanced-person-search");
   if (!container) return;
-// Prevent double-run (allow forced reload on language change)
-if (!forceReload && container.dataset.apsPresetLoaded === "1") return;
 
-container.dataset.apsPresetLoaded = "1";
-container.dataset.apsPresetActive = "1";
+  // Prevent double-run (allow forced reload on language change)
+  if (!forceReload && container.dataset.apsPresetLoaded === "1") return;
+  container.dataset.apsPresetLoaded = "1";
+  container.dataset.apsPresetActive = "1";
 
-const resultsWrapper = document.getElementById("aps-results");
-const listWrapper = document.getElementById("aps-results-list-wrapper");
-const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+  const resultsWrapper = document.getElementById("aps-results");
+  const listWrapper = document.getElementById("aps-results-list-wrapper");
+  const graphWrapper = document.getElementById("aps-results-graph-wrapper");
 
-
-  // Show results UI (even though the form is blank)
+  // Show results UI (form remains blank)
   if (resultsWrapper) resultsWrapper.classList.remove("aps-results-hidden");
   if (listWrapper) listWrapper.classList.remove("aps-results-hidden");
   if (graphWrapper) graphWrapper.classList.remove("aps-results-hidden");
 
-  // Force graph mode as the default view for the preset
+  // Force graph mode for preset
   viewMode = "graph";
 
-  // Ensure correct panels visible
   const graphEl = container.querySelector("#aps-results-graph");
   const listEl = container.querySelector(".aps-results-list");
   if (listEl) listEl.style.display = "none";
@@ -844,14 +842,11 @@ const graphWrapper = document.getElementById("aps-results-graph-wrapper");
   const pagEl = document.querySelector(".aps-pagination");
   if (pagEl) pagEl.classList.add("aps-pagination-hidden");
 
-  // Remove list-only spacing
+  // Remove list spacing in graph mode
   if (resultsWrapper) resultsWrapper.classList.remove("list-mode");
 
-  // Update the toggle button UI if your function exists in scope
-  // (Your file defines updateToggleBtnUI() in init; we safely call it if available.)
-  if (typeof updateToggleBtnUI === "function") {
-    updateToggleBtnUI();
-  }
+  // Keep toggle UI consistent
+  if (typeof updateToggleBtnUI === "function") updateToggleBtnUI();
 
   const lang = getCurrentLang();
   const msgEl = document.querySelector(".aps-results-summary");
@@ -863,33 +858,30 @@ const graphWrapper = document.getElementById("aps-results-graph-wrapper");
   }
 
   try {
-   const lang = getCurrentLang();
-   const data = await runSparql(getPresetGraphQuery(lang));
+    // IMPORTANT: bindings is declared here and used only inside this try block
+    const data = await runSparql(getPresetGraphQuery(lang));
+    const bindings = (data && data.results && data.results.bindings) ? data.results.bindings : [];
 
-
-    // GRAPH: keep full bindings
+    // Populate states
     graphState.full = [...bindings];
-
-    // LIST: keep deduped (so list mode still works if user toggles)
     listState.full = dedupeByQid(graphState.full);
     listState.currentPage = 1;
 
-    // Render graph (default)
+    // Render preset graph
     renderGraph(graphState.full);
 
-    // Make sure zoom controls are visible in graph mode (if you added this helper)
+    // Ensure graph zoom controls visible (if present)
     if (typeof setGraphZoomControlsVisible === "function") {
       setGraphZoomControlsVisible(true);
     }
 
-    // Update summary using existing helper
+    // Summary + pagination state
     updateResultsSummary(graphState.full.length, false, 1);
-
-    // Mark as "has results", but DO NOT set lastSearchSelection (so your form remains “blank search”)
     lastSearchHasResults = graphState.full.length > 0;
+
+    // Do NOT set lastSearchSelection, keep form "blank search"
     lastSearchSelection = null;
 
-    // Keep pagination controls consistent (list mode only)
     updatePaginationControls(false, 1);
   } catch (e) {
     console.error("APS: preset graph load failed", e);
