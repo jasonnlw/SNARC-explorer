@@ -21,7 +21,7 @@
 { "id": "Q85", "label_en": "Bhāts", "label_cy": "Bhāts" },
 { "id": "Q87", "label_en": "archer", "label_cy": "saethwyr" },
 { "id": "Q88", "label_en": "wheelwright", "label_cy": "Saer troliau" },
-{ "id": "Q89", "label_en": "bard", "label_cy": "bardd" },
+{ "id": "Q89", "label_en": "medeival bard", "label_cy": "bardd canol-oesol" },
 { "id": "Q90", "label_en": "minstrel", "label_cy": "clerwr" },
 { "id": "Q91", "label_en": "chimney sweep", "label_cy": "ysgubiad simnai" },
 { "id": "Q92", "label_en": "goze", "label_cy": "goze" },
