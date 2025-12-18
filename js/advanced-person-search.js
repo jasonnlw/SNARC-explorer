@@ -706,7 +706,7 @@ LIMIT 5000
 node
   .append("circle")
   .attr("r", (d) => (d.type === "person" ? 8 : 5))
-  .attr("fill", (d) => (d.type === "person" ? "#0b7e5c" : "#888"));
+  .attr("fill", (d) => (d.type === "person" ? "#FF9F00" : "#309898"));
 
 // Attach interaction ONLY to person nodes
 node
