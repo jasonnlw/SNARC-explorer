@@ -1612,4 +1612,121 @@ a { color: #0645ad; }
  transform: translateY(1px);
 }
 
+/* =========================================================
+   APS COLLAPSIBLE FILTERS + IMPACTFUL GRAPH (palette-only)
+   Allowed colours: #FF9F00, #F4631E, #309898, #CB0404
+   ========================================================= */
+
+/* Make APS container feel bolder without changing layout */
+.aps-inner {
+  border: 2px solid #309898;
+  box-shadow: none; /* remove grey-ish shadow */
+}
+
+/* Filters toggle button */
+.aps-filters-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 999px;
+  padding: 0.55rem 1rem;
+  border: 2px solid #FF9F00;
+  background: #FF9F00;
+  color: #000; /* keep readable; not part of “design palette” colours */
+
+  font-weight: 700;
+  cursor: pointer;
+  margin-top: 0.75rem;
+}
+
+.aps-filters-toggle:hover {
+  background: #F4631E;
+  border-color: #F4631E;
+}
+
+/* Collapsible panel mechanics */
+.aps-filters-panel {
+  margin-top: 0.75rem;
+}
+
+.aps-filters-panel.aps-filters-collapsed {
+  display: none;
+}
+
+/* Ensure the primary action uses palette (replaces existing green) */
+.aps-btn-primary {
+  background: #309898;
+  color: #fff;
+}
+
+.aps-btn-primary:hover {
+  background: #F4631E;
+}
+
+/* Inputs: replace grey borders with palette */
+.aps-input {
+  border: 2px solid #309898;
+}
+
+.aps-input:focus {
+  border-color: #FF9F00;
+}
+
+/* Options dropdown: remove grey border/shadow colour cast */
+.aps-options {
+  border: 2px solid #309898;
+  box-shadow: none;
+}
+
+/* Results area: keep behaviour, but visually frame the graph */
+.aps-results {
+  border-top: 2px solid #CB0404;
+  padding-top: 1rem;
+}
+
+/* Make graph area the hero */
+#aps-results-graph {
+  width: 100%;
+  min-height: 520px;
+  height: 65vh;
+  border: 2px solid #309898;
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+/* Mobile tuning: large but not overwhelming */
+@media (max-width: 768px) {
+  #aps-results-graph {
+    min-height: 420px;
+    height: 58vh;
+  }
+}
+
+/* View toggle button: palette-only */
+.aps-view-toggle {
+  border: 2px solid #309898;
+  background: #FF9F00;
+  box-shadow: none;
+}
+
+.aps-view-toggle:hover {
+  background: #F4631E;
+}
+
+/* Zoom controls: palette-only */
+.aps-graph-zoom-btn {
+  border: 2px solid #309898;
+  background: #FF9F00;
+  box-shadow: none;
+}
+.aps-graph-zoom-btn:hover {
+  background: #F4631E;
+}
+
+/* List cards: remove greys and keep consistent framing */
+.aps-result-card {
+  border: 2px solid #309898;
+  background: #fff;
+}
 
