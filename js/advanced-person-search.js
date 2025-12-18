@@ -76,9 +76,12 @@
   }
 
 // ---------------------------------------------------------------------------
-// PRESET GRAPH (loads on page launch)
+// PRESET GRAPH (loads on page launch) — language aware
 // ---------------------------------------------------------------------------
-const APS_PRESET_GRAPH_QUERY = `
+function getPresetGraphQuery(lang) {
+  const uiLang = lang === "cy" ? "cy,en" : "en,cy";
+
+  return `
 PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
 PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
@@ -102,14 +105,17 @@ WHERE {
   OPTIONAL { ?item wdt:P23 ?eduPlace . }
   OPTIONAL { ?item wdt:P21 ?birthPlace . }
   OPTIONAL { ?item wdt:P22 ?deathPlace . }
+
   OPTIONAL {
     ?item schema:description ?description .
-    FILTER (LANG(?description) = "en")
+    FILTER (LANG(?description) = "${lang}")
   }
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "en,cy". }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${uiLang}". }
 }
 LIMIT 5000
 `;
+}
 
 
   
@@ -806,17 +812,19 @@ node
 // ---------------------------------------------------------------------------
 // PRESET GRAPH LOADER (runs once on page load)
 // ---------------------------------------------------------------------------
-async function loadPresetGraphOnLaunch() {
+async function loadPresetGraphOnLaunch(forceReload = false) {
   const container = document.getElementById("advanced-person-search");
   if (!container) return;
+// Prevent double-run (allow forced reload on language change)
+if (!forceReload && container.dataset.apsPresetLoaded === "1") return;
 
-  // Prevent double-run
-  if (container.dataset.apsPresetLoaded === "1") return;
-  container.dataset.apsPresetLoaded = "1";
+container.dataset.apsPresetLoaded = "1";
+container.dataset.apsPresetActive = "1";
 
-  const resultsWrapper = document.getElementById("aps-results");
-  const listWrapper = document.getElementById("aps-results-list-wrapper");
-  const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+const resultsWrapper = document.getElementById("aps-results");
+const listWrapper = document.getElementById("aps-results-list-wrapper");
+const graphWrapper = document.getElementById("aps-results-graph-wrapper");
+
 
   // Show results UI (even though the form is blank)
   if (resultsWrapper) resultsWrapper.classList.remove("aps-results-hidden");
@@ -855,8 +863,9 @@ async function loadPresetGraphOnLaunch() {
   }
 
   try {
-    const data = await runSparql(APS_PRESET_GRAPH_QUERY);
-    const bindings = (data.results && data.results.bindings) || [];
+   const lang = getCurrentLang();
+   const data = await runSparql(getPresetGraphQuery(lang));
+
 
     // GRAPH: keep full bindings
     graphState.full = [...bindings];
@@ -915,6 +924,9 @@ async function loadPresetGraphOnLaunch() {
     if (graphWrapper) {
       graphWrapper.classList.remove("aps-results-hidden");
     }
+
+    const container = document.getElementById("advanced-person-search");
+if (container) container.dataset.apsPresetActive = "0";
 
     const lang = getCurrentLang();
     const selection = getCurrentFacetSelections();
@@ -1195,10 +1207,17 @@ toggleBtn.addEventListener("click", () => {
         if (m.attributeName === "lang") {
           updateAdvancedSearchLabels();
           initStaticGenderDropdown();
-          if (lastSearchHasResults && lastSearchSelection) {
-            // Rerun the search in new language, keep current mode
-            executeSearch();
-          }
+const container = document.getElementById("advanced-person-search");
+const presetActive = container && container.dataset.apsPresetActive === "1";
+
+if (presetActive) {
+  // Reload preset graph in the new language (do not fill form inputs)
+  loadPresetGraphOnLaunch(true);
+} else if (lastSearchHasResults && lastSearchSelection) {
+  // Rerun user search in new language, keep current mode
+  executeSearch();
+}
+
         }
       }
     });
