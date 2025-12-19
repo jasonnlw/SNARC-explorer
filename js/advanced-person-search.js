@@ -607,9 +607,6 @@ LIMIT 5000
     // Attach zoom to SVG
     svg.call(zoom);
 
-    // Add +/- controls (we keep them always created, but you can choose to hide on desktop)
-    ensureGraphZoomControls(container, zoom, svg);
-
     const nodesById = new Map();
     const links = [];
 
@@ -760,6 +757,12 @@ node
   function updatePaginationControls(hasMore, page) {
     const pagEl = document.querySelector(".aps-pagination");
     if (!pagEl) return;
+    // Pagination should only be visible in LIST mode
+if (viewMode !== "list") {
+  pagEl.classList.add("aps-pagination-hidden");
+  return;
+}
+
 
     const prevBtn = document.getElementById("aps-prev-page");
     const nextBtn = document.getElementById("aps-next-page");
