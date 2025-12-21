@@ -1249,15 +1249,15 @@ a { color: #0645ad; }
 }
 
 .aps-inner {
-  border-radius: 1rem;
-  padding: 1.25rem 1rem;
-  background: #ffffff;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 @media (min-width: 768px) {
   .aps-inner {
-    padding: 1.5rem 1.5rem;
+    padding: 0;
   }
 }
 
@@ -1683,24 +1683,6 @@ a { color: #0645ad; }
 .aps-results {
   border-top: 2px solid #CB0404;
   padding-top: 1rem;
-}
-
-/* Make graph area the hero */
-#aps-results-graph {
-  width: 100%;
-  min-height: 520px;
-  height: 65vh;
-  border: 2px solid #309898;
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-/* Mobile tuning: large but not overwhelming */
-@media (max-width: 768px) {
-  #aps-results-graph {
-    min-height: 420px;
-    height: 58vh;
-  }
 }
 
 /* View toggle button: palette-only */
