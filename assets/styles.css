@@ -1730,3 +1730,16 @@ a { color: #0645ad; }
   margin-top: 0.5rem;
 }
 
+/* Header horizontal buffer (prevents edge collision) */
+.aps-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 768px) {
+  .aps-header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+
