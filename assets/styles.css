@@ -1617,11 +1617,7 @@ a { color: #0645ad; }
    Allowed colours: #FF9F00, #F4631E, #309898, #CB0404
    ========================================================= */
 
-/* Make APS container feel bolder without changing layout */
-.aps-inner {
-  border: 2px solid #309898;
-  box-shadow: none; /* remove grey-ish shadow */
-}
+
 
 /* Filters toggle button */
 .aps-filters-toggle {
@@ -1677,12 +1673,6 @@ a { color: #0645ad; }
 .aps-options {
   border: 2px solid #309898;
   box-shadow: none;
-}
-
-/* Results area: keep behaviour, but visually frame the graph */
-.aps-results {
-  border-top: 2px solid #CB0404;
-  padding-top: 1rem;
 }
 
 /* View toggle button: palette-only */
