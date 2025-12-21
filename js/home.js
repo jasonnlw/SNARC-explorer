@@ -64,16 +64,6 @@ home.innerHTML = `
 </header>
 
 
-    <!-- APS filters toggle (NEW) -->
-    <button type="button"
-            class="aps-filters-toggle"
-            aria-expanded="false"
-            aria-controls="aps-filters-panel"
-            data-i18n-en="Show filters"
-            data-i18n-cy="Dangos hidlwyr">
-      Show filters
-    </button>
-
     <!-- APS collapsible filters panel (NEW) -->
     <div id="aps-filters-panel" class="aps-filters-panel aps-filters-collapsed">
 
