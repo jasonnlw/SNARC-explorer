@@ -39,16 +39,30 @@ home.innerHTML = `
 <!-- Advanced Person Search (below map placeholder) -->
 <section id="advanced-person-search" class="aps-section">
   <div class="aps-inner">
-    <header class="aps-header">
-      <h2 class="aps-title" data-i18n-en="Explore people by filters" data-i18n-cy="Archwilio pobl drwy hidlwyr">
-        Explore people by filters
-      </h2>
-      <p class="aps-subtitle"
-         data-i18n-en="Combine any of the filters below to discover people by gender, occupation, places and related collections."
-         data-i18n-cy="Cyfunwch unrhyw un o’r hidlwyr isod i ddarganfod pobl yn ôl rhyw, galwedigaeth, lleoedd a chasgliadau cysylltiedig.">
-        Combine any of the filters below to discover people by gender, occupation, places and related collections.
-      </p>
-      </header>
+<header class="aps-header">
+  <div class="aps-header-text">
+    <h2 class="aps-title" data-i18n-en="Explore people by filters" data-i18n-cy="Archwilio pobl drwy hidlwyr">
+      Explore people by filters
+    </h2>
+
+    <p class="aps-subtitle"
+       data-i18n-en="Combine any of the filters below to discover people by gender, occupation, places and related collections."
+       data-i18n-cy="Cyfunwch unrhyw un o’r hidlwyr isod i ddarganfod pobl yn ôl rhyw, galwedigaeth, lleoedd a chasgliadau cysylltiedig.">
+      Combine any of the filters below to discover people by gender, occupation, places and related collections.
+    </p>
+  </div>
+
+  <!-- Filters toggle moved INTO header (NEW position) -->
+  <button type="button"
+          class="aps-filters-toggle"
+          aria-expanded="false"
+          aria-controls="aps-filters-panel"
+          data-i18n-en="Show filters"
+          data-i18n-cy="Dangos hidlwyr">
+    Show filters
+  </button>
+</header>
+
 
     <!-- APS filters toggle (NEW) -->
     <button type="button"
