@@ -1701,4 +1701,32 @@ a { color: #0645ad; }
   border: 2px solid #309898;
   background: #fff;
 }
+/* Desktop: header becomes one row with right-aligned toggle */
+@media (min-width: 768px) {
+  .aps-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .aps-header-text {
+    min-width: 0;
+  }
+
+  .aps-filters-toggle {
+    margin-top: 0.25rem; /* keeps it visually aligned with title/description block */
+    white-space: nowrap;
+  }
+}
+
+/* Slimline filters panel spacing */
+.aps-filters-panel {
+  margin-top: 0.5rem;
+}
+
+/* Reduce default form top gap so collapsed/expanded feels tighter */
+.aps-form {
+  margin-top: 0.5rem;
+}
 
