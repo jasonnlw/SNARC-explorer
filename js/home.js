@@ -53,14 +53,16 @@ home.innerHTML = `
   </div>
 
   <!-- Filters toggle moved INTO header (NEW position) -->
-  <button type="button"
-          class="aps-filters-toggle"
-          aria-expanded="false"
-          aria-controls="aps-filters-panel"
-          data-i18n-en="Show filters"
-          data-i18n-cy="Dangos hidlwyr">
-    Show filters
-  </button>
+<button type="button"
+        class="aps-filters-toggle"
+        aria-expanded="false"
+        aria-controls="aps-filters-panel"
+        data-show-en="Show filters"
+        data-show-cy="Dangos hidlwyr"
+        data-hide-en="Hide filters"
+        data-hide-cy="Cuddio hidlwyr">
+  Show filters
+</button>
 </header>
 
 
