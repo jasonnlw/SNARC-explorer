@@ -201,8 +201,14 @@ home.innerHTML = `
   </button>
 </div>
 
-    <!-- RESULTS WRAPPER -->
+      </form>
+    </div> <!-- closes #aps-filters-panel -->
+
+    <!-- RESULTS WRAPPER (must NOT be inside filters panel) -->
     <div id="aps-results" class="aps-results aps-results-hidden">
+
+
+    
  <!-- NEW: Single unified toggle button -->
     <button id="aps-view-toggle" class="aps-view-toggle">
       <span class="icon"></span>
