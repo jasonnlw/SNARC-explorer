@@ -1656,11 +1656,6 @@ a { color: #0645ad; }
 }
 
 
-.aps-filters-toggle:hover {
-  background: #F4631E;
-  border-color: #F4631E;
-}
-
 /* Collapsible panel mechanics */
 .aps-filters-panel {
   margin-top: 0.5rem;
@@ -1772,6 +1767,40 @@ a { color: #0645ad; }
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
+}
+/* Filters toggle — match .aps-btn text style, but keep lang-switch visual styling */
+.aps-header .aps-filters-toggle {
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+
+  /* Match Search button text style */
+  font-size: 0.85rem;     /* same as .aps-btn */
+  font-weight: 400;       /* match normal button text */
+  line-height: 1.2;
+  color: #000;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  /* Prevent any leftover “pill” or strong styling */
+  box-shadow: none;
+  text-transform: none;
+}
+
+/* Hover/active states (neutral, NOT orange) */
+.aps-header .aps-filters-toggle:hover {
+  background: #eeeeee;
+  border-color: #ccc;
+}
+
+.aps-header .aps-filters-toggle:active {
+  background: #e6e6e6;
 }
 
 
