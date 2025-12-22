@@ -1631,21 +1631,30 @@ a { color: #0645ad; }
 
 
 /* Filters toggle button */
+/* Show / Hide filters button — match language switch style */
 .aps-filters-toggle {
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #000;
+
   display: inline-flex;
   align-items: center;
-  justify-content: center;
-
-  border-radius: 999px;
-  padding: 0.55rem 1rem;
-  border: 2px solid #FF9F00;
-  background: #FF9F00;
-  color: #000; /* keep readable; not part of “design palette” colours */
-
-  font-weight: 700;
-  cursor: pointer;
-  margin-top: 0.75rem;
+  gap: 0.35rem;
 }
+
+/* Hover state consistent with header controls */
+.aps-filters-toggle:hover {
+  background: #eeeeee;
+}
+
 
 .aps-filters-toggle:hover {
   background: #F4631E;
@@ -1722,6 +1731,8 @@ a { color: #0645ad; }
     align-items: flex-start;
     justify-content: space-between;
     gap: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
   }
 
   .aps-header-text {
