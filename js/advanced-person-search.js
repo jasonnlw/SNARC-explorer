@@ -1015,17 +1015,19 @@ if (container) container.dataset.apsPresetActive = "0";
   if (!toggleBtn || !panel) return;
 
   const setExpanded = (expanded) => {
-    toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
-    panel.classList.toggle("aps-filters-collapsed", !expanded);
+  toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
+  panel.classList.toggle("aps-filters-collapsed", !expanded);
 
-    // Keep button label language-aware via your existing i18n swapper
-    // (updateAdvancedSearchLabels already handles data-i18n-*)
-    // but we must re-apply the correct visible text after toggles.
-    const lang = getCurrentLang();
-    const attr = lang === "cy" ? "data-i18n-cy" : "data-i18n-en";
-    const txt = toggleBtn.getAttribute(attr);
-    if (txt) toggleBtn.textContent = txt;
-  };
+  const lang = getCurrentLang();
+  const key = expanded ? "hide" : "show";
+  const attr = `data-${key}-${lang}`;
+
+  const label = toggleBtn.getAttribute(attr);
+  if (label) {
+    toggleBtn.textContent = label;
+  }
+};
+
 
   // Default: collapsed
   setExpanded(false);
