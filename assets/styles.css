@@ -1263,21 +1263,27 @@ a { color: #0645ad; }
 
 .aps-header {
   margin-bottom: 1rem;
+
+  background: #309898;
+  color: #ffffff;
+
+  border-radius: 0; /* ensure no card effect */
 }
+
 #aps-results {
   position: relative;   /* button will now be positioned inside results area */
 }
 
 .aps-title {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
 }
 
 .aps-subtitle {
   margin: 0;
   font-size: 0.9rem;
-  opacity: 0.85;
+  opacity: 0.95;
 }
 
 /* Fields grid */
