@@ -1384,7 +1384,11 @@ a { color: #0645ad; }
   align-items: center;
   gap: 0.5rem;
   margin-top: 1rem;
+
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+
 
 .aps-btn {
   border-radius: 999px;
@@ -1643,8 +1647,11 @@ a { color: #0645ad; }
 
 /* Collapsible panel mechanics */
 .aps-filters-panel {
-  margin-top: 0.75rem;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
 }
+
 
 .aps-filters-panel.aps-filters-collapsed {
   display: none;
@@ -1737,6 +1744,13 @@ a { color: #0645ad; }
 }
 @media (min-width: 768px) {
   .aps-header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .aps-filters-panel,
+  .aps-actions {
     padding-left: 1.5rem;
     padding-right: 1.5rem;
   }
