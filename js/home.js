@@ -193,11 +193,12 @@ home.innerHTML = `
       </div>
 
 <div class="aps-actions">
-        <button type="submit" class="aps-btn aps-btn-primary">
-          Search people
-        </button>
-      </div>
-    </form>
+  <button type="submit"
+          class="aps-btn aps-btn-primary"
+          data-i18n-en="Search people"
+          data-i18n-cy="Chwilio pobl">
+    Search people
+  </button>
 </div>
 
     <!-- RESULTS WRAPPER -->
