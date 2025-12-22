@@ -1267,7 +1267,8 @@ a { color: #0645ad; }
   background: #309898;
   color: #ffffff;
 
-  border-radius: 0; /* ensure no card effect */
+    padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 #aps-results {
