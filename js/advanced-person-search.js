@@ -1014,17 +1014,19 @@ if (container) container.dataset.apsPresetActive = "0";
   const panel = container.querySelector("#aps-filters-panel");
   if (!toggleBtn || !panel) return;
 
-  const setExpanded = (expanded) => {
+const setExpanded = (expanded) => {
   toggleBtn.setAttribute("aria-expanded", expanded ? "true" : "false");
   panel.classList.toggle("aps-filters-collapsed", !expanded);
 
   const lang = getCurrentLang();
   const key = expanded ? "hide" : "show";
   const attr = `data-${key}-${lang}`;
-
   const label = toggleBtn.getAttribute(attr);
+
+  const arrow = expanded ? "▲" : "▼";
+
   if (label) {
-    toggleBtn.textContent = label;
+    toggleBtn.textContent = `${label} ${arrow}`;
   }
 };
 
