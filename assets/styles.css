@@ -1813,4 +1813,29 @@ header.aps-header button.aps-filters-toggle {
   background: #e6e6e6;
 }
 
+/* =========================================================
+   APS view toggle hard override (prevents gray/black fallback)
+   Place at END of stylesheet
+   ========================================================= */
+
+#aps-view-toggle.aps-view-toggle {
+  background: #309898;
+  border-color: #309898;
+  color: #fff;             /* label text */
+}
+
+/* Keep same colour on hover/focus/active */
+#aps-view-toggle.aps-view-toggle:hover,
+#aps-view-toggle.aps-view-toggle:focus,
+#aps-view-toggle.aps-view-toggle:active {
+  background: #309898;
+  border-color: #309898;
+  color: #fff;
+}
+
+/* Force icon colour regardless of SVG element types */
+#aps-view-toggle.aps-view-toggle .icon svg * {
+  stroke: #fff;
+  fill: #fff;
+}
 
