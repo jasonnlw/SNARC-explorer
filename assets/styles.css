@@ -1852,4 +1852,15 @@ header.aps-header button.aps-filters-toggle {
   overflow-y: visible;
 }
 
+/* LIST MODE ONLY: add horizontal gutters so cards don't touch screen edge */
+.aps-results.list-mode .aps-results-list {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
 
+@media (min-width: 768px) {
+  .aps-results.list-mode .aps-results-list {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
