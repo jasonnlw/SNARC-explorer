@@ -1839,3 +1839,11 @@ header.aps-header button.aps-filters-toggle {
   fill: #fff;
 }
 
+@media (max-width: 767px) {
+  .aps-header .aps-filters-toggle {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    align-self: flex-start;
+  }
+}
+
