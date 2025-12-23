@@ -1846,4 +1846,10 @@ header.aps-header button.aps-filters-toggle {
     align-self: flex-start;
   }
 }
+/* LIST MODE ONLY: allow results list to expand to full height (no vertical scroll) */
+.aps-results.list-mode .aps-results-list {
+  max-height: none;
+  overflow-y: visible;
+}
+
 
