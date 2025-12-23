@@ -1695,7 +1695,7 @@ a { color: #0645ad; }
 
 /* View toggle button: palette-only */
 .aps-view-toggle {
-  border: 2px solid #309898;
+  border: 2px solid #f8f8f8;
   background: #FF9F00;
   box-shadow: none;
 }
