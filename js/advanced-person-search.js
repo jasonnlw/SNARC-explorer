@@ -813,6 +813,60 @@ if (viewMode !== "list") {
   }
 
 // ---------------------------------------------------------------------------
+// PRESET FILTER UI (populate form controls WITHOUT triggering a manual search)
+// ---------------------------------------------------------------------------
+const PRESET_SELECTION = {
+  gender: "Q34",
+  occupation: "Q50180",
+  relatedContent: "P12", // Archives (matches: { ?item wdt:P12 ?anyVal })
+};
+
+function applyPresetSelectionsToForm(lang) {
+  // Gender (static <select>)
+  const genderSel = document.getElementById("aps-gender-select");
+  const genderField = document.querySelector('.aps-field[data-facet="gender"]');
+
+  if (genderSel && genderField) {
+    genderSel.value = PRESET_SELECTION.gender;
+
+    const label =
+      genderSel.options[genderSel.selectedIndex]
+        ? genderSel.options[genderSel.selectedIndex].textContent
+        : "";
+
+    genderField.dataset.valueId = PRESET_SELECTION.gender;
+    genderField.dataset.valueLabel = label;
+  }
+
+  // Occupation (typeahead input + dataset backing store)
+  const occInput = document.getElementById("aps-occupation-input");
+  const occField = document.querySelector('.aps-field[data-facet="occupation"]');
+
+  if (occInput && occField) {
+    const list = (window.Facets && window.Facets.occupation) ? window.Facets.occupation : [];
+    const hit = list.find((x) => x.id === PRESET_SELECTION.occupation);
+
+    const label = hit
+      ? (lang === "cy" ? hit.label_cy : hit.label_en)
+      : "";
+
+    occInput.value = label;
+    occField.dataset.valueId = PRESET_SELECTION.occupation;
+    occField.dataset.valueLabel = label;
+  }
+
+  // Related content (static <select> using property IDs like P12, P50...)
+  const rcSel = document.getElementById("aps-relatedContent-select");
+  if (rcSel) {
+    rcSel.value = PRESET_SELECTION.relatedContent; // e.g. P12
+
+    // If options have not been populated yet for any reason, this will be "",
+    // but once initStaticRelatedContentDropdown runs, value will resolve.
+  }
+}
+
+  
+// ---------------------------------------------------------------------------
 // PRESET GRAPH LOADER (runs on page load; can be forced on language change)
 // ---------------------------------------------------------------------------
 async function loadPresetGraphOnLaunch(forceReload = false) {
@@ -1081,23 +1135,33 @@ const setExpanded = (expanded) => {
       });
     }
 
-    function initStaticRelatedContentDropdown() {
-      const sel = document.getElementById("aps-relatedContent-select");
-      if (!sel) return;
+function initStaticRelatedContentDropdown() {
+  const sel = document.getElementById("aps-relatedContent-select");
+  if (!sel) return;
 
-      const lang = getCurrentLang();
-      const list = LocalFacets.content_type || [];
+  // Remove all dynamic options, keep:
+  // 1) the default "" option
+  // 2) the ALL option
+  sel.querySelectorAll("option").forEach((opt, idx) => {
+    // keep first two options only
+    if (idx > 1) opt.remove();
+  });
 
-      list.forEach((c) => {
-        const opt = document.createElement("option");
-        opt.value = c.id; // P12, P50...
-        opt.textContent = lang === "cy" ? c.label_cy : c.label_en;
-        sel.appendChild(opt);
-      });
-    }
+  const lang = getCurrentLang();
+  const list = LocalFacets.content_type || [];
 
-    initStaticGenderDropdown();
-    initStaticRelatedContentDropdown();
+  list.forEach((c) => {
+    const opt = document.createElement("option");
+    opt.value = c.id; // P12, P50...
+    opt.textContent = lang === "cy" ? c.label_cy : c.label_en;
+    sel.appendChild(opt);
+  });
+}
+
+
+updateAdvancedSearchLabels();
+initStaticGenderDropdown();
+initStaticRelatedContentDropdown();
 
   // -------------------------------------------------------------------------
 // UNIFIED VIEW MODE TOGGLE (List / Graph)
