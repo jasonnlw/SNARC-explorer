@@ -856,14 +856,22 @@ function applyPresetSelectionsToForm(lang) {
   }
 
   // Related content (static <select> using property IDs like P12, P50...)
-  const rcSel = document.getElementById("aps-relatedContent-select");
-  if (rcSel) {
-    rcSel.value = PRESET_SELECTION.relatedContent; // e.g. P12
+const rcSel = document.getElementById("aps-relatedContent-select");
+if (rcSel) {
+  const desired = PRESET_SELECTION.relatedContent;
 
-    // If options have not been populated yet for any reason, this will be "",
-    // but once initStaticRelatedContentDropdown runs, value will resolve.
+  // Try to set immediately
+  rcSel.value = desired;
+
+  // If the option isn't present yet, rcSel.value will not match.
+  // Retry once on next tick after dropdown options may have been appended.
+  if (rcSel.value !== desired) {
+    setTimeout(() => {
+      rcSel.value = desired;
+    }, 0);
   }
 }
+
 
   
 // ---------------------------------------------------------------------------
@@ -1088,10 +1096,18 @@ const setExpanded = (expanded) => {
   // Default: collapsed
   setExpanded(false);
 
-  toggleBtn.addEventListener("click", () => {
-    const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
-    setExpanded(!expanded);
-  });
+toggleBtn.addEventListener("click", () => {
+  const expanded = toggleBtn.getAttribute("aria-expanded") === "true";
+  const next = !expanded;
+
+  setExpanded(next);
+
+  // If preset is active and user just opened filters, ensure UI shows preset values
+  if (next && container.dataset.apsPresetActive === "1") {
+    applyPresetSelectionsToForm(getCurrentLang());
+  }
+});
+
 
   // If user focuses into any filter input, expand automatically (mobile-friendly)
   panel.addEventListener("focusin", () => setExpanded(true));
@@ -1162,6 +1178,9 @@ function initStaticRelatedContentDropdown() {
 updateAdvancedSearchLabels();
 initStaticGenderDropdown();
 initStaticRelatedContentDropdown();
+if (container.dataset.apsPresetActive === "1") {
+  applyPresetSelectionsToForm(getCurrentLang());
+}
 
   // -------------------------------------------------------------------------
 // UNIFIED VIEW MODE TOGGLE (List / Graph)
@@ -1304,6 +1323,9 @@ toggleBtn.addEventListener("click", () => {
         if (m.attributeName === "lang") {
           updateAdvancedSearchLabels();
           initStaticGenderDropdown();
+          if (container.dataset.apsPresetActive === "1") {
+  applyPresetSelectionsToForm(getCurrentLang());
+}
 const container = document.getElementById("advanced-person-search");
 const presetActive = container && container.dataset.apsPresetActive === "1";
 
