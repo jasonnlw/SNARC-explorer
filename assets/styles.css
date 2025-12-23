@@ -1632,12 +1632,12 @@ a { color: #0645ad; }
 
 /* Filters toggle button */
 /* Show / Hide filters button — match language switch style */
-.aps-filters-toggle {
+.aps-header .aps-filters-toggle {
   margin-left: 0.25rem;
   padding: 0.4rem 0.6rem;
 
   border: 1px solid #ccc;
-  background: #f8f8f8;
+  background: #fff;
   border-radius: 8px;
 
   cursor: pointer;
@@ -1649,6 +1649,14 @@ a { color: #0645ad; }
   align-items: center;
   gap: 0.35rem;
 }
+
+.aps-header .aps-filters-toggle:hover,
+.aps-header .aps-filters-toggle:focus,
+.aps-header .aps-filters-toggle:active {
+  background: #eeeeee;
+  color: #309898;
+}
+
 
 /* Hover state consistent with header controls */
 .aps-filters-toggle:hover {
