@@ -1968,4 +1968,36 @@ header.aps-header button.aps-filters-toggle {
   border-radius: 10px;
   display: block;
 }
+/* Map loading overlay */
+#homeMap {
+  position: relative; /* required for overlay positioning */
+}
+
+.map-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 600; /* above leaflet tiles + markers */
+  display: none; /* toggled by JS */
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(1px);
+}
+
+.map-loading-overlay.is-visible {
+  display: flex;
+}
+
+.map-loading-spinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 6px solid rgba(0,0,0,0.18);
+  border-top-color: #309898;
+  animation: mapSpin 0.9s linear infinite;
+}
+
+@keyframes mapSpin {
+  to { transform: rotate(360deg); }
+}
 
