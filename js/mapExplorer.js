@@ -335,6 +335,18 @@ WHERE {
 
     rootEl = document.getElementById("homeMap");
     if (!rootEl) return;
+    
+  // If the homepage was re-rendered, #homeMap is a NEW DOM node.
+  // Leaflet must be destroyed and re-created against the new container.
+  if (map && typeof map.getContainer === "function") {
+    const currentContainer = map.getContainer();
+    if (currentContainer !== rootEl) {
+      try { map.remove(); } catch (e) {}
+      map = null;
+      clusterGroup = null;
+      oms = null;
+    }
+  }
 
       // ---------------------------------------------------------
   // Map loading overlay (created once per homeMap instance)
@@ -358,9 +370,6 @@ WHERE {
   window.__mapExplorerSetLoading = setLoading;
 
 
-    // Prevent double init
-    if (rootEl.dataset.meInit === "1") return;
-    rootEl.dataset.meInit = "1";
 
     buildShell();
     buildFilterPanel(langPref);
@@ -524,13 +533,15 @@ try {
   function initLeaflet() {
     if (map) return;
 
-    map = L.map("homeMap", { scrollWheelZoom: true });
+    map = L.map(rootEl, { scrollWheelZoom: true });
+
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
     map.setView([52.3, -3.8], 7);
+setTimeout(() => map.invalidateSize(), 0);
 
     clusterGroup = L.markerClusterGroup({
       showCoverageOnHover: false,
