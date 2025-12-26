@@ -23,24 +23,25 @@ const SNARC_SPARQL_ENDPOINT =
   "https://snarc-proxy.onrender.com/query";
 
 async function runSPARQL(query) {
-  const endpoint =
-    window.SNARC_SPARQL_ENDPOINT ||
-    "https://snarc-proxy.onrender.com/query";
+  const url =
+    `${SNARC_SPARQL_ENDPOINT}?query=${encodeURIComponent(query)}&format=json`;
 
-  // GET avoids CORS preflight as long as you do not add custom headers.
-  const url = `${endpoint}?query=${encodeURIComponent(query)}`;
+  const res = await fetch(url, { method: "GET", credentials: "omit" });
 
-  const res = await fetch(url, {
-    method: "GET",
-    credentials: "omit" // explicit; keeps it a simple request
-  });
-
+  // Read as text first so we can print useful diagnostics if something goes wrong
+  const text = await res.text();
   if (!res.ok) {
-    const text = await res.text().catch(() => "");
     throw new Error(`SPARQL proxy HTTP ${res.status}: ${text.slice(0, 300)}`);
   }
 
-  const json = await res.json();
+  let json;
+  try {
+    json = JSON.parse(text);
+  } catch (e) {
+    // If this happens again, you'll see the first chars (often XML/HTML)
+    throw new Error(`Proxy returned non-JSON. First 200 chars: ${text.slice(0, 200)}`);
+  }
+
   return json?.results?.bindings || [];
 }
 
