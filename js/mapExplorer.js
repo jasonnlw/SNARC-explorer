@@ -22,16 +22,17 @@ const SNARC_SPARQL_ENDPOINT =
   window.SNARC_SPARQL_ENDPOINT ||
   "https://snarc-proxy.onrender.com/query";
 
-  async function runSPARQL(query) {
-  const res = await fetch(SNARC_SPARQL_ENDPOINT, {
-    method: "POST",
-    headers: {
-      // Most SNARC proxy implementations accept either of these.
-      // APS likely uses one of them; this is the safest combo.
-      "Content-Type": "application/sparql-query; charset=utf-8",
-      "Accept": "application/sparql-results+json"
-    },
-    body: query
+async function runSPARQL(query) {
+  const endpoint =
+    window.SNARC_SPARQL_ENDPOINT ||
+    "https://snarc-proxy.onrender.com/query";
+
+  // GET avoids CORS preflight as long as you do not add custom headers.
+  const url = `${endpoint}?query=${encodeURIComponent(query)}`;
+
+  const res = await fetch(url, {
+    method: "GET",
+    credentials: "omit" // explicit; keeps it a simple request
   });
 
   if (!res.ok) {
@@ -42,6 +43,7 @@ const SNARC_SPARQL_ENDPOINT =
   const json = await res.json();
   return json?.results?.bindings || [];
 }
+
 
 
   // -----------------------------------------------------------
