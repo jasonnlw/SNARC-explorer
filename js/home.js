@@ -282,11 +282,18 @@ home.innerHTML = `
   });
 
   // ---------------------------------------------------------
-  // Initialise the homepage map
+  // Initialise + language-refresh the homepage map
   // ---------------------------------------------------------
   if (window.MapExplorer && typeof MapExplorer.initHomeMap === "function") {
-    MapExplorer.initHomeMap(lang);
+    // IMPORTANT: await ensures the map initialises after #homeMap exists
+    await MapExplorer.initHomeMap(lang);
+
+    // IMPORTANT: setLanguage ensures queries/popup strings refresh on EN/CY toggle
+    if (typeof MapExplorer.setLanguage === "function") {
+      MapExplorer.setLanguage(lang);
+    }
   } else {
     console.error("MapExplorer.initHomeMap() not found.");
   }
+
 };
