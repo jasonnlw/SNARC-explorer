@@ -372,7 +372,14 @@ WHERE {
 
 
     buildShell();
+    initLeaflet();
+    // Defaults only on first load (so checkboxes + initial pins appear)
+    if (selected.size === 0) {
+      selectDefaultFacets();
+    }
     buildFilterPanel(langPref);
+
+
 
 // ---------------------------------------------------------
 // Initial dataset load (show overlay immediately)
@@ -405,7 +412,17 @@ try {
   // Shell + filter panel
   // -----------------------------------------------------------
 
+    
   function buildShell() {
+
+    // Guard: if already wrapped, just re-bind refs and exit
+    const existingShell = rootEl?.parentElement?.classList?.contains("map-explorer-shell");
+    if (existingShell) {
+      filterToggleBtn = rootEl.parentElement.querySelector(".me-filters-toggle");
+      filterPanelEl = rootEl.parentElement.querySelector(".me-filters-panel");
+      return;
+    }
+
     // Wrap map element to allow overlay UI
     const wrapper = document.createElement("div");
     wrapper.className = "map-explorer-shell";
