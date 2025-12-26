@@ -336,6 +336,28 @@ WHERE {
     rootEl = document.getElementById("homeMap");
     if (!rootEl) return;
 
+      // ---------------------------------------------------------
+  // Map loading overlay (created once per homeMap instance)
+  // ---------------------------------------------------------
+  let overlay = rootEl.querySelector(".map-loading-overlay");
+  if (!overlay) {
+    overlay = document.createElement("div");
+    overlay.className = "map-loading-overlay";
+    overlay.innerHTML = `
+      <div class="map-loading-spinner" aria-label="Loading"></div>
+    `;
+    rootEl.appendChild(overlay);
+  }
+
+  // Expose a local helper for this map instance
+  function setLoading(isLoading) {
+    overlay.classList.toggle("is-visible", !!isLoading);
+  }
+
+  // Make it available to other functions in this module
+  window.__mapExplorerSetLoading = setLoading;
+
+
     // Prevent double init
     if (rootEl.dataset.meInit === "1") return;
     rootEl.dataset.meInit = "1";
@@ -343,13 +365,21 @@ WHERE {
     buildShell();
     buildFilterPanel(langPref);
 
-    // Default selection (change as you prefer)
-    selectDefaultFacets();
+// ---------------------------------------------------------
+// Initial dataset load (show overlay immediately)
+// ---------------------------------------------------------
+if (window.__mapExplorerSetLoading) {
+  window.__mapExplorerSetLoading(true);
+}
 
-    initLeaflet();
+try {
+  await applyFacets(langPref);
+} finally {
+  if (window.__mapExplorerSetLoading) {
+    window.__mapExplorerSetLoading(false);
+  }
+}
 
-    // Initial load + render
-    await applyFacets(langPref);
 
     // Responsive panel behaviour
     window.addEventListener("resize", () => syncPanelForViewport());
@@ -676,9 +706,15 @@ WHERE {
   // Render markers according to selected facets
   // -----------------------------------------------------------
 
-  async function applyFacets(langPref) {
-    if (!map || !clusterGroup) return;
+async function applyFacets(langPref) {
+  if (!map || !clusterGroup) return;
 
+  // Show loading overlay (if wired)
+  if (window.__mapExplorerSetLoading) {
+    window.__mapExplorerSetLoading(true);
+  }
+
+  try {
     clusterGroup.clearLayers();
     coordCounts = new Map();
 
@@ -742,7 +778,14 @@ WHERE {
       clusterGroup.addLayer(marker);
       if (oms) oms.addMarker(marker);
     });
+  } finally {
+    // Always hide loading overlay (even if SPARQL fails)
+    if (window.__mapExplorerSetLoading) {
+      window.__mapExplorerSetLoading(false);
+    }
   }
+}
+
 
   function coordKey(coords) {
     return `${coords.lat.toFixed(5)},${coords.lon.toFixed(5)}`;
