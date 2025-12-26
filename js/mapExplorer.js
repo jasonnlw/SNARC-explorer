@@ -1,83 +1,898 @@
 // -------------------------------------------------------------
-// SNARC Explorer – Map Explorer (Homepage Version)
+// SNARC Explorer – Map Explorer (Homepage + Facets)
+// - Leaflet + Leaflet.markercluster (required)
+// - OverlappingMarkerSpiderfier-Leaflet (optional, recommended for same-coordinate spider plots)
 // -------------------------------------------------------------
+
+/* global L, API */
 
 window.MapExplorer = (() => {
 
-  let map, markers;
+  // -----------------------------------------------------------
+  // Config
+  // -----------------------------------------------------------
+
+  const ITEM_URL_PREFIX = "https://jasonnlw.github.io/SNARC-explorer/#/item/";
+
+  // Small helper: treat "cy" as Welsh, everything else as English.
+  const normaliseLang = (lang) => (lang === "cy" ? "cy" : "en");
 
   // -----------------------------------------------------------
-  // Initialise the homepage map
+  // Revised SPARQL queries (language-controlled via ${langPref})
   // -----------------------------------------------------------
+
+  const QUERIES = {
+    // Places
+    landforms: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?item ?itemLabel ?itemDescription ?image ?coords
+       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
+WHERE {
+  ?item wdt:P7/wdt:P45* wd:Q8575 .
+  ?item wdt:P26 ?coords .
+  ?item wdt:P7 ?type .
+
+  ?type rdfs:label ?type_label .
+  FILTER (lang(?type_label) = "${langPref}")
+
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
+`.trim(),
+
+    settlements: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?item ?itemLabel ?itemDescription ?image ?coords
+       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
+WHERE {
+  ?item wdt:P7/wdt:P45* wd:Q1368 .
+  ?item wdt:P26 ?coords .
+  ?item wdt:P7 ?type .
+
+  ?type rdfs:label ?type_label .
+  FILTER (lang(?type_label) = "${langPref}")
+
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
+`.trim(),
+
+    regions: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?item ?itemLabel ?itemDescription ?image ?coords
+       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
+WHERE {
+  ?item wdt:P7/wdt:P45* wd:Q8574 .
+  ?item wdt:P26 ?coords .
+  ?item wdt:P7 ?type .
+
+  ?type rdfs:label ?type_label .
+  FILTER (lang(?type_label) = "${langPref}")
+
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
+`.trim(),
+
+    buildings: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?item ?itemLabel ?itemDescription ?image ?coords
+       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
+WHERE {
+  ?item wdt:P7/wdt:P45* wd:Q9783 .
+  ?item wdt:P26 ?coords .
+  ?item wdt:P7 ?type .
+
+  ?type rdfs:label ?type_label .
+  FILTER (lang(?type_label) = "${langPref}")
+
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
+`.trim(),
+
+    // People (3 facets from one query)
+    peoplePlaces: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?item ?itemLabel ?itemDescription
+       ?birthplace ?deathplace ?residence
+       ?birthplacecoords ?deathplacecoords ?residencecoords
+       ?image
+WHERE {
+  OPTIONAL {
+    ?item wdt:P21 ?birthplace .
+    OPTIONAL { ?birthplace wdt:P26 ?birthplacecoords . }
+  }
+  OPTIONAL {
+    ?item wdt:P22 ?deathplace .
+    OPTIONAL { ?deathplace wdt:P26 ?deathplacecoords . }
+  }
+  OPTIONAL {
+    ?item wdt:P78 ?residence .
+    OPTIONAL { ?residence wdt:P26 ?residencecoords . }
+  }
+
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  FILTER(BOUND(?birthplace) || BOUND(?deathplace) || BOUND(?residence))
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+`.trim(),
+
+    // Collections
+    images: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?item ?itemLabel ?itemDescription ?coords ?nlwmedia
+WHERE {
+  ?item wdt:P26 ?coords .
+  ?item wdt:P50 ?nlwmedia .
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+`.trim(),
+
+    collectionsPlaces: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?item ?itemLabel ?itemDescription ?coords
+       ?archives ?manuscripts ?clipcymru
+       ?image
+WHERE {
+  { ?item wdt:P12 ?archives }
+  UNION { ?item wdt:P90 ?manuscripts }
+  UNION { ?item wdt:P108 ?clipcymru }
+
+  ?item wdt:P26 ?coords .
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+`.trim(),
+
+    // Events
+    events: ({ langPref }) => `
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT ?item ?itemLabel ?itemDescription ?coords ?locationLabel ?location ?image
+WHERE {
+  ?item wdt:P7/wdt:P45* wd:Q9948 .
+  ?item wdt:P73 ?location .
+  ?location wdt:P26 ?coords .
+  OPTIONAL { ?item wdt:P31 ?image }
+
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+}
+`.trim()
+  };
+
+  // -----------------------------------------------------------
+  // Facet registry
+  // -----------------------------------------------------------
+
+  const FACETS = [
+    {
+      groupKey: "places",
+      label: { en: "Places", cy: "Lleoedd" },
+      items: [
+        { key: "landforms",   label: { en: "Landforms",            cy: "Tirffurfiau" },      dataset: "landforms",   category: "places.landforms" },
+        { key: "settlements", label: { en: "Human Settlements",    cy: "Anheddiadau Dynol" },dataset: "settlements", category: "places.settlements" },
+        { key: "regions",     label: { en: "Regions",              cy: "Ardaloedd" },        dataset: "regions",     category: "places.regions" },
+        { key: "buildings",   label: { en: "Buildings & Structures",cy: "Adeiladau a Strwythurau" }, dataset: "buildings", category: "places.buildings" }
+      ]
+    },
+    {
+      groupKey: "people",
+      label: { en: "People", cy: "Pobl" },
+      items: [
+        { key: "birth",     label: { en: "Place of Birth", cy: "Man Geni" },  dataset: "peoplePlaces", category: "people.birth", property: "P21" },
+        { key: "death",     label: { en: "Place of Death", cy: "Man Marw" },  dataset: "peoplePlaces", category: "people.death", property: "P22" },
+        { key: "residence", label: { en: "Residence",      cy: "Preswylfa" }, dataset: "peoplePlaces", category: "people.residence", property: "P78" }
+      ]
+    },
+    {
+      groupKey: "collections",
+      label: { en: "Collections", cy: "Casgliadau" },
+      items: [
+        { key: "images",      label: { en: "Images",      cy: "Delweddau" },  dataset: "images",            category: "collections.images", property: "P50", special: "images" },
+        { key: "archives",    label: { en: "Archives",    cy: "Archifau" },   dataset: "collectionsPlaces", category: "collections.archives", property: "P12" },
+        { key: "manuscripts", label: { en: "Manuscripts", cy: "Llawysgrifau"},dataset: "collectionsPlaces", category: "collections.manuscripts", property: "P90" },
+        { key: "clipcymru",   label: { en: "Clip Cymru",  cy: "Clip Cymru" },dataset: "collectionsPlaces", category: "collections.clipcymru", property: "P108" }
+      ]
+    },
+    {
+      groupKey: "events",
+      label: { en: "Events", cy: "Digwyddiadau" },
+      items: [
+        { key: "events", label: { en: "All Events", cy: "Pob Digwyddiad" }, dataset: "events", category: "events.all" }
+      ]
+    }
+  ];
+
+  // -----------------------------------------------------------
+  // Marker styles (divIcon)
+  // -----------------------------------------------------------
+
+  const MARKER_STYLE = {
+    "places.landforms":     { className: "me-pin me-pin-places",     glyph: "⛰" },
+    "places.settlements":   { className: "me-pin me-pin-places",     glyph: "🏘" },
+    "places.regions":       { className: "me-pin me-pin-places",     glyph: "🗺" },
+    "places.buildings":     { className: "me-pin me-pin-places",     glyph: "🏛" },
+
+    "people.birth":         { className: "me-pin me-pin-people",     glyph: "★" },
+    "people.death":         { className: "me-pin me-pin-people",     glyph: "✦" },
+    "people.residence":     { className: "me-pin me-pin-people",     glyph: "⌂" },
+
+    "collections.images":   { className: "me-pin me-pin-images",     glyph: "▦" },
+    "collections.archives": { className: "me-pin me-pin-collections",glyph: "▣" },
+    "collections.manuscripts": { className: "me-pin me-pin-collections", glyph: "▤" },
+    "collections.clipcymru":{ className: "me-pin me-pin-collections",glyph: "▧" },
+
+    "events.all":           { className: "me-pin me-pin-events",     glyph: "●" }
+  };
+
+  // -----------------------------------------------------------
+  // State
+  // -----------------------------------------------------------
+
+  let map = null;
+
+  // Cluster group containing all markers currently visible
+  let clusterGroup = null;
+
+  // Optional: spiderfy for same-coordinate markers
+  let oms = null;
+
+  // Cache: cache[langPref][datasetKey] = normalisedRecords[]
+  const cache = { en: {}, cy: {} };
+
+  // Selected facets: set of facet item keys
+  const selected = new Set();
+
+  // coordKey -> count
+  let coordCounts = new Map();
+
+  // DOM refs
+  let rootEl = null;
+  let filterPanelEl = null;
+  let filterToggleBtn = null;
+
+  // -----------------------------------------------------------
+  // Public init
+  // -----------------------------------------------------------
+
   async function initHomeMap(lang = "en") {
-    console.log("MapExplorer: Initialising homepage map");
+    const langPref = normaliseLang(lang);
 
-    const mapEl = document.getElementById("homeMap");
-    if (!mapEl) {
-      console.error("homeMap container missing");
-      return;
+    rootEl = document.getElementById("homeMap");
+    if (!rootEl) return;
+
+    // Prevent double init
+    if (rootEl.dataset.meInit === "1") return;
+    rootEl.dataset.meInit = "1";
+
+    buildShell();
+    buildFilterPanel(langPref);
+
+    // Default selection (change as you prefer)
+    selectDefaultFacets();
+
+    initLeaflet();
+
+    // Initial load + render
+    await applyFacets(langPref);
+
+    // Responsive panel behaviour
+    window.addEventListener("resize", () => syncPanelForViewport());
+    syncPanelForViewport();
+  }
+
+  function setLanguage(lang = "en") {
+    const langPref = normaliseLang(lang);
+    buildFilterPanel(langPref, /* rebuildOnly */ true);
+    applyFacets(langPref);
+  }
+
+  // -----------------------------------------------------------
+  // Shell + filter panel
+  // -----------------------------------------------------------
+
+  function buildShell() {
+    // Wrap map element to allow overlay UI
+    const wrapper = document.createElement("div");
+    wrapper.className = "map-explorer-shell";
+    rootEl.parentNode.insertBefore(wrapper, rootEl);
+    wrapper.appendChild(rootEl);
+
+    // Toggle button (mobile)
+    filterToggleBtn = document.createElement("button");
+    filterToggleBtn.type = "button";
+    filterToggleBtn.className = "me-filters-toggle aps-btn aps-btn-ghost";
+    filterToggleBtn.addEventListener("click", () => {
+      filterPanelEl.classList.toggle("open");
+    });
+
+    wrapper.appendChild(filterToggleBtn);
+
+    // Filter panel
+    filterPanelEl = document.createElement("div");
+    filterPanelEl.className = "me-filters-panel";
+    wrapper.appendChild(filterPanelEl);
+  }
+
+  function buildFilterPanel(langPref, rebuildOnly = false) {
+    if (!filterPanelEl) return;
+
+    const t = (en, cy) => (langPref === "cy" ? cy : en);
+
+    if (filterToggleBtn) {
+      filterToggleBtn.textContent = t("Filters", "Hidlyddion");
     }
 
-    // Set map height dynamically if needed
-    mapEl.style.height = "420px";
+    filterPanelEl.innerHTML = "";
 
-    // Create Leaflet map
-    map = L.map("homeMap", {
-      scrollWheelZoom: true
-    }).setView([52.4, -3.8], 7); // Wales centre point
+    // Header
+    const header = document.createElement("div");
+    header.className = "me-panel-header";
+
+    const title = document.createElement("div");
+    title.className = "me-panel-title";
+    title.textContent = t("Map Explorer", "Archwiliwr Map");
+
+    const actions = document.createElement("div");
+    actions.className = "me-panel-actions";
+
+    const clearBtn = document.createElement("button");
+    clearBtn.type = "button";
+    clearBtn.className = "aps-btn aps-btn-ghost";
+    clearBtn.textContent = t("Clear", "Clirio");
+    clearBtn.addEventListener("click", () => {
+      selected.clear();
+      filterPanelEl.querySelectorAll("input[type='checkbox']").forEach(cb => { cb.checked = false; });
+      applyFacets(langPref);
+    });
+
+    actions.appendChild(clearBtn);
+
+    header.appendChild(title);
+    header.appendChild(actions);
+    filterPanelEl.appendChild(header);
+
+    // Groups
+    FACETS.forEach(group => {
+      const groupWrap = document.createElement("div");
+      groupWrap.className = "me-group";
+
+      const groupTitle = document.createElement("div");
+      groupTitle.className = "me-group-title";
+      groupTitle.textContent = group.label[langPref];
+
+      groupWrap.appendChild(groupTitle);
+
+      group.items.forEach(item => {
+        const row = document.createElement("label");
+        row.className = "me-facet-row";
+
+        const cb = document.createElement("input");
+        cb.type = "checkbox";
+        cb.checked = selected.has(item.key);
+
+        cb.addEventListener("change", async () => {
+          if (cb.checked) selected.add(item.key);
+          else selected.delete(item.key);
+          await applyFacets(langPref);
+        });
+
+        const txt = document.createElement("span");
+        txt.textContent = item.label[langPref];
+
+        row.appendChild(cb);
+        row.appendChild(txt);
+        groupWrap.appendChild(row);
+      });
+
+      filterPanelEl.appendChild(groupWrap);
+    });
+
+    const hint = document.createElement("div");
+    hint.className = "me-panel-hint";
+    hint.textContent = t("Select one or more datasets to display.", "Dewiswch un neu fwy o setiau data i’w dangos.");
+    filterPanelEl.appendChild(hint);
+
+    syncPanelForViewport();
+  }
+
+  function selectDefaultFacets() {
+    selected.add("settlements");
+    selected.add("regions");
+    selected.add("events");
+  }
+
+  function syncPanelForViewport() {
+    if (!filterPanelEl) return;
+
+    const isMobile = window.matchMedia("(max-width: 860px)").matches;
+    filterPanelEl.classList.toggle("me-mobile", isMobile);
+
+    if (!isMobile) filterPanelEl.classList.add("open");
+    else filterPanelEl.classList.remove("open");
+  }
+
+  // -----------------------------------------------------------
+  // Leaflet init
+  // -----------------------------------------------------------
+
+  function initLeaflet() {
+    if (map) return;
+
+    map = L.map("homeMap", { scrollWheelZoom: true });
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
     }).addTo(map);
 
-    markers = L.markerClusterGroup();
-    map.addLayer(markers);
+    map.setView([52.3, -3.8], 7);
 
-    // Load places
-    loadPlaces(lang);
+    clusterGroup = L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 55,
+      spiderfyOnMaxZoom: true
+    });
+
+    map.addLayer(clusterGroup);
+
+    // Optional OMS for true “same coordinate” spider plots
+    if (typeof OverlappingMarkerSpiderfier !== "undefined") {
+      oms = new OverlappingMarkerSpiderfier(map, {
+        keepSpiderfied: true,
+        nearbyDistance: 28,
+        legWeight: 1.5
+      });
+    }
   }
 
   // -----------------------------------------------------------
-  // Load place markers from SPARQL
+  // Fetch + normalise
   // -----------------------------------------------------------
-  async function loadPlaces(lang) {
-    const query = `
-      SELECT ?place ?placeLabel ?coord WHERE {
-        ?place wdt:P625 ?coord.
-        SERVICE wikibase:label { bd:serviceParam wikibase:language "${lang},en,cy". }
-      }
-    `;
 
-    let results = [];
+  async function fetchDataset(datasetKey, langPref) {
+    if (cache[langPref][datasetKey]) return cache[langPref][datasetKey];
+
+    const queryBuilder = QUERIES[datasetKey];
+    if (!queryBuilder) {
+      cache[langPref][datasetKey] = [];
+      return cache[langPref][datasetKey];
+    }
+
+    const query = queryBuilder({ langPref });
+
+    let results;
     try {
       results = await API.runSPARQL(query);
     } catch (err) {
-      console.error("SPARQL error:", err);
-      return;
+      console.error("MapExplorer: SPARQL error for", datasetKey, err);
+      cache[langPref][datasetKey] = [];
+      return cache[langPref][datasetKey];
     }
 
-    results.forEach(row => {
-      const coord = row.coord.value.replace("Point(", "").replace(")", "");
-      const [lon, lat] = coord.split(" ");
+    const records = normaliseResults(datasetKey, results);
+    cache[langPref][datasetKey] = records;
+    return records;
+  }
 
-      const qid = row.place.value.split("/").pop();
-      const label = row.placeLabel?.value || qid;
+  function normaliseResults(datasetKey, rows) {
+    const out = [];
 
-      const marker = L.marker([parseFloat(lat), parseFloat(lon)]);
-      marker.bindPopup(`
-        <strong>${label}</strong><br>
-        <a href="#/item/${qid}">
-          ${lang === "cy" ? "Gweld manylion" : "View details"}
-        </a>
-      `);
+    const getQid = (uri) => (uri ? uri.split("/").pop() : "");
 
-      markers.addLayer(marker);
+    const parsePoint = (wkt) => {
+      if (!wkt) return null;
+      const s = wkt.replace("Point(", "").replace(")", "").trim();
+      const parts = s.split(/\s+/);
+      if (parts.length !== 2) return null;
+      const lon = parseFloat(parts[0]);
+      const lat = parseFloat(parts[1]);
+      if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
+      return { lat, lon };
+    };
+
+    if (datasetKey === "peoplePlaces") {
+      rows.forEach(row => {
+        const personQid = getQid(row.item?.value);
+        const title = row.itemLabel?.value || personQid;
+        const desc = row.itemDescription?.value || "";
+        const imageVal = row.image?.value || null;
+
+        const pushIf = (placeField, coordField, category) => {
+          if (!row[placeField]?.value || !row[coordField]?.value) return;
+
+          const placeQid = getQid(row[placeField].value);
+          const placeLabel = row[`${placeField}Label`]?.value || placeQid;
+          const coords = parsePoint(row[coordField].value);
+          if (!coords) return;
+
+          out.push({
+            datasetKey,
+            category,
+            qid: personQid,
+            title,
+            description: desc,
+            placeQid,
+            placeLabel,
+            coords,
+            image: imageVal
+          });
+        };
+
+        pushIf("birthplace", "birthplacecoords", "people.birth");
+        pushIf("deathplace", "deathplacecoords", "people.death");
+        pushIf("residence", "residencecoords", "people.residence");
+      });
+
+      return out;
+    }
+
+    if (datasetKey === "images") {
+      rows.forEach(row => {
+        const itemQid = getQid(row.item?.value);
+        const coords = parsePoint(row.coords?.value);
+        if (!coords) return;
+
+        out.push({
+          datasetKey,
+          category: "collections.images",
+          qid: itemQid,
+          title: row.itemLabel?.value || itemQid,
+          description: row.itemDescription?.value || "",
+          coords,
+          nlwmedia: row.nlwmedia?.value || null
+        });
+      });
+      return out;
+    }
+
+    if (datasetKey === "collectionsPlaces") {
+      rows.forEach(row => {
+        const itemQid = getQid(row.item?.value);
+        const coords = parsePoint(row.coords?.value);
+        if (!coords) return;
+
+        const imageVal = row.image?.value || null;
+
+        if (row.archives?.value) {
+          out.push({ datasetKey, category: "collections.archives", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
+        }
+        if (row.manuscripts?.value) {
+          out.push({ datasetKey, category: "collections.manuscripts", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
+        }
+        if (row.clipcymru?.value) {
+          out.push({ datasetKey, category: "collections.clipcymru", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
+        }
+      });
+
+      return out;
+    }
+
+    // Default datasets
+    rows.forEach(row => {
+      const itemQid = getQid(row.item?.value);
+      const coords = parsePoint(row.coords?.value);
+      if (!coords) return;
+
+      const imageVal = row.image?.value || null;
+
+      let category = "places.settlements";
+      if (datasetKey === "landforms") category = "places.landforms";
+      if (datasetKey === "settlements") category = "places.settlements";
+      if (datasetKey === "regions") category = "places.regions";
+      if (datasetKey === "buildings") category = "places.buildings";
+      if (datasetKey === "events") category = "events.all";
+
+      out.push({
+        datasetKey,
+        category,
+        qid: itemQid,
+        title: row.itemLabel?.value || itemQid,
+        description: row.itemDescription?.value || "",
+        coords,
+        image: imageVal,
+        types: row.types?.value || ""
+      });
+    });
+
+    return out;
+  }
+
+  // -----------------------------------------------------------
+  // Render markers according to selected facets
+  // -----------------------------------------------------------
+
+  async function applyFacets(langPref) {
+    if (!map || !clusterGroup) return;
+
+    clusterGroup.clearLayers();
+    coordCounts = new Map();
+
+    if (oms) oms.clearMarkers();
+
+    const neededDatasets = new Set();
+    FACETS.forEach(g => g.items.forEach(it => { if (selected.has(it.key)) neededDatasets.add(it.dataset); }));
+
+    if (neededDatasets.size === 0) return;
+
+    const datasetRecords = {};
+    for (const ds of neededDatasets) {
+      datasetRecords[ds] = await fetchDataset(ds, langPref);
+    }
+
+    const wantedCategories = new Set();
+    FACETS.forEach(g => g.items.forEach(it => {
+      if (selected.has(it.key)) wantedCategories.add(it.category);
+    }));
+
+    const visible = [];
+    Object.values(datasetRecords).forEach(records => {
+      records.forEach(r => { if (wantedCategories.has(r.category)) visible.push(r); });
+    });
+
+    visible.forEach(r => {
+      const k = coordKey(r.coords);
+      coordCounts.set(k, (coordCounts.get(k) || 0) + 1);
+    });
+
+    const imagesByCoord = groupImagesByCoord(visible);
+
+    visible.forEach(record => {
+      if (record.category === "collections.images") {
+        const k = coordKey(record.coords);
+        const group = imagesByCoord.get(k);
+        if (!group || group._markerCreated) return;
+        group._markerCreated = true;
+
+        const marker = makeMarker(record.coords, "collections.images", coordCounts.get(k) || group.items.length);
+        marker.on("click", () => {
+          marker.bindPopup(buildImagesPopup(group, langPref), { maxWidth: 420 }).openPopup();
+          setTimeout(() => renderImagesThumbsIntoPopup(group, marker), 0);
+        });
+
+        clusterGroup.addLayer(marker);
+        if (oms) oms.addMarker(marker);
+        return;
+      }
+
+      const k = coordKey(record.coords);
+      const count = coordCounts.get(k) || 1;
+
+      const marker = makeMarker(record.coords, record.category, count);
+
+      marker.on("click", () => {
+        marker.bindPopup(buildStandardPopup(record, langPref), { maxWidth: 360 }).openPopup();
+        setTimeout(() => renderStandardThumbIntoPopup(record, marker), 0);
+      });
+
+      clusterGroup.addLayer(marker);
+      if (oms) oms.addMarker(marker);
     });
   }
 
+  function coordKey(coords) {
+    return `${coords.lat.toFixed(5)},${coords.lon.toFixed(5)}`;
+  }
+
+  function groupImagesByCoord(visibleRecords) {
+    const m = new Map();
+    visibleRecords.forEach(r => {
+      if (r.category !== "collections.images") return;
+      const k = coordKey(r.coords);
+      if (!m.has(k)) m.set(k, { coords: r.coords, items: [] });
+      m.get(k).items.push(r);
+    });
+    m.forEach(g => { g.items = g.items.slice(0, 10); });
+    return m;
+  }
+
+  // -----------------------------------------------------------
+  // Marker icon factory
+  // -----------------------------------------------------------
+
+  function makeMarker(coords, category, count = 1) {
+    const style = MARKER_STYLE[category] || { className: "me-pin", glyph: "●" };
+
+    const badge = count > 1 ? `<span class="me-pin-badge">${count}</span>` : "";
+    const html = `
+      <div class="me-pin-inner">
+        <span class="me-pin-glyph">${style.glyph}</span>
+        ${badge}
+      </div>
+    `;
+
+    const icon = L.divIcon({
+      className: style.className,
+      html,
+      iconSize: [28, 28],
+      iconAnchor: [14, 28],
+      popupAnchor: [0, -26]
+    });
+
+    return L.marker([coords.lat, coords.lon], { icon });
+  }
+
+  // -----------------------------------------------------------
+  // Popup builders
+  // -----------------------------------------------------------
+
+  function buildStandardPopup(record, langPref) {
+    const t = (en, cy) => (langPref === "cy" ? cy : en);
+
+    const qid = record.qid;
+    const link = `${ITEM_URL_PREFIX}${qid}`;
+
+    const typesHTML = record.types ? `<div class="me-popup-meta">${escapeHtml(record.types)}</div>` : "";
+    const placeHTML = record.placeLabel ? `<div class="me-popup-meta">${t("Place:", "Lle:")} ${escapeHtml(record.placeLabel)}</div>` : "";
+
+    const thumbWrap = `<div class="me-popup-thumb" data-me-thumb data-qid="${escapeHtml(qid)}"></div>`;
+
+    return `
+      <div class="me-popup">
+        <div class="me-popup-title">${escapeHtml(record.title || qid)}</div>
+        ${record.description ? `<div class="me-popup-desc">${escapeHtml(record.description)}</div>` : ""}
+        ${placeHTML}
+        ${typesHTML}
+        ${thumbWrap}
+        <a class="me-popup-link" href="${link}">
+          ${t("View details", "Gweld manylion")}
+        </a>
+      </div>
+    `;
+  }
+
+  function buildImagesPopup(group, langPref) {
+    const t = (en, cy) => (langPref === "cy" ? cy : en);
+
+    return `
+      <div class="me-popup">
+        <div class="me-popup-title">${t("Images at this location", "Delweddau yn y lleoliad hwn")}</div>
+        <div class="me-popup-meta">${t("Showing up to 10 thumbnails.", "Yn dangos hyd at 10 mân-lun.")}</div>
+        <div class="me-popup-thumbs" data-me-images-thumbs></div>
+      </div>
+    `;
+  }
+
+  // -----------------------------------------------------------
+  // Thumbnail logic (IIIF fallback preserved)
+  // -----------------------------------------------------------
+
+  function extractNumericId(value) {
+    if (!value) return null;
+    const s = String(value);
+    const m = s.match(/(\d+)(?:\D*)$/);
+    return m ? m[1] : null;
+  }
+
+  function isMultiRange(baseId) {
+    const n = parseInt(baseId, 10);
+    return n >= 1448577 && n <= 1588867;
+  }
+
+  function createIIIFThumb(baseId, sizePx = 90) {
+    const idStr = String(baseId);
+    const isMulti = isMultiRange(idStr);
+    const imageId = isMulti ? (parseInt(idStr, 10) + 1) : parseInt(idStr, 10);
+
+    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/${sizePx},/0/default.jpg`;
+    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/${sizePx},/0/default.jpg`;
+    const rootUrl = `https://viewer.library.wales/${idStr}`;
+
+    const a = document.createElement("a");
+    a.href = rootUrl;
+    a.target = "_blank";
+    a.rel = "noopener";
+
+    const img = document.createElement("img");
+    img.loading = "lazy";
+    img.alt = "";
+
+    img.onerror = () => {
+      if (img.dataset.meTried === "1") return;
+      img.dataset.meTried = "1";
+      img.src = url2;
+    };
+
+    img.src = url1;
+    a.appendChild(img);
+
+    return a;
+  }
+
+  function renderStandardThumbIntoPopup(record, marker) {
+    const popupEl = marker.getPopup()?.getElement();
+    if (!popupEl) return;
+
+    const wrap = popupEl.querySelector("[data-me-thumb]");
+    if (!wrap) return;
+
+    const id = extractNumericId(record.image) || extractNumericId(record.nlwmedia);
+    if (!id) return;
+
+    wrap.innerHTML = "";
+    wrap.appendChild(createIIIFThumb(id, 90));
+  }
+
+  function renderImagesThumbsIntoPopup(group, marker) {
+    const popupEl = marker.getPopup()?.getElement();
+    if (!popupEl) return;
+
+    const thumbsWrap = popupEl.querySelector("[data-me-images-thumbs]");
+    if (!thumbsWrap) return;
+
+    thumbsWrap.innerHTML = "";
+
+    group.items.forEach(item => {
+      const id = extractNumericId(item.nlwmedia);
+      if (!id) return;
+      thumbsWrap.appendChild(createIIIFThumb(id, 80));
+    });
+  }
+
+  // -----------------------------------------------------------
+  // Utils
+  // -----------------------------------------------------------
+
+  function escapeHtml(str) {
+    return String(str || "")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  // -----------------------------------------------------------
+  // Exports
+  // -----------------------------------------------------------
+
   return {
-    initHomeMap
+    initHomeMap,
+    setLanguage
   };
 
 })();
-
