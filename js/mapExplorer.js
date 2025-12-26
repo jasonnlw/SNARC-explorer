@@ -17,6 +17,33 @@ window.MapExplorer = (() => {
   // Small helper: treat "cy" as Welsh, everything else as English.
   const normaliseLang = (lang) => (lang === "cy" ? "cy" : "en");
 
+  // Use the same proxy endpoint as Advanced Person Search (GitHub Pages safe)
+const SNARC_SPARQL_ENDPOINT =
+  window.SNARC_SPARQL_ENDPOINT ||
+  "https://snarc-proxy.onrender.com/query";
+
+  async function runSPARQL(query) {
+  const res = await fetch(SNARC_SPARQL_ENDPOINT, {
+    method: "POST",
+    headers: {
+      // Most SNARC proxy implementations accept either of these.
+      // APS likely uses one of them; this is the safest combo.
+      "Content-Type": "application/sparql-query; charset=utf-8",
+      "Accept": "application/sparql-results+json"
+    },
+    body: query
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(`SPARQL proxy HTTP ${res.status}: ${text.slice(0, 300)}`);
+  }
+
+  const json = await res.json();
+  return json?.results?.bindings || [];
+}
+
+
   // -----------------------------------------------------------
   // Revised SPARQL queries (language-controlled via ${langPref})
   // -----------------------------------------------------------
@@ -507,7 +534,7 @@ WHERE {
 
     let results;
     try {
-      results = await API.runSPARQL(query);
+      results = await runSPARQL(query);
     } catch (err) {
       console.error("MapExplorer: SPARQL error for", datasetKey, err);
       cache[langPref][datasetKey] = [];
