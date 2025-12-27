@@ -45,6 +45,36 @@ async function runSPARQL(query) {
   return json?.results?.bindings || [];
 }
 
+// Snapshot directory served by GitHub Pages
+const MAP_SNAPSHOT_BASE =
+  window.MAP_SNAPSHOT_BASE ||
+  "data/map-snapshots";
+
+let snapshotIndex = null;
+
+async function getSnapshotIndex() {
+  if (snapshotIndex) return snapshotIndex;
+  try {
+    const res = await fetch(`${MAP_SNAPSHOT_BASE}/index.json`, { cache: "no-store" });
+    if (!res.ok) throw new Error(`index.json HTTP ${res.status}`);
+    snapshotIndex = await res.json();
+    return snapshotIndex;
+  } catch (e) {
+    // Snapshot index is optional (fallback to live queries)
+    snapshotIndex = null;
+    return null;
+  }
+}
+
+async function loadSnapshotBindings(datasetKey, langPref) {
+  const idx = await getSnapshotIndex();
+  const v = idx?.generatedAt ? encodeURIComponent(idx.generatedAt) : Date.now();
+
+  const url = `${MAP_SNAPSHOT_BASE}/${datasetKey}.${langPref}.json?v=${v}`;
+  const res = await fetch(url, { cache: "no-store" });
+  if (!res.ok) throw new Error(`snapshot HTTP ${res.status}`);
+  return await res.json(); // this is already an array of bindings
+}
 
 
   // -----------------------------------------------------------
@@ -594,13 +624,25 @@ setTimeout(() => map.invalidateSize(), 0);
     const query = queryBuilder({ langPref });
 
     let results;
+
+    // 1) Try snapshot first (fast)
     try {
-      results = await runSPARQL(query);
-    } catch (err) {
-      console.error("MapExplorer: SPARQL error for", datasetKey, err);
-      cache[langPref][datasetKey] = [];
-      return cache[langPref][datasetKey];
+      results = await loadSnapshotBindings(datasetKey, langPref);
+    } catch (e) {
+      results = null;
     }
+
+    // 2) Fallback to live query if snapshot missing/failed
+    if (!results) {
+      try {
+        results = await runSPARQL(query);
+      } catch (err) {
+        console.error("MapExplorer: SPARQL error for", datasetKey, err);
+        cache[langPref][datasetKey] = [];
+        return cache[langPref][datasetKey];
+      }
+    }
+
 
     const records = normaliseResults(datasetKey, results);
     cache[langPref][datasetKey] = records;
