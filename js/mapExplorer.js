@@ -944,35 +944,28 @@ async function applyFacets(langPref) {
     return a;
   }
 
-  function renderStandardThumbIntoPopup(record, marker) {
-    const popupEl = marker.getPopup()?.getElement();
-    if (!popupEl) return;
+function renderStandardThumbIntoPopup(record, marker) {
+  const popupEl = marker.getPopup()?.getElement();
+  if (!popupEl) return;
 
-    const wrap = popupEl.querySelector("[data-me-thumb]");
-    if (!wrap) return;
+  const wrap = popupEl.querySelector("[data-me-thumb]");
+  if (!wrap) return;
 
-    const id = extractNumericId(record.image) || extractNumericId(record.nlwmedia);
-    if (!id) return;
+  // Only render a thumb if P31 is present
+  const commonsVal = record.image || null;
+  if (!commonsVal) return;
 
-    wrap.innerHTML = "";
-    wrap.appendChild(createIIIFThumb(id, 90));
-  }
+  const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
+  if (!thumbUrl) return;
 
-  function renderImagesThumbsIntoPopup(group, marker) {
-    const popupEl = marker.getPopup()?.getElement();
-    if (!popupEl) return;
+  wrap.innerHTML = "";
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.alt = "";
+  img.src = thumbUrl;
+  wrap.appendChild(img);
+}
 
-    const thumbsWrap = popupEl.querySelector("[data-me-images-thumbs]");
-    if (!thumbsWrap) return;
-
-    thumbsWrap.innerHTML = "";
-
-    group.items.forEach(item => {
-      const id = extractNumericId(item.nlwmedia);
-      if (!id) return;
-      thumbsWrap.appendChild(createIIIFThumb(id, 80));
-    });
-  }
 
   // -----------------------------------------------------------
   // Utils
@@ -986,6 +979,49 @@ async function applyFacets(langPref) {
       .replace(/"/g, "&quot;")
       .replace(/'/g, "&#039;");
   }
+
+  function commonsThumbUrlFromValue(value, widthPx = 180) {
+  // Value may be a full URL, or a Commons entity URI, or "File:Name.ext"
+  const fileName = extractCommonsFileName(value);
+  if (!fileName) return null;
+
+  // Special:FilePath serves the original file; width= gives a thumbnail.
+  // This avoids hashing logic and works well for most file types.
+  const encoded = encodeURIComponent(fileName.replace(/ /g, "_"));
+  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encoded}?width=${widthPx}`;
+}
+
+function extractCommonsFileName(value) {
+  const s = String(value || "").trim();
+  if (!s) return null;
+
+  // Common case: already "File:Something.jpg"
+  if (s.startsWith("File:")) return s;
+
+  // If it's a URL, try to pull a "File:..." segment
+  // Examples:
+  // - https://commons.wikimedia.org/wiki/Special:EntityData/M123.json
+  // - https://commons.wikimedia.org/wiki/File:Name.jpg
+  // - https://commons.wikimedia.org/entity/M123
+  // - https://commons.wikimedia.org/wiki/Special:FilePath/Name.jpg
+  try {
+    const u = new URL(s);
+    const path = decodeURIComponent(u.pathname);
+
+    const fileMatch = path.match(/\/File:(.+)$/);
+    if (fileMatch) return `File:${fileMatch[1]}`;
+
+    const fpMatch = path.match(/\/Special:FilePath\/(.+)$/);
+    if (fpMatch) return `File:${fpMatch[1]}`;
+
+    // If none of the above, it might be a media entity id (M123) –
+    // in that case we cannot derive a filename without an extra lookup,
+    // so we return null.
+    return null;
+  } catch {
+    return null;
+  }
+}
 
   // -----------------------------------------------------------
   // Exports
