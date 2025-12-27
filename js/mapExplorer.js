@@ -558,9 +558,8 @@ try {
   }
 
   function selectDefaultFacets() {
-    selected.add("settlements");
-    selected.add("regions");
-    selected.add("events");
+selected.clear();
+  selected.add("images"); // Images
   }
 
   function syncPanelForViewport() {
