@@ -147,7 +147,7 @@ jobs:
 
           SELECT ?item ?itemLabel ?itemDescription
                  ?birthplace ?deathplace ?residence
-                 ?birthplacecoords ?deathplacecoords ?residencecoords
+                 ?birthplacecoords ?deathplacecoords ?residencecoords ?birthplaceLabel ?deathplaceLabel ?residenceLabel
                  ?image
           WHERE {
             OPTIONAL {
