@@ -938,7 +938,7 @@ wireHoverPopup(
         clusterGroup.addLayer(marker);
         if (oms) oms.addMarker(marker);
         return;
-      }
+      
 
       const k = coordKey(record.coords);
       const count = coordCounts.get(k) || 1;
