@@ -1047,7 +1047,7 @@ wireHoverPopup(
       try { marker.closePopup(); } catch (e) {}
     });
   }
-}
+
 
 function clearSpider() {
   if (!spiderLayer) return;
