@@ -841,11 +841,18 @@ async function applyFacets(langPref) {
         if (!group || group._markerCreated) return;
         group._markerCreated = true;
 
-        const marker = makeMarker(record.coords, "collections.images", coordCounts.get(k) || group.items.length);
-        marker.on("click", () => {
-          marker.bindPopup(buildImagesPopup(group, langPref), { maxWidth: 420 }).openPopup();
-          setTimeout(() => renderImagesThumbsIntoPopup(group, marker), 0);
-        });
+const marker = makeMarker(
+  record.coords,
+  "collections.images",
+  coordCounts.get(k) || group.items.length
+);
+
+wireHoverPopup(
+  marker,
+  () => buildImagesPopup(group, langPref),
+  () => renderImagesThumbsIntoPopup(group, marker)
+);
+
 
         clusterGroup.addLayer(marker);
         if (oms) oms.addMarker(marker);
@@ -855,12 +862,14 @@ async function applyFacets(langPref) {
       const k = coordKey(record.coords);
       const count = coordCounts.get(k) || 1;
 
-      const marker = makeMarker(record.coords, record.category, count);
+const marker = makeMarker(record.coords, record.category, count);
 
-      marker.on("click", () => {
-        marker.bindPopup(buildStandardPopup(record, langPref), { maxWidth: 360 }).openPopup();
-        setTimeout(() => renderStandardThumbIntoPopup(record, marker), 0);
-      });
+wireHoverPopup(
+  marker,
+  () => buildStandardPopup(record, langPref),
+  () => renderStandardThumbIntoPopup(record, marker)
+);
+
 
       clusterGroup.addLayer(marker);
       if (oms) oms.addMarker(marker);
