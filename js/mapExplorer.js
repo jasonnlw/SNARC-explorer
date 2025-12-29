@@ -1097,15 +1097,33 @@ function expandSpiderAt(coords, records, langPref) {
       centerPt.y + radiusPx * Math.sin(angle)
     );
     
-const latlng = map.unproject(pt, map.getZoom());
+const zoom = map.getZoom();
+const latlng = map.unproject(pt, zoom);
 
-// ✅ Add a connecting “spider leg” line from the center to the child
-const leg = L.polyline([center, latlng], {
+// Anchor spider line to the *visual centre* of the icons (your icons are 28px high)
+const ICON_HALF_HEIGHT = 14;
+
+// Convert both endpoints to pixel space, offset upward, then convert back to latlng
+const centerAnchorLatLng = map.unproject(
+  L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
+  zoom
+);
+
+const childPt = map.project(latlng, zoom);
+const childAnchorLatLng = map.unproject(
+  L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
+  zoom
+);
+
+// ✅ Add a connecting “spider leg” line (black) from parent centre to child centre
+const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
+  color: "#000",
   weight: 1.5,
-  opacity: 0.7,
+  opacity: 1,
   interactive: false
 });
 spiderLayer.addLayer(leg);
+
 
 // Child markers: NO COUNT on expanded nodes
 const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
