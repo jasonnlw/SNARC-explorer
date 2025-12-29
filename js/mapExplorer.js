@@ -1170,6 +1170,7 @@ wireHoverPopup(
     }
   }
 );
+}
 
 
     spiderLayer.addLayer(child);
