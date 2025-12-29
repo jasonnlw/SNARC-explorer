@@ -2102,11 +2102,7 @@ header.aps-header button.aps-filters-toggle {
   font-weight: 700;
   text-decoration: none;
 }
-/* Close button inset to respect the new white frame + inner border */
-.me-fixed-popup .leaflet-popup-close-button {
-  top: 14px;     /* increase as needed */
-  right: 14px;   /* increase as needed */
-}
+
 /* If the thumb wrapper exists but is empty, collapse it */
 .me-fixed-popup .me-popup-thumb:empty {
   display: none !important;
@@ -2118,6 +2114,11 @@ header.aps-header button.aps-filters-toggle {
 }
 .me-fixed-popup .me-popup {
   height: auto !important;
+}
+/* Inset the Leaflet popup close (X) to account for the outer white frame */
+.leaflet-container .leaflet-popup.me-fixed-popup a.leaflet-popup-close-button {
+  top: 10px !important;
+  right: 10px !important;
 }
 
 
