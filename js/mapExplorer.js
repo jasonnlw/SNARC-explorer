@@ -1052,7 +1052,13 @@ function makeMarker(coords, category, count = 1) {
 
   function wireHoverPopup(marker, buildPopupHtml, onAfterOpen) {
     const open = () => {
-      marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
+      marker.bindPopup(buildPopupHtml(), {
+  className: "me-fixed-popup",
+  maxWidth: 320,
+  minWidth: 320,
+  autoPan: true
+}).openPopup();
+
       if (onAfterOpen) setTimeout(onAfterOpen, 0);
 
       // Desktop: keep popup open until closed or outside click
