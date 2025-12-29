@@ -1077,7 +1077,7 @@ wireHoverPopup(
         () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
         () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
       );
-    } else {
+ } else {
       wireHoverPopup(
         child,
         () => buildStandardPopup(record, langPref),
@@ -1086,20 +1086,21 @@ wireHoverPopup(
     }
 
     spiderLayer.addLayer(child);
-  });
+  }); // end records.forEach
+
+} // end expandSpiderAt (or whatever function this is)
+
+
+// -----------------------------------------------------------
+// Thumbnail logic (IIIF fallback preserved)
+// -----------------------------------------------------------
+
+function extractNumericId(value) {
+  if (!value) return null;
+  const s = String(value);
+  const m = s.match(/(\d+)(?:\D*)$/);
+  return m ? m[1] : null;
 }
-
-
-  // -----------------------------------------------------------
-  // Thumbnail logic (IIIF fallback preserved)
-  // -----------------------------------------------------------
-
-  function extractNumericId(value) {
-    if (!value) return null;
-    const s = String(value);
-    const m = s.match(/(\d+)(?:\D*)$/);
-    return m ? m[1] : null;
-  }
 
   function isMultiRange(baseId) {
     const n = parseInt(baseId, 10);
