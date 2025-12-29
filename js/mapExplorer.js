@@ -929,12 +929,16 @@ byCoord.forEach((recordsAtCoord, k) => {
         () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
       );
     } else {
-      wireHoverPopup(
-        marker,
-        () => buildStandardPopup(record, langPref),
-        () => renderStandardThumbIntoPopup(record, marker)
-      );
+wireHoverPopup(
+  marker,
+  () => buildStandardPopup(record, langPref),
+  () => {
+    renderStandardThumbIntoPopup(record, marker);
+    if (record.category && record.category.startsWith("people.")) {
+      hydratePeoplePlaceLabelsInPopup(marker, langPref);
     }
+  }
+);
 
     clusterGroup.addLayer(marker);
     return;
@@ -1018,9 +1022,20 @@ function makeMarker(coords, category, count = 1) {
     const link = `${ITEM_URL_PREFIX}${qid}`;
 
     const typesHTML = record.types ? `<div class="me-popup-meta">${escapeHtml(record.types)}</div>` : "";
-    const placeHTML = record.placeLabel
+    const isPeoplePlace = record.category && record.category.startsWith("people.");
+const placeHTML = (isPeoplePlace && record.placeQid)
+  ? `<div class="me-popup-meta">
+       ${t("Place:", "Lle:")}
+       <a class="me-place-link"
+          data-place-qid="${escapeHtml(record.placeQid)}"
+          href="${ITEM_URL_PREFIX}${escapeHtml(record.placeQid)}">
+          ${escapeHtml(record.placeLabel || record.placeQid)}
+       </a>
+     </div>`
+  : (record.placeLabel
       ? `<div class="me-popup-meta">${t("Place:", "Lle:")} ${escapeHtml(record.placeLabel)}</div>`
-      : "";
+      : "");
+
 
     const thumbWrap = `<div class="me-popup-thumb" data-me-thumb data-qid="${escapeHtml(qid)}"></div>`;
 
@@ -1143,12 +1158,17 @@ const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, 
         () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
       );
     } else {
-      wireHoverPopup(
-        child,
-        () => buildStandardPopup(record, langPref),
-        () => renderStandardThumbIntoPopup(record, child)
-      );
+wireHoverPopup(
+  child,
+  () => buildStandardPopup(record, langPref),
+  () => {
+    renderStandardThumbIntoPopup(record, child);
+    if (record.category && record.category.startsWith("people.")) {
+      hydratePeoplePlaceLabelsInPopup(child, langPref);
     }
+  }
+);
+
 
     spiderLayer.addLayer(child);
   });
@@ -1245,6 +1265,29 @@ function renderStandardThumbIntoPopup(record, marker) {
   wrap.appendChild(img);
 }
 
+async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
+  // Only run if the API module exists
+  if (typeof API === "undefined" || !API.getLabels) return;
+
+  const popupEl = marker.getPopup()?.getElement();
+  if (!popupEl) return;
+
+  const links = Array.from(popupEl.querySelectorAll("a[data-place-qid]"));
+  if (!links.length) return;
+
+  const qids = [...new Set(links.map(a => a.dataset.placeQid).filter(Boolean))];
+  if (!qids.length) return;
+
+  try {
+    const labels = await API.getLabels(qids, langPref);
+    links.forEach(a => {
+      const qid = a.dataset.placeQid;
+      a.textContent = labels?.[qid] || qid;
+    });
+  } catch (e) {
+    // Fail silently: popup remains usable with QIDs
+  }
+}
 
   // -----------------------------------------------------------
   // Utils
