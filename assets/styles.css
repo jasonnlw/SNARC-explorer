@@ -2104,8 +2104,8 @@ header.aps-header button.aps-filters-toggle {
 }
 /* Close button inset to respect the new white frame + inner border */
 .me-fixed-popup .leaflet-popup-close-button {
-  top: 12px;     /* increase as needed */
-  right: 12px;   /* increase as needed */
+  top: 14px;     /* increase as needed */
+  right: 14px;   /* increase as needed */
 }
 /* If the thumb wrapper exists but is empty, collapse it */
 .me-fixed-popup .me-popup-thumb:empty {
