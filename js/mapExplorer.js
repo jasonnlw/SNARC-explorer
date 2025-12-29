@@ -615,14 +615,13 @@ setTimeout(() => map.invalidateSize(), 0);
         legWeight: 1.5
       });
     }
-  }
-
+ 
+  // ✅ MOVE THIS HERE (was incorrectly at top-level)
   if (!spiderLayer) {
-  spiderLayer = L.layerGroup().addTo(map);
+    spiderLayer = L.layerGroup().addTo(map);
+  }
+  map.on("zoomstart movestart", clearSpider);
 }
-
-// Clear spider when zoom/move changes (so it doesn’t “float”)
-map.on("zoomstart movestart", clearSpider);
 
 
   // -----------------------------------------------------------
