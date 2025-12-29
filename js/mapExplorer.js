@@ -1088,7 +1088,6 @@ wireHoverPopup(
     spiderLayer.addLayer(child);
   }); // end records.forEach
 
-} // end expandSpiderAt (or whatever function this is)
 
 
 // -----------------------------------------------------------
