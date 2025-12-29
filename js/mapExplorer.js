@@ -929,21 +929,21 @@ if (recordsAtCoord.length === 1) {
       () => buildImagesPopup({ coords: centerCoords, items: [record] }, langPref),
       () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
     );
-  } else {
-    wireHoverPopup(
-      marker,
-      () => buildStandardPopup(record, langPref),
-      () => {
-        renderStandardThumbIntoPopup(record, marker);
-        if (record.category && record.category.startsWith("people.")) {
-          hydratePeoplePlaceLabelsInPopup(marker, langPref);
-        }
+} else {
+  wireHoverPopup(
+    marker,
+    () => buildStandardPopup(record, langPref),
+    () => {
+      renderStandardThumbIntoPopup(record, marker);
+      if (record.category && record.category.startsWith("people.")) {
+        hydratePeoplePlaceLabelsInPopup(marker, langPref);
       }
-    );
-  }
+    }
+  );
+}  // ✅ ADD THIS LINE to close the else block
 
-  clusterGroup.addLayer(marker);
-  return;
+clusterGroup.addLayer(marker);
+return;
 }
 
   // Multiple items → aggregate marker with count, click to expand
