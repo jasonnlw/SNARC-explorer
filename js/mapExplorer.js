@@ -868,24 +868,59 @@ async function applyFacets(langPref) {
       if (selected.has(it.key)) wantedCategories.add(it.category);
     }));
 
-    const visible = [];
-    Object.values(datasetRecords).forEach(records => {
-      records.forEach(r => { if (wantedCategories.has(r.category)) visible.push(r); });
-    });
+// 1. Build visible records
+const visible = [];
+Object.values(datasetRecords).forEach(records => {
+  records.forEach(r => {
+    if (wantedCategories.has(r.category)) visible.push(r);
+  });
+});
 
-    visible.forEach(r => {
-      const k = coordKey(r.coords);
-      coordCounts.set(k, (coordCounts.get(k) || 0) + 1);
-    });
+// 2. Group visible records by coordinate
+const byCoord = new Map();
+visible.forEach(r => {
+  const k = coordKey(r.coords);
+  if (!byCoord.has(k)) byCoord.set(k, []);
+  byCoord.get(k).push(r);
+});
 
-    const imagesByCoord = groupImagesByCoord(visible);
+// 3. Create markers (ONLY from byCoord)
+byCoord.forEach((recordsAtCoord, k) => {
+  const centerCoords = recordsAtCoord[0].coords;
 
-    visible.forEach(record => {
-      if (record.category === "collections.images") {
-        const k = coordKey(record.coords);
-        const group = imagesByCoord.get(k);
-        if (!group || group._markerCreated) return;
-        group._markerCreated = true;
+  // Single item → hover works immediately
+  if (recordsAtCoord.length === 1) {
+    const record = recordsAtCoord[0];
+    const marker = makeMarker(centerCoords, record.category, null);
+
+    if (record.category === "collections.images") {
+      wireHoverPopup(
+        marker,
+        () => buildImagesPopup({ coords: centerCoords, items: [record] }, langPref),
+        () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
+      );
+    } else {
+      wireHoverPopup(
+        marker,
+        () => buildStandardPopup(record, langPref),
+        () => renderStandardThumbIntoPopup(record, marker)
+      );
+    }
+
+    clusterGroup.addLayer(marker);
+    return;
+  }
+
+  // Multiple items → aggregate marker with count, click to expand
+  const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
+
+  agg.on("click", () => {
+    expandSpiderAt(centerCoords, recordsAtCoord, langPref);
+  });
+
+  clusterGroup.addLayer(agg);
+});
+
 
 const marker = makeMarker(
   record.coords,
