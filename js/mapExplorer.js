@@ -656,6 +656,10 @@ clusterGroup = L.markerClusterGroup({
   showCoverageOnHover: false,
   maxClusterRadius: 55,
   spiderfyOnMaxZoom: true,
+  spiderLegPolylineOptions: {
+    weight: 1.5,
+    opacity: 0.7
+  },
 
 iconCreateFunction: function (cluster) {
   const count = getWeightedClusterCount(cluster);
