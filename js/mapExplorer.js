@@ -665,11 +665,12 @@ iconCreateFunction: function (cluster) {
   if (count >= 100) sizeClass = "marker-cluster-large";
   else if (count >= 10) sizeClass = "marker-cluster-medium";
 
-  return L.divIcon({
-    html: `<div><span>${count}</span></div>`,
-    className: `marker-cluster ${sizeClass}`,
-    iconSize: L.point(40, 40)
-  });
+return L.divIcon({
+  html: `<div><span>${count}</span></div>`,
+  className: `marker-cluster ${sizeClass}`,
+  iconSize: L.point(40, 40),
+  iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
+});
 }
 
 });
