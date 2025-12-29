@@ -637,6 +637,13 @@ selected.clear();
 
     map = L.map(rootEl, { scrollWheelZoom: true });
 
+function getWeightedClusterCount(cluster) {
+  let total = 0;
+  cluster.getAllChildMarkers().forEach(m => {
+    total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
+  });
+  return total;
+}
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
@@ -645,11 +652,22 @@ selected.clear();
     map.setView([52.3, -3.8], 7);
 setTimeout(() => map.invalidateSize(), 0);
 
-    clusterGroup = L.markerClusterGroup({
-      showCoverageOnHover: false,
-      maxClusterRadius: 55,
-      spiderfyOnMaxZoom: true
+clusterGroup = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  maxClusterRadius: 55,
+  spiderfyOnMaxZoom: true,
+
+  iconCreateFunction: function (cluster) {
+    const count = getWeightedClusterCount(cluster);
+
+    return L.divIcon({
+      html: `<div class="marker-cluster"><span>${count}</span></div>`,
+      className: "marker-cluster",
+      iconSize: L.point(40, 40)
     });
+  }
+});
+
 
     map.addLayer(clusterGroup);
 
@@ -950,27 +968,33 @@ byCoord.forEach((recordsAtCoord, k) => {
   // Marker icon factory
   // -----------------------------------------------------------
 
-  function makeMarker(coords, category, count = 1) {
-    const style = MARKER_STYLE[category] || { className: "me-pin", glyph: "●" };
+function makeMarker(coords, category, count = 1) {
+  const style = MARKER_STYLE[category] || { className: "me-pin", glyph: "●" };
 
-    const badge = count > 1 ? `<span class="me-pin-badge">${count}</span>` : "";
-    const html = `
-      <div class="me-pin-inner">
-        <span class="me-pin-glyph">${style.glyph}</span>
-        ${badge}
-      </div>
-    `;
+  const badge = count > 1 ? `<span class="me-pin-badge">${count}</span>` : "";
+  const html = `
+    <div class="me-pin-inner">
+      <span class="me-pin-glyph">${style.glyph}</span>
+      ${badge}
+    </div>
+  `;
 
-    const icon = L.divIcon({
-      className: style.className,
-      html,
-      iconSize: [28, 28],
-      iconAnchor: [14, 28],
-      popupAnchor: [0, -26]
-    });
+  const icon = L.divIcon({
+    className: style.className,
+    html,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -26]
+  });
 
-    return L.marker([coords.lat, coords.lon], { icon });
-  }
+  const marker = L.marker([coords.lat, coords.lon], { icon });
+
+  // ✅ attach weight for cluster summing
+  marker.__meCount = Number(count) || 1;
+
+  return marker;
+}
+
 
   // -----------------------------------------------------------
   // Popup builders
