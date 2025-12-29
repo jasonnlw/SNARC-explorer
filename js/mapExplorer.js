@@ -356,6 +356,16 @@ WHERE {
   let filterPanelEl = null;
   let filterToggleBtn = null;
 
+  // Hover refs
+
+  let spiderLayer = null;
+  let activeSpiderKey = null;
+
+const isDesktopHover =
+  window.matchMedia &&
+  window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+
   // -----------------------------------------------------------
   // Public init
   // -----------------------------------------------------------
@@ -607,6 +617,14 @@ setTimeout(() => map.invalidateSize(), 0);
     }
   }
 
+  if (!spiderLayer) {
+  spiderLayer = L.layerGroup().addTo(map);
+}
+
+// Clear spider when zoom/move changes (so it doesn’t “float”)
+map.on("zoomstart movestart", clearSpider);
+
+
   // -----------------------------------------------------------
   // Fetch + normalise
   // -----------------------------------------------------------
@@ -777,6 +795,7 @@ setTimeout(() => map.invalidateSize(), 0);
 
 async function applyFacets(langPref) {
   if (!map || !clusterGroup) return;
+  clearSpider();
 
   // Show loading overlay (if wired)
   if (window.__mapExplorerSetLoading) {
@@ -938,6 +957,79 @@ async function applyFacets(langPref) {
       </div>
     `;
   }
+
+  function wireHoverPopup(marker, buildPopupHtml, onAfterOpen) {
+  // Always support click (mobile + accessibility)
+  marker.on("click", () => {
+    marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
+    if (onAfterOpen) setTimeout(onAfterOpen, 0);
+  });
+
+  // Desktop hover
+  if (isDesktopHover) {
+    marker.on("mouseover", () => {
+      marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
+      if (onAfterOpen) setTimeout(onAfterOpen, 0);
+    });
+    marker.on("mouseout", () => {
+      // Close only if still open
+      try { marker.closePopup(); } catch (e) {}
+    });
+  }
+}
+
+function clearSpider() {
+  if (!spiderLayer) return;
+  spiderLayer.clearLayers();
+  activeSpiderKey = null;
+}
+
+function expandSpiderAt(coords, records, langPref) {
+  if (!map || !spiderLayer) return;
+
+  clearSpider();
+
+  activeSpiderKey = coordKey(coords);
+
+  // Convert center latlng -> pixel point
+  const center = L.latLng(coords.lat, coords.lon);
+  const centerPt = map.project(center, map.getZoom());
+
+  const n = records.length;
+  const radiusPx = 36; // adjust for spacing
+  const step = (Math.PI * 2) / n;
+
+  records.forEach((record, i) => {
+    const angle = i * step;
+    const pt = L.point(
+      centerPt.x + radiusPx * Math.cos(angle),
+      centerPt.y + radiusPx * Math.sin(angle)
+    );
+    const latlng = map.unproject(pt, map.getZoom());
+
+    // Child markers: NO COUNT on expanded nodes
+    const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
+
+    // Popups on hover/click
+    if (record.category === "collections.images") {
+      // Images: use IIIF popup builder and thumb renderer
+      wireHoverPopup(
+        child,
+        () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
+        () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
+      );
+    } else {
+      wireHoverPopup(
+        child,
+        () => buildStandardPopup(record, langPref),
+        () => renderStandardThumbIntoPopup(record, child)
+      );
+    }
+
+    spiderLayer.addLayer(child);
+  });
+}
+
 
   // -----------------------------------------------------------
   // Thumbnail logic (IIIF fallback preserved)
