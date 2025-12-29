@@ -918,31 +918,33 @@ byCoord.forEach((recordsAtCoord, k) => {
   const centerCoords = recordsAtCoord[0].coords;
 
   // Single item → hover works immediately
-  if (recordsAtCoord.length === 1) {
-    const record = recordsAtCoord[0];
-    const marker = makeMarker(centerCoords, record.category, null);
+  // Single item → hover works immediately
+if (recordsAtCoord.length === 1) {
+  const record = recordsAtCoord[0];
+  const marker = makeMarker(centerCoords, record.category, null);
 
-    if (record.category === "collections.images") {
-      wireHoverPopup(
-        marker,
-        () => buildImagesPopup({ coords: centerCoords, items: [record] }, langPref),
-        () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
-      );
-    } else {
-wireHoverPopup(
-  marker,
-  () => buildStandardPopup(record, langPref),
-  () => {
-    renderStandardThumbIntoPopup(record, marker);
-    if (record.category && record.category.startsWith("people.")) {
-      hydratePeoplePlaceLabelsInPopup(marker, langPref);
-    }
+  if (record.category === "collections.images") {
+    wireHoverPopup(
+      marker,
+      () => buildImagesPopup({ coords: centerCoords, items: [record] }, langPref),
+      () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
+    );
+  } else {
+    wireHoverPopup(
+      marker,
+      () => buildStandardPopup(record, langPref),
+      () => {
+        renderStandardThumbIntoPopup(record, marker);
+        if (record.category && record.category.startsWith("people.")) {
+          hydratePeoplePlaceLabelsInPopup(marker, langPref);
+        }
+      }
+    );
   }
-);
 
-    clusterGroup.addLayer(marker);
-    return;
-  }
+  clusterGroup.addLayer(marker);
+  return;
+}
 
   // Multiple items → aggregate marker with count, click to expand
   const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
