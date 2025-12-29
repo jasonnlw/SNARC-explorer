@@ -1953,7 +1953,7 @@ header.aps-header button.aps-filters-toggle {
 .me-popup-thumb { margin-top: 8px; }
 .me-popup-thumb img { border-radius: 10px; display: block; max-width: 100%; height: auto; }
 
-.me-popup-link { display: inline-block; margin-top: 10px; font-weight: 700; text-decoration: none; }
+.me-popup-link { display: inline-block; margin-top: 10px; padding-top: 2px; font-weight: 700; text-decoration: none; }
 
 /* Images popup thumb grid */
 .me-popup-thumbs {
@@ -2023,8 +2023,8 @@ header.aps-header button.aps-filters-toggle {
   min-width: 200px !important;
   max-width: 200px !important;
   height: auto !important;      /* allow content-driven height */
-  max-height: 260px;            /* optional: prevents giant popups */
-  overflow: auto;               /* only scroll if content exceeds max-height */
+  overflow: hidden !important;
+  max-height: none !important;               /* only scroll if content exceeds max-height */
 }
 }
 
@@ -2102,4 +2102,22 @@ header.aps-header button.aps-filters-toggle {
   font-weight: 700;
   text-decoration: none;
 }
+/* Close button inset to respect the new white frame + inner border */
+.me-fixed-popup .leaflet-popup-close-button {
+  top: 10px;     /* increase as needed */
+  right: 10px;   /* increase as needed */
+}
+/* If the thumb wrapper exists but is empty, collapse it */
+.me-fixed-popup .me-popup-thumb:empty {
+  display: none !important;
+}
+
+/* If the wrapper exists but has no <img>, collapse it (Chrome supports :has) */
+.me-fixed-popup .me-popup-thumb:not(:has(img)) {
+  display: none !important;
+}
+.me-fixed-popup .me-popup {
+  height: auto !important;
+}
+
 
