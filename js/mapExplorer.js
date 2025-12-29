@@ -657,15 +657,21 @@ clusterGroup = L.markerClusterGroup({
   maxClusterRadius: 55,
   spiderfyOnMaxZoom: true,
 
-  iconCreateFunction: function (cluster) {
-    const count = getWeightedClusterCount(cluster);
+iconCreateFunction: function (cluster) {
+  const count = getWeightedClusterCount(cluster);
 
-    return L.divIcon({
-      html: `<div class="marker-cluster"><span>${count}</span></div>`,
-      className: "marker-cluster",
-      iconSize: L.point(40, 40)
-    });
-  }
+  // Match Leaflet.markercluster default size buckets
+  let sizeClass = "marker-cluster-small";
+  if (count >= 100) sizeClass = "marker-cluster-large";
+  else if (count >= 10) sizeClass = "marker-cluster-medium";
+
+  return L.divIcon({
+    html: `<div><span>${count}</span></div>`,
+    className: `marker-cluster ${sizeClass}`,
+    iconSize: L.point(40, 40)
+  });
+}
+
 });
 
 
