@@ -2001,3 +2001,99 @@ header.aps-header button.aps-filters-toggle {
   to { transform: rotate(360deg); }
 }
 
+/* -----------------------------------------------------------
+   Map Explorer fixed-size popup cards
+   ----------------------------------------------------------- */
+
+/* Scope everything to these popups only */
+.me-fixed-popup .leaflet-popup-content-wrapper {
+  background: #fff;
+  border: 1px solid #309898;   /* thin teal border */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+  padding: 10px;
+}
+
+.me-fixed-popup .leaflet-popup-content {
+  width: 320px !important;     /* fixed card width */
+  height: 260px;               /* fixed card height */
+  margin: 0;                   /* remove Leaflet default margin */
+  overflow: hidden;            /* prevent content resizing the card */
+}
+
+/* Make your internal popup layout fill the fixed container */
+.me-fixed-popup .me-popup {
+  height: 260px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow: hidden;
+}
+
+/* Text: clamp so long labels/descriptions do not resize the card */
+.me-fixed-popup .me-popup-title {
+  font-weight: 700;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;       /* up to 2 lines */
+}
+
+.me-fixed-popup .me-popup-desc {
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;       /* up to 3 lines */
+}
+
+.me-fixed-popup .me-popup-meta {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;     /* single-line meta */
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
+/* Main thumbnail box: fixed dimensions */
+.me-fixed-popup .me-popup-thumb {
+  margin-top: 6px;
+  width: 100%;
+  height: 110px;               /* fixed thumb height */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.me-fixed-popup .me-popup-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;           /* crop to fit */
+  display: block;
+}
+
+/* Images popup grid: fixed dimensions per thumb */
+.me-fixed-popup .me-popup-thumbs {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.me-fixed-popup .me-popup-thumbs img {
+  width: 100%;
+  aspect-ratio: 1 / 1;         /* square thumbs */
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Keep the "View details" link pinned to the bottom */
+.me-fixed-popup .me-popup-link {
+  margin-top: auto;
+  display: inline-block;
+  font-weight: 700;
+  text-decoration: none;
+}
+
