@@ -361,6 +361,52 @@ WHERE {
   let spiderLayer = null;
   let activeSpiderKey = null;
 
+// Sticky popup management (desktop hover)
+let activePopupMarker = null;
+let outsidePopupListener = null;
+
+function makePopupSticky(marker) {
+  const popupEl = marker.getPopup()?.getElement();
+  if (!popupEl) return;
+
+  // Prevent clicks inside popup from bubbling to the map/document
+  if (typeof L !== "undefined" && L.DomEvent) {
+    L.DomEvent.disableClickPropagation(popupEl);
+    L.DomEvent.disableScrollPropagation(popupEl);
+  }
+
+  // Replace any previous outside-click listener
+  if (outsidePopupListener) {
+    document.removeEventListener("mousedown", outsidePopupListener, true);
+    outsidePopupListener = null;
+  }
+
+  activePopupMarker = marker;
+
+  outsidePopupListener = (ev) => {
+    const el = marker.getPopup()?.getElement();
+    if (!el) return;
+
+    // Click inside popup => keep it open
+    if (el.contains(ev.target)) return;
+
+    // Otherwise close
+    try { marker.closePopup(); } catch (e) {}
+  };
+
+  // Use capture to ensure we see the click early
+  document.addEventListener("mousedown", outsidePopupListener, true);
+
+  // Cleanup when popup closes (X button, etc.)
+  marker.once("popupclose", () => {
+    if (outsidePopupListener) {
+      document.removeEventListener("mousedown", outsidePopupListener, true);
+      outsidePopupListener = null;
+    }
+    if (activePopupMarker === marker) activePopupMarker = null;
+  });
+}
+
 const isDesktopHover =
   window.matchMedia &&
   window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -967,11 +1013,28 @@ wireHoverPopup(
   }
 
   function wireHoverPopup(marker, buildPopupHtml, onAfterOpen) {
-  // Always support click (mobile + accessibility)
-  marker.on("click", () => {
+  const open = () => {
     marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
     if (onAfterOpen) setTimeout(onAfterOpen, 0);
-  });
+
+    // On desktop, keep popup open until closed or outside click
+    if (isDesktopHover) {
+      setTimeout(() => makePopupSticky(marker), 0);
+    }
+  };
+
+  // Always support click (mobile + accessibility)
+  marker.on("click", open);
+
+  // Desktop hover
+  if (isDesktopHover) {
+    marker.on("mouseover", open);
+
+    // IMPORTANT: remove mouseout close; popup stays open for interaction
+    // marker.on("mouseout", () => { marker.closePopup(); });
+  }
+}
+
 
   // Desktop hover
   if (isDesktopHover) {
