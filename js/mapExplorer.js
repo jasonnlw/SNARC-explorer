@@ -982,7 +982,9 @@ wireHoverPopup(
     const link = `${ITEM_URL_PREFIX}${qid}`;
 
     const typesHTML = record.types ? `<div class="me-popup-meta">${escapeHtml(record.types)}</div>` : "";
-    const placeHTML = record.placeLabel ? `<div class="me-popup-meta">${t("Place:", "Lle:")} ${escapeHtml(record.placeLabel)}</div>` : "";
+    const placeHTML = record.placeLabel
+      ? `<div class="me-popup-meta">${t("Place:", "Lle:")} ${escapeHtml(record.placeLabel)}</div>`
+      : "";
 
     const thumbWrap = `<div class="me-popup-thumb" data-me-thumb data-qid="${escapeHtml(qid)}"></div>`;
 
@@ -1013,54 +1015,40 @@ wireHoverPopup(
   }
 
   function wireHoverPopup(marker, buildPopupHtml, onAfterOpen) {
-  const open = () => {
-    marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
-    if (onAfterOpen) setTimeout(onAfterOpen, 0);
-
-    // On desktop, keep popup open until closed or outside click
-    if (isDesktopHover) {
-      setTimeout(() => makePopupSticky(marker), 0);
-    }
-  };
-
-  // Always support click (mobile + accessibility)
-  marker.on("click", open);
-
-  // Desktop hover
-  if (isDesktopHover) {
-    marker.on("mouseover", open);
-
-    // IMPORTANT: remove mouseout close; popup stays open for interaction
-    // marker.on("mouseout", () => { marker.closePopup(); });
-  }
-}
-
-
-  // Desktop hover
-  if (isDesktopHover) {
-    marker.on("mouseover", () => {
+    const open = () => {
       marker.bindPopup(buildPopupHtml(), { maxWidth: 360 }).openPopup();
       if (onAfterOpen) setTimeout(onAfterOpen, 0);
-    });
-    marker.on("mouseout", () => {
-      // Close only if still open
-      try { marker.closePopup(); } catch (e) {}
-    });
+
+      // Desktop: keep popup open until closed or outside click
+      if (isDesktopHover) {
+        setTimeout(() => makePopupSticky(marker), 0);
+      }
+    };
+
+    // Always support click (mobile + accessibility)
+    marker.on("click", open);
+
+    // Desktop hover opens; do NOT close on mouseout
+    if (isDesktopHover) {
+      marker.on("mouseover", open);
+    }
   }
 
+  function clearSpider() {
+    if (!spiderLayer) return;
+    spiderLayer.clearLayers();
+    activeSpiderKey = null;
+  }
 
-function clearSpider() {
-  if (!spiderLayer) return;
-  spiderLayer.clearLayers();
-  activeSpiderKey = null;
-}
+  function expandSpiderAt(coords, records, langPref) {
+    if (!map || !spiderLayer) return;
 
-function expandSpiderAt(coords, records, langPref) {
-  if (!map || !spiderLayer) return;
+    clearSpider();
 
-  clearSpider();
+    activeSpiderKey = coordKey(coords);
+    // ... rest of your function
+  }
 
-  activeSpiderKey = coordKey(coords);
 
   // Convert center latlng -> pixel point
   const center = L.latLng(coords.lat, coords.lon);
