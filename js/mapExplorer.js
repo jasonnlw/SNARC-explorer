@@ -921,40 +921,6 @@ byCoord.forEach((recordsAtCoord, k) => {
   clusterGroup.addLayer(agg);
 });
 
-
-const marker = makeMarker(
-  record.coords,
-  "collections.images",
-  coordCounts.get(k) || group.items.length
-);
-
-wireHoverPopup(
-  marker,
-  () => buildImagesPopup(group, langPref),
-  () => renderImagesThumbsIntoPopup(group, marker)
-);
-
-
-        clusterGroup.addLayer(marker);
-        if (oms) oms.addMarker(marker);
-        return;
-      
-
-      const k = coordKey(record.coords);
-      const count = coordCounts.get(k) || 1;
-
-const marker = makeMarker(record.coords, record.category, count);
-
-wireHoverPopup(
-  marker,
-  () => buildStandardPopup(record, langPref),
-  () => renderStandardThumbIntoPopup(record, marker)
-);
-
-
-      clusterGroup.addLayer(marker);
-      if (oms) oms.addMarker(marker);
-    });
   } finally {
     // Always hide loading overlay (even if SPARQL fails)
     if (window.__mapExplorerSetLoading) {
@@ -1167,6 +1133,26 @@ function extractNumericId(value) {
 
     return a;
   }
+
+function renderImagesThumbsIntoPopup(group, marker) {
+  const popupEl = marker.getPopup()?.getElement();
+  if (!popupEl) return;
+
+  const thumbsWrap = popupEl.querySelector("[data-me-images-thumbs]");
+  if (!thumbsWrap) return;
+
+  thumbsWrap.innerHTML = "";
+
+  const items = Array.isArray(group?.items) ? group.items.slice(0, 10) : [];
+  if (!items.length) return;
+
+  items.forEach((r) => {
+    const baseId = extractNumericId(r?.nlwmedia) || extractNumericId(r?.qid);
+    if (!baseId) return;
+    thumbsWrap.appendChild(createIIIFThumb(baseId, 90));
+  });
+}
+
 
 function renderStandardThumbIntoPopup(record, marker) {
   const popupEl = marker.getPopup()?.getElement();
