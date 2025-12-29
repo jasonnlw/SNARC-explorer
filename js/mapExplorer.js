@@ -1040,15 +1040,11 @@ wireHoverPopup(
     activeSpiderKey = null;
   }
 
-  function expandSpiderAt(coords, records, langPref) {
-    if (!map || !spiderLayer) return;
+function expandSpiderAt(coords, records, langPref) {
+  if (!map || !spiderLayer) return;
 
-    clearSpider();
-
-    activeSpiderKey = coordKey(coords);
-    // ... rest of your function
-  }
-
+  clearSpider();
+  activeSpiderKey = coordKey(coords);
 
   // Convert center latlng -> pixel point
   const center = L.latLng(coords.lat, coords.lon);
@@ -1071,13 +1067,12 @@ wireHoverPopup(
 
     // Popups on hover/click
     if (record.category === "collections.images") {
-      // Images: use IIIF popup builder and thumb renderer
       wireHoverPopup(
         child,
         () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
         () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
       );
- } else {
+    } else {
       wireHoverPopup(
         child,
         () => buildStandardPopup(record, langPref),
@@ -1086,7 +1081,9 @@ wireHoverPopup(
     }
 
     spiderLayer.addLayer(child);
-  }); // end records.forEach
+  });
+}
+
 
 
 
