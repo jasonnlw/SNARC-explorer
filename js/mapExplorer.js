@@ -1054,8 +1054,8 @@ function makeMarker(coords, category, count = 1) {
     const open = () => {
       marker.bindPopup(buildPopupHtml(), {
   className: "me-fixed-popup",
-  maxWidth: 320,
-  minWidth: 320,
+  maxWidth: 200,
+  minWidth: 200,
   autoPan: true
 }).openPopup();
 
