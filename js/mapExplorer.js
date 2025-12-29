@@ -1096,10 +1096,20 @@ function expandSpiderAt(coords, records, langPref) {
       centerPt.x + radiusPx * Math.cos(angle),
       centerPt.y + radiusPx * Math.sin(angle)
     );
-    const latlng = map.unproject(pt, map.getZoom());
+    
+const latlng = map.unproject(pt, map.getZoom());
 
-    // Child markers: NO COUNT on expanded nodes
-    const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
+// ✅ Add a connecting “spider leg” line from the center to the child
+const leg = L.polyline([center, latlng], {
+  weight: 1.5,
+  opacity: 0.7,
+  interactive: false
+});
+spiderLayer.addLayer(leg);
+
+// Child markers: NO COUNT on expanded nodes
+const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
+
 
     // Popups on hover/click
     if (record.category === "collections.images") {
