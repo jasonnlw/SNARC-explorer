@@ -1412,18 +1412,24 @@ const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
 }
 
 function wireImagesRing(marker, group, langPref) {
-  const open = () => {
-    showImagesRingAt(marker, group, langPref);
-  };
+  const open = () => showImagesRingAt(marker, group, langPref);
 
-  // Always support click (mobile + accessibility)
+  // Defensive: ensure we don't accumulate handlers across re-inits/navigation
+  marker.off("click");
+  marker.off("mouseover");
+
+  // Always support click (desktop + mobile)
   marker.on("click", open);
 
-  // Desktop hover opens ring; do NOT auto-close on mouseout (consistent with your sticky popups)
-  if (isDesktopHover) {
-    marker.on("mouseover", open);
-  }
+  // Hover: evaluate capability at runtime (important after SPA navigation)
+  marker.on("mouseover", () => {
+    const canHover =
+      window.matchMedia &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (canHover) open();
+  });
 }
+
 
 
 
