@@ -869,7 +869,10 @@ return L.divIcon({
 
 async function applyFacets(langPref) {
   if (!map || !clusterGroup) return;
+
+  // Reset any open spider/ring state before rebuilding markers
   clearSpider();
+  activeSpiderKey = null;
 
   // Show loading overlay (if wired)
   if (window.__mapExplorerSetLoading) {
@@ -879,7 +882,6 @@ async function applyFacets(langPref) {
   try {
     clusterGroup.clearLayers();
     coordCounts = new Map();
-
     if (oms) oms.clearMarkers();
 
     const neededDatasets = new Set();
@@ -1313,9 +1315,11 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const parentLatLng = parentMarker.getLatLng();
   const key = `images:${parentLatLng.lat.toFixed(5)},${parentLatLng.lng.toFixed(5)}`;
   if (activeSpiderKey === key) {
-    clearSpider();
-    return;
-  }
+  clearSpider();
+  activeSpiderKey = null;
+  return;
+}
+
 
   clearSpider();
   activeSpiderKey = key;
