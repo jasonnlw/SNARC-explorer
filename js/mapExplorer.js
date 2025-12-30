@@ -1265,10 +1265,13 @@ async function buildThumbMarker(latlng, thumbUrl, qid) {
   ensureImagesRingStyles();
 
   const html = `
-    <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
+  <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
+    <div class="me-thumb-inner">
       <img src="${thumbUrl}" alt="" loading="lazy">
     </div>
-  `;
+  </div>
+`;
+
 
   const icon = L.divIcon({
     className: "",               // prevent Leaflet default styles
@@ -1321,13 +1324,31 @@ async function showImagesRingAt(parentMarker, group, langPref) {
 
   if (!resolved.length) return;
 
-  // Compute ring radius so 140px thumbs don’t overlap
+
+
+
+
+  
+  // -----------------------------------------------------------
+// Geometry: inner-only ring for < 5, staggered ring for >= 5
+// -----------------------------------------------------------
   const n = resolved.length;
+
   const thumbDiameter = 140;
-  const gap = 8;
-  const minRadius = 42; // small ring baseline
-  const requiredRadius = Math.ceil((n * (thumbDiameter + gap)) / (2 * Math.PI));
-  const radiusPx = Math.max(minRadius, requiredRadius);
+  const gap = 14;
+  const minRadius = 90;
+
+  // Base radius derived from circumference (prevents overlap)
+  const baseRadius = Math.max(
+    minRadius,
+    Math.ceil((n * (thumbDiameter + gap)) / (2 * Math.PI))
+  );
+
+  // If fewer than 5 images, keep ALL on a single inner ring
+  const useStagger = n >= 5;
+
+  const radiusNear = baseRadius;
+  const radiusFar  = baseRadius + (thumbDiameter * 0.55) + gap;
 
   const center = parentLatLng;
   const zoom = map.getZoom();
@@ -1343,9 +1364,15 @@ async function showImagesRingAt(parentMarker, group, langPref) {
 
   for (let i = 0; i < n; i++) {
     const angle = i * step;
+
+    // Radius rule:
+    // - < 5 images: all inner ring
+    // - >= 5 images: alternate near/far
+    const r = useStagger ? ((i % 2 === 0) ? radiusNear : radiusFar) : radiusNear;
+
     const pt = L.point(
-      centerPt.x + radiusPx * Math.cos(angle),
-      centerPt.y + radiusPx * Math.sin(angle)
+      centerPt.x + r * Math.cos(angle),
+      centerPt.y + r * Math.sin(angle)
     );
 
     const latlng = map.unproject(pt, zoom);
