@@ -1195,6 +1195,25 @@ wireHoverPopup(
   });
 }
 
+
+function ensureImagesRingPanes() {
+  if (!map) return;
+
+  // Legs (polylines)
+  if (!map.getPane("me-images-legs")) {
+    const p = map.createPane("me-images-legs");
+    p.style.zIndex = 950; // above markers/cluster icons
+    p.style.pointerEvents = "none";
+  }
+
+  // Thumbnails (markers)
+  if (!map.getPane("me-images-thumbs")) {
+    const p = map.createPane("me-images-thumbs");
+    p.style.zIndex = 960; // above legs
+  }
+}
+  
+
 // -----------------------------------------------------------
 // Images ring (ONLY for collections.images)
 // - Up to 10 circular thumbs around the parent marker
@@ -1249,14 +1268,13 @@ function preflightIIIF(urlList) {
 async function buildThumbMarker(latlng, thumbUrl, qid) {
   ensureImagesRingStyles();
 
-  const html = `
+const html = `
   <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
     <div class="me-thumb-inner">
       <img src="${thumbUrl}" alt="" loading="lazy">
     </div>
   </div>
 `;
-
 
 const icon = L.divIcon({
   className: "me-thumb-leaflet-icon",
@@ -1266,7 +1284,13 @@ const icon = L.divIcon({
 });
 
 
-  const m = L.marker(latlng, { icon, keyboard: true });
+const m = L.marker(latlng, {
+  icon,
+  keyboard: true,
+  pane: "me-images-thumbs"
+});
+m.setZIndexOffset(10000);
+
 
   const href = `${ITEM_URL_PREFIX}${qid}`;
   const open = () => window.open(href, "_self"); // same tab to match “load the item page”
@@ -1280,6 +1304,7 @@ const icon = L.divIcon({
 
 async function showImagesRingAt(parentMarker, group, langPref) {
   if (!map || !spiderLayer) return;
+  ensureImagesRingPanes();
 
   const itemsRaw = Array.isArray(group?.items) ? group.items : [];
   const items = itemsRaw.slice(0, 10);
@@ -1370,12 +1395,14 @@ async function showImagesRingAt(parentMarker, group, langPref) {
       zoom
     );
 
-    const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
-      color: "#000",
-      weight: 1.5,
-      opacity: 1,
-      interactive: false
-    });
+const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
+  pane: "me-images-legs",
+  color: "#000",
+  weight: 1.5,
+  opacity: 1,
+  interactive: false
+});
+
     spiderLayer.addLayer(leg);
 
     const thumb = resolved[i];
