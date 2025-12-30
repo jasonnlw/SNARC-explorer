@@ -1203,32 +1203,17 @@ wireHoverPopup(
 // -----------------------------------------------------------
 
 function ensureImagesRingStyles() {
+  // Intentionally minimal now; project CSS handles appearance.
   if (document.getElementById("me-images-ring-style")) return;
 
   const style = document.createElement("style");
   style.id = "me-images-ring-style";
   style.textContent = `
-    .me-thumb-icon {
-      width: 140px;
-      height: 140px;
-      border-radius: 999px;
-      overflow: hidden;
-      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
-      background: #fff;
-      border: 2px solid rgba(255,255,255,0.9);
-    }
-    .me-thumb-icon img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .me-thumb-icon--clickable {
-      cursor: pointer;
-    }
+    .me-thumb-icon--clickable { cursor: pointer; }
   `;
   document.head.appendChild(style);
 }
+
 
 function iiifCandidatesFromNlwMedia(nlwmediaValue, sizePx = 140) {
   // Matches your gallery logic: extract numeric base id, apply multi-range rule
@@ -1273,12 +1258,13 @@ async function buildThumbMarker(latlng, thumbUrl, qid) {
 `;
 
 
-  const icon = L.divIcon({
-    className: "",               // prevent Leaflet default styles
-    html,
-    iconSize: [140, 140],
-    iconAnchor: [70, 70]
-  });
+const icon = L.divIcon({
+  className: "me-thumb-leaflet-icon",
+  html,
+  iconSize: [140, 140],
+  iconAnchor: [70, 70]
+});
+
 
   const m = L.marker(latlng, { icon, keyboard: true });
 
