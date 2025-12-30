@@ -917,6 +917,24 @@ visible.forEach(r => {
 byCoord.forEach((recordsAtCoord, k) => {
   const centerCoords = recordsAtCoord[0].coords;
 
+    // ---------------------------------------------------------
+  // Images-only: one marker per coordinate, thumbs in a ring
+  // ---------------------------------------------------------
+  const isImagesOnlyCoord =
+    recordsAtCoord.length > 0 &&
+    recordsAtCoord.every(r => r.category === "collections.images");
+
+  if (isImagesOnlyCoord) {
+    const count = recordsAtCoord.length;
+    const marker = makeMarker(centerCoords, "collections.images", count > 1 ? count : null);
+
+    wireImagesRing(marker, { coords: centerCoords, items: recordsAtCoord }, langPref);
+
+    clusterGroup.addLayer(marker);
+    return;
+  }
+
+
   // Single item → hover works immediately
   // Single item → hover works immediately
 if (recordsAtCoord.length === 1) {
@@ -1177,6 +1195,195 @@ wireHoverPopup(
   });
 }
 
+// -----------------------------------------------------------
+// Images ring (ONLY for collections.images)
+// - Up to 10 circular thumbs around the parent marker
+// - IIIF fallback preflight (avoid empty frames)
+// - Click thumb => open parent entity item page (QID)
+// -----------------------------------------------------------
+
+function ensureImagesRingStyles() {
+  if (document.getElementById("me-images-ring-style")) return;
+
+  const style = document.createElement("style");
+  style.id = "me-images-ring-style";
+  style.textContent = `
+    .me-thumb-icon {
+      width: 70px;
+      height: 70px;
+      border-radius: 999px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+      background: #fff;
+      border: 2px solid rgba(255,255,255,0.9);
+    }
+    .me-thumb-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .me-thumb-icon--clickable {
+      cursor: pointer;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+function iiifCandidatesFromNlwMedia(nlwmediaValue, sizePx = 140) {
+  // Matches your gallery logic: extract numeric base id, apply multi-range rule
+  const idMatch = String(nlwmediaValue || "").match(/(\d{6,})/);
+  if (!idMatch) return null;
+
+  const baseId = parseInt(idMatch[1], 10);
+  const isMulti = baseId >= 1448577 && baseId <= 1588867;
+  const imageId = isMulti ? baseId + 1 : baseId;
+
+  const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/${sizePx},/0/default.jpg`;
+  const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/${sizePx},/0/default.jpg`;
+
+  return { baseId, imageId, isMulti, urls: [url1, url2] };
+}
+
+function preflightIIIF(urlList) {
+  // Try each URL until one loads; resolve the working URL or null
+  return new Promise(resolve => {
+    const tryNext = (i) => {
+      if (i >= urlList.length) return resolve(null);
+      const url = urlList[i];
+
+      const img = new Image();
+      img.onload = () => resolve(url);
+      img.onerror = () => tryNext(i + 1);
+      img.src = url;
+    };
+    tryNext(0);
+  });
+}
+
+async function buildThumbMarker(latlng, thumbUrl, qid) {
+  ensureImagesRingStyles();
+
+  const html = `
+    <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
+      <img src="${thumbUrl}" alt="" loading="lazy">
+    </div>
+  `;
+
+  const icon = L.divIcon({
+    className: "",               // prevent Leaflet default styles
+    html,
+    iconSize: [70, 70],
+    iconAnchor: [35, 35]
+  });
+
+  const m = L.marker(latlng, { icon, keyboard: true });
+
+  const href = `${ITEM_URL_PREFIX}${qid}`;
+  const open = () => window.open(href, "_self"); // same tab to match “load the item page”
+  m.on("click", open);
+  m.on("keypress", (e) => {
+    if (e?.originalEvent?.key === "Enter") open();
+  });
+
+  return m;
+}
+
+async function showImagesRingAt(parentMarker, group, langPref) {
+  if (!map || !spiderLayer) return;
+
+  const itemsRaw = Array.isArray(group?.items) ? group.items : [];
+  const items = itemsRaw.slice(0, 10);
+
+  // Toggle: if this ring is already open, close it
+  const parentLatLng = parentMarker.getLatLng();
+  const key = `images:${parentLatLng.lat.toFixed(5)},${parentLatLng.lng.toFixed(5)}`;
+  if (activeSpiderKey === key) {
+    clearSpider();
+    return;
+  }
+
+  clearSpider();
+  activeSpiderKey = key;
+
+  // Preflight thumbs first (avoid rendering empty circles)
+  const resolved = [];
+  for (const r of items) {
+    const qid = r?.qid;
+    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 140);
+    if (!qid || !cand) continue;
+
+    const okUrl = await preflightIIIF(cand.urls);
+    if (!okUrl) continue;
+
+    resolved.push({ qid, thumbUrl: okUrl });
+  }
+
+  if (!resolved.length) return;
+
+  // Compute ring radius so 70px thumbs don’t overlap
+  const n = resolved.length;
+  const thumbDiameter = 70;
+  const gap = 8;
+  const minRadius = 42; // small ring baseline
+  const requiredRadius = Math.ceil((n * (thumbDiameter + gap)) / (2 * Math.PI));
+  const radiusPx = Math.max(minRadius, requiredRadius);
+
+  const center = parentLatLng;
+  const zoom = map.getZoom();
+  const centerPt = map.project(center, zoom);
+  const step = (Math.PI * 2) / n;
+
+  // Optional: draw legs (match your existing spider aesthetic)
+  const ICON_HALF_HEIGHT = 14; // your pins are 28px high; keep this consistent
+  const centerAnchorLatLng = map.unproject(
+    L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
+    zoom
+  );
+
+  for (let i = 0; i < n; i++) {
+    const angle = i * step;
+    const pt = L.point(
+      centerPt.x + radiusPx * Math.cos(angle),
+      centerPt.y + radiusPx * Math.sin(angle)
+    );
+
+    const latlng = map.unproject(pt, zoom);
+
+    // Leg line to thumb centre (visual neatness)
+    const childPt = map.project(latlng, zoom);
+    const childAnchorLatLng = map.unproject(
+      L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
+      zoom
+    );
+
+    const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
+      color: "#000",
+      weight: 1.5,
+      opacity: 1,
+      interactive: false
+    });
+    spiderLayer.addLayer(leg);
+
+    const thumb = resolved[i];
+    const m = await buildThumbMarker(latlng, thumb.thumbUrl, thumb.qid);
+    spiderLayer.addLayer(m);
+  }
+}
+
+function wireImagesRing(marker, group, langPref) {
+  const open = () => {
+    showImagesRingAt(marker, group, langPref);
+  };
+
+  // Always support click (mobile + accessibility)
+  marker.on("click", open);
+
+  // Desktop hover opens ring; do NOT auto-close on mouseout (consistent with your sticky popups)
+  if (isDesktopHover) {
+    marker.on("mouseover", open);
+  }
+}
 
 
 
