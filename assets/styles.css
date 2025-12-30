@@ -2125,7 +2125,7 @@ header.aps-header button.aps-filters-toggle {
    Map Explorer – Images ring thumbnails
    --------------------------------------------------- */
 
-/* Remove Leaflet default divIcon box */
+/* Leaflet wrapper reset */
 .me-thumb-leaflet-icon,
 .leaflet-div-icon.me-thumb-leaflet-icon {
   background: transparent !important;
@@ -2133,37 +2133,44 @@ header.aps-header button.aps-filters-toggle {
   padding: 0 !important;
 }
 
-/* Outer circle: white ring */
+/* Tune these three values to taste */
+:root {
+  --me-thumb-size: 140px;
+  --me-thumb-outer-pad: 5px;   /* white OUTSIDE the blue border */
+  --me-thumb-border: 2px;      /* blue border thickness */
+  --me-thumb-inner-pad: 5px;   /* white INSIDE the blue border */
+}
+
 .me-thumb-icon {
-  width: 140px;
-  height: 140px;
+  width: var(--me-thumb-size);
+  height: var(--me-thumb-size);
   border-radius: 999px;
-  background: #ffffff; /* this becomes the white ring */
+  background: #fff;                 /* this is the OUTER white halo */
   position: relative;
   box-shadow: 0 2px 10px rgba(0,0,0,0.25);
   box-sizing: border-box;
 }
 
-/* Blue border on top of the white ring */
+/* Blue border INSET from the outer edge, so outer white is visible */
 .me-thumb-icon::before {
   content: "";
   position: absolute;
-  inset: 0;
-  border: 2px solid #309898;
+  inset: var(--me-thumb-outer-pad);
+  border: var(--me-thumb-border) solid #309898;
   border-radius: 999px;
   pointer-events: none;
+  box-sizing: border-box;
 }
 
-/* Inner clipped circle: inset creates the visible white padding */
+/* Inner clipped image circle: inset further to create inner white padding */
 .me-thumb-inner {
   position: absolute;
-  inset: 5px;              /* white padding thickness */
+  inset: calc(var(--me-thumb-outer-pad) + var(--me-thumb-border) + var(--me-thumb-inner-pad));
   border-radius: 999px;
   overflow: hidden;
-  background: #ffffff;
+  background: #fff;
 }
 
-/* Image fills the inner circle cleanly */
 .me-thumb-inner img {
   width: 100%;
   height: 100%;
@@ -2173,3 +2180,4 @@ header.aps-header button.aps-filters-toggle {
 }
 
 .me-thumb-icon--clickable { cursor: pointer; }
+
