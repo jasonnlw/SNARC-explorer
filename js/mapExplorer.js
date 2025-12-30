@@ -1273,8 +1273,8 @@ async function buildThumbMarker(latlng, thumbUrl, qid) {
   const icon = L.divIcon({
     className: "",               // prevent Leaflet default styles
     html,
-    iconSize: [70, 70],
-    iconAnchor: [35, 35]
+    iconSize: [140, 140],
+    iconAnchor: [70, 70]
   });
 
   const m = L.marker(latlng, { icon, keyboard: true });
@@ -1310,7 +1310,7 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const resolved = [];
   for (const r of items) {
     const qid = r?.qid;
-    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 140);
+    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 250);
     if (!qid || !cand) continue;
 
     const okUrl = await preflightIIIF(cand.urls);
@@ -1321,9 +1321,9 @@ async function showImagesRingAt(parentMarker, group, langPref) {
 
   if (!resolved.length) return;
 
-  // Compute ring radius so 70px thumbs don’t overlap
+  // Compute ring radius so 140px thumbs don’t overlap
   const n = resolved.length;
-  const thumbDiameter = 70;
+  const thumbDiameter = 140;
   const gap = 8;
   const minRadius = 42; // small ring baseline
   const requiredRadius = Math.ceil((n * (thumbDiameter + gap)) / (2 * Math.PI));
