@@ -1299,7 +1299,7 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const resolved = [];
   for (const r of items) {
     const qid = r?.qid;
-    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 250);
+    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 300);
     if (!qid || !cand) continue;
 
     const okUrl = await preflightIIIF(cand.urls);
