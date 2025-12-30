@@ -1209,8 +1209,8 @@ function ensureImagesRingStyles() {
   style.id = "me-images-ring-style";
   style.textContent = `
     .me-thumb-icon {
-      width: 70px;
-      height: 70px;
+      width: 140px;
+      height: 140px;
       border-radius: 999px;
       overflow: hidden;
       box-shadow: 0 2px 10px rgba(0,0,0,0.25);
