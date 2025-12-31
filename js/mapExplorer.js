@@ -334,6 +334,8 @@ WHERE {
   // State
   // -----------------------------------------------------------
 
+  let currentLangPref = "en";
+
   let map = null;
 
   // Cluster group containing all markers currently visible
@@ -418,6 +420,7 @@ const isDesktopHover =
 
   async function initHomeMap(lang = "en") {
     const langPref = normaliseLang(lang);
+    currentLangPref = langPref;
 
     rootEl = document.getElementById("homeMap");
     if (!rootEl) return;
@@ -488,8 +491,8 @@ if (!window.__mePageshowBound) {
 
   window.addEventListener("pageshow", (ev) => {
     if (ev && ev.persisted) {
-      requestAnimationFrame(() => refreshMapAfterReturn());
-      setTimeout(() => refreshMapAfterReturn(), 50);
+      // BFCache restore: rebuild Leaflet + MarkerCluster to guarantee click/hover works
+      requestAnimationFrame(() => reinitMapAfterBFCache());
     }
   });
 }
@@ -513,6 +516,7 @@ if (!window.__meVisibilityBound) {
 
   function setLanguage(lang = "en") {
     const langPref = normaliseLang(lang);
+    currentLangPref = langPref;
     buildFilterPanel(langPref, /* rebuildOnly */ true);
     applyFacets(langPref);
   }
@@ -664,26 +668,16 @@ function bindResizeOnce() {
 function refreshMapAfterReturn() {
   if (!map) return;
 
-  // 1) Leaflet layout recalculation
-  map.invalidateSize(true);
+  // Gentle refresh for visibility changes or layout shifts
+  try {
+    map.invalidateSize(true);
+  } catch (e) {}
 
-  // 2) HARD reset for MarkerCluster after BFCache restore:
-  // remove + re-add forces DOM/event rebinding for cluster icons.
-  if (clusterGroup && map.hasLayer && map.hasLayer(clusterGroup)) {
-    try {
-      map.removeLayer(clusterGroup);
-      map.addLayer(clusterGroup);
-    } catch (e) {
-      // If anything odd happens, fail soft—map will still be usable.
-    }
-  }
-
-  // 3) Nudge cluster recalculation
   if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
-    clusterGroup.refreshClusters();
+    try { clusterGroup.refreshClusters(); } catch (e) {}
   }
 
-  // 4) Ensure interactions are enabled (some SPA flows disable these)
+  // Ensure interactions are enabled
   try {
     map.dragging?.enable?.();
     map.touchZoom?.enable?.();
@@ -1683,3 +1677,61 @@ function extractCommonsFileName(value) {
   };
 
 })();
+
+function reinitMapAfterBFCache() {
+  // Full teardown + rebuild is the most reliable way to restore MarkerCluster interactivity after BFCache.
+  try { window.__mapExplorerSetLoading?.(true); } catch (e) {}
+
+  // Re-acquire container (BFCache restores DOM; IDs remain)
+  if (!rootEl) {
+    rootEl = document.getElementById("homeMap");
+  }
+  if (!rootEl) {
+    try { window.__mapExplorerSetLoading?.(false); } catch (e) {}
+    return;
+  }
+
+  try {
+    // Tear down Leaflet safely
+    if (map) {
+      try { map.off(); } catch (e) {}
+      try { map.remove(); } catch (e) {}
+    }
+    map = null;
+
+    // MarkerCluster/other layers
+    if (clusterGroup) {
+      try { clusterGroup.off?.(); } catch (e) {}
+      try { clusterGroup.clearLayers?.(); } catch (e) {}
+    }
+    clusterGroup = null;
+
+    if (spiderLayer) {
+      try { spiderLayer.clearLayers?.(); } catch (e) {}
+    }
+    spiderLayer = null;
+    oms = null;
+    activeSpiderKey = null;
+
+    // Leaflet sometimes leaves an internal marker on the container; remove it explicitly.
+    try {
+      if (rootEl._leaflet_id) {
+        delete rootEl._leaflet_id;
+      }
+    } catch (e) {
+      try { rootEl._leaflet_id = null; } catch (e2) {}
+    }
+
+    // Clear any leftover panes that BFCache might have preserved.
+    try { rootEl.innerHTML = ""; } catch (e) {}
+
+    // Rebuild the map + layers
+    initLeaflet();
+
+    // Re-apply facets (recreates markers and clusters)
+    return applyFacets(currentLangPref);
+  } finally {
+    try { window.__mapExplorerSetLoading?.(false); } catch (e) {}
+  }
+}
+
