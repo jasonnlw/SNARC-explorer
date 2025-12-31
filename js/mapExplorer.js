@@ -482,9 +482,31 @@ try {
   }
 }
 
+requestAnimationFrame(() => refreshMapAfterReturn());
+setTimeout(() => refreshMapAfterReturn(), 50);
 
+if (!window.__mePageshowBound) {
+  window.__mePageshowBound = true;
+
+  window.addEventListener("pageshow", (ev) => {
+    if (ev && ev.persisted) {
+      requestAnimationFrame(() => refreshMapAfterReturn());
+      setTimeout(() => refreshMapAfterReturn(), 50);
+    }
+  });
+}
+    
     // Responsive panel behaviour
-    window.addEventListener("resize", () => syncPanelForViewport());
+function bindResizeOnce() {
+  if (window.__meResizeBound) return;
+  window.__meResizeBound = true;
+
+  window.addEventListener("resize", () => {
+    syncPanelForViewport();
+    refreshMapAfterReturn(); // keep Leaflet aligned after responsive changes
+  });
+}
+
     syncPanelForViewport();
   }
 
@@ -628,6 +650,19 @@ selected.clear();
     else filterPanelEl.classList.remove("open");
   }
 
+function refreshMapAfterReturn() {
+  if (!map) return;
+
+  // If the map was hidden/collapsed and then shown again, Leaflet needs this
+  map.invalidateSize(true);
+
+  // MarkerCluster sometimes needs a nudge after invalidateSize
+  if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
+    clusterGroup.refreshClusters();
+  }
+}
+
+  
   // -----------------------------------------------------------
   // Leaflet init
   // -----------------------------------------------------------
