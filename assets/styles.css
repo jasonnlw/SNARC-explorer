@@ -1,1699 +1,2182 @@
-// -------------------------------------------------------------
-// SNARC Explorer – Map Explorer (Homepage + Facets)
-// - Leaflet + Leaflet.markercluster (required)
-// - OverlappingMarkerSpiderfier-Leaflet (optional, recommended for same-coordinate spider plots)
-// -------------------------------------------------------------
+/* ========== BASE LAYOUT ========== */
+* { box-sizing: border-box; }
 
-/* global L, API */
-
-window.MapExplorer = (() => {
-
-  // -----------------------------------------------------------
-  // Config
-  // -----------------------------------------------------------
-
-  const ITEM_URL_PREFIX = "https://jasonnlw.github.io/SNARC-explorer/#/item/";
-
-  // Small helper: treat "cy" as Welsh, everything else as English.
-  const normaliseLang = (lang) => (lang === "cy" ? "cy" : "en");
-
-  // Use the same proxy endpoint as Advanced Person Search (GitHub Pages safe)
-const SNARC_SPARQL_ENDPOINT =
-  window.SNARC_SPARQL_ENDPOINT ||
-  "https://snarc-proxy.onrender.com/query";
-
-async function runSPARQL(query) {
-  const url =
-    `${SNARC_SPARQL_ENDPOINT}?query=${encodeURIComponent(query)}&format=json`;
-
-  const res = await fetch(url, { method: "GET", credentials: "omit" });
-
-  // Read as text first so we can print useful diagnostics if something goes wrong
-  const text = await res.text();
-  if (!res.ok) {
-    throw new Error(`SPARQL proxy HTTP ${res.status}: ${text.slice(0, 300)}`);
-  }
-
-  let json;
-  try {
-    json = JSON.parse(text);
-  } catch (e) {
-    // If this happens again, you'll see the first chars (often XML/HTML)
-    throw new Error(`Proxy returned non-JSON. First 200 chars: ${text.slice(0, 200)}`);
-  }
-
-  return json?.results?.bindings || [];
+body {
+  font-family: system-ui, Segoe UI, Arial, sans-serif;
+  margin: 0;
 }
 
-// Snapshot directory served by GitHub Pages
-const MAP_SNAPSHOT_BASE =
-  window.MAP_SNAPSHOT_BASE ||
-  "data/map-snapshots";
 
-let snapshotIndex = null;
+.brand {
+  font-weight: 700;
+  text-decoration: none;
+  color: inherit;
+}
 
-async function getSnapshotIndex() {
-  if (snapshotIndex) return snapshotIndex;
-  try {
-    const res = await fetch(`${MAP_SNAPSHOT_BASE}/index.json`, { cache: "no-store" });
-    if (!res.ok) throw new Error(`index.json HTTP ${res.status}`);
-    snapshotIndex = await res.json();
-    return snapshotIndex;
-  } catch (e) {
-    // Snapshot index is optional (fallback to live queries)
-    snapshotIndex = null;
-    return null;
+#search-form { flex: 1; }
+
+#search-input {
+  width: 100%;
+  padding: .5rem .75rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+}
+
+.lang-switch button {
+  margin-left: .25rem;
+  padding: .4rem .6rem;
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.lang-switch button.active { border-color: #000; }
+
+/* ===== Remove frame on desktop ===== */
+main {
+  max-width: 2500px;
+  margin: 1rem auto;
+  padding: 0; /* no page frame */
+}
+
+/* ===== Full-width mobile layout ===== */
+@media (max-width: 768px) {
+  main {
+    margin: 0;
+    padding: 0;
+    width: 100%;
   }
 }
 
-async function loadSnapshotBindings(datasetKey, langPref) {
-  const idx = await getSnapshotIndex();
-  const v = idx?.generatedAt ? encodeURIComponent(idx.generatedAt) : Date.now();
 
-  const url = `${MAP_SNAPSHOT_BASE}/${datasetKey}.${langPref}.json?v=${v}`;
-  const res = await fetch(url, { cache: "no-store" });
-  if (!res.ok) throw new Error(`snapshot HTTP ${res.status}`);
-  return await res.json(); // this is already an array of bindings
+
+a { color: #0645ad; }
+
+.list { display: grid; gap: .5rem; }
+
+/* ========== SEARCH DROPDOWN ========== */
+.suggestions {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 100%;
+  max-height: 300px;
+  overflow-y: auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  z-index: 999;
+}
+
+.suggestion { padding: 0.5rem 0.75rem; cursor: pointer; }
+.suggestion:hover { background: #f0f0f0; }
+.suggestion.active { background: #e0e0ff; }
+
+/* ========== IIIF IMAGE GALLERY ========== */
+/* ========== IIIF IMAGE GALLERY ========== */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 10px;
+  margin: 10px 0 20px;
+}
+
+.gallery-item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background: #fafafa;
+  height: 300px;             /* Fixed uniform height */
+  position: relative;
+}
+
+.thumb-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;           /* Crop overflowing parts */
+}
+
+.thumb-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;          /* Fill + crop */
+  object-position: center;    /* Keep centered focus */
+  display: block;
+}
+
+.multi-icon {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 4px;
+  padding: 2px;
+  pointer-events: none;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 
-  // -----------------------------------------------------------
-  // Revised SPARQL queries (language-controlled via ${langPref})
-  // -----------------------------------------------------------
 
-  const QUERIES = {
-    // Places
-    landforms: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+.gallery-item:hover img { transform: scale(1.03); }
 
-SELECT ?item ?itemLabel ?itemDescription ?image ?coords
-       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
-WHERE {
-  ?item wdt:P7/wdt:P45* wd:Q8575 .
-  ?item wdt:P26 ?coords .
-  ?item wdt:P7 ?type .
 
-  ?type rdfs:label ?type_label .
-  FILTER (lang(?type_label) = "${langPref}")
-
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+/* ========== MAP THUMBNAILS ========== */
+.map-thumb {
+  position: relative;
+  width: 100%;
+  height: 200px;             /* visible height for the small map */
+  margin: 10px 0;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
-`.trim(),
 
-    settlements: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT ?item ?itemLabel ?itemDescription ?image ?coords
-       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
-WHERE {
-  ?item wdt:P7/wdt:P45* wd:Q1368 .
-  ?item wdt:P26 ?coords .
-  ?item wdt:P7 ?type .
-
-  ?type rdfs:label ?type_label .
-  FILTER (lang(?type_label) = "${langPref}")
-
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+.map-thumb-canvas {
+  width: 100%;
+  height: 100%;
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
-`.trim(),
 
-    regions: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
-SELECT ?item ?itemLabel ?itemDescription ?image ?coords
-       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
-WHERE {
-  ?item wdt:P7/wdt:P45* wd:Q8574 .
-  ?item wdt:P26 ?coords .
-  ?item wdt:P7 ?type .
-
-  ?type rdfs:label ?type_label .
-  FILTER (lang(?type_label) = "${langPref}")
-
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+/* ========== MAP MODAL ========== */
+.map-modal {
+  display: none;
+  position: fixed;
+  z-index: 9999;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.6);
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
-`.trim(),
 
-    buildings: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
-PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
-
-SELECT ?item ?itemLabel ?itemDescription ?image ?coords
-       (GROUP_CONCAT(DISTINCT ?type_label; separator=", ") AS ?types)
-WHERE {
-  ?item wdt:P7/wdt:P45* wd:Q9783 .
-  ?item wdt:P26 ?coords .
-  ?item wdt:P7 ?type .
-
-  ?type rdfs:label ?type_label .
-  FILTER (lang(?type_label) = "${langPref}")
-
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+.map-modal-content {
+  position: relative;
+  margin: 5% auto;
+  width: 80%;
+  max-width: 800px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 }
-GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
-`.trim(),
 
-    // People (3 facets from one query)
-    peoplePlaces: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
+.map-large { width: 100%; height: 500px; border-radius: 6px; }
 
-SELECT ?item ?itemLabel ?itemDescription
-       ?birthplace ?deathplace ?residence
-       ?birthplacecoords ?deathplacecoords ?residencecoords
-       ?image
-WHERE {
-  OPTIONAL {
-    ?item wdt:P21 ?birthplace .
-    OPTIONAL { ?birthplace wdt:P26 ?birthplacecoords . }
+.map-close {
+  position: absolute;
+  top: 10px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  color: #333;
+}
+
+.map-close:hover { color: #000; }
+
+
+.brand-logo {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+#search-form {
+  flex: 1;
+  margin: 0 1rem;
+  position: relative;
+}
+
+/* Language buttons */
+.lang-switch button {
+  margin-left: .4rem;
+  padding: 0.4rem 0.7rem;
+  border: none;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.lang-switch button:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.lang-switch button.active {
+  background: #fff;
+  color: #309898;
+}
+
+/* === Desktop layout for header === */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background-color: #309898;
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* logo | search | lang */
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Arrange logo, search, and language switch in one row */
+.site-header-top {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 1rem;
+}
+
+.brand {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo {
+  height: 38px;
+  width: auto;
+}
+
+#search-form {
+  flex: 1;
+  max-width: 500px;
+  position: relative;
+}
+
+.lang-switch {
+  flex: 0 0 auto;
+  display: flex;
+  gap: 0.4rem;
+}
+
+.lang-switch button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.lang-switch button:hover {
+  background: rgba(255,255,255,0.3);
+}
+
+.lang-switch button.active {
+  background: #fff;
+  color: #309898;
+}
+
+/* === Header: desktop default === */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: #309898;
+  color: #fff;
+  padding: 0.6rem 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+
+  display: grid;
+  grid-template-columns: auto 1fr auto; /* logo | search | lang */
+  align-items: center;
+  gap: 1rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+}
+
+.brand-logo {
+  height: 38px;
+  width: auto;
+}
+
+/* Center search box */
+#search-form {
+  width: 100%;
+  max-width: 600px;
+  justify-self: center;
+  position: relative;
+}
+
+#search-input {
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+/* Language switch on right */
+.lang-switch {
+  display: flex;
+  gap: 0.4rem;
+  justify-self: end;
+}
+
+.lang-switch button {
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.7rem;
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.lang-switch button:hover { background: rgba(255,255,255,0.3); }
+.lang-switch button.active { background:#fff; color:#309898; }
+
+/* Suggestions dropdown */
+#search-suggestions,
+.suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 0 0 8px 8px;
+  background: #fff;
+  z-index: 999;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+}
+.suggestions .suggestion { color:#000; background:#fff; padding:.5rem .75rem; cursor:pointer; }
+.suggestions .suggestion:hover { background:#f0f0f0; }
+
+/* === Desktop override to flatten the mobile-top wrapper === */
+@media (min-width: 769px) {
+  /* Make .mobile-top invisible to the grid layout */
+  .mobile-top {
+    display: contents;
   }
-  OPTIONAL {
-    ?item wdt:P22 ?deathplace .
-    OPTIONAL { ?deathplace wdt:P26 ?deathplacecoords . }
-  }
-  OPTIONAL {
-    ?item wdt:P78 ?residence .
-    OPTIONAL { ?residence wdt:P26 ?residencecoords . }
+
+  /* Ensure language switch aligns right inside the grid */
+  .lang-switch {
+    justify-self: end;
   }
 
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  FILTER(BOUND(?birthplace) || BOUND(?deathplace) || BOUND(?residence))
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+  /* Keep search centered and full width inside its grid cell */
+  #search-form {
+    justify-self: center;
+    width: 100%;
+    max-width: 600px;
+  }
 }
-`.trim(),
 
-    // Collections
-    images: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
+/* === Mobile layout === */
+@media (max-width: 768px) {
+  .site-header {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 0.5rem 0.75rem;
+    gap: 0.4rem;
+  }
 
-SELECT ?item ?itemLabel ?itemDescription ?coords ?nlwmedia
-WHERE {
-  ?item wdt:P26 ?coords .
-  ?item wdt:P50 ?nlwmedia .
+  /* Top row: logo left, language right (single flex row) */
+  .mobile-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+  .brand {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex: 0 0 auto;
+  }
+
+  .lang-switch {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    flex: 0 0 auto;
+  }
+
+  /* Search full width below, but constrained to padding */
+  #search-form {
+    width: 100%;
+    margin-top: 0.4rem;
+    box-sizing: border-box;
+  }
+
+  #search-input {
+    width: 100%;
+    max-width: 100%;
+    font-size: 1rem;
+    box-sizing: border-box;
+  }
+
+  #search-suggestions {
+    width: 100%;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
 }
-`.trim(),
 
-    collectionsPlaces: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
 
-SELECT ?item ?itemLabel ?itemDescription ?coords
-       ?archives ?manuscripts ?clipcymru
-       ?image
-WHERE {
-  { ?item wdt:P12 ?archives }
-  UNION { ?item wdt:P90 ?manuscripts }
-  UNION { ?item wdt:P108 ?clipcymru }
-
-  ?item wdt:P26 ?coords .
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+/* Ensure the form is the positioning context and is shrink-wrapped */
+.site-header #search-form {
+  position: relative !important;
+  width: min(100%, 600px);
+  margin: 0;                 /* no stray offsets */
+  justify-self: center;      /* stay centred in the middle grid cell */
 }
-`.trim(),
 
-    // Events
-    events: ({ langPref }) => `
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX wd: <https://snarc-llgc.wikibase.cloud/entity/>
-PREFIX bd: <http://www.bigdata.com/rdf#>
-
-SELECT ?item ?itemLabel ?itemDescription ?coords ?locationLabel ?location ?image
-WHERE {
-  ?item wdt:P7/wdt:P45* wd:Q9948 .
-  ?item wdt:P73 ?location .
-  ?location wdt:P26 ?coords .
-  OPTIONAL { ?item wdt:P31 ?image }
-
-  SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+/* Make the input define the exact box width */
+.site-header #search-input {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
 }
-`.trim()
-  };
 
-  // -----------------------------------------------------------
-  // Facet registry
-  // -----------------------------------------------------------
+/* Anchor the dropdown to the form and make its width EXACTLY match the input */
+.site-header #search-suggestions,
+.site-header .suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;                  /* <-- let left+right set width; no calc drift */
+  width: auto;               /* ignore earlier width:100% */
+  box-sizing: border-box;
+  z-index: 999;
+}
 
-  const FACETS = [
-    {
-      groupKey: "places",
-      label: { en: "Places", cy: "Lleoedd" },
-      items: [
-        { key: "landforms",   label: { en: "Landforms",            cy: "Tirffurfiau" },      dataset: "landforms",   category: "places.landforms" },
-        { key: "settlements", label: { en: "Human Settlements",    cy: "Anheddiadau Dynol" },dataset: "settlements", category: "places.settlements" },
-        { key: "regions",     label: { en: "Regions",              cy: "Ardaloedd" },        dataset: "regions",     category: "places.regions" },
-        { key: "buildings",   label: { en: "Buildings & Structures",cy: "Adeiladau a Strwythurau" }, dataset: "buildings", category: "places.buildings" }
-      ]
-    },
-    {
-      groupKey: "people",
-      label: { en: "People", cy: "Pobl" },
-      items: [
-        { key: "birth",     label: { en: "Place of Birth", cy: "Man Geni" },  dataset: "peoplePlaces", category: "people.birth", property: "P21" },
-        { key: "death",     label: { en: "Place of Death", cy: "Man Marw" },  dataset: "peoplePlaces", category: "people.death", property: "P22" },
-        { key: "residence", label: { en: "Residence",      cy: "Preswylfa" }, dataset: "peoplePlaces", category: "people.residence", property: "P78" }
-      ]
-    },
-    {
-      groupKey: "collections",
-      label: { en: "Collections", cy: "Casgliadau" },
-      items: [
-        { key: "images",      label: { en: "Images",      cy: "Delweddau" },  dataset: "images",            category: "collections.images", property: "P50", special: "images" },
-        { key: "archives",    label: { en: "Archives",    cy: "Archifau" },   dataset: "collectionsPlaces", category: "collections.archives", property: "P12" },
-        { key: "manuscripts", label: { en: "Manuscripts", cy: "Llawysgrifau"},dataset: "collectionsPlaces", category: "collections.manuscripts", property: "P90" },
-        { key: "clipcymru",   label: { en: "Clip Cymru",  cy: "Clip Cymru" },dataset: "collectionsPlaces", category: "collections.clipcymru", property: "P108" }
-      ]
-    },
-    {
-      groupKey: "events",
-      label: { en: "Events", cy: "Digwyddiadau" },
-      items: [
-        { key: "events", label: { en: "All Events", cy: "Pob Digwyddiad" }, dataset: "events", category: "events.all" }
-      ]
+/* --- Desktop placement: force brand | search | language in one row --- */
+@media (min-width: 769px) {
+  .site-header {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    grid-template-areas: "brand search lang";
+    align-items: center;
+    gap: 1rem;
+  }
+
+  /* Make wrapper transparent so its children enter the grid */
+  .mobile-top { display: contents; }
+
+  /* Pin each element to its area */
+  .brand { grid-area: brand; }
+  #search-form { 
+    grid-area: search; 
+    justify-self: center;
+    width: 100%;
+    max-width: 600px;
+  }
+  .lang-switch { 
+    grid-area: lang; 
+    justify-self: end; 
+  }
+
+  /* Override earlier flex-oriented desktop remnants */
+  #search-form { flex: initial; }              /* neutralise flex:1 */
+  #search-form { max-width: 600px !important; }/* beat old 500px cap */
+}
+
+/* Desktop: limit width of entity content */
+@media (min-width: 769px) {
+  .entity-layout {
+    max-width: 80%;       
+    margin-left: auto;
+    margin-right: auto;
+
+
+  }
+}
+
+.entity-layout > * {
+  margin-bottom: 3rem;
+}
+
+
+
+.family-tree-wrapper {
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+.family-tree-iframe {
+  width: 100%;
+  height: 600px; /* ADJUST AS DESIRED */
+  border: 0;
+  display: block;
+  overflow: hidden;
+  width: 100vw !important;
+  max-width: 100% !important;
+}
+
+@media (max-width: 768px) {
+  .family-tree-iframe {
+    height: 420px;
+  }
+}
+
+/* === HERO HEADER === */
+
+.hero-header {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0px 0px;
+}
+
+.hero-image img {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}
+
+.hero-text h1 {
+  margin: 0;
+  font-size: 2rem;
+  font-weight: 700;
+}
+
+.hero-desc {
+  margin: 4px 0 12px;
+  font-size: 1.1rem;
+  color: #555;
+}
+
+.hero-tags {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.hero-tag {
+  background: #EEE;
+  padding: 4px 10px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.hero-tag.place {
+  background: #d0e8ff;
+  color: #045396;
+}
+
+.hero-coords {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+
+/* mobile header */
+
+@media (max-width: 600px) {
+  .hero-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 20px 16px; /* slightly reduced vertical padding */
+  }
+
+  .hero-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* centers everything inside hero-text */
+  }
+
+  .hero-tags {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .hero-image img {
+    width: 110px;
+    height: 110px;
+  }
+}
+
+/* ============================================
+   NEW BOX 1 + BOX 2 TWO-COLUMN LAYOUT (Option A)
+   ============================================ */
+
+/* Full-width grey background stripe */
+.box-wrapper-outer {
+  width: 100vw;                   /* full screen width */
+  margin-left: 50%;
+  transform: translateX(-50%);   /* escape parent centering */
+  background: #309898;           /* same grey */
+  padding: 2rem 0;               /* keep vertical space */
+}
+
+/* Inner constrained content (same width as rest of page) */
+.box-wrapper {
+  max-width: 80%;                /* desktop width */
+  margin: 0 auto;                /* center it */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* Mobile: keep full-bleed background, stack boxes */
+@media (max-width: 768px) {
+  .box-wrapper-outer {
+    padding: 1.5rem 0;
+  }
+
+  .box-wrapper {
+    max-width: 100%;             /* use full width on mobile */
+    grid-template-columns: 1fr;
+    padding: 0 1rem;             /* small side padding for readability */
+  }
+}
+
+
+.box-col {
+  background: #fff;
+  border: 1px solid #e3e3e3;
+  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+}
+
+/* ==========================
+   BOX 1 — PROFILE (DL Layout)
+   ========================== */
+
+.profile-box dl {
+  margin: 0;
+}
+
+.profile-box dt {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 1rem;
+  color: #333;
+}
+
+.profile-box dd {
+  margin: 0.2rem 0 0.8rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* First row slight spacing fix */
+.profile-box dt:first-child {
+  margin-top: 0.2rem;
+}
+
+/* ==========================
+   MAP THUMBNAIL IN BOX 1
+   ========================== */
+
+.profile-box .map-thumb {
+  height: 180px;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+}
+
+/* ==========================
+   BOX 2 — COLLECTION GROUPS
+   ========================== */
+
+.collections-box {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.collection-group h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #309898;
+}
+
+.collection-group dl {
+  margin: 0;
+}
+
+.collection-group dt {
+  font-weight: 600;
+  font-size: 0.95rem;
+  margin-top: 0.9rem;
+  color: #333;
+}
+
+.collection-group dd {
+  margin: 0.2rem 0 0.8rem 0;
+  font-size: 1rem;
+  color: #444;
+}
+
+/* Link layout inside collections */
+.collection-group dd a {
+  text-decoration: none;
+  color: #0645ad;
+}
+
+.collection-group dd a:hover {
+  text-decoration: underline;
+}
+
+/* Profile header matching Box 2 */
+.profile-header {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #309898;
+}
+
+/* Layout: DL on left, map on right */
+.profile-inner {
+  display: grid;
+  grid-template-columns: 1fr 200px;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* Mobile: stack */
+@media (max-width: 768px) {
+  .profile-inner {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-map-container {
+    width: 100%;
+  }
+}
+
+/* Map container */
+.profile-map-container .map-thumb {
+  height: 200px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+.profile-inner {
+    display: flex;
+    flex-direction: row;
+    gap: 24px;
+    align-items: flex-start;
+}
+
+.profile-map-container {
+    min-width: 300px;
+}
+
+.profile-map-container .map-thumb {
+    width: 300px;
+    height: 200px;
+    border-radius: 8px;
+    overflow: hidden;
+}
+.map-thumb-canvas {
+    width: 100%;
+    height: 100%;   /* <-- essential for Leaflet to render */
+}
+
+/* Map at bottom of Box 1 */
+.profile-map-container {
+  margin-top: 1.25rem;
+}
+
+.profile-map-container .map-thumb {
+  width: 100%;
+  max-width: 400px;
+  height: 220px;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.profile-map-container .map-thumb-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+/* ==========================================
+   BOX 1: RENDER dt + dd ON THE SAME LINE
+   ========================================== */
+
+.profile-inner dl {
+  display: grid;
+  grid-template-columns: 180px 1fr; /* adjust width as needed */
+  grid-column-gap: 1rem;
+  align-items: start;
+}
+
+.profile-inner dt,
+.profile-inner dd {
+  margin: 0;              /* remove default browser spacing */
+  padding: 4px 0;         /* keep a little vertical rhythm */
+}
+
+.profile-inner dt {
+  font-weight: 600;
+  color: #333;
+}
+
+.profile-inner dd {
+  color: #444;
+}
+
+/* Mobile: stack with full-width label */
+@media (max-width: 600px) {
+  .profile-inner dl {
+    grid-template-columns: 1fr; /* label above value on narrow screens */
+  }
+  .profile-inner dd {
+    margin-bottom: 0.5rem;
+  }
+}
+
+/* ==========================================
+   BOX 2: RENDER dt + dd ON THE SAME LINE
+   ========================================== */
+
+.collection-group dl {
+  display: grid;
+  grid-template-columns: 180px 1fr;  /* adjust width if needed */
+  grid-column-gap: 1rem;
+  align-items: start;
+}
+
+.collection-group dt,
+.collection-group dd {
+  margin: 0;
+  padding: 4px 0;   /* compact vertical rhythm */
+}
+
+.collection-group dt {
+  font-weight: 600;
+  color: #333;
+}
+
+.collection-group dd {
+  color: #444;
+}
+
+/* MOBILE: stack label above value */
+@media (max-width: 600px) {
+  .collection-group dl {
+    grid-template-columns: 1fr;
+  }
+  .collection-group dd {
+    margin-bottom: 0.5rem;
+  }
+}
+/* Tighten spacing for Box 2 subheadings */
+.collections-box h3 {
+  margin-top: 0.5rem;     /* was larger before */
+  margin-bottom: 0.75rem; /* subtle but compact */
+  font-size: 1.15rem;     /* slightly smaller if desired */
+}
+
+/* ==========================================
+   BOX 1 — pill buttons for entity links (flat colours)
+   ========================================== */
+
+.box1-link-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  margin: 3px 6px 3px 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  white-space: nowrap;
+}
+
+.box1-link-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.box1-link-pill:active {
+  opacity: 0.75;
+}
+
+/* ==========================================
+   BOX 1 — pill buttons (using user palette)
+   ========================================== */
+
+.box1-link-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  margin: 3px 6px 3px 0;
+  border-radius: 999px;
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: transform 0.12s ease, opacity 0.12s ease;
+  white-space: nowrap;
+}
+
+.box1-link-pill:hover {
+  transform: translateY(-2px);
+  opacity: 0.85;
+}
+
+.box1-link-pill:active {
+  opacity: 0.75;
+}
+
+/* CATEGORY COLOURS — EXACT USER PALETTE */
+.box1-pill-family {
+  background: #FA0808;     /* RED */
+}
+
+.box1-pill-place {
+  background: #309898;     /* DEEP TEAL */
+}
+
+.box1-pill-education {
+  background: #FFB233;     /* AMBER */
+}
+
+.box1-pill-default {
+  background: #5FCD96;     /* SOFT GREEN */
+}
+
+/* Arrow icon */
+.box1-link-pill::after {
+  content: "›";
+  margin-left: 10px;
+  font-weight: 700;
+}
+
+.id-icon {
+  width: 18px;
+  height: 18px;
+  fill: #FF9F00;
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+/* tree toggle mobile */
+
+.family-tree-toggle {
+  display: block;
+  width: 100%;
+  margin: 12px 0;
+  padding: 14px 16px;
+  font-size: 17px;
+  font-weight: 600;
+  background: #eee;
+  border-radius: 8px;
+  border: none;
+}
+
+.family-tree-collapsible {
+  transition: all 0.3s ease;
+}
+
+
+/* ===============================================================
+   MOBILE COLLAPSIBLE RIBBONS
+   =============================================================== */
+@media (max-width: 768px) {
+
+  /* hide desktop layout on mobile */
+  .desktop-layout { display: none; }
+
+  /* show mobile layout only on mobile */
+  .mobile-layout { display: block; }
+
+  .mobile-section-toggle {
+    width: 100%;
+    border: none;
+    border-radius: 0;
+    padding: 14px 16px;
+    margin: 0;
+    font-size: 1.05rem;
+    font-weight: 700;
+    text-align: left;
+    color: #fff;
+    position: relative;
+    cursor: pointer;
+  }
+
+  /* Arrow */
+  .mobile-section-toggle::after {
+    content: "▾";
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1.2rem;
+    transition: transform 0.25s ease;
+  }
+
+  .mobile-section-toggle.open::after {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  /* Colour themes */
+  .mobile-toggle-info         { background: #309898; }
+  .mobile-toggle-collections  { background: #5FCD96; }
+  .mobile-toggle-family       { background: #FFB233; }
+  .mobile-toggle-images       { background: #FA0808; }
+
+  /* No spacing between sections */
+  .mobile-section {
+    margin: 0;
+    padding: 0;
+  }
+}
+
+/* Desktop: hide mobile layout entirely */
+@media (min-width: 769px) {
+  .mobile-layout { display: none; }
+}
+/* MOBILE FIX: Prevent map collapse in ribbon layout */
+@media (max-width: 768px) {
+
+  /* Stop Box 1 using desktop flex layout */
+  .profile-inner {
+    display: block !important;
+  }
+
+  /* Map container must size naturally */
+  .profile-map-container {
+    min-width: auto !important;
+    width: 100% !important;
+  }
+
+  /* Map thumbnail must fill available width */
+  .profile-map-container .map-thumb {
+    width: 100% !important;
+    height: 200px !important;
+  }
+
+  .profile-map-container .map-thumb-canvas {
+    width: 100% !important;
+    height: 100% !important;
+  }
+}
+
+/* --- Refinement 1: Desktop Map Full Width --- */
+/* Override max-width constraint for desktop (min-width: 769px) */
+@media (min-width: 769px) {
+  /* Target the map thumb inside the left box column */
+  .box-left .profile-map-container .map-thumb {
+    max-width: 100%; /* Allow map to fill the entire width of Box 1 */
+    height: 300px;   /* Optional: increase height for a more prominent desktop map */
+  }
+}
+/* ===============================================================
+   IMAGE GALLERY: Multi-Column/Masonry Layout (Desktop Only)
+   =============================================================== */
+
+@media (min-width: 769px) {
+    /* 1. Container using Multi-Column Layout (Masonry effect) */
+    .gallery.adaptive-gallery-container {
+        /* CRITICAL: Sets up the columns (adjust '3' to change density) */
+        column-count: 3; 
+        
+        /* Sets the even spacing between the columns */
+        column-gap: 5px; 
+        
+        /* FIX: Add padding at the very top of the gallery element */
+        padding-top: 20px; 
+        
+        /* Ensure display is block for multi-column to work */
+        display: block; 
+        margin: 0;
+        padding-left: 0;
+        padding-right: 0;
+        width: 100%;
     }
-  ];
 
-  // -----------------------------------------------------------
-  // Marker styles (divIcon)
-  // -----------------------------------------------------------
-
-  const MARKER_STYLE = {
-    "places.landforms":     { className: "me-pin me-pin-places",     glyph: "⛰" },
-    "places.settlements":   { className: "me-pin me-pin-places",     glyph: "🏘" },
-    "places.regions":       { className: "me-pin me-pin-places",     glyph: "🗺" },
-    "places.buildings":     { className: "me-pin me-pin-places",     glyph: "🏛" },
-
-    "people.birth":         { className: "me-pin me-pin-people",     glyph: "★" },
-    "people.death":         { className: "me-pin me-pin-people",     glyph: "✦" },
-    "people.residence":     { className: "me-pin me-pin-people",     glyph: "⌂" },
-
-    "collections.images":   { className: "me-pin me-pin-images",     glyph: "▦" },
-    "collections.archives": { className: "me-pin me-pin-collections",glyph: "▣" },
-    "collections.manuscripts": { className: "me-pin me-pin-collections", glyph: "▤" },
-    "collections.clipcymru":{ className: "me-pin me-pin-collections",glyph: "▧" },
-
-    "events.all":           { className: "me-pin me-pin-events",     glyph: "●" }
-  };
-
-  // -----------------------------------------------------------
-  // State
-  // -----------------------------------------------------------
-
-  let map = null;
-
-  // Cluster group containing all markers currently visible
-  let clusterGroup = null;
-
-  // Optional: spiderfy for same-coordinate markers
-  let oms = null;
-
-  // Cache: cache[langPref][datasetKey] = normalisedRecords[]
-  const cache = { en: {}, cy: {} };
-
-  // Selected facets: set of facet item keys
-  const selected = new Set();
-
-  // coordKey -> count
-  let coordCounts = new Map();
-
-  // DOM refs
-  let rootEl = null;
-  let filterPanelEl = null;
-  let filterToggleBtn = null;
-
-  // Hover refs
-
-  let spiderLayer = null;
-  let activeSpiderKey = null;
-
-// Sticky popup management (desktop hover)
-let activePopupMarker = null;
-let outsidePopupListener = null;
-
-function makePopupSticky(marker) {
-  const popupEl = marker.getPopup()?.getElement();
-  if (!popupEl) return;
-
-  // Prevent clicks inside popup from bubbling to the map/document
-  if (typeof L !== "undefined" && L.DomEvent) {
-    L.DomEvent.disableClickPropagation(popupEl);
-    L.DomEvent.disableScrollPropagation(popupEl);
-  }
-
-  // Replace any previous outside-click listener
-  if (outsidePopupListener) {
-    document.removeEventListener("mousedown", outsidePopupListener, true);
-    outsidePopupListener = null;
-  }
-
-  activePopupMarker = marker;
-
-  outsidePopupListener = (ev) => {
-    const el = marker.getPopup()?.getElement();
-    if (!el) return;
-
-    // Click inside popup => keep it open
-    if (el.contains(ev.target)) return;
-
-    // Otherwise close
-    try { marker.closePopup(); } catch (e) {}
-  };
-
-  // Use capture to ensure we see the click early
-  document.addEventListener("mousedown", outsidePopupListener, true);
-
-  // Cleanup when popup closes (X button, etc.)
-  marker.once("popupclose", () => {
-    if (outsidePopupListener) {
-      document.removeEventListener("mousedown", outsidePopupListener, true);
-      outsidePopupListener = null;
+    /* 2. Individual image wrapper (the link) */
+    .gallery-link {
+        /* CRITICAL: Prevents an image from being split across two columns */
+        display: block;
+        break-inside: avoid; 
+        
+        /* Spacing between images stacked vertically in the column */
+        margin-bottom: 5px; 
+        
+        height: auto;
+        line-height: 0; 
     }
-    if (activePopupMarker === marker) activePopupMarker = null;
-  });
-}
-
-const isDesktopHover =
-  window.matchMedia &&
-  window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-
-
-  // -----------------------------------------------------------
-  // Public init
-  // -----------------------------------------------------------
-
-  async function initHomeMap(lang = "en") {
-    const langPref = normaliseLang(lang);
-
-    rootEl = document.getElementById("homeMap");
-    if (!rootEl) return;
     
-  // If the homepage was re-rendered, #homeMap is a NEW DOM node.
-  // Leaflet must be destroyed and re-created against the new container.
-  if (map && typeof map.getContainer === "function") {
-    const currentContainer = map.getContainer();
-    if (currentContainer !== rootEl) {
-      try { map.remove(); } catch (e) {}
-      map = null;
-      clusterGroup = null;
-      oms = null;
+    /* 3. The actual image */
+    .gallery-image {
+        /* Fills the full width of the column */
+        width: 100%;     
+        /* Maintains aspect ratio (NO CROP) */
+        height: auto;    
+        
+        /* Remove object-fit properties, which were introducing gaps */
+        object-fit: unset; 
+        display: block;
     }
-  }
+}
 
-      // ---------------------------------------------------------
-  // Map loading overlay (created once per homeMap instance)
-  // ---------------------------------------------------------
-  let overlay = rootEl.querySelector(".map-loading-overlay");
-  if (!overlay) {
-    overlay = document.createElement("div");
-    overlay.className = "map-loading-overlay";
-    overlay.innerHTML = `
-      <div class="map-loading-spinner" aria-label="Loading"></div>
-    `;
-    rootEl.appendChild(overlay);
-  }
+/* ===============================================================
+   MOBILE: Ensure basic functionality (full width, no crop)
+   =============================================================== */
 
-  // Expose a local helper for this map instance
-  function setLoading(isLoading) {
-    const on = !!isLoading;
-    overlay.classList.toggle("is-visible", on);
-    // Critical: when hidden, ensure the overlay cannot intercept pointer events (BFCache can preserve state)
-    overlay.style.pointerEvents = on ? "auto" : "none";
-  }
-
-  // Make it available to other functions in this module
-  window.__mapExplorerSetLoading = setLoading;
-
-
-
-    buildShell();
-    initLeaflet();
-    // Defaults only on first load (so checkboxes + initial pins appear)
-    if (selected.size === 0) {
-      selectDefaultFacets();
+@media (max-width: 768px) {
+    /* Set images to stack on mobile */
+    .gallery.adaptive-gallery-container {
+        display: block; 
+        padding: 0;
     }
-    buildFilterPanel(langPref);
-
-
-
-// ---------------------------------------------------------
-// Initial dataset load (show overlay immediately)
-// ---------------------------------------------------------
-if (window.__mapExplorerSetLoading) {
-  window.__mapExplorerSetLoading(true);
-}
-
-try {
-  await applyFacets(langPref);
-} finally {
-  if (window.__mapExplorerSetLoading) {
-    window.__mapExplorerSetLoading(false);
-  }
-}
-
-
-if (!window.__mePageshowBound) {
-  window.__mePageshowBound = true;
-
-  window.addEventListener("pageshow", (ev) => {
-    if (ev && ev.persisted) {
-      if (window.__mapExplorerSetLoading) {
-        try { window.__mapExplorerSetLoading(false); } catch (e) {}
-      }
-      requestAnimationFrame(() => refreshMapAfterReturn());
-      setTimeout(() => refreshMapAfterReturn(), 50);
+    .gallery.adaptive-gallery-container .gallery-link {
+        display: block;
+        margin-bottom: 5px; /* Add spacing between stacked images */
+        height: auto; /* Let images determine their height on mobile */
     }
-  });
-}
-
-if (!window.__meVisibilityBound) {
-  window.__meVisibilityBound = true;
-
-  document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible") {
-      if (window.__mapExplorerSetLoading) {
-        try { window.__mapExplorerSetLoading(false); } catch (e) {}
-      }
-      requestAnimationFrame(() => refreshMapAfterReturn());
-      setTimeout(() => refreshMapAfterReturn(), 50);
+    .gallery-image {
+        width: 100%;
+        height: auto;
+        object-fit: contain;
     }
-  });
 }
-    
-    // Responsive panel behaviour
-function bindResizeOnce() {
-  if (window.__meResizeBound) return;
-  window.__meResizeBound = true;
-
-  window.addEventListener("resize", () => {
-    syncPanelForViewport();
-    refreshMapAfterReturn(); // keep Leaflet aligned after responsive changes
-  });
+/* --- Multi-Image Icon Styling --- */
+.gallery-link {
+    position: relative; /* Ensures multi-icon is positioned relative to the link */
 }
-
-    syncPanelForViewport();
-  }
-
-  function setLanguage(lang = "en") {
-    const langPref = normaliseLang(lang);
-    buildFilterPanel(langPref, /* rebuildOnly */ true);
-    applyFacets(langPref);
-  }
-
-  // -----------------------------------------------------------
-  // Shell + filter panel
-  // -----------------------------------------------------------
-
-    
-  function buildShell() {
-
-    // Guard: if already wrapped, just re-bind refs and exit
-    const existingShell = rootEl?.parentElement?.classList?.contains("map-explorer-shell");
-    if (existingShell) {
-      filterToggleBtn = rootEl.parentElement.querySelector(".me-filters-toggle");
-      filterPanelEl = rootEl.parentElement.querySelector(".me-filters-panel");
-      return;
-    }
-
-    // Wrap map element to allow overlay UI
-    const wrapper = document.createElement("div");
-    wrapper.className = "map-explorer-shell";
-    rootEl.parentNode.insertBefore(wrapper, rootEl);
-    wrapper.appendChild(rootEl);
-
-    // Toggle button (mobile)
-    filterToggleBtn = document.createElement("button");
-    filterToggleBtn.type = "button";
-    filterToggleBtn.className = "me-filters-toggle aps-btn aps-btn-ghost";
-    filterToggleBtn.addEventListener("click", () => {
-      filterPanelEl.classList.toggle("open");
-    });
-
-    wrapper.appendChild(filterToggleBtn);
-
-    // Filter panel
-    filterPanelEl = document.createElement("div");
-    filterPanelEl.className = "me-filters-panel";
-    wrapper.appendChild(filterPanelEl);
-  }
-
-  function buildFilterPanel(langPref, rebuildOnly = false) {
-    if (!filterPanelEl) return;
-
-    const t = (en, cy) => (langPref === "cy" ? cy : en);
-
-    if (filterToggleBtn) {
-      filterToggleBtn.textContent = t("Filters", "Hidlyddion");
-    }
-
-    filterPanelEl.innerHTML = "";
-
-    // Header
-    const header = document.createElement("div");
-    header.className = "me-panel-header";
-
-    const title = document.createElement("div");
-    title.className = "me-panel-title";
-    title.textContent = t("Map Explorer", "Archwiliwr Map");
-
-    const actions = document.createElement("div");
-    actions.className = "me-panel-actions";
-
-    const clearBtn = document.createElement("button");
-    clearBtn.type = "button";
-    clearBtn.className = "aps-btn aps-btn-ghost";
-    clearBtn.textContent = t("Clear", "Clirio");
-    clearBtn.addEventListener("click", () => {
-      selected.clear();
-      filterPanelEl.querySelectorAll("input[type='checkbox']").forEach(cb => { cb.checked = false; });
-      applyFacets(langPref);
-    });
-
-    actions.appendChild(clearBtn);
-
-    header.appendChild(title);
-    header.appendChild(actions);
-    filterPanelEl.appendChild(header);
-
-    // Groups
-    FACETS.forEach(group => {
-      const groupWrap = document.createElement("div");
-      groupWrap.className = "me-group";
-
-      const groupTitle = document.createElement("div");
-      groupTitle.className = "me-group-title";
-      groupTitle.textContent = group.label[langPref];
-
-      groupWrap.appendChild(groupTitle);
-
-      group.items.forEach(item => {
-        const row = document.createElement("label");
-        row.className = "me-facet-row";
-
-        const cb = document.createElement("input");
-        cb.type = "checkbox";
-        cb.checked = selected.has(item.key);
-
-        cb.addEventListener("change", async () => {
-          if (cb.checked) selected.add(item.key);
-          else selected.delete(item.key);
-          await applyFacets(langPref);
-        });
-
-        const txt = document.createElement("span");
-        txt.textContent = item.label[langPref];
-
-        row.appendChild(cb);
-        row.appendChild(txt);
-        groupWrap.appendChild(row);
-      });
-
-      filterPanelEl.appendChild(groupWrap);
-    });
-
-    const hint = document.createElement("div");
-    hint.className = "me-panel-hint";
-    hint.textContent = t("Select one or more datasets to display.", "Dewiswch un neu fwy o setiau data i’w dangos.");
-    filterPanelEl.appendChild(hint);
-
-    syncPanelForViewport();
-  }
-
-  function selectDefaultFacets() {
-selected.clear();
-  selected.add("images"); // Images
-  }
-
-  function syncPanelForViewport() {
-    if (!filterPanelEl) return;
-
-    const isMobile = window.matchMedia("(max-width: 860px)").matches;
-    filterPanelEl.classList.toggle("me-mobile", isMobile);
-
-    if (!isMobile) filterPanelEl.classList.add("open");
-    else filterPanelEl.classList.remove("open");
-  }
-
-bindResizeOnce();
-  
-function refreshMapAfterReturn() {
-  if (!map) return;
-
-  // Ensure any loading overlay cannot block interactions
-  if (window.__mapExplorerSetLoading) {
-    try { window.__mapExplorerSetLoading(false); } catch (e) {}
-  }
-
-  // 1) Leaflet layout recalculation
-  map.invalidateSize(true);
-
-  // 2) HARD reset for MarkerCluster after BFCache restore:
-  // remove + re-add forces DOM/event rebinding for cluster icons.
-  if (clusterGroup && map.hasLayer && map.hasLayer(clusterGroup)) {
-    try {
-      map.removeLayer(clusterGroup);
-      map.addLayer(clusterGroup);
-    } catch (e) {
-      // If anything odd happens, fail soft—map will still be usable.
-    }
-  }
-
-  // 3) Nudge cluster recalculation
-  if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
-    clusterGroup.refreshClusters();
-  }
-
-  // 4) Ensure interactions are enabled (some SPA flows disable these)
-  try {
-    map.dragging?.enable?.();
-    map.touchZoom?.enable?.();
-    map.doubleClickZoom?.enable?.();
-    map.scrollWheelZoom?.enable?.();
-    map.boxZoom?.enable?.();
-    map.keyboard?.enable?.();
-  } catch (e) {}
+.multi-icon {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    padding: 2px;
+    background: rgba(255, 255, 255, 0.85); /* Semi-transparent white background */
+    border-radius: 3px;
+    line-height: 1;
+    color: #444; /* Dark color for the icon graphic */
+    z-index: 10;
+}
+.home-search-wrapper {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 20px;
 }
 
-
-  
-  // -----------------------------------------------------------
-  // Leaflet init
-  // -----------------------------------------------------------
-
-  function initLeaflet() {
-    if (map) return;
-
-    map = L.map(rootEl, { scrollWheelZoom: true });
-
-function getWeightedClusterCount(cluster) {
-  let total = 0;
-  cluster.getAllChildMarkers().forEach(m => {
-    total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
-  });
-  return total;
+.home-card {
+  padding: 16px;
+  border-radius: 8px;
+  background: #efefef;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      attribution: "&copy; OpenStreetMap contributors"
-    }).addTo(map);
-
-    map.setView([52.3, -3.8], 7);
-setTimeout(() => map.invalidateSize(), 0);
-
-clusterGroup = L.markerClusterGroup({
-  showCoverageOnHover: false,
-  maxClusterRadius: 55,
-  spiderfyOnMaxZoom: true,
-  spiderLegPolylineOptions: {
-    weight: 1.5,
-    opacity: 0.7
-  },
-
-iconCreateFunction: function (cluster) {
-  const count = getWeightedClusterCount(cluster);
-
-  // Match Leaflet.markercluster default size buckets
-  let sizeClass = "marker-cluster-small";
-  if (count >= 100) sizeClass = "marker-cluster-large";
-  else if (count >= 10) sizeClass = "marker-cluster-medium";
-
-return L.divIcon({
-  html: `<div><span>${count}</span></div>`,
-  className: `marker-cluster ${sizeClass}`,
-  iconSize: L.point(40, 40),
-  iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
-});
+.home-card:hover {
+  background: #ddd;
 }
 
-});
-
-
-    map.addLayer(clusterGroup);
-
-    // Optional OMS for true “same coordinate” spider plots
-    if (typeof OverlappingMarkerSpiderfier !== "undefined") {
-      oms = new OverlappingMarkerSpiderfier(map, {
-        keepSpiderfied: true,
-        nearbyDistance: 28,
-        legWeight: 1.5
-      });
-    }
- 
-  // ✅ MOVE THIS HERE (was incorrectly at top-level)
-  if (!spiderLayer) {
-    spiderLayer = L.layerGroup().addTo(map);
-  }
-  map.on("zoomstart movestart", clearSpider);
+.recent-line {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
 }
-
-
-  // -----------------------------------------------------------
-  // Fetch + normalise
-  // -----------------------------------------------------------
-
-  async function fetchDataset(datasetKey, langPref) {
-    if (cache[langPref][datasetKey]) return cache[langPref][datasetKey];
-
-    const queryBuilder = QUERIES[datasetKey];
-    if (!queryBuilder) {
-      cache[langPref][datasetKey] = [];
-      return cache[langPref][datasetKey];
-    }
-
-    const query = queryBuilder({ langPref });
-
-    let results;
-
-    // 1) Try snapshot first (fast)
-    try {
-      results = await loadSnapshotBindings(datasetKey, langPref);
-    } catch (e) {
-      results = null;
-    }
-
-    // 2) Fallback to live query if snapshot missing/failed
-    if (!results) {
-      try {
-        results = await runSPARQL(query);
-      } catch (err) {
-        console.error("MapExplorer: SPARQL error for", datasetKey, err);
-        cache[langPref][datasetKey] = [];
-        return cache[langPref][datasetKey];
-      }
-    }
-
-
-    const records = normaliseResults(datasetKey, results);
-    cache[langPref][datasetKey] = records;
-    return records;
-  }
-
-  function normaliseResults(datasetKey, rows) {
-    const out = [];
-
-    const getQid = (uri) => (uri ? uri.split("/").pop() : "");
-
-    const parsePoint = (wkt) => {
-      if (!wkt) return null;
-      const s = wkt.replace("Point(", "").replace(")", "").trim();
-      const parts = s.split(/\s+/);
-      if (parts.length !== 2) return null;
-      const lon = parseFloat(parts[0]);
-      const lat = parseFloat(parts[1]);
-      if (Number.isNaN(lat) || Number.isNaN(lon)) return null;
-      return { lat, lon };
-    };
-
-    if (datasetKey === "peoplePlaces") {
-      rows.forEach(row => {
-        const personQid = getQid(row.item?.value);
-        const title = row.itemLabel?.value || personQid;
-        const desc = row.itemDescription?.value || "";
-        const imageVal = row.image?.value || null;
-
-        const pushIf = (placeField, coordField, category) => {
-          if (!row[placeField]?.value || !row[coordField]?.value) return;
-
-          const placeQid = getQid(row[placeField].value);
-          const placeLabel = row[`${placeField}Label`]?.value || placeQid;
-          const coords = parsePoint(row[coordField].value);
-          if (!coords) return;
-
-          out.push({
-            datasetKey,
-            category,
-            qid: personQid,
-            title,
-            description: desc,
-            placeQid,
-            placeLabel,
-            coords,
-            image: imageVal
-          });
-        };
-
-        pushIf("birthplace", "birthplacecoords", "people.birth");
-        pushIf("deathplace", "deathplacecoords", "people.death");
-        pushIf("residence", "residencecoords", "people.residence");
-      });
-
-      return out;
-    }
-
-    if (datasetKey === "images") {
-      rows.forEach(row => {
-        const itemQid = getQid(row.item?.value);
-        const coords = parsePoint(row.coords?.value);
-        if (!coords) return;
-
-        out.push({
-          datasetKey,
-          category: "collections.images",
-          qid: itemQid,
-          title: row.itemLabel?.value || itemQid,
-          description: row.itemDescription?.value || "",
-          coords,
-          nlwmedia: row.nlwmedia?.value || null
-        });
-      });
-      return out;
-    }
-
-    if (datasetKey === "collectionsPlaces") {
-      rows.forEach(row => {
-        const itemQid = getQid(row.item?.value);
-        const coords = parsePoint(row.coords?.value);
-        if (!coords) return;
-
-        const imageVal = row.image?.value || null;
-
-        if (row.archives?.value) {
-          out.push({ datasetKey, category: "collections.archives", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
-        }
-        if (row.manuscripts?.value) {
-          out.push({ datasetKey, category: "collections.manuscripts", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
-        }
-        if (row.clipcymru?.value) {
-          out.push({ datasetKey, category: "collections.clipcymru", qid: itemQid, title: row.itemLabel?.value || itemQid, description: row.itemDescription?.value || "", coords, image: imageVal });
-        }
-      });
-
-      return out;
-    }
-
-    // Default datasets
-    rows.forEach(row => {
-      const itemQid = getQid(row.item?.value);
-      const coords = parsePoint(row.coords?.value);
-      if (!coords) return;
-
-      const imageVal = row.image?.value || null;
-
-      let category = "places.settlements";
-      if (datasetKey === "landforms") category = "places.landforms";
-      if (datasetKey === "settlements") category = "places.settlements";
-      if (datasetKey === "regions") category = "places.regions";
-      if (datasetKey === "buildings") category = "places.buildings";
-      if (datasetKey === "events") category = "events.all";
-
-      out.push({
-        datasetKey,
-        category,
-        qid: itemQid,
-        title: row.itemLabel?.value || itemQid,
-        description: row.itemDescription?.value || "",
-        coords,
-        image: imageVal,
-        types: row.types?.value || ""
-      });
-    });
-
-    return out;
-  }
-
-  // -----------------------------------------------------------
-  // Render markers according to selected facets
-  // -----------------------------------------------------------
-
-async function applyFacets(langPref) {
-  if (!map || !clusterGroup) return;
-
-  // Reset any open spider/ring state before rebuilding markers
-  clearSpider();
-  activeSpiderKey = null;
-
-  // Show loading overlay (if wired)
-  if (window.__mapExplorerSetLoading) {
-    window.__mapExplorerSetLoading(true);
-  }
-
-  try {
-    clusterGroup.clearLayers();
-    coordCounts = new Map();
-    if (oms) oms.clearMarkers();
-
-    const neededDatasets = new Set();
-    FACETS.forEach(g => g.items.forEach(it => { if (selected.has(it.key)) neededDatasets.add(it.dataset); }));
-
-    if (neededDatasets.size === 0) return;
-
-    const datasetRecords = {};
-    for (const ds of neededDatasets) {
-      datasetRecords[ds] = await fetchDataset(ds, langPref);
-    }
-
-    const wantedCategories = new Set();
-    FACETS.forEach(g => g.items.forEach(it => {
-      if (selected.has(it.key)) wantedCategories.add(it.category);
-    }));
-
-// 1. Build visible records
-const visible = [];
-Object.values(datasetRecords).forEach(records => {
-  records.forEach(r => {
-    if (wantedCategories.has(r.category)) visible.push(r);
-  });
-});
-
-// 2. Group visible records by coordinate
-const byCoord = new Map();
-visible.forEach(r => {
-  const k = coordKey(r.coords);
-  if (!byCoord.has(k)) byCoord.set(k, []);
-  byCoord.get(k).push(r);
-});
-
-// 3. Create markers (ONLY from byCoord)
-byCoord.forEach((recordsAtCoord, k) => {
-  const centerCoords = recordsAtCoord[0].coords;
-
-    // ---------------------------------------------------------
-  // Images-only: one marker per coordinate, thumbs in a ring
-  // ---------------------------------------------------------
-  const isImagesOnlyCoord =
-    recordsAtCoord.length > 0 &&
-    recordsAtCoord.every(r => r.category === "collections.images");
-
-  if (isImagesOnlyCoord) {
-    const count = recordsAtCoord.length;
-    const marker = makeMarker(centerCoords, "collections.images", count > 1 ? count : null);
-
-    wireImagesRing(marker, { coords: centerCoords, items: recordsAtCoord }, langPref);
-
-    clusterGroup.addLayer(marker);
-    return;
-  }
-
-
-  // Single item → hover works immediately
-  // Single item → hover works immediately
-if (recordsAtCoord.length === 1) {
-  const record = recordsAtCoord[0];
-  const marker = makeMarker(centerCoords, record.category, null);
-
-  if (record.category === "collections.images") {
-    wireHoverPopup(
-      marker,
-      () => buildImagesPopup({ coords: centerCoords, items: [record] }, langPref),
-      () => renderImagesThumbsIntoPopup({ coords: centerCoords, items: [record] }, marker)
-    );
-} else {
-  wireHoverPopup(
-    marker,
-    () => buildStandardPopup(record, langPref),
-    () => {
-      renderStandardThumbIntoPopup(record, marker);
-      if (record.category && record.category.startsWith("people.")) {
-        hydratePeoplePlaceLabelsInPopup(marker, langPref);
-      }
-    }
-  );
-}  // ✅ ADD THIS LINE to close the else block
-
-clusterGroup.addLayer(marker);
-return;
+.recent-line:hover {
+  color: #0a6;
 }
+/* Desktop-only: slightly deeper header + search input */
+@media (min-width: 768px) {
 
-  // Multiple items → aggregate marker with count, click to expand
-  const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
+  header.site-header {
+    padding-top: 16px;   /* increase as needed */
+    padding-bottom: 16px;
+  }
 
-  agg.on("click", () => {
-    expandSpiderAt(centerCoords, recordsAtCoord, langPref);
-  });
-
-  clusterGroup.addLayer(agg);
-});
-
-  } finally {
-    // Always hide loading overlay (even if SPARQL fails)
-    if (window.__mapExplorerSetLoading) {
-      window.__mapExplorerSetLoading(false);
-    }
+  #search-input {
+    height: 44px;        /* tweak to taste: 42–48px is usually nice */
+    line-height: 44px;
+    font-size: 1rem;     /* keep or nudge slightly up if you like */
   }
 }
-
-
-  function coordKey(coords) {
-    return `${coords.lat.toFixed(5)},${coords.lon.toFixed(5)}`;
-  }
-
-  function groupImagesByCoord(visibleRecords) {
-    const m = new Map();
-    visibleRecords.forEach(r => {
-      if (r.category !== "collections.images") return;
-      const k = coordKey(r.coords);
-      if (!m.has(k)) m.set(k, { coords: r.coords, items: [] });
-      m.get(k).items.push(r);
-    });
-    m.forEach(g => { g.items = g.items.slice(0, 10); });
-    return m;
-  }
-
-  // -----------------------------------------------------------
-  // Marker icon factory
-  // -----------------------------------------------------------
-
-function makeMarker(coords, category, count = 1) {
-  const style = MARKER_STYLE[category] || { className: "me-pin", glyph: "●" };
-
-  const badge = count > 1 ? `<span class="me-pin-badge">${count}</span>` : "";
-  const html = `
-    <div class="me-pin-inner">
-      <span class="me-pin-glyph">${style.glyph}</span>
-      ${badge}
-    </div>
-  `;
-
-  const icon = L.divIcon({
-    className: style.className,
-    html,
-    iconSize: [28, 28],
-    iconAnchor: [14, 28],
-    popupAnchor: [0, -26]
-  });
-
-  const marker = L.marker([coords.lat, coords.lon], { icon });
-
-  // ✅ attach weight for cluster summing
-  marker.__meCount = Number(count) || 1;
-
-  return marker;
+.map-block {
+  margin-top: 2rem;
 }
 
-
-  // -----------------------------------------------------------
-  // Popup builders
-  // -----------------------------------------------------------
-
-  function buildStandardPopup(record, langPref) {
-    const t = (en, cy) => (langPref === "cy" ? cy : en);
-
-    const qid = record.qid;
-    const link = `${ITEM_URL_PREFIX}${qid}`;
-
-    const typesHTML = record.types ? `<div class="me-popup-meta">${escapeHtml(record.types)}</div>` : "";
-    const isPeoplePlace = record.category && record.category.startsWith("people.");
-const placeHTML = (isPeoplePlace && record.placeQid)
-  ? `<div class="me-popup-meta">
-       ${t("Place:", "Lle:")}
-       <a class="me-place-link"
-          data-place-qid="${escapeHtml(record.placeQid)}"
-          href="${ITEM_URL_PREFIX}${escapeHtml(record.placeQid)}">
-          ${escapeHtml(record.placeLabel || record.placeQid)}
-       </a>
-     </div>`
-  : (record.placeLabel
-      ? `<div class="me-popup-meta">${t("Place:", "Lle:")} ${escapeHtml(record.placeLabel)}</div>`
-      : "");
-
-
-    const thumbWrap = `<div class="me-popup-thumb" data-me-thumb data-qid="${escapeHtml(qid)}"></div>`;
-
-    return `
-      <div class="me-popup">
-        <div class="me-popup-title">${escapeHtml(record.title || qid)}</div>
-        ${record.description ? `<div class="me-popup-desc">${escapeHtml(record.description)}</div>` : ""}
-        ${placeHTML}
-        ${typesHTML}
-        ${thumbWrap}
-        <a class="me-popup-link" href="${link}">
-          ${t("View details", "Gweld manylion")}
-        </a>
-      </div>
-    `;
-  }
-
-  function buildImagesPopup(group, langPref) {
-    const t = (en, cy) => (langPref === "cy" ? cy : en);
-
-    return `
-      <div class="me-popup">
-        <div class="me-popup-title">${t("Images at this location", "Delweddau yn y lleoliad hwn")}</div>
-        <div class="me-popup-meta">${t("Showing up to 10 thumbnails.", "Yn dangos hyd at 10 mân-lun.")}</div>
-        <div class="me-popup-thumbs" data-me-images-thumbs></div>
-      </div>
-    `;
-  }
-
-  function wireHoverPopup(marker, buildPopupHtml, onAfterOpen) {
-    const open = () => {
-      marker.bindPopup(buildPopupHtml(), {
-  className: "me-fixed-popup",
-  maxWidth: 200,
-  minWidth: 200,
-  autoPan: true
-}).openPopup();
-
-      if (onAfterOpen) setTimeout(onAfterOpen, 0);
-
-      // Desktop: keep popup open until closed or outside click
-      if (isDesktopHover) {
-        setTimeout(() => makePopupSticky(marker), 0);
-      }
-    };
-
-    // Always support click (mobile + accessibility)
-    marker.on("click", open);
-
-    // Desktop hover opens; do NOT close on mouseout
-    if (isDesktopHover) {
-      marker.on("mouseover", open);
-    }
-  }
-
-  function clearSpider() {
-    if (!spiderLayer) return;
-    spiderLayer.clearLayers();
-    activeSpiderKey = null;
-  }
-
-function expandSpiderAt(coords, records, langPref) {
-  if (!map || !spiderLayer) return;
-
-  clearSpider();
-  activeSpiderKey = coordKey(coords);
-
-  // Convert center latlng -> pixel point
-  const center = L.latLng(coords.lat, coords.lon);
-  const centerPt = map.project(center, map.getZoom());
-
-  const n = records.length;
-  const radiusPx = 36; // adjust for spacing
-  const step = (Math.PI * 2) / n;
-
-  records.forEach((record, i) => {
-    const angle = i * step;
-    const pt = L.point(
-      centerPt.x + radiusPx * Math.cos(angle),
-      centerPt.y + radiusPx * Math.sin(angle)
-    );
-    
-const zoom = map.getZoom();
-const latlng = map.unproject(pt, zoom);
-
-// Anchor spider line to the *visual centre* of the icons (your icons are 28px high)
-const ICON_HALF_HEIGHT = 14;
-
-// Convert both endpoints to pixel space, offset upward, then convert back to latlng
-const centerAnchorLatLng = map.unproject(
-  L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
-  zoom
-);
-
-const childPt = map.project(latlng, zoom);
-const childAnchorLatLng = map.unproject(
-  L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
-  zoom
-);
-
-// ✅ Add a connecting “spider leg” line (black) from parent centre to child centre
-const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
-  color: "#000",
-  weight: 1.5,
-  opacity: 1,
-  interactive: false
-});
-spiderLayer.addLayer(leg);
-
-
-// Child markers: NO COUNT on expanded nodes
-const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
-
-
-    // Popups on hover/click
-    if (record.category === "collections.images") {
-      wireHoverPopup(
-        child,
-        () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
-        () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
-      );
-    } else {
-wireHoverPopup(
-  child,
-  () => buildStandardPopup(record, langPref),
-  () => {
-    renderStandardThumbIntoPopup(record, child);
-    if (record.category && record.category.startsWith("people.")) {
-      hydratePeoplePlaceLabelsInPopup(child, langPref);
-    }
-  }
-);
+#homeMap {
+  width: 100%;
+  height: 500px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.15);
 }
 
-
-    spiderLayer.addLayer(child);
-  });
-}
-
-
-function ensureImagesRingPanes() {
-  if (!map) return;
-
-  // Legs (polylines)
-  if (!map.getPane("me-images-legs")) {
-    const p = map.createPane("me-images-legs");
-    p.style.zIndex = 950; // above markers/cluster icons
-    p.style.pointerEvents = "none";
-  }
-
-  // Thumbnails (markers)
-  if (!map.getPane("me-images-thumbs")) {
-    const p = map.createPane("me-images-thumbs");
-    p.style.zIndex = 960; // above legs
-  }
-}
-  
-
-// -----------------------------------------------------------
-// Images ring (ONLY for collections.images)
-// - Up to 10 circular thumbs around the parent marker
-// - IIIF fallback preflight (avoid empty frames)
-// - Click thumb => open parent entity item page (QID)
-// -----------------------------------------------------------
-
-function ensureImagesRingStyles() {
-  // Intentionally minimal now; project CSS handles appearance.
-  if (document.getElementById("me-images-ring-style")) return;
-
-  const style = document.createElement("style");
-  style.id = "me-images-ring-style";
-  style.textContent = `
-    .me-thumb-icon--clickable { cursor: pointer; }
-  `;
-  document.head.appendChild(style);
-}
-
-
-function iiifCandidatesFromNlwMedia(nlwmediaValue, sizePx = 140) {
-  // Matches your gallery logic: extract numeric base id, apply multi-range rule
-  const idMatch = String(nlwmediaValue || "").match(/(\d{6,})/);
-  if (!idMatch) return null;
-
-  const baseId = parseInt(idMatch[1], 10);
-  const isMulti = baseId >= 1448577 && baseId <= 1588867;
-  const imageId = isMulti ? baseId + 1 : baseId;
-
-  const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/${sizePx},/0/default.jpg`;
-  const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/${sizePx},/0/default.jpg`;
-
-  return { baseId, imageId, isMulti, urls: [url1, url2] };
-}
-
-function preflightIIIF(urlList) {
-  // Try each URL until one loads; resolve the working URL or null
-  return new Promise(resolve => {
-    const tryNext = (i) => {
-      if (i >= urlList.length) return resolve(null);
-      const url = urlList[i];
-
-      const img = new Image();
-      img.onload = () => resolve(url);
-      img.onerror = () => tryNext(i + 1);
-      img.src = url;
-    };
-    tryNext(0);
-  });
-}
-
-async function buildThumbMarker(latlng, thumbUrl, qid) {
-  ensureImagesRingStyles();
-
-const html = `
-  <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
-    <div class="me-thumb-inner">
-      <img src="${thumbUrl}" alt="" loading="lazy">
-    </div>
-  </div>
-`;
-
-const icon = L.divIcon({
-  className: "me-thumb-leaflet-icon",
-  html,
-  iconSize: [140, 140],
-  iconAnchor: [70, 70]
-});
-
-
-const m = L.marker(latlng, {
-  icon,
-  keyboard: true,
-  pane: "me-images-thumbs"
-});
-m.setZIndexOffset(10000);
-
-
-  const href = `${ITEM_URL_PREFIX}${qid}`;
-  const open = () => window.open(href, "_self"); // same tab to match “load the item page”
-  m.on("click", open);
-  m.on("keypress", (e) => {
-    if (e?.originalEvent?.key === "Enter") open();
-  });
-
-  return m;
-}
-
-async function showImagesRingAt(parentMarker, group, langPref) {
-  if (!map || !spiderLayer) return;
-  ensureImagesRingPanes();
-
-  const itemsRaw = Array.isArray(group?.items) ? group.items : [];
-  const items = itemsRaw.slice(0, 10);
-
-  // Toggle: if this ring is already open, close it
-  const parentLatLng = parentMarker.getLatLng();
-  const key = `images:${parentLatLng.lat.toFixed(5)},${parentLatLng.lng.toFixed(5)}`;
-  if (activeSpiderKey === key) {
-  clearSpider();
-  activeSpiderKey = null;
-  return;
-}
-
-
-  clearSpider();
-  activeSpiderKey = key;
-
-  // Preflight thumbs first (avoid rendering empty circles)
-  const resolved = [];
-  for (const r of items) {
-    const qid = r?.qid;
-    const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 300);
-    if (!qid || !cand) continue;
-
-    const okUrl = await preflightIIIF(cand.urls);
-    if (!okUrl) continue;
-
-    resolved.push({ qid, thumbUrl: okUrl });
-  }
-
-  if (!resolved.length) return;
-
-
-
-
-
-  
-  // -----------------------------------------------------------
-// Geometry: inner-only ring for < 5, staggered ring for >= 5
-// -----------------------------------------------------------
-  const n = resolved.length;
-
-  const thumbDiameter = 140;
-  const gap = 14;
-  const minRadius = 90;
-
-  // Base radius derived from circumference (prevents overlap)
-  const baseRadius = Math.max(
-    minRadius,
-    Math.ceil((n * (thumbDiameter + gap)) / (2 * Math.PI))
-  );
-
-  // If fewer than 5 images, keep ALL on a single inner ring
-  const useStagger = n >= 5;
-
-  const radiusNear = baseRadius;
-  const radiusFar  = baseRadius + (thumbDiameter * 0.55) + gap;
-
-  const center = parentLatLng;
-  const zoom = map.getZoom();
-  const centerPt = map.project(center, zoom);
-  const step = (Math.PI * 2) / n;
-
-  // Optional: draw legs (match your existing spider aesthetic)
-  const ICON_HALF_HEIGHT = 14; // your pins are 28px high; keep this consistent
-  const centerAnchorLatLng = map.unproject(
-    L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
-    zoom
-  );
-
-  for (let i = 0; i < n; i++) {
-    const angle = i * step;
-
-    // Radius rule:
-    // - < 5 images: all inner ring
-    // - >= 5 images: alternate near/far
-    const r = useStagger ? ((i % 2 === 0) ? radiusNear : radiusFar) : radiusNear;
-
-    const pt = L.point(
-      centerPt.x + r * Math.cos(angle),
-      centerPt.y + r * Math.sin(angle)
-    );
-
-    const latlng = map.unproject(pt, zoom);
-
-    // Leg line to thumb centre (visual neatness)
-    const childPt = map.project(latlng, zoom);
-    const childAnchorLatLng = map.unproject(
-      L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
-      zoom
-    );
-
-const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
-  pane: "me-images-legs",
-  color: "#000",
-  weight: 1.5,
-  opacity: 1,
-  interactive: false
-});
-
-    spiderLayer.addLayer(leg);
-
-    const thumb = resolved[i];
-    const m = await buildThumbMarker(latlng, thumb.thumbUrl, thumb.qid);
-    spiderLayer.addLayer(m);
-  }
-}
-
-function wireImagesRing(marker, group, langPref) {
-  const open = () => showImagesRingAt(marker, group, langPref);
-
-  // Defensive: ensure we don't accumulate handlers across re-inits/navigation
-  marker.off("click");
-  marker.off("mouseover");
-
-  // Always support click (desktop + mobile)
-  marker.on("click", open);
-
-  // Hover: evaluate capability at runtime (important after SPA navigation)
-  marker.on("mouseover", () => {
-    const canHover =
-      window.matchMedia &&
-      window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    if (canHover) open();
-  });
+.map-block h2 {
+  margin-bottom: 0.6rem;
 }
 
 
 
+/* Advanced Person Search section */
 
-// -----------------------------------------------------------
-// Thumbnail logic (IIIF fallback preserved)
-// -----------------------------------------------------------
-
-function extractNumericId(value) {
-  if (!value) return null;
-  const s = String(value);
-  const m = s.match(/(\d+)(?:\D*)$/);
-  return m ? m[1] : null;
+.aps-section {
+  margin-top: 2rem;
 }
 
-  function isMultiRange(baseId) {
-    const n = parseInt(baseId, 10);
-    return n >= 1448577 && n <= 1588867;
-  }
-
-  function createIIIFThumb(baseId, sizePx = 90) {
-    const idStr = String(baseId);
-    const isMulti = isMultiRange(idStr);
-    const imageId = isMulti ? (parseInt(idStr, 10) + 1) : parseInt(idStr, 10);
-
-    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/${sizePx},/0/default.jpg`;
-    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/${sizePx},/0/default.jpg`;
-    const rootUrl = `https://viewer.library.wales/${idStr}`;
-
-    const a = document.createElement("a");
-    a.href = rootUrl;
-    a.target = "_blank";
-    a.rel = "noopener";
-
-    const img = document.createElement("img");
-    img.loading = "lazy";
-    img.alt = "";
-
-    img.onerror = () => {
-      if (img.dataset.meTried === "1") return;
-      img.dataset.meTried = "1";
-      img.src = url2;
-    };
-
-    img.src = url1;
-    a.appendChild(img);
-
-    return a;
-  }
-
-function renderImagesThumbsIntoPopup(group, marker) {
-  const popupEl = marker.getPopup()?.getElement();
-  if (!popupEl) return;
-
-  const thumbsWrap = popupEl.querySelector("[data-me-images-thumbs]");
-  if (!thumbsWrap) return;
-
-  thumbsWrap.innerHTML = "";
-
-  const items = Array.isArray(group?.items) ? group.items.slice(0, 10) : [];
-  if (!items.length) return;
-
-  items.forEach((r) => {
-    const baseId = extractNumericId(r?.nlwmedia) || extractNumericId(r?.qid);
-    if (!baseId) return;
-    thumbsWrap.appendChild(createIIIFThumb(baseId, 90));
-  });
+.aps-inner {
+  border-radius: 0;
+  padding: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
-
-function renderStandardThumbIntoPopup(record, marker) {
-  const popupEl = marker.getPopup()?.getElement();
-  if (!popupEl) return;
-
-  const wrap = popupEl.querySelector("[data-me-thumb]");
-  if (!wrap) return;
-
-  // Only render a thumb if P31 is present
-  const commonsVal = record.image || null;
-  if (!commonsVal) return;
-
-  const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
-  if (!thumbUrl) return;
-
-  wrap.innerHTML = "";
-  const img = document.createElement("img");
-  img.loading = "lazy";
-  img.alt = "";
-  img.src = thumbUrl;
-  wrap.appendChild(img);
-}
-
-async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
-  // Only run if the API module exists
-  if (typeof API === "undefined" || !API.getLabels) return;
-
-  const popupEl = marker.getPopup()?.getElement();
-  if (!popupEl) return;
-
-  const links = Array.from(popupEl.querySelectorAll("a[data-place-qid]"));
-  if (!links.length) return;
-
-  const qids = [...new Set(links.map(a => a.dataset.placeQid).filter(Boolean))];
-  if (!qids.length) return;
-
-  try {
-    const labels = await API.getLabels(qids, langPref);
-    links.forEach(a => {
-      const qid = a.dataset.placeQid;
-      a.textContent = labels?.[qid] || qid;
-    });
-  } catch (e) {
-    // Fail silently: popup remains usable with QIDs
+@media (min-width: 768px) {
+  .aps-inner {
+    padding: 0;
   }
 }
 
-  // -----------------------------------------------------------
-  // Utils
-  // -----------------------------------------------------------
+.aps-header {
+  margin-bottom: 1rem;
 
-  function escapeHtml(str) {
-    return String(str || "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#039;");
-  }
+  background: #309898;
+  color: #ffffff;
 
-  function commonsThumbUrlFromValue(value, widthPx = 180) {
-  // Value may be a full URL, or a Commons entity URI, or "File:Name.ext"
-  const fileName = extractCommonsFileName(value);
-  if (!fileName) return null;
-
-  // Special:FilePath serves the original file; width= gives a thumbnail.
-  // This avoids hashing logic and works well for most file types.
-  const encoded = encodeURIComponent(fileName.replace(/ /g, "_"));
-  return `https://commons.wikimedia.org/wiki/Special:FilePath/${encoded}?width=${widthPx}`;
+    padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
-function extractCommonsFileName(value) {
-  const s = String(value || "").trim();
-  if (!s) return null;
+#aps-results {
+  position: relative;   /* button will now be positioned inside results area */
+}
 
-  // Common case: already "File:Something.jpg"
-  if (s.startsWith("File:")) return s;
+.aps-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin: 0 0 0.3rem;
+}
 
-  // If it's a URL, try to pull a "File:..." segment
-  // Examples:
-  // - https://commons.wikimedia.org/wiki/Special:EntityData/M123.json
-  // - https://commons.wikimedia.org/wiki/File:Name.jpg
-  // - https://commons.wikimedia.org/entity/M123
-  // - https://commons.wikimedia.org/wiki/Special:FilePath/Name.jpg
-  try {
-    const u = new URL(s);
-    const path = decodeURIComponent(u.pathname);
+.aps-subtitle {
+  margin: 0;
+  font-size: 0.9rem;
+  opacity: 0.95;
+}
 
-    const fileMatch = path.match(/\/File:(.+)$/);
-    if (fileMatch) return `File:${fileMatch[1]}`;
+/* Fields grid */
 
-    const fpMatch = path.match(/\/Special:FilePath\/(.+)$/);
-    if (fpMatch) return `File:${fpMatch[1]}`;
+.aps-form {
+  margin-top: 1rem;
+}
 
-    // If none of the above, it might be a media entity id (M123) –
-    // in that case we cannot derive a filename without an extra lookup,
-    // so we return null.
-    return null;
-  } catch {
-    return null;
+.aps-fields-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
+@media (min-width: 720px) {
+  .aps-fields-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
-  // -----------------------------------------------------------
-  // Exports
-  // -----------------------------------------------------------
+.aps-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
 
-  return {
-    initHomeMap,
-    setLanguage
-  };
+.aps-label {
+  font-size: 0.8rem;
+  font-weight: 600;
+}
 
-})();
+.aps-dropdown {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.aps-input {
+  width: 100%;
+  font-size: 0.85rem;
+  padding: 0.4rem 2rem 0.4rem 0.6rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+  outline: none;
+}
+
+.aps-input:focus {
+  border-color: rgba(0,0,0,0.25);
+}
+
+.aps-clear {
+  position: absolute;
+  right: 0.3rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+  opacity: 0.5;
+}
+
+.aps-clear:hover {
+  opacity: 0.9;
+}
+
+/* Options dropdown */
+
+.aps-options {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  z-index: 30;
+  max-height: 220px;
+  overflow-y: auto;
+  background: #ffffff;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.12);
+  margin: 0.1rem 0 0;
+  padding: 0.25rem 0;
+  list-style: none;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+.aps-options-hidden {
+  display: none;
+}
+
+.aps-option {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.aps-option:hover,
+.aps-option.aps-option-selected {
+  background: rgba(0,0,0,0.05);
+}
+
+/* Actions */
+
+.aps-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-top: 1rem;
+
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+
+.aps-btn {
+  border-radius: 999px;
+  font-size: 0.85rem;
+  padding: 0.4rem 0.9rem;
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.aps-btn-primary {
+  /* Use your primary brand colour here */
+  background: #0b7e5c;
+  color: #ffffff;
+}
+
+.aps-btn-primary:hover {
+  filter: brightness(1.05);
+}
+
+.aps-btn-secondary {
+  background: #f3f3f3;
+  border-color: rgba(0,0,0,0.08);
+}
+
+.aps-btn-secondary:hover {
+  background: #e9e9e9;
+}
+
+.aps-btn-ghost {
+  background: transparent;
+  border-color: rgba(0,0,0,0.12);
+}
+
+.aps-hint {
+  margin: 0;
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+/* Results */
+
+.aps-results {
+  margin-top: 1rem;
+  border-top: 1px solid rgba(0,0,0,0.08);
+  padding-top: 0.75rem;
+}
+
+.aps-results-hidden {
+  display: none;
+}
+
+.aps-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.aps-results-summary {
+  margin: 0;
+  font-size: 0.85rem;
+}
+
+.aps-results-list {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.6rem;
+  max-height: 420px;      /* prevents the block getting huge */
+  overflow-y: auto;
+  padding-right: 0.25rem;
+}
+
+@media (min-width: 640px) {
+  .aps-results-list {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.aps-result-card {
+  border-radius: 0.75rem;
+  border: 1px solid rgba(0,0,0,0.08);
+  padding: 0.6rem 0.7rem;
+  background: #fafafa;
+}
+
+.aps-result-title {
+  margin: 0 0 0.1rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.aps-result-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.aps-result-meta {
+  margin: 0;
+  font-size: 0.78rem;
+  opacity: 0.85;
+}
+
+.aps-result-tags {
+  margin: 0.25rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2rem;
+}
+
+.aps-tag {
+  font-size: 0.7rem;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0,0,0,0.15);
+}
+
+/* Pagination */
+
+.aps-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.4rem;
+}
+
+.aps-pagination-hidden {
+  display: none;
+}
+
+.aps-page-indicator {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.aps-view-toggle {
+  position: absolute;
+  top: 1.5rem;
+  left: 0.75rem;
+  z-index: 50;
+
+  background: #309898;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+
+  padding: 4px 10px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+
+  transition: background 0.2s;
+}
+
+.aps-view-toggle:hover {
+  background: #309898;
+}
+
+.aps-view-toggle .icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
+}
+
+.graph-icon svg line,
+.graph-icon svg circle {
+  stroke: #fff;
+  fill: none;
+}
+
+.list-icon svg rect {
+  fill: #fff;
+}
+/* When in LIST mode, give room for the floating toggle button */
+.aps-results.list-mode .aps-results-list {
+  padding-top: 3rem;   /* adjust as needed, 2.5–3rem usually ideal */
+}
+
+
+/* ===========================
+   APS GRAPH ZOOM (graph-only)
+   =========================== */
+
+/* Allow pinch-zoom + wheel zoom to be handled by d3.zoom cleanly */
+#aps-results-graph svg {
+  touch-action: none; /* critical for mobile pinch zoom */
+}
+
+/* On-screen +/- controls (only shown in graph mode by JS) */
+.aps-graph-zoom-controls {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  z-index: 60;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.aps-graph-zoom-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  border: 1px solid rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.12);
+
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+
+  display: grid;
+  place-items: center;
+}
+
+.aps-graph-zoom-btn:active {
+ /* Graph: only person nodes show pointer cursor */
+#aps-results-graph .aps-graph-node { cursor: default; }
+#aps-results-graph .aps-graph-node--person { cursor: pointer; }
+ transform: translateY(1px);
+}
+
+/* =========================================================
+   APS COLLAPSIBLE FILTERS + IMPACTFUL GRAPH (palette-only)
+   Allowed colours: #FF9F00, #F4631E, #309898, #CB0404
+   ========================================================= */
+
+
+
+/* Filters toggle button */
+/* Show / Hide filters button — match language switch style */
+.aps-header .aps-filters-toggle {
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #309898;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.aps-header .aps-filters-toggle:hover,
+.aps-header .aps-filters-toggle:focus,
+.aps-header .aps-filters-toggle:active {
+  background: #eeeeee;
+  color: #309898;
+}
+
+
+/* Hover state consistent with header controls */
+.aps-filters-toggle:hover {
+  background: #eeeeee;
+}
+
+header.aps-header button.aps-filters-toggle {
+  color: #309898;
+}
+
+/* Collapsible panel mechanics */
+.aps-filters-panel {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+
+.aps-filters-panel.aps-filters-collapsed {
+  display: none;
+}
+
+/* Ensure the primary action uses palette (replaces existing green) */
+.aps-btn-primary {
+  background: #309898;
+  color: #fff;
+}
+
+.aps-btn-primary:hover {
+  background: #F4631E;
+}
+
+/* Inputs: replace grey borders with palette */
+.aps-input {
+  border: 2px solid #309898;
+}
+
+.aps-input:focus {
+  border-color: #FF9F00;
+}
+
+/* Options dropdown: remove grey border/shadow colour cast */
+.aps-options {
+  border: 2px solid #309898;
+  box-shadow: none;
+}
+
+/* View toggle button: palette-only */
+.aps-view-toggle {
+  border: 2px solid #f8f8f8;
+  background: #f8f8f8;
+  box-shadow: none;
+}
+
+.aps-view-toggle:hover {
+  background: #f3f3f3;
+}
+
+/* Zoom controls: palette-only */
+.aps-graph-zoom-btn {
+  border: 2px solid #309898;
+  background: #FF9F00;
+  box-shadow: none;
+}
+.aps-graph-zoom-btn:hover {
+  background: #F4631E;
+}
+
+/* List cards: remove greys and keep consistent framing */
+.aps-result-card {
+  border: 2px solid #309898;
+  background: #fff;
+}
+/* Desktop: header becomes one row with right-aligned toggle */
+@media (min-width: 768px) {
+  .aps-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .aps-header-text {
+    min-width: 0;
+  }
+
+  .aps-filters-toggle {
+    margin-top: 0.25rem; /* keeps it visually aligned with title/description block */
+    white-space: nowrap;
+  }
+}
+
+/* Slimline filters panel spacing */
+.aps-filters-panel {
+  margin-top: 0.5rem;
+}
+
+/* Reduce default form top gap so collapsed/expanded feels tighter */
+.aps-form {
+  margin-top: 0.5rem;
+}
+
+/* Header horizontal buffer (prevents edge collision) */
+.aps-header {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 768px) {
+  .aps-header {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+@media (min-width: 768px) {
+  .aps-filters-panel,
+  .aps-actions {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+/* Filters toggle — match .aps-btn text style, but keep lang-switch visual styling */
+.aps-header .aps-filters-toggle {
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+
+  border: 1px solid #ccc;
+  background: #f8f8f8;
+  border-radius: 8px;
+  cursor: pointer;
+
+  /* Match Search button text style */
+  font-size: 0.85rem;     /* same as .aps-btn */
+  font-weight: 400;       /* match normal button text */
+  line-height: 1.2;
+  color: #000;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  /* Prevent any leftover “pill” or strong styling */
+  box-shadow: none;
+  text-transform: none;
+}
+
+/* Hover/active states (neutral, NOT orange) */
+.aps-header .aps-filters-toggle:hover {
+  background: #eeeeee;
+  border-color: #ccc;
+}
+
+.aps-header .aps-filters-toggle:active {
+  background: #e6e6e6;
+}
+
+/* =========================================================
+   APS view toggle hard override (prevents gray/black fallback)
+   Place at END of stylesheet
+   ========================================================= */
+
+#aps-view-toggle.aps-view-toggle {
+  background: #309898;
+  border-color: #309898;
+  color: #fff;             /* label text */
+}
+
+/* Keep same colour on hover/focus/active */
+#aps-view-toggle.aps-view-toggle:hover,
+#aps-view-toggle.aps-view-toggle:focus,
+#aps-view-toggle.aps-view-toggle:active {
+  background: #309898;
+  border-color: #309898;
+  color: #fff;
+}
+
+/* Force icon colour regardless of SVG element types */
+#aps-view-toggle.aps-view-toggle .icon svg * {
+  stroke: #fff;
+  fill: #fff;
+}
+
+@media (max-width: 767px) {
+  .aps-header .aps-filters-toggle {
+    margin-left: 0;
+    margin-top: 0.5rem;
+    align-self: flex-start;
+  }
+}
+/* LIST MODE ONLY: allow results list to expand to full height (no vertical scroll) */
+.aps-results.list-mode .aps-results-list {
+  max-height: none;
+  overflow-y: visible;
+}
+
+/* LIST MODE ONLY: add horizontal gutters so cards don't touch screen edge */
+.aps-results.list-mode .aps-results-list {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 768px) {
+  .aps-results.list-mode .aps-results-list {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Map Explorer shell */
+.map-explorer-shell { position: relative; }
+
+/* Filters toggle (mobile) */
+.me-filters-toggle {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1001;
+}
+
+/* Filters panel */
+.me-filters-panel {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 280px;
+  max-height: calc(100% - 24px);
+  overflow: auto;
+  z-index: 1000;
+  background: #fff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+  padding: 10px 12px;
+  display: none;
+}
+
+.me-filters-panel.open { display: block; }
+
+.me-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
+.me-panel-title { font-weight: 700; }
+.me-group { margin: 10px 0; }
+.me-group-title { font-weight: 700; margin-bottom: 6px; }
+.me-facet-row { display: flex; gap: 10px; align-items: center; padding: 4px 0; cursor: pointer; }
+.me-facet-row input { transform: translateY(1px); }
+.me-panel-hint { font-size: 0.85rem; opacity: 0.8; margin-top: 10px; }
+
+/* Mobile behaviour */
+.me-filters-panel.me-mobile {
+  width: min(92vw, 360px);
+}
+
+/* Pins (Leaflet div icons) */
+.me-pin { background: transparent; border: none; }
+.me-pin-inner {
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  position: relative;
+  border: 2px solid rgba(255,255,255,0.9);
+  box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+}
+
+.me-pin-glyph { font-size: 14px; line-height: 1; }
+
+/* Category colours */
+.me-pin-places .me-pin-inner { background: #309898; color: #fff; }
+.me-pin-people .me-pin-inner { background: #FFB233; color: #111; }
+.me-pin-collections .me-pin-inner { background: #5FCD96; color: #111; }
+.me-pin-images .me-pin-inner { background: #FA0808; color: #fff; }
+.me-pin-events .me-pin-inner { background: #333; color: #fff; }
+
+.me-pin-badge {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 999px;
+  background: #fff;
+  color: #111;
+  font-size: 11px;
+  display: grid;
+  place-items: center;
+  border: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Popup layout */
+.me-popup { font-family: inherit; }
+.me-popup-title { font-weight: 700; margin-bottom: 4px; }
+.me-popup-desc { margin: 6px 0; }
+.me-popup-meta { font-size: 0.85rem; opacity: 0.85; margin-top: 4px; }
+.me-popup-thumb { margin-top: 8px; }
+.me-popup-thumb img { border-radius: 10px; display: block; max-width: 100%; height: auto; }
+
+.me-popup-link { display: inline-block; margin-top: 10px; padding-top: 2px; font-weight: 700; text-decoration: none; }
+
+/* Images popup thumb grid */
+.me-popup-thumbs {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-top: 10px;
+}
+.me-popup-thumbs a img {
+  width: 100%;
+  height: auto;
+  border-radius: 10px;
+  display: block;
+}
+/* Map loading overlay */
+#homeMap {
+  position: relative; /* required for overlay positioning */
+}
+
+.map-loading-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 600; /* above leaflet tiles + markers */
+  display: none; /* toggled by JS */
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(1px);
+}
+
+.map-loading-overlay.is-visible {
+  display: flex;
+}
+
+.map-loading-spinner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 6px solid rgba(0,0,0,0.18);
+  border-top-color: #309898;
+  animation: mapSpin 0.9s linear infinite;
+}
+
+@keyframes mapSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* -----------------------------------------------------------
+   Map Explorer fixed-size popup cards
+   ----------------------------------------------------------- */
+
+/* Scope everything to these popups only */
+.me-fixed-popup .leaflet-popup-content-wrapper {
+  background: #fff;
+  padding: 6px;                 /* white margin outside border */
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+}
+
+.me-fixed-popup .leaflet-popup-content {
+  border: 2px solid #309898;    /* teal border */
+  border-radius: 10px;
+  padding: 8px;
+  margin: 0;
+  background: #fff;
+  width: 200px !important;      /* fixed width */
+  min-width: 200px !important;
+  max-width: 200px !important;
+  height: auto !important;      /* allow content-driven height */
+  overflow: hidden !important;
+  max-height: none !important;               /* only scroll if content exceeds max-height */
+}
+}
+
+/* Make your internal popup layout fill the fixed container */
+.me-fixed-popup .me-popup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  height: auto;                 /* ensure NOT fixed */
+}
+
+/* Text: clamp so long labels/descriptions do not resize the card */
+.me-fixed-popup .me-popup-title {
+  font-weight: 700;
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;       /* up to 2 lines */
+}
+
+.me-fixed-popup .me-popup-desc {
+  margin: 0;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;       /* up to 3 lines */
+}
+
+.me-fixed-popup .me-popup-meta {
+  margin: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;     /* single-line meta */
+  opacity: 0.85;
+  font-size: 0.85rem;
+}
+
+/* Main thumbnail box: fixed dimensions */
+.me-fixed-popup .me-popup-thumb {
+  margin-top: 6px;
+  width: 100%;
+  aspect-ratio: 4 / 3;               /* fixed thumb height */
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.me-fixed-popup .me-popup-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Images popup grid: fixed dimensions per thumb */
+.me-fixed-popup .me-popup-thumbs {
+  margin-top: 6px;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+}
+
+.me-fixed-popup .me-popup-thumbs img {
+  width: 100%;
+  aspect-ratio: 1 / 1;         /* square thumbs */
+  object-fit: cover;
+  border-radius: 8px;
+  display: block;
+}
+
+/* Keep the "View details" link pinned to the bottom */
+.me-fixed-popup .me-popup-link {
+  margin-top: auto;
+  display: inline-block;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+/* If the thumb wrapper exists but is empty, collapse it */
+.me-fixed-popup .me-popup-thumb:empty {
+  display: none !important;
+}
+
+/* If the wrapper exists but has no <img>, collapse it (Chrome supports :has) */
+.me-fixed-popup .me-popup-thumb:not(:has(img)) {
+  display: none !important;
+}
+.me-fixed-popup .me-popup {
+  height: auto !important;
+}
+/* Inset the Leaflet popup close (X) to account for the outer white frame */
+.leaflet-container .leaflet-popup.me-fixed-popup a.leaflet-popup-close-button {
+  top: 8px !important;
+  right: 8px !important;
+}
+
+/* ---------------------------------------------------
+   Map Explorer – Images ring thumbnails
+   --------------------------------------------------- */
+
+/* Leaflet wrapper reset */
+.me-thumb-leaflet-icon,
+.leaflet-div-icon.me-thumb-leaflet-icon {
+  background: transparent !important;
+  border: 0 !important;
+  padding: 0 !important;
+}
+
+/* Tune these three values to taste */
+:root {
+  --me-thumb-size: 140px;
+  --me-thumb-outer-pad: 5px;   /* white OUTSIDE the blue border */
+  --me-thumb-border: 2px;      /* blue border thickness */
+  --me-thumb-inner-pad: 5px;   /* white INSIDE the blue border */
+}
+
+.me-thumb-icon {
+  width: var(--me-thumb-size);
+  height: var(--me-thumb-size);
+  border-radius: 999px;
+  background: #fff;                 /* this is the OUTER white halo */
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+  box-sizing: border-box;
+}
+
+/* Blue border INSET from the outer edge, so outer white is visible */
+.me-thumb-icon::before {
+  content: "";
+  position: absolute;
+  inset: var(--me-thumb-outer-pad);
+  border: var(--me-thumb-border) solid #309898;
+  border-radius: 999px;
+  pointer-events: none;
+  box-sizing: border-box;
+}
+
+/* Inner clipped image circle: inset further to create inner white padding */
+.me-thumb-inner {
+  position: absolute;
+  inset: calc(var(--me-thumb-outer-pad) + var(--me-thumb-border) + var(--me-thumb-inner-pad));
+  border-radius: 999px;
+  overflow: hidden;
+  background: #fff;
+}
+
+.me-thumb-inner img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.me-thumb-icon--clickable { cursor: pointer; }
