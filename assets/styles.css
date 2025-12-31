@@ -2180,3 +2180,8 @@ header.aps-header button.aps-filters-toggle {
 }
 
 .me-thumb-icon--clickable { cursor: pointer; }
+
+/* Map loading overlay: never capture clicks unless explicitly visible */
+.map-loading-overlay { pointer-events: none; }
+.map-loading-overlay.is-visible { pointer-events: auto; }
+
