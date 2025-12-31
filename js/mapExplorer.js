@@ -514,7 +514,6 @@ if (!window.__meVisibilityBound) {
   });
 }
     
-    // Responsive panel behaviour
 function bindResizeOnce() {
   if (window.__meResizeBound) return;
   window.__meResizeBound = true;
@@ -525,8 +524,9 @@ function bindResizeOnce() {
   });
 }
 
-    syncPanelForViewport();
-  }
+syncPanelForViewport();
+bindResizeOnce();
+}
 
   function setLanguage(lang = "en") {
     const langPref = normaliseLang(lang);
@@ -668,7 +668,6 @@ selected.clear();
     else filterPanelEl.classList.remove("open");
   }
 
-bindResizeOnce();
   
 function refreshMapAfterReturn() {
   if (!map) return;
