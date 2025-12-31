@@ -504,18 +504,10 @@ if (!window.__meVisibilityBound) {
     }
   });
 }
-    
+
     // Responsive panel behaviour
-function bindResizeOnce() {
-  if (window.__meResizeBound) return;
-  window.__meResizeBound = true;
 
-  window.addEventListener("resize", () => {
-    syncPanelForViewport();
-    refreshMapAfterReturn(); // keep Leaflet aligned after responsive changes
-  });
-}
-
+    bindResizeOnce();
     syncPanelForViewport();
   }
 
@@ -659,8 +651,16 @@ selected.clear();
     else filterPanelEl.classList.remove("open");
   }
 
-bindResizeOnce();
-  
+function bindResizeOnce() {
+  if (window.__meResizeBound) return;
+  window.__meResizeBound = true;
+
+  window.addEventListener("resize", () => {
+    syncPanelForViewport();
+    refreshMapAfterReturn(); // keep Leaflet aligned after responsive changes
+  });
+}
+
 function refreshMapAfterReturn() {
   if (!map) return;
 
