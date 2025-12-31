@@ -482,14 +482,23 @@ try {
   }
 }
 
-requestAnimationFrame(() => refreshMapAfterReturn());
-setTimeout(() => refreshMapAfterReturn(), 50);
 
 if (!window.__mePageshowBound) {
   window.__mePageshowBound = true;
 
   window.addEventListener("pageshow", (ev) => {
     if (ev && ev.persisted) {
+      requestAnimationFrame(() => refreshMapAfterReturn());
+      setTimeout(() => refreshMapAfterReturn(), 50);
+    }
+  });
+}
+
+if (!window.__meVisibilityBound) {
+  window.__meVisibilityBound = true;
+
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible") {
       requestAnimationFrame(() => refreshMapAfterReturn());
       setTimeout(() => refreshMapAfterReturn(), 50);
     }
@@ -650,17 +659,41 @@ selected.clear();
     else filterPanelEl.classList.remove("open");
   }
 
+bindResizeOnce();
+  
 function refreshMapAfterReturn() {
   if (!map) return;
 
-  // If the map was hidden/collapsed and then shown again, Leaflet needs this
+  // 1) Leaflet layout recalculation
   map.invalidateSize(true);
 
-  // MarkerCluster sometimes needs a nudge after invalidateSize
+  // 2) HARD reset for MarkerCluster after BFCache restore:
+  // remove + re-add forces DOM/event rebinding for cluster icons.
+  if (clusterGroup && map.hasLayer && map.hasLayer(clusterGroup)) {
+    try {
+      map.removeLayer(clusterGroup);
+      map.addLayer(clusterGroup);
+    } catch (e) {
+      // If anything odd happens, fail soft—map will still be usable.
+    }
+  }
+
+  // 3) Nudge cluster recalculation
   if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
     clusterGroup.refreshClusters();
   }
+
+  // 4) Ensure interactions are enabled (some SPA flows disable these)
+  try {
+    map.dragging?.enable?.();
+    map.touchZoom?.enable?.();
+    map.doubleClickZoom?.enable?.();
+    map.scrollWheelZoom?.enable?.();
+    map.boxZoom?.enable?.();
+    map.keyboard?.enable?.();
+  } catch (e) {}
 }
+
 
   
   // -----------------------------------------------------------
