@@ -2185,11 +2185,21 @@ header.aps-header button.aps-filters-toggle {
 .map-loading-overlay { pointer-events: none; }
 .map-loading-overlay.is-visible { pointer-events: auto; }
 
+/* Enlarge and perfectly centre the locate icon */
 .me-locate-control .me-locate-btn {
   width: 34px;
   height: 34px;
   line-height: 34px;
   text-align: center;
-  font-size: 18px;
+
+  /* icon sizing */
+  font-size: 25px;
+  font-weight: 600;
+
+  /* ensure vertical centring across browsers */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
+
 
