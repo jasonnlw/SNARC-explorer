@@ -1817,31 +1817,27 @@ function renderStandardThumbIntoPopup(record, marker) {
 if (!thumbUrl) return;
 
 wrap.innerHTML = "";
+
+const link = record.qid ? `${ITEM_URL_PREFIX}${record.qid}` : (record.itemUrl || record.url || record.pageUrl || "#");
+const anchor = document.createElement("a");
+anchor.href = link;
+anchor.target = "_blank";
+anchor.rel = "noopener";
+
 const img = document.createElement("img");
 img.loading = "lazy";
 img.alt = "";
 img.src = thumbUrl;
 
 img.onerror = () => {
-  // Try the alternate IIIF path once, then fall back to bilingual error tile
-  if (!img.__triedFallback) {
-    img.__triedFallback = true;
-
-    // Only attempt the fallback if the URL matches the IIIF pattern you support
-    const fallbackUrl = thumbUrl.includes("/iiif/image/")
-      ? thumbUrl.replace("/iiif/image/", "/iiif/2.0/image/")
-      : null;
-
-    if (fallbackUrl && fallbackUrl !== img.src) {
-      img.src = fallbackUrl;
-      return;
-    }
-  }
-
-  renderThumbErrorTile(anchor, record.itemUrl || record.url || record.pageUrl, langPref);
+  // No IIIF fallback applies here because commonsThumbUrlFromValue() returns Special:FilePath.
+  // So we go straight to the bilingual error tile.
+  renderThumbErrorTile(anchor, link, langPref);
 };
 
-wrap.appendChild(img);
+anchor.appendChild(img);
+wrap.appendChild(anchor);
+
 }
 
 async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
