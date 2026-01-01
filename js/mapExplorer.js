@@ -1103,11 +1103,14 @@ return;
 }
 
   // Multiple items → aggregate marker with count, click to expand
-  const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
+const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
 
-  agg.on("click", () => {
-    expandSpiderAt(centerCoords, recordsAtCoord, langPref);
-  });
+agg.on("click", (e) => {
+  // Prevent any document-level "click outside" closers from firing on the same click
+  try { L.DomEvent.stop(e); } catch (err) {}
+  expandSpiderAt(centerCoords, recordsAtCoord, langPref);
+});
+
 
   clusterGroup.addLayer(agg);
 });
@@ -1255,8 +1258,24 @@ const placeHTML = (isPeoplePlace && record.placeQid)
     activeSpiderKey = null;
   }
 
-function expandSpiderAt(coords, records, langPref) {
-  if (!map || !spiderLayer) return;
+function expandSpiderAt(centerCoords, recordsAtCoord, langPref) {
+
+  // ---- FIX: self-heal spider layer after BFCache restore ----
+  if (!map) return;
+
+  if (!spiderLayer) {
+    spiderLayer = L.layerGroup();
+  }
+
+  if (!map.hasLayer(spiderLayer)) {
+    spiderLayer.addTo(map);
+  }
+
+  // Clear previous spider markers deterministically
+  try {
+    spiderLayer.clearLayers();
+  } catch (e) {}
+
 
   clearSpider();
   activeSpiderKey = coordKey(coords);
