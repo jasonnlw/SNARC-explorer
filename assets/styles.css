@@ -2194,7 +2194,7 @@ header.aps-header button.aps-filters-toggle {
 
   /* icon sizing */
   font-size: 30px;
-  font-weight: 900;
+  font-weight: 600;
 
   /* ensure vertical centring across browsers */
   display: flex;
