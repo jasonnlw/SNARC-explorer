@@ -1578,7 +1578,15 @@ m.setZIndexOffset(10000);
 }
 
 async function showImagesRingAt(parentMarker, group, langPref) {
-  if (!map || !spiderLayer) return;
+  if (!map) return;
+
+  if (!spiderLayer) {
+    spiderLayer = L.layerGroup();
+  }
+  if (!map.hasLayer(spiderLayer)) {
+    spiderLayer.addTo(map);
+  }
+
   ensureImagesRingPanes();
 
   const itemsRaw = Array.isArray(group?.items) ? group.items : [];
