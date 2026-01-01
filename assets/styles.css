@@ -2193,8 +2193,8 @@ header.aps-header button.aps-filters-toggle {
   text-align: center;
 
   /* icon sizing */
-  font-size: 25px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 900;
 
   /* ensure vertical centring across browsers */
   display: flex;
