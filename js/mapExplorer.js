@@ -342,48 +342,11 @@ WHERE {
   // Optional: spiderfy for same-coordinate markers
   let oms = null;
 
-
-  // -----------------------------------------------------------
-  // MarkerCluster helpers (BFCache-safe)
-  // -----------------------------------------------------------
-
-  function getWeightedClusterCount(cluster) {
-    let total = 0;
-    cluster.getAllChildMarkers().forEach(m => {
-      total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
-    });
-    return total;
-  }
-
-  function createClusterGroup() {
-    return L.markerClusterGroup({
-      showCoverageOnHover: false,
-      maxClusterRadius: 55,
-      spiderfyOnMaxZoom: true,
-      spiderLegPolylineOptions: {
-        weight: 1.5,
-        opacity: 0.7
-      },
-
-      iconCreateFunction: function (cluster) {
-        const count = getWeightedClusterCount(cluster);
-
-        // Match Leaflet.markercluster default size buckets
-        let sizeClass = "marker-cluster-small";
-        if (count >= 100) sizeClass = "marker-cluster-large";
-        else if (count >= 10) sizeClass = "marker-cluster-medium";
-
-        return L.divIcon({
-          html: `<div><span>${count}</span></div>`,
-          className: `marker-cluster ${sizeClass}`,
-          iconSize: L.point(40, 40),
-          iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
-        });
-      }
-    });
-  }
   // Cache: cache[langPref][datasetKey] = normalisedRecords[]
   const cache = { en: {}, cy: {} };
+
+  // Track current language for BFCache rebuilds
+  let currentLangPref = "en";
 
   // Selected facets: set of facet item keys
   const selected = new Set();
@@ -447,6 +410,17 @@ function makePopupSticky(marker) {
   });
 }
 
+function resetStickyPopupState() {
+  if (outsidePopupListener) {
+    try { document.removeEventListener("mousedown", outsidePopupListener, true); } catch (e) {}
+    outsidePopupListener = null;
+  }
+  if (activePopupMarker) {
+    try { activePopupMarker.closePopup(); } catch (e) {}
+    activePopupMarker = null;
+  }
+}
+
 const isDesktopHover =
   window.matchMedia &&
   window.matchMedia("(hover: hover) and (pointer: fine)").matches;
@@ -458,6 +432,9 @@ const isDesktopHover =
 
   async function initHomeMap(lang = "en") {
     const langPref = normaliseLang(lang);
+
+
+    currentLangPref = langPref;
 
     rootEl = document.getElementById("homeMap");
     if (!rootEl) return;
@@ -530,20 +507,15 @@ if (!window.__mePageshowBound) {
   window.__mePageshowBound = true;
 
   window.addEventListener("pageshow", (ev) => {
-  if (ev && ev.persisted) {
-    // Ensure loading overlay is not left visible after BFCache restore
-    if (window.__mapExplorerSetLoading) {
-      try { window.__mapExplorerSetLoading(false); } catch (e) {}
+    if (ev && ev.persisted) {
+      if (window.__mapExplorerSetLoading) {
+        try { window.__mapExplorerSetLoading(false); } catch (e) {}
+      }
+      // BFCache restore: rebuild Leaflet instance to guarantee cluster click handlers are live.
+      requestAnimationFrame(() => hardResetMapAfterBFCache());
     }
-
-    // BFCache restore: Leaflet pane transforms can be wrong; rebuild map instance
-    requestAnimationFrame(() => {
-      hardResetMapAfterBFCache();
-    });
-  }
-});
+  });
 }
-
 
 if (!window.__meVisibilityBound) {
   window.__meVisibilityBound = true;
@@ -554,7 +526,6 @@ if (!window.__meVisibilityBound) {
         try { window.__mapExplorerSetLoading(false); } catch (e) {}
       }
       requestAnimationFrame(() => refreshMapAfterReturn());
-      setTimeout(() => refreshMapAfterReturn(), 50);
     }
   });
 }
@@ -713,61 +684,12 @@ selected.clear();
     else filterPanelEl.classList.remove("open");
   }
 
-function hardResetMapAfterBFCache() {
-  const el = document.getElementById("homeMap");
-  if (!el) return;
-
-  // Preserve view if possible
-  let center = null;
-  let zoom = null;
-  try {
-    if (map && map.getCenter) center = map.getCenter();
-    if (map && map.getZoom) zoom = map.getZoom();
-  } catch (e) {}
-
-  // Destroy Leaflet instance completely
-  try {
-    if (map) {
-      try { map.off(); } catch (e) {}
-      try { map.remove(); } catch (e) {}
-    }
-  } catch (e) {}
-
-  // Remove any stale panes/clusters and reset Leaflet container state
-  el.innerHTML = "";
-  if (el._leaflet_id) {
-    try { delete el._leaflet_id; } catch (e) { el._leaflet_id = undefined; }
-  }
-
-  // Clear references (adjust to your actual globals)
-  map = null;
-  clusterGroup = null;
-  // If you keep other Leaflet layer refs, clear them too:
-  // spiderLayer = null; spiderMarkers = null; etc.
-
-  // Recreate map
-  initLeaflet();
-
-  // Restore view (optional)
-  try {
-    if (center && typeof zoom === "number" && map) {
-      map.setView(center, zoom, { animate: false });
-    }
-  } catch (e) {}
-
-  // Rebuild markers/layers from in-memory state (no refetch)
-  try {
-    const langPref =
-      (typeof getCurrentLang === "function" ? getCurrentLang() :
-       (window.__langPref || "en"));
-
-    if (typeof applyFacets === "function") applyFacets(langPref);
-  } catch (e) {}
-}
-
   
 function refreshMapAfterReturn() {
   if (!map) return;
+
+
+  resetStickyPopupState();
 
   // Ensure any loading overlay cannot block interactions
   if (window.__mapExplorerSetLoading) {
@@ -777,29 +699,21 @@ function refreshMapAfterReturn() {
   // 1) Leaflet layout recalculation
   map.invalidateSize(true);
 
-  // 2) HARD rebuild for MarkerCluster after BFCache restore:
-  // Recreating the MarkerClusterGroup is more reliable than remove+readd of the same instance.
-  if (clusterGroup) {
+  // 2) HARD reset for MarkerCluster after BFCache restore:
+  // remove + re-add forces DOM/event rebinding for cluster icons.
+  if (clusterGroup && map.hasLayer && map.hasLayer(clusterGroup)) {
     try {
-      const existingMarkers = clusterGroup.getLayers(); // preserve marker instances + handlers
-
-      if (map.hasLayer(clusterGroup)) map.removeLayer(clusterGroup);
-
-      clusterGroup = createClusterGroup();
+      map.removeLayer(clusterGroup);
       map.addLayer(clusterGroup);
-
-      if (existingMarkers && existingMarkers.length) {
-        clusterGroup.addLayers(existingMarkers);
-      }
-
-      if (typeof clusterGroup.refreshClusters === "function") {
-        clusterGroup.refreshClusters();
-      }
     } catch (e) {
-      // fail soft
+      // If anything odd happens, fail soft—map will still be usable.
     }
   }
 
+  // 3) Nudge cluster recalculation
+  if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
+    clusterGroup.refreshClusters();
+  }
 
   // 4) Ensure interactions are enabled (some SPA flows disable these)
   try {
@@ -813,6 +727,42 @@ function refreshMapAfterReturn() {
 }
 
 
+
+function hardResetMapAfterBFCache() {
+  // This is intentionally heavy-handed: MarkerCluster can lose its DOM listeners on BFCache restore.
+  if (!rootEl) rootEl = document.getElementById("homeMap");
+  if (!rootEl) return;
+
+  resetStickyPopupState();
+
+  // Tear down Leaflet completely
+  if (map) {
+    try { map.off(); } catch (e) {}
+    try { map.remove(); } catch (e) {}
+  }
+  map = null;
+  clusterGroup = null;
+  oms = null;
+  spiderLayer = null;
+
+  // Leaflet stores an internal id on the container; remove it so L.map can re-bind
+  try {
+    if (rootEl._leaflet_id) delete rootEl._leaflet_id;
+  } catch (e) {}
+
+  // Recreate map + layers
+  initLeaflet();
+
+  // Re-render markers using current facet selections
+  try {
+    applyFacets(currentLangPref);
+  } catch (e) {}
+
+  // Final layout pass
+  try { map && map.invalidateSize(true); } catch (e) {}
+}
+
+
   
   // -----------------------------------------------------------
   // Leaflet init
@@ -823,7 +773,13 @@ function refreshMapAfterReturn() {
 
     map = L.map(rootEl, { scrollWheelZoom: true });
 
-
+function getWeightedClusterCount(cluster) {
+  let total = 0;
+  cluster.getAllChildMarkers().forEach(m => {
+    total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
+  });
+  return total;
+}
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
@@ -832,9 +788,35 @@ function refreshMapAfterReturn() {
     map.setView([52.3, -3.8], 7);
 setTimeout(() => map.invalidateSize(), 0);
 
-clusterGroup = createClusterGroup();
+clusterGroup = L.markerClusterGroup({
+  showCoverageOnHover: false,
+  maxClusterRadius: 55,
+  spiderfyOnMaxZoom: true,
+  spiderLegPolylineOptions: {
+    weight: 1.5,
+    opacity: 0.7
+  },
 
-map.addLayer(clusterGroup);
+iconCreateFunction: function (cluster) {
+  const count = getWeightedClusterCount(cluster);
+
+  // Match Leaflet.markercluster default size buckets
+  let sizeClass = "marker-cluster-small";
+  if (count >= 100) sizeClass = "marker-cluster-large";
+  else if (count >= 10) sizeClass = "marker-cluster-medium";
+
+return L.divIcon({
+  html: `<div><span>${count}</span></div>`,
+  className: `marker-cluster ${sizeClass}`,
+  iconSize: L.point(40, 40),
+  iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
+});
+}
+
+});
+
+
+    map.addLayer(clusterGroup);
 
     // Optional OMS for true “same coordinate” spider plots
     if (typeof OverlappingMarkerSpiderfier !== "undefined") {
