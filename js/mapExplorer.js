@@ -342,6 +342,46 @@ WHERE {
   // Optional: spiderfy for same-coordinate markers
   let oms = null;
 
+
+  // -----------------------------------------------------------
+  // MarkerCluster helpers (BFCache-safe)
+  // -----------------------------------------------------------
+
+  function getWeightedClusterCount(cluster) {
+    let total = 0;
+    cluster.getAllChildMarkers().forEach(m => {
+      total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
+    });
+    return total;
+  }
+
+  function createClusterGroup() {
+    return L.markerClusterGroup({
+      showCoverageOnHover: false,
+      maxClusterRadius: 55,
+      spiderfyOnMaxZoom: true,
+      spiderLegPolylineOptions: {
+        weight: 1.5,
+        opacity: 0.7
+      },
+
+      iconCreateFunction: function (cluster) {
+        const count = getWeightedClusterCount(cluster);
+
+        // Match Leaflet.markercluster default size buckets
+        let sizeClass = "marker-cluster-small";
+        if (count >= 100) sizeClass = "marker-cluster-large";
+        else if (count >= 10) sizeClass = "marker-cluster-medium";
+
+        return L.divIcon({
+          html: `<div><span>${count}</span></div>`,
+          className: `marker-cluster ${sizeClass}`,
+          iconSize: L.point(40, 40),
+          iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
+        });
+      }
+    });
+  }
   // Cache: cache[langPref][datasetKey] = normalisedRecords[]
   const cache = { en: {}, cy: {} };
 
@@ -680,21 +720,29 @@ function refreshMapAfterReturn() {
   // 1) Leaflet layout recalculation
   map.invalidateSize(true);
 
-  // 2) HARD reset for MarkerCluster after BFCache restore:
-  // remove + re-add forces DOM/event rebinding for cluster icons.
-  if (clusterGroup && map.hasLayer && map.hasLayer(clusterGroup)) {
+  // 2) HARD rebuild for MarkerCluster after BFCache restore:
+  // Recreating the MarkerClusterGroup is more reliable than remove+readd of the same instance.
+  if (clusterGroup) {
     try {
-      map.removeLayer(clusterGroup);
+      const existingMarkers = clusterGroup.getLayers(); // preserve marker instances + handlers
+
+      if (map.hasLayer(clusterGroup)) map.removeLayer(clusterGroup);
+
+      clusterGroup = createClusterGroup();
       map.addLayer(clusterGroup);
+
+      if (existingMarkers && existingMarkers.length) {
+        clusterGroup.addLayers(existingMarkers);
+      }
+
+      if (typeof clusterGroup.refreshClusters === "function") {
+        clusterGroup.refreshClusters();
+      }
     } catch (e) {
-      // If anything odd happens, fail soft—map will still be usable.
+      // fail soft
     }
   }
 
-  // 3) Nudge cluster recalculation
-  if (clusterGroup && typeof clusterGroup.refreshClusters === "function") {
-    clusterGroup.refreshClusters();
-  }
 
   // 4) Ensure interactions are enabled (some SPA flows disable these)
   try {
@@ -718,13 +766,7 @@ function refreshMapAfterReturn() {
 
     map = L.map(rootEl, { scrollWheelZoom: true });
 
-function getWeightedClusterCount(cluster) {
-  let total = 0;
-  cluster.getAllChildMarkers().forEach(m => {
-    total += (m && typeof m.__meCount === "number") ? m.__meCount : 1;
-  });
-  return total;
-}
+
 
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
       attribution: "&copy; OpenStreetMap contributors"
@@ -733,35 +775,9 @@ function getWeightedClusterCount(cluster) {
     map.setView([52.3, -3.8], 7);
 setTimeout(() => map.invalidateSize(), 0);
 
-clusterGroup = L.markerClusterGroup({
-  showCoverageOnHover: false,
-  maxClusterRadius: 55,
-  spiderfyOnMaxZoom: true,
-  spiderLegPolylineOptions: {
-    weight: 1.5,
-    opacity: 0.7
-  },
+clusterGroup = createClusterGroup();
 
-iconCreateFunction: function (cluster) {
-  const count = getWeightedClusterCount(cluster);
-
-  // Match Leaflet.markercluster default size buckets
-  let sizeClass = "marker-cluster-small";
-  if (count >= 100) sizeClass = "marker-cluster-large";
-  else if (count >= 10) sizeClass = "marker-cluster-medium";
-
-return L.divIcon({
-  html: `<div><span>${count}</span></div>`,
-  className: `marker-cluster ${sizeClass}`,
-  iconSize: L.point(40, 40),
-  iconAnchor: L.point(20, 20) // critical: centre anchor so spider legs originate correctly
-});
-}
-
-});
-
-
-    map.addLayer(clusterGroup);
+map.addLayer(clusterGroup);
 
     // Optional OMS for true “same coordinate” spider plots
     if (typeof OverlappingMarkerSpiderfier !== "undefined") {
