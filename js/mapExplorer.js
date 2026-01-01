@@ -94,25 +94,31 @@ function addLocateControl(map) {
       btn.title = "Center map on your location";
       btn.setAttribute("role", "button");
       btn.setAttribute("aria-label", "Center map on your location");
-      btn.innerHTML = "⌖"; // simple crosshair glyph
+      btn.innerHTML = "⦿"; // simple crosshair glyph
 
       // Prevent this control click from triggering map interactions
       L.DomEvent.disableClickPropagation(container);
       L.DomEvent.disableScrollPropagation(container);
 
-      L.DomEvent.on(btn, "click", (e) => {
-        L.DomEvent.preventDefault(e);
+const doLocate = (e) => {
+  if (e) {
+    try { L.DomEvent.preventDefault(e); } catch (_) {}
+    try { L.DomEvent.stop(e); } catch (_) {}
+  }
 
-        // Ask Leaflet to locate; mobile + desktop
-        // setView=true recenters automatically; maxZoom gives "fairly close"
-        map.locate({
-          setView: true,
-          maxZoom: 16,
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 60000
-        });
-      });
+  map.locate({
+    setView: true,
+    maxZoom: 16,
+    enableHighAccuracy: true,
+    timeout: 10000,
+    maximumAge: 60000
+  });
+};
+
+// Bind both click and touchstart (required for iOS/WebKit reliability)
+L.DomEvent.on(btn, "click", doLocate);
+L.DomEvent
+
 
       return container;
     }
