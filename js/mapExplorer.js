@@ -76,6 +76,24 @@ async function loadSnapshotBindings(datasetKey, langPref) {
   return await res.json(); // this is already an array of bindings
 }
 
+function renderThumbErrorTile(anchorEl, itemUrl, langPref) {
+  const label = t("View item", "Gweld yr eitem");
+  const title = t("Thumbnail unavailable", "Darluniad ddim ar gael");
+
+  anchorEl.innerHTML = `
+    <div class="me-thumb-error" role="link" aria-label="${label}" title="${title}">
+      <div class="me-thumb-error-icon">!</div>
+      <div class="me-thumb-error-text">${label}</div>
+    </div>
+  `;
+
+  // Keep link behaviour
+  anchorEl.href = itemUrl;
+  anchorEl.target = "_blank";
+  anchorEl.rel = "noopener";
+}
+
+
 // -----------------------------------------------------------
 // Geolocation control (top-right)
 // -----------------------------------------------------------
@@ -1795,16 +1813,36 @@ function renderStandardThumbIntoPopup(record, marker) {
   const commonsVal = record.image || null;
   if (!commonsVal) return;
 
-  const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
-  if (!thumbUrl) return;
+ const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
+if (!thumbUrl) return;
 
-  wrap.innerHTML = "";
-  const img = document.createElement("img");
-  img.loading = "lazy";
-  img.alt = "";
-  img.src = thumbUrl;
-  wrap.appendChild(img);
-}
+wrap.innerHTML = "";
+const img = document.createElement("img");
+img.loading = "lazy";
+img.alt = "";
+img.src = thumbUrl;
+
+img.onerror = () => {
+  // Try the alternate IIIF path once, then fall back to bilingual error tile
+  if (!img.__triedFallback) {
+    img.__triedFallback = true;
+
+    // Only attempt the fallback if the URL matches the IIIF pattern you support
+    const fallbackUrl = thumbUrl.includes("/iiif/image/")
+      ? thumbUrl.replace("/iiif/image/", "/iiif/2.0/image/")
+      : null;
+
+    if (fallbackUrl && fallbackUrl !== img.src) {
+      img.src = fallbackUrl;
+      return;
+    }
+  }
+
+  renderThumbErrorTile(anchor, record.itemUrl || record.url || record.pageUrl, langPref);
+};
+
+wrap.appendChild(img);
+
 
 async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
   // Only run if the API module exists
