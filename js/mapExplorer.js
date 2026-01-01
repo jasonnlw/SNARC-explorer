@@ -76,7 +76,7 @@ async function loadSnapshotBindings(datasetKey, langPref) {
   return await res.json(); // this is already an array of bindings
 }
 
-function renderThumbErrorTile(anchorEl, itemUrl, langPref) {
+function renderThumbErrorTile(anchorEl, itemUrl) {
   const label = t("View item", "Gweld yr eitem");
   const title = t("Thumbnail unavailable", "Darluniad ddim ar gael");
 
@@ -87,11 +87,11 @@ function renderThumbErrorTile(anchorEl, itemUrl, langPref) {
     </div>
   `;
 
-  // Keep link behaviour
   anchorEl.href = itemUrl;
   anchorEl.target = "_blank";
   anchorEl.rel = "noopener";
 }
+
 
 
 // -----------------------------------------------------------
@@ -1809,35 +1809,42 @@ function renderStandardThumbIntoPopup(record, marker) {
   const wrap = popupEl.querySelector("[data-me-thumb]");
   if (!wrap) return;
 
-  // Only render a thumb if P31 is present
   const commonsVal = record.image || null;
   if (!commonsVal) return;
 
- const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
-if (!thumbUrl) return;
+  const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
+  if (!thumbUrl) return;
 
-wrap.innerHTML = "";
+  // Build an anchor so the fallback tile can remain clickable
+  const itemUrl =
+    record.itemUrl ||
+    record.url ||
+    record.pageUrl ||
+    (record.qid ? `${ITEM_URL_PREFIX}${record.qid}` : "#");
 
-const link = record.qid ? `${ITEM_URL_PREFIX}${record.qid}` : (record.itemUrl || record.url || record.pageUrl || "#");
-const anchor = document.createElement("a");
-anchor.href = link;
-anchor.target = "_blank";
-anchor.rel = "noopener";
+  wrap.innerHTML = "";
 
-const img = document.createElement("img");
-img.loading = "lazy";
-img.alt = "";
-img.src = thumbUrl;
+  const anchor = document.createElement("a");
+  anchor.href = itemUrl;
+  anchor.target = "_blank";
+  anchor.rel = "noopener";
 
-img.onerror = () => {
-  // No IIIF fallback applies here because commonsThumbUrlFromValue() returns Special:FilePath.
-  // So we go straight to the bilingual error tile.
-  renderThumbErrorTile(anchor, link, langPref);
-};
+  const img = document.createElement("img");
+  img.loading = "lazy";
+  img.alt = "";
+  img.src = thumbUrl;
 
-anchor.appendChild(img);
-wrap.appendChild(anchor);
+  img.onerror = () => {
+    // Prevent any re-entrancy loops
+    img.onerror = null;
 
+    // commonsThumbUrlFromValue() uses Wikimedia Special:FilePath, not your IIIF.
+    // So there is no meaningful IIIF fallback here; show the bilingual error tile.
+    renderThumbErrorTile(anchor, itemUrl);
+  };
+
+  anchor.appendChild(img);
+  wrap.appendChild(anchor);
 }
 
 async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
