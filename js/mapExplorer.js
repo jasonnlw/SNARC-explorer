@@ -1842,7 +1842,7 @@ img.onerror = () => {
 };
 
 wrap.appendChild(img);
-
+}
 
 async function hydratePeoplePlaceLabelsInPopup(marker, langPref) {
   // Only run if the API module exists
