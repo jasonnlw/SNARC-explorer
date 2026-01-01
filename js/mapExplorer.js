@@ -186,10 +186,10 @@ L.DomEvent.on(btn, "pointerdown", doLocate);
     }
   });
 
-  map.on("locationerror", (e) => {
-    // Keep this non-intrusive; avoids breaking UX if permission denied
-    console.warn("Geolocation error:", e && e.message ? e.message : e);
-  });
+map.on("locationerror", (e) => {
+  const msg = (e && e.message) ? e.message : "Unable to access location.";
+  alert("Location error: " + msg);
+});
 }
   
 
