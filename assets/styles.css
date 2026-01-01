@@ -1724,6 +1724,24 @@ header.aps-header button.aps-filters-toggle {
   background: #F4631E;
 }
 
+/* Allow clicks to pass through header background to the map */
+.site-header {
+  pointer-events: none;
+}
+
+/* Re-enable interaction for the actual header controls */
+.site-header a,
+.site-header button,
+.site-header input,
+.site-header select,
+.site-header textarea,
+.site-header label,
+.site-header #search-form,
+.site-header .lang-switch {
+  pointer-events: auto;
+}
+
+
 /* List cards: remove greys and keep consistent framing */
 .aps-result-card {
   border: 2px solid #309898;
