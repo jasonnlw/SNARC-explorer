@@ -94,7 +94,7 @@ function addLocateControl(map) {
       btn.title = "Center map on your location";
       btn.setAttribute("role", "button");
       btn.setAttribute("aria-label", "Center map on your location");
-      btn.innerHTML = "◎"; // simple crosshair glyph
+      btn.innerHTML = "📍"; // simple crosshair glyph
 
       // Prevent this control click from triggering map interactions
       L.DomEvent.disableClickPropagation(container);
