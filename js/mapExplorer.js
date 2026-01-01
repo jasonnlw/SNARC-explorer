@@ -78,73 +78,23 @@ async function loadSnapshotBindings(datasetKey, langPref) {
 
 function renderThumbErrorTile(containerEl, itemUrl, langPref) {
   if (!containerEl) return;
+  const tLocal = (en, cy) => (langPref === "cy" ? cy : en);
 
-  // Ensure minimal styling exists (only used when a thumb fails)
-  if (!document.getElementById("me-thumb-error-style")) {
-    const s = document.createElement("style");
-    s.id = "me-thumb-error-style";
-    s.textContent = `
-      .me-thumb-error-link{
-        display:flex;
-        width:100%;
-        height:100%;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        gap:6px;
-        text-decoration:none;
-        color:inherit;
-        background:#fff;
-      }
-      .me-thumb-error{
-        width:100%;
-        height:100%;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        flex-direction:column;
-        gap:6px;
-        border:2px dashed rgba(0,0,0,0.25);
-        border-radius:999px;
-        box-sizing:border-box;
-        padding:10px;
-      }
-      .me-thumb-error-icon{
-        width:26px;
-        height:26px;
-        border-radius:999px;
-        display:grid;
-        place-items:center;
-        font-weight:800;
-        background:rgba(0,0,0,0.08);
-      }
-      .me-thumb-error-text{
-        font-size:12px;
-        font-weight:700;
-        text-align:center;
-        line-height:1.15;
-      }
-      /* Popup thumbs are rectangular; adjust rounding there */
-      .me-fixed-popup .me-thumb-error{ border-radius:10px; }
-    `;
-    document.head.appendChild(s);
-  }
+  const label = tLocal("View item", "Gweld yr eitem");
+  const title = tLocal("Thumbnail unavailable", "Darluniad ddim ar gael");
 
-  const t = (en, cy) => (langPref === "cy" ? cy : en);
-  const label = t("View item", "Gweld yr eitem");
-  const title = t("Thumbnail unavailable", "Darluniad ddim ar gael");
+  const safeUrl = itemUrl || "#";
 
-  const href = itemUrl ? String(itemUrl) : "#";
   containerEl.innerHTML = `
-    <a class="me-thumb-error-link" href="${escapeHtml(href)}" target="_blank" rel="noopener" aria-label="${escapeHtml(label)}" title="${escapeHtml(title)}">
+    <a class="me-thumb-error-link" href="${escapeHtml(safeUrl)}" target="_blank" rel="noopener"
+       aria-label="${label}" title="${title}">
       <div class="me-thumb-error">
         <div class="me-thumb-error-icon">!</div>
-        <div class="me-thumb-error-text">${escapeHtml(label)}</div>
+        <div class="me-thumb-error-text">${label}</div>
       </div>
     </a>
   `;
 }
-
 
 
 // -----------------------------------------------------------
@@ -1611,15 +1561,15 @@ function preflightIIIF(urlList) {
   });
 }
 
-async function buildThumbMarker(latlng, thumbUrl, qid, langPref) {
+async function buildThumbMarker(latlng, url1, url2, qid, langPref) {
   ensureImagesRingStyles();
-
-  const href = `${ITEM_URL_PREFIX}${qid}`;
+  const tLocal = (en, cy) => (langPref === "cy" ? cy : en);
 
   const html = `
-    <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0" aria-label="Open item ${escapeHtml(qid)}">
+    <div class="me-thumb-icon me-thumb-icon--clickable" role="button" tabindex="0"
+         aria-label="${escapeHtml(tLocal("Open item", "Agor eitem"))} ${escapeHtml(qid)}">
       <div class="me-thumb-inner">
-        <img src="${thumbUrl}" alt="" loading="lazy">
+        ${url1 ? `<img src="${escapeHtml(url1)}" alt="" loading="lazy">` : ""}
       </div>
     </div>
   `;
@@ -1638,31 +1588,48 @@ async function buildThumbMarker(latlng, thumbUrl, qid, langPref) {
   });
   m.setZIndexOffset(10000);
 
-  // If the live <img> fails (e.g., intermittent 500 after preflight), replace it with a bilingual error tile.
-  m.on("add", () => {
-    try {
-      const el = m.getElement();
-      const img = el ? el.querySelector("img") : null;
-      if (!img) return;
-
-      img.addEventListener("error", () => {
-        try {
-          const inner = el.querySelector(".me-thumb-inner") || el;
-          renderThumbErrorTile(inner, href, langPref);
-        } catch (_) {}
-      }, { once: true });
-    } catch (_) {}
-  });
-
-  const open = () => window.open(href, "_self"); // same tab to match “load the item page”
+  const href = `${ITEM_URL_PREFIX}${qid}`;
+  const open = () => window.open(href, "_self"); // same tab to match item navigation
   m.on("click", open);
   m.on("keypress", (e) => {
     if (e?.originalEvent?.key === "Enter") open();
   });
 
+  // Attach robust fallback/error tile once the marker's DOM exists
+  m.on("add", () => {
+    const el = m.getElement();
+    if (!el) return;
+
+    const inner = el.querySelector(".me-thumb-inner");
+    const img = el.querySelector("img");
+
+    const showError = () => {
+      if (!inner) return;
+      inner.innerHTML = `
+        <div class="me-thumb-error me-thumb-error--ring" title="${escapeHtml(tLocal("Thumbnail unavailable", "Darluniad ddim ar gael"))}">
+          <div class="me-thumb-error-icon">!</div>
+          <div class="me-thumb-error-text">${escapeHtml(tLocal("View item", "Gweld yr eitem"))}</div>
+        </div>
+      `;
+    };
+
+    if (!img) {
+      showError();
+      return;
+    }
+
+    img.addEventListener("error", () => {
+      if (!img.dataset.meTriedFallback && url2) {
+        img.dataset.meTriedFallback = "1";
+        img.src = url2;
+        return;
+      }
+      showError();
+    }, { once: false });
+  });
+
   return m;
 }
-
 
 async function showImagesRingAt(parentMarker, group, langPref) {
   if (!map) return;
@@ -1683,36 +1650,33 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const parentLatLng = parentMarker.getLatLng();
   const key = `images:${parentLatLng.lat.toFixed(5)},${parentLatLng.lng.toFixed(5)}`;
   if (activeSpiderKey === key) {
-  clearSpider();
-  activeSpiderKey = null;
-  return;
-}
-
+    clearSpider();
+    activeSpiderKey = null;
+    return;
+  }
 
   clearSpider();
   activeSpiderKey = key;
 
-  // Preflight thumbs first (avoid rendering empty circles)
+  // Build candidate URLs (no preflight). We handle fallback + bilingual error tile in buildThumbMarker().
   const resolved = [];
   for (const r of items) {
     const qid = r?.qid;
     const cand = iiifCandidatesFromNlwMedia(r?.nlwmedia, /* sizePx */ 300);
-    if (!qid || !cand) continue;
 
-    const okUrl = await preflightIIIF(cand.urls);
-    if (!okUrl) continue;
+    if (!qid) continue;
 
-    resolved.push({ qid, thumbUrl: okUrl });
+    if (cand && Array.isArray(cand.urls) && cand.urls.length) {
+      resolved.push({ qid, url1: cand.urls[0] || null, url2: cand.urls[1] || null });
+    } else {
+      // No IIIF candidate could be derived -> still render an error tile so the node is never "dead"
+      resolved.push({ qid, url1: null, url2: null });
+    }
   }
 
   if (!resolved.length) return;
 
-
-
-
-
-  
-  // -----------------------------------------------------------
+// -----------------------------------------------------------
 // Geometry: inner-only ring for < 5, staggered ring for >= 5
 // -----------------------------------------------------------
   const n = resolved.length;
@@ -1778,7 +1742,7 @@ const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
     spiderLayer.addLayer(leg);
 
     const thumb = resolved[i];
-    const m = await buildThumbMarker(latlng, thumb.thumbUrl, thumb.qid, langPref);
+    const m = await buildThumbMarker(latlng, thumb.url1, thumb.url2, thumb.qid, langPref);
     spiderLayer.addLayer(m);
   }
 }
@@ -1878,39 +1842,24 @@ function renderStandardThumbIntoPopup(record, marker, langPref) {
   const wrap = popupEl.querySelector("[data-me-thumb]");
   if (!wrap) return;
 
-  // Only render a thumb if an image value exists
-  const commonsVal = record.image || null;
+  // Only render a thumb if P31 (image) is present
+  const commonsVal = record?.image || null;
   if (!commonsVal) return;
 
   const thumbUrl = commonsThumbUrlFromValue(commonsVal, 180);
   if (!thumbUrl) return;
 
   wrap.innerHTML = "";
+
   const img = document.createElement("img");
   img.loading = "lazy";
   img.alt = "";
   img.src = thumbUrl;
 
   img.onerror = () => {
-    // Try the alternate IIIF path once, then fall back to bilingual error tile
-    if (!img.__triedFallback) {
-      img.__triedFallback = true;
-
-      const fallbackUrl = thumbUrl.includes("/iiif/image/")
-        ? thumbUrl.replace("/iiif/image/", "/iiif/2.0/image/")
-        : null;
-
-      if (fallbackUrl && fallbackUrl !== img.src) {
-        img.src = fallbackUrl;
-        return;
-      }
-    }
-
-    renderThumbErrorTile(
-      wrap,
-      record.itemUrl || record.url || record.pageUrl || `${ITEM_URL_PREFIX}${record.qid || ""}`,
-      langPref
-    );
+    const qid = record?.qid || "";
+    const itemUrl = qid ? `${ITEM_URL_PREFIX}${qid}` : (record?.itemUrl || record?.url || record?.pageUrl || "#");
+    renderThumbErrorTile(wrap, itemUrl, langPref);
   };
 
   wrap.appendChild(img);
