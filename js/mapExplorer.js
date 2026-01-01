@@ -1354,19 +1354,20 @@ wireHoverPopup(
 function ensureImagesRingPanes() {
   if (!map) return;
 
-  // Legs (polylines)
+  // Legs (polylines) — must be BELOW standard markers so the parent pin stays on top
   if (!map.getPane("me-images-legs")) {
     const p = map.createPane("me-images-legs");
-    p.style.zIndex = 950; // above markers/cluster icons
+    p.style.zIndex = 590; // below Leaflet markerPane (~600)
     p.style.pointerEvents = "none";
   }
 
-  // Thumbnails (markers)
+  // Thumbnails (markers) — should be ABOVE markers/legs
   if (!map.getPane("me-images-thumbs")) {
     const p = map.createPane("me-images-thumbs");
-    p.style.zIndex = 960; // above legs
+    p.style.zIndex = 610; // above markerPane, below popups (~700)
   }
 }
+
   
 
 // -----------------------------------------------------------
