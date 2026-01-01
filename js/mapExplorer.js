@@ -1260,43 +1260,41 @@ const placeHTML = (isPeoplePlace && record.placeQid)
 
 function expandSpiderAt(centerCoords, recordsAtCoord, langPref) {
 
-  // ---- FIX: self-heal spider layer after BFCache restore ----
+  // ---- self-heal spider layer after BFCache restore ----
   if (!map) return;
 
   if (!spiderLayer) {
     spiderLayer = L.layerGroup();
   }
-
   if (!map.hasLayer(spiderLayer)) {
     spiderLayer.addTo(map);
   }
 
-  // Clear previous spider markers deterministically
-  try {
-    spiderLayer.clearLayers();
-  } catch (e) {}
-
-
+  // Start clean (clears previous legs/children + resets activeSpiderKey)
   clearSpider();
-  activeSpiderKey = coordKey(coords);
+
+  // Set active key for THIS spider
+  activeSpiderKey = coordKey(centerCoords);
 
   // Convert center latlng -> pixel point
-  const center = L.latLng(coords.lat, coords.lon);
-  const centerPt = map.project(center, map.getZoom());
+  const center = L.latLng(centerCoords.lat, centerCoords.lon);
+  const zoom = map.getZoom();
+  const centerPt = map.project(center, zoom);
 
-  const n = records.length;
-  const radiusPx = 36; // adjust for spacing
+  const n = recordsAtCoord.length;
+  if (!n) return;
+
+  const radiusPx = 36;
   const step = (Math.PI * 2) / n;
 
-  records.forEach((record, i) => {
+  recordsAtCoord.forEach((record, i) => {
     const angle = i * step;
     const pt = L.point(
       centerPt.x + radiusPx * Math.cos(angle),
       centerPt.y + radiusPx * Math.sin(angle)
     );
-    
-const zoom = map.getZoom();
-const latlng = map.unproject(pt, zoom);
+
+    const latlng = map.unproject(pt, zoom);
 
 // Anchor spider line to the *visual centre* of the icons (your icons are 28px high)
 const ICON_HALF_HEIGHT = 14;
