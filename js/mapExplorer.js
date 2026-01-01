@@ -771,7 +771,9 @@ function hardResetMapAfterBFCache() {
   function initLeaflet() {
     if (map) return;
 
-    map = L.map(rootEl, { scrollWheelZoom: true });
+    map = L.map(rootEl, { scrollWheelZoom: true, zoomControl: false });
+L.control.zoom({ position: "bottomright" }).addTo(map);
+
 
 function getWeightedClusterCount(cluster) {
   let total = 0;
