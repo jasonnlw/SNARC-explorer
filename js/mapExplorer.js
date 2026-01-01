@@ -530,15 +530,20 @@ if (!window.__mePageshowBound) {
   window.__mePageshowBound = true;
 
   window.addEventListener("pageshow", (ev) => {
-    if (ev && ev.persisted) {
-      if (window.__mapExplorerSetLoading) {
-        try { window.__mapExplorerSetLoading(false); } catch (e) {}
-      }
-      requestAnimationFrame(() => refreshMapAfterReturn());
-      setTimeout(() => refreshMapAfterReturn(), 50);
+  if (ev && ev.persisted) {
+    // Ensure loading overlay is not left visible after BFCache restore
+    if (window.__mapExplorerSetLoading) {
+      try { window.__mapExplorerSetLoading(false); } catch (e) {}
     }
-  });
+
+    // BFCache restore: Leaflet pane transforms can be wrong; rebuild map instance
+    requestAnimationFrame(() => {
+      hardResetMapAfterBFCache();
+    });
+  }
+});
 }
+
 
 if (!window.__meVisibilityBound) {
   window.__meVisibilityBound = true;
@@ -707,6 +712,58 @@ selected.clear();
     if (!isMobile) filterPanelEl.classList.add("open");
     else filterPanelEl.classList.remove("open");
   }
+
+function hardResetMapAfterBFCache() {
+  const el = document.getElementById("homeMap");
+  if (!el) return;
+
+  // Preserve view if possible
+  let center = null;
+  let zoom = null;
+  try {
+    if (map && map.getCenter) center = map.getCenter();
+    if (map && map.getZoom) zoom = map.getZoom();
+  } catch (e) {}
+
+  // Destroy Leaflet instance completely
+  try {
+    if (map) {
+      try { map.off(); } catch (e) {}
+      try { map.remove(); } catch (e) {}
+    }
+  } catch (e) {}
+
+  // Remove any stale panes/clusters and reset Leaflet container state
+  el.innerHTML = "";
+  if (el._leaflet_id) {
+    try { delete el._leaflet_id; } catch (e) { el._leaflet_id = undefined; }
+  }
+
+  // Clear references (adjust to your actual globals)
+  map = null;
+  clusterGroup = null;
+  // If you keep other Leaflet layer refs, clear them too:
+  // spiderLayer = null; spiderMarkers = null; etc.
+
+  // Recreate map
+  initLeaflet();
+
+  // Restore view (optional)
+  try {
+    if (center && typeof zoom === "number" && map) {
+      map.setView(center, zoom, { animate: false });
+    }
+  } catch (e) {}
+
+  // Rebuild markers/layers from in-memory state (no refetch)
+  try {
+    const langPref =
+      (typeof getCurrentLang === "function" ? getCurrentLang() :
+       (window.__langPref || "en"));
+
+    if (typeof applyFacets === "function") applyFacets(langPref);
+  } catch (e) {}
+}
 
   
 function refreshMapAfterReturn() {
