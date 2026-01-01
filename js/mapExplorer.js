@@ -94,7 +94,7 @@ function addLocateControl(map) {
       btn.title = "Center map on your location";
       btn.setAttribute("role", "button");
       btn.setAttribute("aria-label", "Center map on your location");
-      btn.innerHTML = "⦿"; // simple crosshair glyph
+      btn.innerHTML = "◎"; // simple crosshair glyph
 
       // Prevent this control click from triggering map interactions
       L.DomEvent.disableClickPropagation(container);
@@ -106,18 +106,51 @@ const doLocate = (e) => {
     try { L.DomEvent.stop(e); } catch (_) {}
   }
 
-  map.locate({
-    setView: true,
-    maxZoom: 16,
-    enableHighAccuracy: true,
-    timeout: 10000,
-    maximumAge: 60000
-  });
+  // If the handler is not firing on iOS, you will never see this.
+  // Leave it in for one test cycle; remove once confirmed.
+  // alert("Locate tapped");
+
+  // Clear any previous locate attempt (helps on iOS after BFCache / interruptions)
+  try { map.stopLocate(); } catch (_) {}
+
+  // Use Leaflet's locate first
+  try {
+    map.locate({
+      setView: true,
+      maxZoom: 16,
+      enableHighAccuracy: true,
+      timeout: 12000,
+      maximumAge: 60000
+    });
+  } catch (_) {}
+
+  // Fallback: call Geolocation API directly to force a prompt / explicit error
+  // (and to work around any Leaflet wrapper quirks)
+  try {
+    if (navigator.geolocation && typeof navigator.geolocation.getCurrentPosition === "function") {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const latlng = L.latLng(pos.coords.latitude, pos.coords.longitude);
+          map.setView(latlng, Math.max(map.getZoom(), 16), { animate: false });
+        },
+        (err) => {
+          const msg = err && err.message ? err.message : "Unable to access location.";
+          alert("Location error: " + msg);
+        },
+        { enableHighAccuracy: true, timeout: 12000, maximumAge: 60000 }
+      );
+    } else {
+      alert("Geolocation is not available in this browser.");
+    }
+  } catch (err) {
+    alert("Geolocation failed: " + (err && err.message ? err.message : err));
+  }
 };
 
-// Bind both click and touchstart (required for iOS/WebKit reliability)
+// Bind multiple event types for maximum iOS reliability
 L.DomEvent.on(btn, "click", doLocate);
-L.DomEvent
+L.DomEvent.on(btn, "touchstart", doLocate);
+L.DomEvent.on(btn, "pointerdown", doLocate);
 
 
       return container;
