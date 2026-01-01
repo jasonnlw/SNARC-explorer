@@ -76,6 +76,83 @@ async function loadSnapshotBindings(datasetKey, langPref) {
   return await res.json(); // this is already an array of bindings
 }
 
+// -----------------------------------------------------------
+// Geolocation control (top-right)
+// -----------------------------------------------------------
+function addLocateControl(map) {
+  if (!map || map.__meLocateControlAdded) return;
+  map.__meLocateControlAdded = true;
+
+  const LocateControl = L.Control.extend({
+    options: { position: "topright" },
+
+    onAdd: function () {
+      const container = L.DomUtil.create("div", "leaflet-bar me-locate-control");
+      const btn = L.DomUtil.create("a", "me-locate-btn", container);
+
+      btn.href = "#";
+      btn.title = "Center map on your location";
+      btn.setAttribute("role", "button");
+      btn.setAttribute("aria-label", "Center map on your location");
+      btn.innerHTML = "⌖"; // simple crosshair glyph
+
+      // Prevent this control click from triggering map interactions
+      L.DomEvent.disableClickPropagation(container);
+      L.DomEvent.disableScrollPropagation(container);
+
+      L.DomEvent.on(btn, "click", (e) => {
+        L.DomEvent.preventDefault(e);
+
+        // Ask Leaflet to locate; mobile + desktop
+        // setView=true recenters automatically; maxZoom gives "fairly close"
+        map.locate({
+          setView: true,
+          maxZoom: 16,
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 60000
+        });
+      });
+
+      return container;
+    }
+  });
+
+  const ctrl = new LocateControl();
+  map.addControl(ctrl);
+
+  // Optional marker/circle showing current position
+  let locMarker = null;
+  let locCircle = null;
+
+  map.on("locationfound", (e) => {
+    const latlng = e.latlng;
+    const radius = e.accuracy || 0;
+
+    if (!locMarker) {
+      locMarker = L.circleMarker(latlng, {
+        radius: 6,
+        weight: 2,
+        fillOpacity: 0.6
+      }).addTo(map);
+    } else {
+      locMarker.setLatLng(latlng);
+    }
+
+    if (!locCircle) {
+      locCircle = L.circle(latlng, { radius }).addTo(map);
+    } else {
+      locCircle.setLatLng(latlng);
+      locCircle.setRadius(radius);
+    }
+  });
+
+  map.on("locationerror", (e) => {
+    // Keep this non-intrusive; avoids breaking UX if permission denied
+    console.warn("Geolocation error:", e && e.message ? e.message : e);
+  });
+}
+  
 
   // -----------------------------------------------------------
   // Revised SPARQL queries (language-controlled via ${langPref})
@@ -773,6 +850,7 @@ function hardResetMapAfterBFCache() {
 
     map = L.map(rootEl, { scrollWheelZoom: true, zoomControl: false });
 L.control.zoom({ position: "bottomright" }).addTo(map);
+addLocateControl(map);
 
 
 function getWeightedClusterCount(cluster) {
