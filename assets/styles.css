@@ -2241,68 +2241,32 @@ header.aps-header button.aps-filters-toggle {
 }
 
 /* ---------------------------------------------------
-   Map Explorer – Mixed-category (pie) markers (FIX)
-   Force SOLID fill: disables donut/mask mechanics used by normal pins
+   Map Explorer – Mixed-category (pie) markers (FINAL)
    --------------------------------------------------- */
 
-.me-pin-mixed .me-pin-inner-mixed {
-  /* kill common “donut” mechanisms */
-  -webkit-mask: none !important;
-  mask: none !important;
-
-  /* kill common inner cutout/shadow tricks */
-  box-shadow: none !important;
-  outline: none !important;
-  border: none !important;
-
-  /* ensure gradient actually paints the element */
-  background: var(--me-mix-bg, #777) !important;
-  background-image: var(--me-mix-bg, #777) !important;
-}
-
-/* If your normal pins create the hollow centre via pseudo elements */
-.me-pin-mixed .me-pin-inner-mixed::before,
-.me-pin-mixed .me-pin-inner-mixed::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* Ensure mixed marker has a real, visible body even if base pins use pseudo-elements */
-.me-pin-mixed .me-pin-inner-mixed {
-  width: 28px;
-  height: 28px;
-  border-radius: 999px;
-  display: block;
-  position: relative;
-
-  /* keep the pie fill */
-  background: var(--me-mix-bg, #777) !important;
-  background-image: var(--me-mix-bg, #777) !important;
-
-  /* defeat donut masks */
-  -webkit-mask: none !important;
-  mask: none !important;
-}
-
-/* Only disable pseudo-elements for mixed markers */
-.me-pin-mixed .me-pin-inner-mixed::before,
-.me-pin-mixed .me-pin-inner-mixed::after {
-  content: none !important;
-  display: none !important;
-}
-
-/* ---------------------------------------------------
-   Map Explorer – Mixed-category (pie) markers (CLEAN)
-   --------------------------------------------------- */
-
-/* Mixed pin wrapper: keep same Leaflet divIcon behaviour */
+/* Mixed pin wrapper: keep Leaflet divIcon behaviour */
 .me-pin-mixed { background: transparent; border: none; }
 
-/* Remove glyph entirely for mixed markers (badge remains) */
+/* Hide glyph for mixed markers (badge remains) */
 .me-pin-mixed .me-pin-glyph { display: none; }
 
-/* Paint the pie background on the inner disc */
-.me-pin-mixed .me-pin-inner-mixed {
-  background: var(--me-mix-bg, #777) !important;
-  background-image: var(--me-mix-bg, #777) !important;
+/*
+  IMPORTANT:
+  Do NOT remove border/box-shadow here.
+  Your base .me-pin-inner likely provides the visible disc via border + shadow.
+  Mixed markers should only override the fill.
+*/
+.me-pin-mixed .me-pin-inner-mixed,
+.me-pin-mixed .me-pin-inner {
+  background: var(--me-mix-bg, #777);
+  background-image: var(--me-mix-bg, #777);
+  -webkit-mask: none; /* keep, but DO NOT use !important unless you must */
+  mask: none;
+}
+
+/* Only if your base pin uses pseudo-elements to cut out the center: */
+.me-pin-mixed .me-pin-inner-mixed::before,
+.me-pin-mixed .me-pin-inner-mixed::after {
+  content: none;
+  display: none;
 }
