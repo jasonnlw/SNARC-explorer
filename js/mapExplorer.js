@@ -1346,7 +1346,7 @@ function buildConicGradientFromGroups(groups) {
     const c = groupColor(g);
     const from = (i * step).toFixed(2);
     const to = ((i + 1) * step).toFixed(2);
-    return `${c} ${from}deg ${c} ${to}deg`;
+    return `${c} ${from}deg ${to}deg`;
   });
 
   return `conic-gradient(${stops.join(", ")})`;
