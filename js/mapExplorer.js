@@ -710,25 +710,73 @@ bindResizeOnce();
     wrapper.appendChild(rootEl);
 
     // Toggle button (mobile)
-    filterToggleBtn = document.createElement("button");
-    filterToggleBtn.type = "button";
-    filterToggleBtn.className = "me-filters-toggle aps-btn aps-btn-ghost";
-    filterToggleBtn.addEventListener("click", () => {
-      filterPanelEl.classList.toggle("open");
-    });
+// Top controls bar (always visible)
+const controlsBar = document.createElement("div");
+controlsBar.className = "me-controls-bar";
+wrapper.appendChild(controlsBar);
 
-    wrapper.appendChild(filterToggleBtn);
+// Filters toggle (left)
+filterToggleBtn = document.createElement("button");
+filterToggleBtn.type = "button";
+filterToggleBtn.className = "me-filters-toggle";
+filterToggleBtn.setAttribute("aria-expanded", "false");
+filterToggleBtn.setAttribute("aria-controls", "me-filters-panel");
+controlsBar.appendChild(filterToggleBtn);
 
-    // Filter panel
-    filterPanelEl = document.createElement("div");
-    filterPanelEl.className = "me-filters-panel";
-    wrapper.appendChild(filterPanelEl);
-  }
+// Clear (right)
+const clearBtn = document.createElement("button");
+clearBtn.type = "button";
+clearBtn.className = "me-clear-btn";
+controlsBar.appendChild(clearBtn);
+
+// Filter panel
+filterPanelEl = document.createElement("div");
+filterPanelEl.className = "me-filters-panel";
+filterPanelEl.id = "me-filters-panel";
+wrapper.appendChild(filterPanelEl);
+
+// Wire button behaviour (needs panel reference)
+function setPanelOpen(open, langPref) {
+  filterPanelEl.classList.toggle("open", !!open);
+  filterToggleBtn.setAttribute("aria-expanded", open ? "true" : "false");
+
+  // Toggle label text (Show/Hide) in EN/CY
+  const show = (langPref === "cy") ? "Dangos hidlwyr" : "Show filters";
+  const hide = (langPref === "cy") ? "Cuddio hidlwyr" : "Hide filters";
+  filterToggleBtn.textContent = open ? hide : show;
+}
+
+filterToggleBtn.addEventListener("click", () => {
+  const isOpen = filterPanelEl.classList.contains("open");
+  // Use lastLangPref if you have one; otherwise fall back to EN.
+  setPanelOpen(!isOpen, window.__meLangPref || "en");
+});
+
+clearBtn.addEventListener("click", () => {
+  const langPref = window.__meLangPref || "en";
+  selected.clear();
+  filterPanelEl.querySelectorAll("input[type='checkbox']").forEach(cb => { cb.checked = false; });
+  applyFacets(langPref);
+});
+
+// Expose helper + refs to buildFilterPanel via closure vars
+window.__meSetPanelOpen = setPanelOpen;
+window.__meClearBtnRef = clearBtn;
+
 
   function buildFilterPanel(langPref, rebuildOnly = false) {
+    window.__meLangPref = langPref;
     if (!filterPanelEl) return;
 
     const t = (en, cy) => (langPref === "cy" ? cy : en);
+// Update top bar button labels to match current language + open state
+if (window.__meClearBtnRef) {
+  window.__meClearBtnRef.textContent = t("Clear", "Clirio");
+}
+if (window.__meSetPanelOpen) {
+  const isOpen = filterPanelEl.classList.contains("open");
+  window.__meSetPanelOpen(isOpen, langPref);
+}
 
     if (filterToggleBtn) {
       filterToggleBtn.textContent = t("Filters", "Hidlyddion");
@@ -736,32 +784,6 @@ bindResizeOnce();
 
     filterPanelEl.innerHTML = "";
 
-    // Header
-    const header = document.createElement("div");
-    header.className = "me-panel-header";
-
-    const title = document.createElement("div");
-    title.className = "me-panel-title";
-    title.textContent = t("Map Explorer", "Archwiliwr Map");
-
-    const actions = document.createElement("div");
-    actions.className = "me-panel-actions";
-
-    const clearBtn = document.createElement("button");
-    clearBtn.type = "button";
-    clearBtn.className = "aps-btn aps-btn-ghost";
-    clearBtn.textContent = t("Clear", "Clirio");
-    clearBtn.addEventListener("click", () => {
-      selected.clear();
-      filterPanelEl.querySelectorAll("input[type='checkbox']").forEach(cb => { cb.checked = false; });
-      applyFacets(langPref);
-    });
-
-    actions.appendChild(clearBtn);
-
-    header.appendChild(title);
-    header.appendChild(actions);
-    filterPanelEl.appendChild(header);
 
     // Groups
     FACETS.forEach(group => {
@@ -818,8 +840,14 @@ selected.clear();
     const isMobile = window.matchMedia("(max-width: 860px)").matches;
     filterPanelEl.classList.toggle("me-mobile", isMobile);
 
-    if (!isMobile) filterPanelEl.classList.add("open");
-    else filterPanelEl.classList.remove("open");
+    // Only auto-open on first desktop load; afterwards respect user toggle
+if (!window.__mePanelInitDone) {
+  window.__mePanelInitDone = true;
+  if (!isMobile) filterPanelEl.classList.add("open");
+  else filterPanelEl.classList.remove("open");
+}
+// Always keep the mobile class in sync
+
   }
 
   
