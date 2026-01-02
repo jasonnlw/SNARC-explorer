@@ -2228,19 +2228,6 @@ header.aps-header button.aps-filters-toggle {
   line-height: 1.2;
 }
 /* ---------------------------------------------------
-   Map Explorer – Mixed-category (pie) markers
-   --------------------------------------------------- */
-
-/* Mixed pin wrapper: keep same Leaflet divIcon behaviour */
-.me-pin-mixed { background: transparent; border: none; }
-
-
-/* Recommended: remove glyph entirely for mixed markers (badge remains) */
-.me-pin-mixed .me-pin-glyph {
-  display: none;
-}
-
-/* ---------------------------------------------------
    Map Explorer – Mixed-category (pie) markers (FINAL)
    --------------------------------------------------- */
 
@@ -2250,21 +2237,18 @@ header.aps-header button.aps-filters-toggle {
 /* Hide glyph for mixed markers (badge remains) */
 .me-pin-mixed .me-pin-glyph { display: none; }
 
-/*
-  IMPORTANT:
-  Do NOT remove border/box-shadow here.
-  Your base .me-pin-inner likely provides the visible disc via border + shadow.
-  Mixed markers should only override the fill.
-*/
-.me-pin-mixed .me-pin-inner-mixed,
-.me-pin-mixed .me-pin-inner {
+/* Apply the pie fill to whichever inner class exists */
+.me-pin-mixed .me-pin-inner,
+.me-pin-mixed .me-pin-inner-mixed {
   background: var(--me-mix-bg, #777);
   background-image: var(--me-mix-bg, #777);
-  -webkit-mask: none; /* keep, but DO NOT use !important unless you must */
+  -webkit-mask: none;
   mask: none;
 }
 
-/* Only if your base pin uses pseudo-elements to cut out the center: */
+/* Only needed if your base pins cut out the centre with pseudo-elements */
+.me-pin-mixed .me-pin-inner::before,
+.me-pin-mixed .me-pin-inner::after,
 .me-pin-mixed .me-pin-inner-mixed::before,
 .me-pin-mixed .me-pin-inner-mixed::after {
   content: none;
