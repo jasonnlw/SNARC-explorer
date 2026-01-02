@@ -1,3 +1,4 @@
+
 // -------------------------------------------------------------
 // SNARC Explorer – Map Explorer (Homepage + Facets)
 // - Leaflet + Leaflet.markercluster (required)
@@ -1283,9 +1284,14 @@ agg.on("click", (e) => {
 }
 
 
-  function coordKey(coords) {
-    return `${coords.lat.toFixed(5)},${coords.lon.toFixed(5)}`;
-  }
+function coordKey(coords) {
+  if (!coords) return "";
+  const lat = coords.lat;
+  const lon = (coords.lon != null) ? coords.lon : coords.lng; // Leaflet uses lng
+  if (typeof lat !== "number" || typeof lon !== "number") return "";
+  return `${lat.toFixed(5)},${lon.toFixed(5)}`;
+}
+
 
   function groupImagesByCoord(visibleRecords) {
     const m = new Map();
