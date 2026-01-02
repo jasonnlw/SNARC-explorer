@@ -2345,4 +2345,24 @@ header.aps-header button.aps-filters-toggle {
     font-size: 0.8rem;
   }
 }
+/* ---------------------------------------------------
+   Map Explorer — remove rounded corners completely
+   --------------------------------------------------- */
+
+/* The section wrapping the map */
+.map-block {
+  border-radius: 0 !important;
+  overflow: visible;
+}
+
+/* The map container itself */
+#homeMap {
+  border-radius: 0 !important;
+  overflow: hidden; /* keeps tiles clean at edges */
+}
+
+/* Leaflet internal container */
+#homeMap .leaflet-container {
+  border-radius: 0 !important;
+}
 
