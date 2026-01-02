@@ -804,6 +804,10 @@ bindResizeOnce();
     syncPanelForViewport();
   }
 
+  const title = document.createElement("div");
+    title.className = "me-panel-title";
+    title.textContent = t("Map Explorer", "Archwiliwr Map");
+
   function selectDefaultFacets() {
 selected.clear();
   selected.add("images"); // Images
