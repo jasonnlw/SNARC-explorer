@@ -2227,5 +2227,22 @@ header.aps-header button.aps-filters-toggle {
   font-size: 12px;
   line-height: 1.2;
 }
+/* ---------------------------------------------------
+   Map Explorer – Mixed-category (pie) markers
+   --------------------------------------------------- */
+
+/* Mixed pin wrapper: keep same Leaflet divIcon behaviour */
+.me-pin-mixed { background: transparent; border: none; }
+
+/* Use conic-gradient supplied via CSS var --me-mix-bg */
+.me-pin-mixed .me-pin-inner {
+  background: var(--me-mix-bg, #777);
+  color: #111; /* glyph hidden, but keep sane default */
+}
+
+/* Recommended: remove glyph entirely for mixed markers (badge remains) */
+.me-pin-mixed .me-pin-glyph {
+  display: none;
+}
 
 
