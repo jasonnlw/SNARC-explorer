@@ -1223,7 +1223,7 @@ byCoord.forEach((recordsAtCoord, k) => {
     recordsAtCoord.every(r => r.category === "collections.images");
 
   if (isImagesOnlyCoord) {
-    const count = recordsAtCoord.length;
+    const n = spiderItems.length;
     const marker = makeMarker(centerCoords, "collections.images", count > 1 ? count : null);
 
     wireImagesRing(marker, { coords: centerCoords, items: recordsAtCoord }, langPref);
@@ -1517,74 +1517,121 @@ function expandSpiderAt(centerCoords, recordsAtCoord, langPref) {
   const zoom = map.getZoom();
   const centerPt = map.project(center, zoom);
 
-  const n = recordsAtCoord.length;
-  if (!n) return;
+ // ---------------------------------------------------------
+// Mixed-coordinate handling for Images
+// - 2+ images → ONE ring-enabled child node
+// - 0 or 1 image → unchanged per-record behaviour
+// ---------------------------------------------------------
+const imageRecs = recordsAtCoord.filter(r => r.category === "collections.images");
+const otherRecs = recordsAtCoord.filter(r => r.category !== "collections.images");
 
-  const radiusPx = 36;
-  const step = (Math.PI * 2) / n;
+const spiderItems = [];
 
-  recordsAtCoord.forEach((record, i) => {
-    const angle = i * step;
-    const pt = L.point(
-      centerPt.x + radiusPx * Math.cos(angle),
-      centerPt.y + radiusPx * Math.sin(angle)
-    );
-
-    const latlng = map.unproject(pt, zoom);
-
-// Anchor spider line to the *visual centre* of the icons (your icons are 28px high)
-const ICON_HALF_HEIGHT = 14;
-
-// Convert both endpoints to pixel space, offset upward, then convert back to latlng
-const centerAnchorLatLng = map.unproject(
-  L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
-  zoom
-);
-
-const childPt = map.project(latlng, zoom);
-const childAnchorLatLng = map.unproject(
-  L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
-  zoom
-);
-
-// ✅ Add a connecting “spider leg” line (black) from parent centre to child centre
-const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
-  color: "#000",
-  weight: 1.5,
-  opacity: 1,
-  interactive: false
-});
-spiderLayer.addLayer(leg);
-
-
-// Child markers: NO COUNT on expanded nodes
-const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
-
-
-    // Popups on hover/click
-    if (record.category === "collections.images") {
-      wireHoverPopup(
-        child,
-        () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
-        () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
-      );
-    } else {
-wireHoverPopup(
-  child,
-  () => buildStandardPopup(record, langPref),
-  () => {
-    renderStandardThumbIntoPopup(record, child, langPref);
-    if (record.category && record.category.startsWith("people.")) {
-      hydratePeoplePlaceLabelsInPopup(child, langPref);
-    }
-  }
-);
-}
-
-
-    spiderLayer.addLayer(child);
+// Images group (only if 2+ images)
+if (imageRecs.length >= 2) {
+  spiderItems.push({
+    __type: "imagesGroup",
+    items: imageRecs
+  });
+} else {
+  // 0 or 1 image → preserve existing behaviour
+  imageRecs.forEach(r => {
+    spiderItems.push({
+      __type: "record",
+      record: r
+    });
   });
 }
+
+// Always include non-image records individually
+otherRecs.forEach(r => {
+  spiderItems.push({
+    __type: "record",
+    record: r
+  });
+});
+
+const n = spiderItems.length;
+if (!n) return;
+
+const radiusPx = 36;
+const step = (Math.PI * 2) / n;
+
+spiderItems.forEach((item, i) => {
+  const angle = i * step;
+  const pt = L.point(
+    centerPt.x + radiusPx * Math.cos(angle),
+    centerPt.y + radiusPx * Math.sin(angle)
+  );
+
+  const latlng = map.unproject(pt, zoom);
+
+  // (your existing leg/anchor computation stays the same)
+  const ICON_HALF_HEIGHT = 14;
+  const centerAnchorLatLng = map.unproject(
+    L.point(centerPt.x, centerPt.y - ICON_HALF_HEIGHT),
+    zoom
+  );
+
+  const childPt = map.project(latlng, zoom);
+  const childAnchorLatLng = map.unproject(
+    L.point(childPt.x, childPt.y - ICON_HALF_HEIGHT),
+    zoom
+  );
+
+  const leg = L.polyline([centerAnchorLatLng, childAnchorLatLng], {
+    color: "#000",
+    weight: 1.5,
+    opacity: 1,
+    interactive: false
+  });
+  spiderLayer.addLayer(leg);
+
+  // ---------------------------------------------------------
+  // Create the child marker:
+  // - imagesGroup => ring-enabled images node with count
+  // - record      => existing per-record behaviour
+  // ---------------------------------------------------------
+  if (item.__type === "imagesGroup") {
+    const count = item.items.length;
+
+    // child marker placed in spider; count shown
+    const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, "collections.images", count);
+
+    // IMPORTANT: ring uses the ORIGINAL coordinate's items
+    wireImagesRing(child, { coords: centerCoords, items: item.items }, langPref);
+
+    spiderLayer.addLayer(child);
+    return;
+  }
+
+  // Default: record behaviour unchanged
+  const record = item.record;
+
+  const child = makeMarker({ lat: latlng.lat, lon: latlng.lng }, record.category, null);
+
+  if (record.category === "collections.images") {
+    // single image record behaviour preserved
+    wireHoverPopup(
+      child,
+      () => buildImagesPopup({ coords: record.coords, items: [record] }, langPref),
+      () => renderImagesThumbsIntoPopup({ coords: record.coords, items: [record] }, child)
+    );
+  } else {
+    wireHoverPopup(
+      child,
+      () => buildStandardPopup(record, langPref),
+      () => {
+        renderStandardThumbIntoPopup(record, child, langPref);
+        if (record.category && record.category.startsWith("people.")) {
+          hydratePeoplePlaceLabelsInPopup(child, langPref);
+        }
+      }
+    );
+  }
+
+  spiderLayer.addLayer(child);
+});
 
 
 function ensureImagesRingPanes() {
