@@ -2373,4 +2373,14 @@ header.aps-header button.aps-filters-toggle {
 .map-block + .aps-section {
   margin-top: 0 !important; /* remove the gap completely */
 }
+/* APS: remove gap between header and results container */
+#advanced-person-search .aps-header {
+  margin-bottom: 0 !important;
+}
+
+#advanced-person-search .aps-results {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
 
