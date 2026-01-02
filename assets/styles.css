@@ -2244,5 +2244,16 @@ header.aps-header button.aps-filters-toggle {
 .me-pin-mixed .me-pin-glyph {
   display: none;
 }
+/* Mixed markers must be SOLID (no donut cut-out from base pin styles) */
+.me-pin-mixed .me-pin-inner::before,
+.me-pin-mixed .me-pin-inner::after {
+  content: none !important;
+  display: none !important;
+}
+
+/* Ensure gradient always wins even if other rules come later */
+.me-pin-mixed .me-pin-inner {
+  background: var(--me-mix-bg, #777) !important;
+}
 
 
