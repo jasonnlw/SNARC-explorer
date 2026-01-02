@@ -2234,26 +2234,37 @@ header.aps-header button.aps-filters-toggle {
 /* Mixed pin wrapper: keep same Leaflet divIcon behaviour */
 .me-pin-mixed { background: transparent; border: none; }
 
-/* Use conic-gradient supplied via CSS var --me-mix-bg */
-.me-pin-mixed .me-pin-inner {
-  background: var(--me-mix-bg, #777);
-  color: #111; /* glyph hidden, but keep sane default */
-}
 
 /* Recommended: remove glyph entirely for mixed markers (badge remains) */
 .me-pin-mixed .me-pin-glyph {
   display: none;
 }
-/* Mixed markers must be SOLID (no donut cut-out from base pin styles) */
-.me-pin-mixed .me-pin-inner::before,
-.me-pin-mixed .me-pin-inner::after {
-  content: none !important;
-  display: none !important;
+
+/* ---------------------------------------------------
+   Map Explorer – Mixed-category (pie) markers (FIX)
+   Force SOLID fill: disables donut/mask mechanics used by normal pins
+   --------------------------------------------------- */
+
+.me-pin-mixed .me-pin-inner-mixed {
+  /* kill common “donut” mechanisms */
+  -webkit-mask: none !important;
+  mask: none !important;
+
+  /* kill common inner cutout/shadow tricks */
+  box-shadow: none !important;
+  outline: none !important;
+  border: none !important;
+
+  /* ensure gradient actually paints the element */
+  background: var(--me-mix-bg, #777) !important;
+  background-image: var(--me-mix-bg, #777) !important;
 }
 
-/* Ensure gradient always wins even if other rules come later */
-.me-pin-mixed .me-pin-inner {
-  background: var(--me-mix-bg, #777) !important;
+/* If your normal pins create the hollow centre via pseudo elements */
+.me-pin-mixed .me-pin-inner-mixed::before,
+.me-pin-mixed .me-pin-inner-mixed::after {
+  content: none !important;
+  display: none !important;
 }
 
 
