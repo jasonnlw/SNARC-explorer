@@ -1869,24 +1869,19 @@ header.aps-header button.aps-filters-toggle {
 .map-explorer-shell { position: relative; }
 
 /* Filters toggle (mobile) */
-.me-filters-toggle {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 50;
-}
+
 
 /* Filters panel */
 .me-filters-panel {
   position: absolute;
-  top: 12px;
+  top: 52px;
   left: 12px;
-  width: 280px;
+  width: min(360px, calc(100% - 24px));
   max-height: calc(100% - 24px);
-  overflow: auto;
+  overflow: visible;
   z-index: 40;
   background: #fff;
-  border: 1px solid rgba(0,0,0,0.08);
+  border: 2px solid #309898;
   border-radius: 14px;
   box-shadow: 0 10px 30px rgba(0,0,0,0.12);
   padding: 10px 12px;
@@ -1897,11 +1892,11 @@ header.aps-header button.aps-filters-toggle {
 
 .me-panel-header { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 8px; }
 .me-panel-title { font-weight: 700; }
-.me-group { margin: 10px 0; }
-.me-group-title { font-weight: 700; margin-bottom: 6px; }
-.me-facet-row { display: flex; gap: 10px; align-items: center; padding: 4px 0; cursor: pointer; }
+.me-group { margin: 6px 0; }
+.me-group-title { font-weight: 700; margin-bottom: 4px; font-size: 0.85rem; }
+.me-facet-row { display: flex; gap: 8px; align-items: center; padding: 2px 0; cursor: pointer; font-size: 0.85rem; }
 .me-facet-row input { transform: translateY(1px); }
-.me-panel-hint { font-size: 0.85rem; opacity: 0.8; margin-top: 10px; }
+.me-panel-hint { font-size: 0.8rem; opacity: 0.8; margin-top: 6px; }
 
 /* Mobile behaviour */
 .me-filters-panel.me-mobile {
@@ -2264,4 +2259,35 @@ header.aps-header button.aps-filters-toggle {
   isolation: isolate; /* creates a new stacking context */
 }
 
+/* Top button bar inside the map */
+.me-controls-bar{
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 80;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Match site button styling (white text on blue) */
+.me-controls-bar .me-filters-toggle,
+.me-controls-bar .me-clear-btn{
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+  border: 1px solid #ccc;
+  background: #309898;
+  border-radius: 8px;
+
+  cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
 
