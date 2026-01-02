@@ -991,7 +991,7 @@ if (!window.__meImagesRingHandlersBound) {
     clearSpider();
   });
 }
-
+  }
 
 
   // -----------------------------------------------------------
