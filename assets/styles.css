@@ -2231,19 +2231,18 @@ header.aps-header button.aps-filters-toggle {
    Map Explorer – Mixed-category (pie) markers (FINAL)
    --------------------------------------------------- */
 
-/* Mixed pin wrapper: keep Leaflet divIcon behaviour */
+/* Wrapper */
 .me-pin-mixed { background: transparent; border: none; }
 
-/* Hide glyph for mixed markers (badge remains) */
+/* Hide glyph (badge remains) */
 .me-pin-mixed .me-pin-glyph { display: none; }
 
-/* Apply the pie fill to whichever inner class exists */
+/* Apply pie fill */
 .me-pin-mixed .me-pin-inner,
 .me-pin-mixed .me-pin-inner-mixed {
   background: var(--me-mix-bg, #777);
   background-image: var(--me-mix-bg, #777);
-  -webkit-mask: none;
-  mask: none;
 }
+
 
 
