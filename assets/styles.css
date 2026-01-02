@@ -2026,7 +2026,7 @@ header.aps-header button.aps-filters-toggle {
   overflow: hidden !important;
   max-height: none !important;               /* only scroll if content exceeds max-height */
 }
-}
+
 
 /* Make your internal popup layout fill the fixed container */
 .me-fixed-popup .me-popup {
@@ -2290,48 +2290,19 @@ header.aps-header button.aps-filters-toggle {
   content: none !important;
   display: none !important;
 }
-/* =========================================================
-   FORCE mixed (pie) markers to render as a visible SOLID disc
-   Put this at the VERY END of the Map Explorer CSS
-   ========================================================= */
 
-.leaflet-marker-icon.me-pin-mixed,
-.leaflet-marker-icon.me-pin.me-pin-mixed {
-  background: transparent !important;
-  border: none !important;
-  opacity: 1 !important;
-  transform: none !important;
-  filter: none !important;
-}
+/* ---------------------------------------------------
+   Map Explorer – Mixed-category (pie) markers (CLEAN)
+   --------------------------------------------------- */
 
-/* Ensure the inner disc has real size and is paintable */
-.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed {
-  width: 28px !important;
-  height: 28px !important;
-  display: block !important;
-  border-radius: 999px !important;
+/* Mixed pin wrapper: keep same Leaflet divIcon behaviour */
+.me-pin-mixed { background: transparent; border: none; }
 
-  /* Most common “donut/ring” mechanisms that hide the fill */
-  -webkit-mask: none !important;
-  mask: none !important;
-  clip-path: none !important;
-  background-clip: border-box !important;
+/* Remove glyph entirely for mixed markers (badge remains) */
+.me-pin-mixed .me-pin-glyph { display: none; }
 
-  /* Force the gradient to paint */
+/* Paint the pie background on the inner disc */
+.me-pin-mixed .me-pin-inner-mixed {
   background: var(--me-mix-bg, #777) !important;
   background-image: var(--me-mix-bg, #777) !important;
-
-  /* Remove any ring-only construction */
-  box-shadow: none !important;
-  border: none !important;
-  outline: none !important;
 }
-
-/* If base pins draw a ring via pseudo-elements, disable those for mixed only */
-.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed::before,
-.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed::after {
-  content: none !important;
-  display: none !important;
-}
-.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed { background: red !important; }
-
