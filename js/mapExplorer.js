@@ -1223,9 +1223,8 @@ byCoord.forEach((recordsAtCoord, k) => {
     recordsAtCoord.every(r => r.category === "collections.images");
 
   if (isImagesOnlyCoord) {
-    const n = spiderItems.length;
-    const marker = makeMarker(centerCoords, "collections.images", count > 1 ? count : null);
-
+    const count = recordsAtCoord.length;
+    const marker = makeMarker(centerCoords, "collections.images", count);
     wireImagesRing(marker, { coords: centerCoords, items: recordsAtCoord }, langPref);
 
     clusterGroup.addLayer(marker);
@@ -1278,6 +1277,7 @@ agg.on("click", (e) => {
 
 clusterGroup.addLayer(agg);
 
+});
 
   } finally {
     // Always hide loading overlay (even if SPARQL fails)
@@ -1633,6 +1633,7 @@ spiderItems.forEach((item, i) => {
   spiderLayer.addLayer(child);
 });
 
+}
 
 function ensureImagesRingPanes() {
   if (!map) return;
