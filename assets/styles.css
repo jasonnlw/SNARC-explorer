@@ -2246,11 +2246,4 @@ header.aps-header button.aps-filters-toggle {
   mask: none;
 }
 
-/* Only needed if your base pins cut out the centre with pseudo-elements */
-.me-pin-mixed .me-pin-inner::before,
-.me-pin-mixed .me-pin-inner::after,
-.me-pin-mixed .me-pin-inner-mixed::before,
-.me-pin-mixed .me-pin-inner-mixed::after {
-  content: none;
-  display: none;
-}
+
