@@ -2259,17 +2259,28 @@ header.aps-header button.aps-filters-toggle {
   isolation: isolate; /* creates a new stacking context */
 }
 
-/* Top button bar inside the map */
 .me-controls-bar{
   position: absolute;
   top: 12px;
   left: 12px;
-  right: 12px;
-  z-index: 80;
-  display: flex;
+
+  /* IMPORTANT: do NOT span across the map */
+  right: auto;
+
+  z-index: 1100;
+  display: inline-flex;
   justify-content: flex-start;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
+
+  /* IMPORTANT: bar should not block Leaflet controls */
+  pointer-events: none;
+}
+
+/* Buttons remain clickable */
+.me-controls-bar > button,
+.me-controls-bar > a{
+  pointer-events: auto;
 }
 
 
