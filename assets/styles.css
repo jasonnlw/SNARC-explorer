@@ -2365,4 +2365,12 @@ header.aps-header button.aps-filters-toggle {
 #homeMap .leaflet-container {
   border-radius: 0 !important;
 }
+/* Homepage: remove the gap between Map Explorer and Advanced Person Search */
+.map-block {
+  margin-bottom: 0; /* ensure map section doesn't add space below */
+}
+
+.map-block + .aps-section {
+  margin-top: 0 !important; /* remove the gap completely */
+}
 
