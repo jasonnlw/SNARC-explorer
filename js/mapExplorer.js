@@ -700,6 +700,7 @@ bindResizeOnce();
     if (existingShell) {
       filterToggleBtn = rootEl.parentElement.querySelector(".me-filters-toggle");
       filterPanelEl = rootEl.parentElement.querySelector(".me-filters-panel");
+      window.__meClearBtnRef = rootEl.parentElement.querySelector(".me-clear-btn");
       return;
     }
 
@@ -762,7 +763,7 @@ clearBtn.addEventListener("click", () => {
 // Expose helper + refs to buildFilterPanel via closure vars
 window.__meSetPanelOpen = setPanelOpen;
 window.__meClearBtnRef = clearBtn;
-
+} 
 
   function buildFilterPanel(langPref, rebuildOnly = false) {
     window.__meLangPref = langPref;
