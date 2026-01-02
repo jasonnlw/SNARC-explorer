@@ -1876,7 +1876,7 @@ header.aps-header button.aps-filters-toggle {
   position: absolute;
   top: 52px;
   left: 12px;
-  width: min(360px, calc(100% - 24px));
+  width: min(320px, calc(100% - 24px));
   max-height: calc(100% - 24px);
   overflow: visible;
   z-index: 40;
