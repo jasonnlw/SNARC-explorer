@@ -2293,4 +2293,45 @@ header.aps-header button.aps-filters-toggle {
   align-items: center;
   gap: 0.35rem;
 }
+/* ---------------------------------------------------
+   Mobile-only compact filters panel (Map Explorer)
+   --------------------------------------------------- */
+@media (max-width: 640px) {
+
+  /* Reduce panel width (~20%) and keep inside map */
+  .me-filters-panel {
+    width: min(300px, calc(100% - 24px)); /* ~20% narrower than desktop */
+    padding: 6px 8px;
+  }
+
+  /* Tighten group spacing */
+  .me-group {
+    margin: 4px 0;
+  }
+
+  .me-group-title {
+    font-size: 0.8rem;
+    margin-bottom: 3px;
+  }
+
+  /* Compact each filter row */
+  .me-facet-row {
+    font-size: 0.8rem;
+    padding: 1px 0;
+    gap: 6px;
+  }
+
+  /* Reduce hint size */
+  .me-panel-hint {
+    font-size: 0.75rem;
+    margin-top: 4px;
+  }
+
+  /* Slightly smaller controls bar buttons */
+  .me-controls-bar .me-filters-toggle,
+  .me-controls-bar .me-clear-btn {
+    padding: 0.3rem 0.5rem;
+    font-size: 0.8rem;
+  }
+}
 
