@@ -2290,4 +2290,47 @@ header.aps-header button.aps-filters-toggle {
   content: none !important;
   display: none !important;
 }
+/* =========================================================
+   FORCE mixed (pie) markers to render as a visible SOLID disc
+   Put this at the VERY END of the Map Explorer CSS
+   ========================================================= */
+
+.leaflet-marker-icon.me-pin-mixed,
+.leaflet-marker-icon.me-pin.me-pin-mixed {
+  background: transparent !important;
+  border: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+}
+
+/* Ensure the inner disc has real size and is paintable */
+.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed {
+  width: 28px !important;
+  height: 28px !important;
+  display: block !important;
+  border-radius: 999px !important;
+
+  /* Most common “donut/ring” mechanisms that hide the fill */
+  -webkit-mask: none !important;
+  mask: none !important;
+  clip-path: none !important;
+  background-clip: border-box !important;
+
+  /* Force the gradient to paint */
+  background: var(--me-mix-bg, #777) !important;
+  background-image: var(--me-mix-bg, #777) !important;
+
+  /* Remove any ring-only construction */
+  box-shadow: none !important;
+  border: none !important;
+  outline: none !important;
+}
+
+/* If base pins draw a ring via pseudo-elements, disable those for mixed only */
+.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed::before,
+.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed::after {
+  content: none !important;
+  display: none !important;
+}
 
