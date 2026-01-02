@@ -2267,4 +2267,27 @@ header.aps-header button.aps-filters-toggle {
   display: none !important;
 }
 
+/* Ensure mixed marker has a real, visible body even if base pins use pseudo-elements */
+.me-pin-mixed .me-pin-inner-mixed {
+  width: 28px;
+  height: 28px;
+  border-radius: 999px;
+  display: block;
+  position: relative;
+
+  /* keep the pie fill */
+  background: var(--me-mix-bg, #777) !important;
+  background-image: var(--me-mix-bg, #777) !important;
+
+  /* defeat donut masks */
+  -webkit-mask: none !important;
+  mask: none !important;
+}
+
+/* Only disable pseudo-elements for mixed markers */
+.me-pin-mixed .me-pin-inner-mixed::before,
+.me-pin-mixed .me-pin-inner-mixed::after {
+  content: none !important;
+  display: none !important;
+}
 
