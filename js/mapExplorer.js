@@ -968,11 +968,30 @@ return L.divIcon({
     }
  
   // ✅ MOVE THIS HERE (was incorrectly at top-level)
-  if (!spiderLayer) {
-    spiderLayer = L.layerGroup().addTo(map);
+if (!window.__meImagesRingHandlersBound) {
+  window.__meImagesRingHandlersBound = true;
+
+  function clearSpiderRespectImagesRing() {
+    if (window.__meImagesRingOpen) return;
+    clearSpider();
   }
-  map.on("zoomstart movestart", clearSpider);
+
+  map.on("zoomstart movestart", clearSpiderRespectImagesRing);
+
+  map.on("click", (e) => {
+    if (!window.__meImagesRingOpen) return;
+
+    const t = e.originalEvent && e.originalEvent.target;
+    if (t && (t.closest(".leaflet-marker-icon") || t.closest(".me-pin-inner"))) {
+      return;
+    }
+
+    window.__meImagesRingOpen = false;
+    window.__meImagesRingKey = null;
+    clearSpider();
+  });
 }
+
 
 
   // -----------------------------------------------------------
@@ -1643,8 +1662,27 @@ async function showImagesRingAt(parentMarker, group, langPref) {
 
   ensureImagesRingPanes();
 
+  // ---------------------------------------------------------
+  // Images ring open/close state (toggle on same parent)
+  // THIS MUST COME BEFORE ANY ITEM PROCESSING
+  // ---------------------------------------------------------
+  const key = coordKey(parentMarker.getLatLng());
+
+  if (window.__meImagesRingOpen && window.__meImagesRingKey === key) {
+    // Second click on the same central node closes the ring
+    window.__meImagesRingOpen = false;
+    window.__meImagesRingKey = null;
+    clearSpider();
+    return;
+  }
+
+  window.__meImagesRingOpen = true;
+  window.__meImagesRingKey = key;
+  // ---------------------------------------------------------
+
   const itemsRaw = Array.isArray(group?.items) ? group.items : [];
   const items = itemsRaw.slice(0, 10);
+
 
   // Toggle: if this ring is already open, close it
   const parentLatLng = parentMarker.getLatLng();
