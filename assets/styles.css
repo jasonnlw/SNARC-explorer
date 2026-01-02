@@ -2300,7 +2300,7 @@ header.aps-header button.aps-filters-toggle {
 
   /* Reduce panel width (~20%) and keep inside map */
   .me-filters-panel {
-    width: min(300px, calc(100% - 24px)); /* ~20% narrower than desktop */
+    width: min(250px, calc(100% - 24px)); /* ~20% narrower than desktop */
     padding: 6px 8px;
   }
 
