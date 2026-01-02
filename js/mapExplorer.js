@@ -740,9 +740,6 @@ bindResizeOnce();
     const header = document.createElement("div");
     header.className = "me-panel-header";
 
-    const title = document.createElement("div");
-    title.className = "me-panel-title";
-    title.textContent = t("Map Explorer", "Archwiliwr Map");
 
     const actions = document.createElement("div");
     actions.className = "me-panel-actions";
