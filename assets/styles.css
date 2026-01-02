@@ -2244,5 +2244,17 @@ header.aps-header button.aps-filters-toggle {
   background-image: var(--me-mix-bg, #777);
 }
 
+/* Keep Leaflet UI elements constrained to the map container */
+#homeMap,
+.leaflet-container {
+  position: relative;   /* ensure a positioning context */
+  overflow: hidden;     /* clip controls/attribution to the map bounds */
+}
+
+/* Force Leaflet control anchors to stay within the container (not the viewport) */
+.leaflet-container .leaflet-top,
+.leaflet-container .leaflet-bottom {
+  position: absolute !important;  /* override any accidental fixed positioning */
+}
 
 
