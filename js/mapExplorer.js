@@ -1357,11 +1357,13 @@ function makeMixedMarker(coords, count, groups) {
 
   const badge = (count > 1) ? `<span class="me-pin-badge">${count}</span>` : "";
 const html = `
+const html = `
   <div class="me-pin-inner me-pin-inner-mixed"
        style="--me-mix-bg: ${mix || "#777"}; background: ${mix || "#777"};">
     ${badge}
   </div>
 `;
+
 
 
   const icon = L.divIcon({
