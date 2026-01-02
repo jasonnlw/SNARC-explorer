@@ -1684,18 +1684,6 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const items = itemsRaw.slice(0, 10);
 
 
-  // Toggle: if this ring is already open, close it
-  const parentLatLng = parentMarker.getLatLng();
-  const key = `images:${parentLatLng.lat.toFixed(5)},${parentLatLng.lng.toFixed(5)}`;
-  if (activeSpiderKey === key) {
-    clearSpider();
-    activeSpiderKey = null;
-    return;
-  }
-
-  clearSpider();
-  activeSpiderKey = key;
-
   // Build candidate URLs (no preflight). We handle fallback + bilingual error tile in buildThumbMarker().
   const resolved = [];
   for (const r of items) {
