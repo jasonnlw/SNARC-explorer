@@ -1723,7 +1723,7 @@ async function showImagesRingAt(parentMarker, group, langPref) {
   const radiusNear = baseRadius;
   const radiusFar  = baseRadius + (thumbDiameter * 0.55) + gap;
 
-  const center = parentLatLng;
+  const center = parentMarker.getLatLng();
   const zoom = map.getZoom();
   const centerPt = map.project(center, zoom);
   const step = (Math.PI * 2) / n;
