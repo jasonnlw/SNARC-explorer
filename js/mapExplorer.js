@@ -1263,17 +1263,21 @@ return;
 }
 
   // Multiple items → aggregate marker with count, click to expand
-const agg = makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
+// Multiple items → aggregate marker with count, click to expand
+const groupsHere = recordsAtCoord.map(r => categoryGroupKey(r.category));
+const hasMixed = new Set(groupsHere).size > 1;
+
+const agg = hasMixed
+  ? makeMixedMarker(centerCoords, recordsAtCoord.length, groupsHere)
+  : makeMarker(centerCoords, recordsAtCoord[0].category, recordsAtCoord.length);
 
 agg.on("click", (e) => {
-  // Prevent any document-level "click outside" closers from firing on the same click
   try { L.DomEvent.stop(e); } catch (err) {}
   expandSpiderAt(centerCoords, recordsAtCoord, langPref);
 });
 
+clusterGroup.addLayer(agg);
 
-  clusterGroup.addLayer(agg);
-});
 
   } finally {
     // Always hide loading overlay (even if SPARQL fails)
@@ -1304,6 +1308,73 @@ function coordKey(coords) {
     m.forEach(g => { g.items = g.items.slice(0, 10); });
     return m;
   }
+
+
+  function categoryGroupKey(category) {
+  // collapse fine-grained categories into the colour families you already style
+  if (!category) return "events";
+  if (category === "collections.images") return "images";
+  if (category.startsWith("places.")) return "places";
+  if (category.startsWith("people.")) return "people";
+  if (category.startsWith("collections.")) return "collections";
+  if (category.startsWith("events.")) return "events";
+  return "events";
+}
+
+function groupColor(groupKey) {
+  // MUST match your CSS palette
+  // places: #309898, people: #FFB233, collections: #5FCD96, images: #FA0808, events: #333
+  switch (groupKey) {
+    case "places": return "#309898";
+    case "people": return "#FFB233";
+    case "collections": return "#5FCD96";
+    case "images": return "#FA0808";
+    case "events": return "#333";
+    default: return "#333";
+  }
+}
+
+function buildConicGradientFromGroups(groups) {
+  // Equal slices, stable ordering for visual consistency
+  const uniq = Array.from(new Set(groups));
+  uniq.sort(); // stable: collections, events, images, people, places (alphabetical)
+  const n = uniq.length;
+  if (n <= 1) return null;
+
+  const step = 360 / n;
+  const stops = uniq.map((g, i) => {
+    const c = groupColor(g);
+    const from = (i * step).toFixed(2);
+    const to = ((i + 1) * step).toFixed(2);
+    return `${c} ${from}deg ${c} ${to}deg`;
+  });
+
+  return `conic-gradient(${stops.join(", ")})`;
+}
+
+function makeMixedMarker(coords, count, groups) {
+  const mix = buildConicGradientFromGroups(groups);
+
+  const badge = (count > 1) ? `<span class="me-pin-badge">${count}</span>` : "";
+  const html = `
+    <div class="me-pin-inner" style="--me-mix-bg: ${mix || "#777"};">
+      ${badge}
+    </div>
+  `;
+
+  const icon = L.divIcon({
+    className: "me-pin me-pin-mixed",
+    html,
+    iconSize: [28, 28],
+    iconAnchor: [14, 28],
+    popupAnchor: [0, -26]
+  });
+
+  const marker = L.marker([coords.lat, coords.lon], { icon });
+  marker.__meCount = Number(count) || 1;
+  return marker;
+}
+
 
   // -----------------------------------------------------------
   // Marker icon factory
