@@ -2333,4 +2333,5 @@ header.aps-header button.aps-filters-toggle {
   content: none !important;
   display: none !important;
 }
+.leaflet-marker-icon.me-pin-mixed .me-pin-inner-mixed { background: red !important; }
 
