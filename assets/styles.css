@@ -2425,10 +2425,6 @@ header.aps-header button.aps-filters-toggle {
    Born on This Day – square orange card + white info box
    ========================================================= */
 
-.botd-block {
-  margin-top: 2rem;
-}
-
 /* Thin title-only header (if you keep a separate section header) */
 .botd-header {
   margin-bottom: 0.75rem;
@@ -2605,6 +2601,13 @@ header.aps-header button.aps-filters-toggle {
 @media (min-width: 900px) {
   .botd-slot {
     grid-template-columns: 1fr 1fr;
+  }
+}
+/* BOTD: desktop-only left alignment gutter (visible + consistent) */
+@media (min-width: 768px) {
+  .botd-slot {
+    padding-left: 2rem;
+    padding-right: 0;
   }
 }
 
