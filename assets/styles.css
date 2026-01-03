@@ -2606,7 +2606,7 @@ header.aps-header button.aps-filters-toggle {
 /* BOTD: desktop-only left alignment gutter (visible + consistent) */
 @media (min-width: 768px) {
   .botd-slot {
-    padding-left: 2rem;
+    padding-left: 1rem;
     padding-right: 0;
   }
 }
