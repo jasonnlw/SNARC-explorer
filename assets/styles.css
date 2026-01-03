@@ -2610,4 +2610,35 @@ header.aps-header button.aps-filters-toggle {
     padding-right: 0;
   }
 }
+/* =========================================================
+   BOTD – MOBILE PROPORTION + PADDING FIXES (MOBILE ONLY)
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* 1. Keep mobile proportions aligned with desktop */
+  .botd-card {
+    height: 360px;          /* same visual depth as desktop */
+  }
+
+  /* 2. Add more horizontal breathing room inside the card */
+  .botd-card-body {
+    padding-left: 1rem;     /* +1rem left */
+    padding-right: 1rem;    /* +1rem right */
+  }
+
+  /* 3. Inner white info box gets extra side padding */
+  .botd-info {
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+
+  /* 4. Image block: fixed crop + visible bottom breathing space */
+  .botd-image {
+    height: 180px;
+    min-height: 180px;
+    margin-bottom: 2rem;    /* requested 2rem beneath image */
+  }
+
+}
 
