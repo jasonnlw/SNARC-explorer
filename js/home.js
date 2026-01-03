@@ -32,6 +32,29 @@ home.innerHTML = `
         </p>
       </section>
 
+<section class="botd-block" aria-label="Born on this day">
+  <header class="aps-header botd-header">
+    <div class="aps-header-text">
+      <h2 class="aps-title"
+          data-i18n-en="Born on this day"
+          data-i18n-cy="Ganwyd ar y dydd hwn">
+        Born on this day
+      </h2>
+
+      <p class="aps-subtitle"
+         data-i18n-en="A person from SNARC born today in history."
+         data-i18n-cy="Person o SNARC a anwyd heddiw mewn hanes.">
+        A person from SNARC born today in history.
+      </p>
+    </div>
+  </header>
+
+  <div id="botd-card-slot" class="botd-slot">
+    <div class="botd-skeleton" aria-hidden="true"></div>
+  </div>
+</section>
+
+
 <section class="map-block">
 
   <header class="aps-header map-header-red">
@@ -269,6 +292,9 @@ home.innerHTML = `
     </div>
   `;
 
+
+
+
   // ---------------------------------------------------------
 // Update homepage bilingual labels (Map header etc.)
 // ---------------------------------------------------------
@@ -281,6 +307,16 @@ home.innerHTML = `
     if (txt) el.textContent = txt;
   });
 }
+
+  // Born on This Day card
+if (window.BornOnThisDay && typeof window.BornOnThisDay.render === "function") {
+  try {
+    await window.BornOnThisDay.render(lang);
+  } catch (err) {
+    console.error("BornOnThisDay.render failed:", err);
+  }
+}
+
 
      // ---------------------------------------------------------
   // NEW: Load facet JSON data and initialise Advanced Search
