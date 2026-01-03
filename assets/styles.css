@@ -2383,4 +2383,10 @@ header.aps-header button.aps-filters-toggle {
   padding-top: 0 !important;
   border-top: 0 !important;
 }
+/* APS: when filters are collapsed, remove ALL gap before results */
+#advanced-person-search .aps-filters-panel.aps-filters-collapsed + #aps-results {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
 
