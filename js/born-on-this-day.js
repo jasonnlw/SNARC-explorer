@@ -42,21 +42,16 @@ window.BornOnThisDay.render = async function (lang = "en") {
   // If your data truly uses YEAR precision only (9), remove the precision filter
   // and decide how you want to display the date (year-only vs full date).
   const sparql = `
-PREFIX wd:  <http://snarc-llgc.wikibase.cloud/entity/>
-PREFIX wdt: <http://snarc-llgc.wikibase.cloud/prop/direct/>
-PREFIX p:   <http://snarc-llgc.wikibase.cloud/prop/>
-PREFIX psv: <http://snarc-llgc.wikibase.cloud/prop/statement/value/>
+PREFIX wd:  <https://snarc-llgc.wikibase.cloud/entity/>
+PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+PREFIX p:   <https://snarc-llgc.wikibase.cloud/prop/>
+PREFIX psv: <https://snarc-llgc.wikibase.cloud/prop/statement/value/>
 PREFIX wikibase: <http://wikiba.se/ontology#>
 PREFIX bd:  <http://www.bigdata.com/rdf#>
 
 SELECT ?person ?personLabel ?personDescription ?birthDate ?prec ?image WHERE {
-  # Person
-  ?person wdt:P7 wd:Q5 .
-
-  # Image (your P31)
+  ?person wdt:P7 wd:Q947 .
   ?person wdt:P31 ?image .
-
-  # Birth date with statement/value node so we can access precision
   ?person p:P17 ?birthStmt .
   ?birthStmt psv:P17 ?birthValue .
   ?birthValue wikibase:timeValue ?birthDate ;
