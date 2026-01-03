@@ -21,6 +21,18 @@ Home.initHomePage = async function (lang = "en") {
   // Render homepage content (map block included)
   // ---------------------------------------------------------
 home.innerHTML = `
+// Update any data-i18n text in the homepage (Map header + any other blocks)
+(function updateHomeLabels() {
+  const root = document.getElementById("homeContainer");
+  if (!root) return;
+
+  const textAttr = (lang === "cy") ? "data-i18n-cy" : "data-i18n-en";
+  root.querySelectorAll("[data-i18n-en]").forEach((el) => {
+    const txt = el.getAttribute(textAttr);
+    if (txt) el.textContent = txt;
+  });
+})();
+
     <div class="home-wrapper">
 
       <section class="home-header">
