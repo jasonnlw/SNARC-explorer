@@ -2640,5 +2640,38 @@ header.aps-header button.aps-filters-toggle {
     margin-bottom: 1.5rem;    /* requested 2rem beneath image */
   }
 
+/* =========================================================
+   BOTD – MOBILE: FORCE SQUARE IMAGE + LOCK CARD DEPTH
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Lock the card height so it cannot collapse */
+  .botd-card {
+    height: 360px !important;
+  }
+
+  /* Force the image container to be square */
+  .botd-image {
+    aspect-ratio: 1 / 1;      /* square */
+    height: auto !important;
+    min-height: 0 !important;
+    max-height: none !important;
+  }
+
+  /* Ensure the image fills the square and does not stretch it */
+  .botd-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Prevent body content from pushing card taller/shorter */
+  .botd-card-body {
+    grid-template-rows: auto 1fr; /* info then fixed image block */
+  }
+
 }
+
 
