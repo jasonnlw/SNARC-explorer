@@ -2412,3 +2412,7 @@ header.aps-header button.aps-filters-toggle {
   padding-top: 0 !important;
 }
 
+#advanced-person-search
+#aps-filters-panel:not(.aps-filters-collapsed) {
+  padding-bottom: 0.75rem; /* adjust to taste: 0.6–0.9rem */
+}
