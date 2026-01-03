@@ -2673,5 +2673,24 @@ header.aps-header button.aps-filters-toggle {
   }
 
 }
+/* =========================================================
+   BOTD – MOBILE: PREVENT MAP HEADER OVERLAP
+   ========================================================= */
+
+@media (max-width: 767px) {
+
+  /* Ensure BOTD fully participates in document flow */
+  .botd-block {
+    position: relative;
+    z-index: 1;
+    margin-bottom: 2rem; /* reserve space above Map Explorer */
+  }
+
+  /* Ensure Map Explorer starts AFTER BOTD */
+  .botd-block + .map-block {
+    margin-top: 0 !important;
+  }
+
+}
 
 
