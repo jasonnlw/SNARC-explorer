@@ -748,10 +748,11 @@ function setPanelOpen(open, langPref) {
 }
 
 filterToggleBtn.addEventListener("click", () => {
-  const isOpen = filterPanelEl.classList.contains("open");
-  // Use lastLangPref if you have one; otherwise fall back to EN.
-  setPanelOpen(!isOpen, window.__meLangPref || "en");
+  const open = !filterPanelEl.classList.contains("open");
+  const langPref = window.__meLangPref || "en";
+  window.__meSetPanelOpen(open, langPref);
 });
+
 
 clearBtn.addEventListener("click", () => {
   const langPref = window.__meLangPref || "en";
@@ -779,9 +780,6 @@ if (window.__meSetPanelOpen) {
   window.__meSetPanelOpen(isOpen, langPref);
 }
 
-    if (filterToggleBtn) {
-      filterToggleBtn.textContent = t("Hide filters", "Cuddio hidlwyr");
-    }
 
     filterPanelEl.innerHTML = "";
 
@@ -835,21 +833,24 @@ selected.clear();
   selected.add("images"); // Images
   }
 
-  function syncPanelForViewport() {
-    if (!filterPanelEl) return;
+function syncPanelForViewport() {
+  if (!filterPanelEl) return;
 
-    const isMobile = window.matchMedia("(max-width: 860px)").matches;
-    filterPanelEl.classList.toggle("me-mobile", isMobile);
+  const isMobile = window.matchMedia("(max-width: 860px)").matches;
 
-    // Only auto-open on first desktop load; afterwards respect user toggle
-if (!window.__mePanelInitDone) {
-  window.__mePanelInitDone = true;
-  if (!isMobile) filterPanelEl.classList.add("open");
-  else filterPanelEl.classList.remove("open");
-}
-// Always keep the mobile class in sync
-
+  // Apply default open/closed ONLY on first run
+  if (!window.__mePanelInitDone) {
+    window.__mePanelInitDone = true;
+    filterPanelEl.classList.toggle("open", !isMobile);
   }
+
+  // Always update the button label to match open/closed + language
+  const langPref = window.__meLangPref || "en";
+  if (window.__meSetPanelOpen) {
+    window.__meSetPanelOpen(filterPanelEl.classList.contains("open"), langPref);
+  }
+}
+
 
   
 function refreshMapAfterReturn() {
