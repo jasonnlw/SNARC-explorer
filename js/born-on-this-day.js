@@ -100,7 +100,7 @@ LIMIT 1
 
   const personUri = row.person.value;
   const qid = personUri.split("/").pop();
-  const entityHash = `#/entity/${qid}`;
+  const entityHash = `#/item/${qid}`;
 
   const data = {
     qid,
