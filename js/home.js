@@ -41,11 +41,6 @@ home.innerHTML = `
         Born on this day
       </h2>
 
-      <p class="aps-subtitle"
-         data-i18n-en="A person from SNARC born today in history."
-         data-i18n-cy="Person o SNARC a anwyd heddiw mewn hanes.">
-        A person from SNARC born today in history.
-      </p>
     </div>
   </header>
 
