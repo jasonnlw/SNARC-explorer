@@ -144,14 +144,21 @@ function buildCardHTML(data, lang) {
 
   const img = data.image ? `<img src="${esc(data.image)}" alt="${esc(data.label)}">` : "";
 
-  return `
-    <a class="botd-card" href="${esc(data.entityHash)}" aria-label="${esc(title)}: ${esc(data.label)}">
-      <div class="botd-thumb">${img}</div>
-      <div class="botd-body">
+return `
+  <a class="botd-card" href="${esc(href)}" aria-label="${esc(title)}: ${esc(data.label)}">
+    <div class="botd-card-head">${esc(title)}</div>
+
+    <div class="botd-card-body">
+      <div class="botd-info">
         <div class="botd-date">${esc(birthText)}</div>
         <div class="botd-label">${esc(data.label)}</div>
         ${data.description ? `<div class="botd-desc">${esc(data.description)}</div>` : ""}
       </div>
-    </a>
-  `;
+
+      <div class="botd-image">
+        ${img}
+      </div>
+    </div>
+  </a>
+`;
 }
