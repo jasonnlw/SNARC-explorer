@@ -2384,4 +2384,31 @@ header.aps-header button.aps-filters-toggle {
   border-top: 0 !important;
 }
 
+/* =========================================================
+   APS: remove ALL vertical gap between header and results content
+   (collapsed filters + graph/list)
+   Put at VERY END of styles.css
+   ========================================================= */
+
+#advanced-person-search .aps-header {
+  margin-bottom: 0 !important;
+}
+
+#advanced-person-search #aps-results.aps-results {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+  border-top: 0 !important;
+}
+
+/* The small remaining “white strip” is often this header spacing */
+#advanced-person-search .aps-results-header {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Ensure the graph container starts immediately */
+#advanced-person-search #aps-results-graph.aps-results-graph {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 
