@@ -2463,10 +2463,11 @@ header.aps-header button.aps-filters-toggle {
 .botd-card-head {
   background: #F4631E;
   color: #fff;
-  font-weight: 800;
-  padding: 10px 12px;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
   line-height: 1.2;
   border-bottom: 2px solid #F4631E;
+  font-size: 1.25rem;
 }
 
 /* Body area (orange) */
@@ -2484,8 +2485,8 @@ header.aps-header button.aps-filters-toggle {
 .botd-info {
   background: #fff;
   color: #111;
-  border-radius: 0;              /* square edges */
-  padding: 10px 10px;
+  border-radius: 6px;              /* square edges */
+  padding: 8px 9px;
 }
 
 /* Info text aligned left */
@@ -2502,9 +2503,8 @@ header.aps-header button.aps-filters-toggle {
 }
 
 .botd-desc {
-  font-size: 0.92rem;
+  font-size: 0.88rem;
   opacity: 0.9;
-
   /* clamp so the layout stays tidy */
   overflow: hidden;
   display: -webkit-box;
@@ -2592,3 +2592,19 @@ header.aps-header button.aps-filters-toggle {
     background: #F4631E; /* same as card */
   }
 }
+.botd-title-line {
+  font-weight: 800;
+  font-size: 0.95rem;
+  line-height: 1.25;
+  margin-bottom: 6px;
+}
+
+.botd-sep {
+  opacity: 0.6;
+}
+@media (min-width: 900px) {
+  .botd-slot {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
