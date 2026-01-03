@@ -2618,7 +2618,7 @@ header.aps-header button.aps-filters-toggle {
 
   /* 1. Keep mobile proportions aligned with desktop */
   .botd-card {
-    height: 360px;          /* same visual depth as desktop */
+    height: 420px;          /* same visual depth as desktop */
   }
 
   /* 2. Add more horizontal breathing room inside the card */
@@ -2637,7 +2637,7 @@ header.aps-header button.aps-filters-toggle {
   .botd-image {
     height: 220px;
     min-height: 180px;
-    margin-bottom: 1rem;    /* requested 2rem beneath image */
+    margin-bottom: 2rem;    /* requested 2rem beneath image */
   }
 
 }
