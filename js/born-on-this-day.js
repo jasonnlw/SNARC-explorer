@@ -138,7 +138,7 @@ LIMIT 1
 function buildCardHTML(data, lang) {
   const tz = "Europe/London";
   const locale = (lang === "cy") ? "cy-GB" : "en-GB";
-
+  const href = `#/item/${data.qid}`;
   let birthText = "";
   if (data.birthDate) {
     // Wikibase timeValue is ISO; Date can parse it
