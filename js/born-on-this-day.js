@@ -169,8 +169,11 @@ return `
 
     <div class="botd-card-body">
       <div class="botd-info">
-        <div class="botd-date">${esc(birthText)}</div>
-        <div class="botd-label">${esc(data.label)}</div>
+<div class="botd-title-line">
+  <span class="botd-label">${esc(data.label)}</span>
+  <span class="botd-sep"> – </span>
+  <span class="botd-date">${esc(birthText)}</span>
+</div>
         ${data.description ? `<div class="botd-desc">${esc(data.description)}</div>` : ""}
       </div>
 
