@@ -2422,103 +2422,152 @@ header.aps-header button.aps-filters-toggle {
 }
 
 /* =========================================================
-   Born on This Day card (home)
+   Born on This Day – square orange card + white info box
    ========================================================= */
 
-.botd-block { margin-top: 2rem; }
+.botd-block {
+  margin-top: 2rem;
+}
 
-.botd-header { /* reuse aps-header look */ }
+/* Thin title-only header (if you keep a separate section header) */
+.botd-header {
+  margin-bottom: 0.75rem;
+}
 
-.botd-slot { margin-top: 0; }
+.botd-title {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 800;
+}
 
-.botd-card {
+/* Slot allows you to drop another card beside it later */
+.botd-slot {
   display: grid;
-  grid-template-columns: 140px 1fr;
-  gap: 14px;
-  align-items: stretch;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
 
+/* Outer card shell */
+.botd-card {
+  display: block;
   text-decoration: none;
   color: inherit;
 
-  background: #fff;
-  border: 2px solid #309898;
-  border-radius: 12px;
+  background: #F4631E;
+  border: 2px solid #F4631E;
+  border-radius: 0;              /* square edges */
   overflow: hidden;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.08);
-
-  margin-top: 0;
 }
 
-.botd-card:hover { filter: brightness(0.99); }
-
-.botd-thumb {
-  width: 140px;
-  height: 140px;
-  background: #f3f3f3;
+/* Card’s own internal header bar (orange) */
+.botd-card-head {
+  background: #F4631E;
+  color: #fff;
+  font-weight: 800;
+  padding: 10px 12px;
+  line-height: 1.2;
+  border-bottom: 2px solid #F4631E;
 }
 
-.botd-thumb img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
+/* Body area (orange) */
+.botd-card-body {
+  padding: 12px;
+  display: grid;
+  grid-template-rows: auto 1fr;  /* info then image */
+  gap: 12px;
+
+  /* Encourage a broadly square footprint */
+  min-height: 320px;
 }
 
-.botd-body { padding: 12px 12px 12px 0; }
+/* White info sub-box */
+.botd-info {
+  background: #fff;
+  color: #111;
+  border-radius: 0;              /* square edges */
+  padding: 10px 10px;
+}
 
+/* Info text aligned left */
 .botd-date {
-  font-size: 0.9rem;
-  font-weight: 700;
-  color: #309898;
-  margin-bottom: 4px;
+  font-size: 0.95rem;
+  font-weight: 800;
+  margin-bottom: 6px;
 }
 
 .botd-label {
   font-size: 1.05rem;
-  font-weight: 700;
+  font-weight: 800;
   margin-bottom: 6px;
 }
 
 .botd-desc {
   font-size: 0.92rem;
-  opacity: 0.85;
+  opacity: 0.9;
 
-  /* clamp to avoid huge cards */
+  /* clamp so the layout stays tidy */
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
 }
 
+/* Image block sits under info, fills remaining area */
+.botd-image {
+  background: #fff;
+  border-radius: 0;              /* square edges */
+  overflow: hidden;
+  min-height: 220px;
+}
+
+.botd-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Skeleton/empty state should match new card aesthetic */
+.botd-skeleton {
+  min-height: 320px;
+  border-radius: 0;
+  background: linear-gradient(90deg, #f2f2f2 25%, #e9e9e9 37%, #f2f2f2 63%);
+  background-size: 400% 100%;
+  animation: botdShimmer 1.2s ease-in-out infinite;
+  border: 2px solid #F4631E;
+}
+
 .botd-empty {
-  border: 2px solid #309898;
-  border-radius: 12px;
+  border: 2px solid #F4631E;
+  border-radius: 0;
   background: #fff;
   padding: 14px;
 }
 
-.botd-skeleton {
-  height: 140px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #f2f2f2 25%, #e9e9e9 37%, #f2f2f2 63%);
-  background-size: 400% 100%;
-  animation: botdShimmer 1.2s ease-in-out infinite;
-  border: 2px solid #309898;
+/* Desktop: make it tile-like so it can sit beside another card */
+@media (min-width: 900px) {
+  .botd-slot {
+    grid-template-columns: 1fr; /* keep 1 for now; change to 2 when you add another card */
+    max-width: 520px;           /* keeps it “broadly square” */
+  }
+}
+
+/* Mobile: fit full width */
+@media (max-width: 600px) {
+  .botd-slot {
+    max-width: none;
+  }
+
+  .botd-card-body {
+    min-height: 0;
+  }
+
+  .botd-image {
+    min-height: 240px;
+  }
 }
 
 @keyframes botdShimmer {
   0% { background-position: 100% 0; }
   100% { background-position: 0 0; }
 }
-
-@media (max-width: 600px) {
-  .botd-card {
-    grid-template-columns: 1fr;
-  }
-  .botd-thumb {
-    width: 100%;
-    height: 220px;
-  }
-  .botd-body { padding: 12px; }
-}
-
