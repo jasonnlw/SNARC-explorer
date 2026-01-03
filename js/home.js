@@ -31,10 +31,27 @@ home.innerHTML = `
         </p>
       </section>
 
-      <section class="map-block">
-        <h2>${lang === "cy" ? "Archwilio’r Map" : "Explore the Map"}</h2>
-        <div id="homeMap"></div>
-      </section>
+<section class="map-block">
+
+  <header class="aps-header map-header-red">
+    <div class="aps-header-text">
+      <h2 class="aps-title"
+          data-i18n-en="Explore the map"
+          data-i18n-cy="Archwilio’r map">
+        Explore the map
+      </h2>
+
+      <p class="aps-subtitle"
+         data-i18n-en="Browse people, places and related collections spatially."
+         data-i18n-cy="Pori pobl, lleoedd a chasgliadau cysylltiedig yn ofodol.">
+        Browse people, places and related collections spatially.
+      </p>
+    </div>
+  </header>
+
+  <div id="homeMap"></div>
+</section>
+
 
 <!-- Advanced Person Search (below map placeholder) -->
 <section id="advanced-person-search" class="aps-section">
