@@ -33,21 +33,11 @@ home.innerHTML = `
       </section>
 
 <section class="botd-block" aria-label="Born on this day">
-  <header class="aps-header botd-header">
-    <div class="aps-header-text">
-      <h2 class="aps-title"
-          data-i18n-en="Born on this day"
-          data-i18n-cy="Ganwyd ar y dydd hwn">
-        Born on this day
-      </h2>
-
-    </div>
-  </header>
-
   <div id="botd-card-slot" class="botd-slot">
     <div class="botd-skeleton" aria-hidden="true"></div>
   </div>
 </section>
+
 
 
 <section class="map-block">
