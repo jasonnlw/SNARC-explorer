@@ -780,7 +780,7 @@ if (window.__meSetPanelOpen) {
 }
 
     if (filterToggleBtn) {
-      filterToggleBtn.textContent = t("Filters", "Hidlyddion");
+      filterToggleBtn.textContent = t("Hide filters", "Cuddio hidlwyr");
     }
 
     filterPanelEl.innerHTML = "";
