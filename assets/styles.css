@@ -2452,7 +2452,7 @@ header.aps-header button.aps-filters-toggle {
   display: block;
   text-decoration: none;
   color: inherit;
-
+  height: 360px;
   background: #F4631E;
   border: 2px solid #F4631E;
   border-radius: 0;              /* square edges */
@@ -2471,10 +2471,10 @@ header.aps-header button.aps-filters-toggle {
 
 /* Body area (orange) */
 .botd-card-body {
-  padding: 12px;
+  padding: 10px;
   display: grid;
   grid-template-rows: auto 1fr;  /* info then image */
-  gap: 12px;
+  gap: 10px;
 
   /* Encourage a broadly square footprint */
   min-height: 320px;
@@ -2517,7 +2517,8 @@ header.aps-header button.aps-filters-toggle {
   background: #fff;
   border-radius: 0;              /* square edges */
   overflow: hidden;
-  min-height: 220px;
+  min-height: 180px;
+  height: 180px;
 }
 
 .botd-image img {
@@ -2570,4 +2571,24 @@ header.aps-header button.aps-filters-toggle {
 @keyframes botdShimmer {
   0% { background-position: 100% 0; }
   100% { background-position: 0 0; }
+}
+/* BOTD: mosaic – no outer spacing, flush with next section */
+.botd-block {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.botd-slot {
+  gap: 0 !important;        /* no whitespace between mosaic tiles */
+}
+
+/* Remove space below BOTD so it touches Map Explorer header */
+.botd-block + .map-block {
+  margin-top: 0 !important;
+}
+@media (min-width: 768px) {
+  .botd-block {
+    padding-left: 2rem;
+    background: #F4631E; /* same as card */
+  }
 }
