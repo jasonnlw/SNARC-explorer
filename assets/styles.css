@@ -2635,9 +2635,9 @@ header.aps-header button.aps-filters-toggle {
 
   /* 4. Image block: fixed crop + visible bottom breathing space */
   .botd-image {
-    height: 180px;
+    height: 220px;
     min-height: 180px;
-    margin-bottom: 2rem;    /* requested 2rem beneath image */
+    margin-bottom: 1rem;    /* requested 2rem beneath image */
   }
 
 }
