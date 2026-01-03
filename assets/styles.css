@@ -2416,3 +2416,7 @@ header.aps-header button.aps-filters-toggle {
 #aps-filters-panel:not(.aps-filters-collapsed) {
   padding-bottom: 0.75rem; /* adjust to taste: 0.6–0.9rem */
 }
+/* Map Explorer header – red variant of APS header */
+.map-header-red {
+  background: #CB0404;
+}
