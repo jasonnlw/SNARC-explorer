@@ -6,7 +6,14 @@ window.BornOnThisDay = window.BornOnThisDay || {};
 
 window.BornOnThisDay.render = async function (lang = "en") {
   const slot = document.getElementById("botd-card-slot");
-  if (!slot) return;
+
+  if (!slot) {
+    console.warn("BOTD: #botd-card-slot not found");
+    return;
+  }
+
+  console.log("BOTD: render start");
+try {
 
   // Use Europe/London (your site context) for the "today" date key
   const now = new Date();
@@ -114,7 +121,19 @@ LIMIT 1
 
   sessionStorage.setItem(cacheKey, JSON.stringify(data));
   slot.innerHTML = buildCardHTML(data, lang);
+  console.log("BOTD: card injected");
+
+} catch (err) {
+  console.error("BOTD: render failed", err);
+  slot.innerHTML = `
+    <div class="botd-empty">
+      ${lang === "cy"
+        ? "Methwyd llwytho'r cerdyn."
+        : "Failed to load the card."}
+    </div>`;
+}
 };
+
 
 function buildCardHTML(data, lang) {
   const tz = "Europe/London";
