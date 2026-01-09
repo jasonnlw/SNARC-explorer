@@ -2422,172 +2422,59 @@ header.aps-header button.aps-filters-toggle {
 }
 
 /* =========================================================
-   Born on This Day – square orange card + white info box
+   Born on This Day – consolidated rules (desktop + mobile)
    ========================================================= */
 
-/* Thin title-only header (if you keep a separate section header) */
-.botd-header {
-  margin-bottom: 0.75rem;
-}
-
-.botd-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 800;
-}
-
-/* Slot allows you to drop another card beside it later */
-.botd-slot {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-}
-
-/* Outer card shell */
-.botd-card {
-  display: block;
-  text-decoration: none;
-  color: inherit;
-  height: 360px;
-  background: #F4631E;
-  border: 2px solid #F4631E;
-  border-radius: 0;              /* square edges */
-  overflow: hidden;
-}
-
-/* Card’s own internal header bar (orange) */
-.botd-card-head {
-  background: #F4631E;
-  color: #fff;
-  font-weight: 700;
-  padding: 0.75rem 1rem;
-  line-height: 1.2;
-  border-bottom: 2px solid #F4631E;
-  font-size: 1.25rem;
-}
-
-/* Body area (orange) */
-.botd-card-body {
-  padding: 10px;
-  display: grid;
-  grid-template-rows: auto 1fr;  /* info then image */
-  gap: 10px;
-  min-height: 320px;
-}
-
-/* Desktop fix: stop the image row stretching */
-@media (min-width: 768px) {
-  .botd-card-body {
-    grid-template-rows: auto auto;  /* info then image (no stretch) */
-  }
-}
-
-/* White info sub-box */
-.botd-info {
-  background: #fff;
-  color: #111;
-  border-radius: 6px;              /* square edges */
-  padding: 8px 9px;
-}
-
-/* Info text aligned left */
-.botd-date {
-  font-size: 0.95rem;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.botd-label {
-  font-size: 1.05rem;
-  font-weight: 800;
-  margin-bottom: 6px;
-}
-
-.botd-desc {
-  font-size: 0.88rem;
-  opacity: 0.9;
-  /* clamp so the layout stays tidy */
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 3;
-}
-
-/* Image block sits under info, fills remaining area */
-.botd-image {
-  background: #fff;
-  border-radius: 0;              /* square edges */
-  overflow: hidden;
-  min-height: 180px;
-  height: 180px;
-}
-
-.botd-image img {
-  width: 100%;
-  height: 100%;
-  display: block;
-  object-fit: cover;
-}
-
-/* Skeleton/empty state should match new card aesthetic */
-.botd-skeleton {
-  min-height: 320px;
-  border-radius: 0;
-  background: linear-gradient(90deg, #f2f2f2 25%, #e9e9e9 37%, #f2f2f2 63%);
-  background-size: 400% 100%;
-  animation: botdShimmer 1.2s ease-in-out infinite;
-  border: 2px solid #F4631E;
-}
-
-.botd-empty {
-  border: 2px solid #F4631E;
-  border-radius: 0;
-  background: #fff;
-  padding: 14px;
-}
-
-/* Desktop: make it tile-like so it can sit beside another card */
-@media (min-width: 900px) {
-  .botd-slot {
-    grid-template-columns: 1fr; /* keep 1 for now; change to 2 when you add another card */
-    max-width: 520px;           /* keeps it “broadly square” */
-  }
-}
-
-
-  .botd-card-body {
-    min-height: 0;
-  }
-
-  .botd-image {
-    min-height: 240px;
-  }
-}
-
-@keyframes botdShimmer {
-  0% { background-position: 100% 0; }
-  100% { background-position: 0 0; }
-}
-/* BOTD: mosaic – no outer spacing, flush with next section */
+/* Mosaic container */
 .botd-block {
   margin: 0 !important;
   padding: 0 !important;
 }
 
 .botd-slot {
-  gap: 0 !important;        /* no whitespace between mosaic tiles */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 !important; /* mosaic: no whitespace */
 }
 
-/* Remove space below BOTD so it touches Map Explorer header */
-.botd-block + .map-block {
-  margin-top: 0 !important;
+/* Card shell */
+.botd-card {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+
+  height: 360px;              /* desktop tile height */
+  background: #F4631E;
+  border: 2px solid #F4631E;
+  border-radius: 0;
+  overflow: hidden;
 }
-@media (min-width: 768px) {
-  .botd-block {
-    padding-left: 2rem;
-    background: #F4631E; /* same as card */
-  }
+
+.botd-card-head {
+  background: #F4631E;
+  color: #fff;
+  font-weight: 700;
+  padding: 0.75rem 1rem;
+  line-height: 1.2;
+  font-size: 1.25rem;         /* matches APS/Map header scale */
+  border-bottom: 2px solid #F4631E;
 }
+
+.botd-card-body {
+  padding: 10px 10px 2rem;    /* bottom padding always visible */
+  display: grid;
+  grid-template-rows: auto auto; /* no stretching row */
+  gap: 10px;
+}
+
+/* Info box */
+.botd-info {
+  background: #fff;
+  color: #111;
+  border-radius: 6px;
+  padding: 8px 9px;
+}
+
 .botd-title-line {
   font-weight: 800;
   font-size: 0.95rem;
@@ -2595,53 +2482,70 @@ header.aps-header button.aps-filters-toggle {
   margin-bottom: 6px;
 }
 
-.botd-sep {
-  opacity: 0.6;
+.botd-sep { opacity: 0.6; }
+
+.botd-desc {
+  font-size: 0.88rem;
+  opacity: 0.9;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
 }
+
+/* Desktop image: fixed height (cropped), avoids aspect-ratio conflicts */
+.botd-image {
+  background: #fff;
+  overflow: hidden;
+  height: 190px;              /* key: deterministic */
+}
+
+.botd-image img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* Desktop alignment gutter (orange) */
+@media (min-width: 768px) {
+  .botd-block {
+    padding-left: 2rem;
+    background: #F4631E;
+  }
+}
+
+/* Two-up mosaic when you add the next card */
 @media (min-width: 900px) {
   .botd-slot {
     grid-template-columns: 1fr 1fr;
   }
 }
-/* BOTD: desktop-only left alignment gutter (visible + consistent) */
-@media (min-width: 768px) {
-  .botd-slot {
-    padding-left: 1rem;
-    padding-right: 0;
-  }
-}
 
 /* =========================================================
    BOTD – MOBILE (single source of truth)
-   Prevent clipping + keep proportions + add bottom padding
    ========================================================= */
 @media (max-width: 767px) {
-
-  /* Keep similar proportions but allow content to breathe */
   .botd-card {
-    height: auto !important;     /* stop hard clipping */
-    min-height: 360px;           /* keeps desktop-like feel */
+    height: auto !important;
+    min-height: 360px;
   }
 
-  /* Card body spacing */
   .botd-card-body {
-    padding: 12px 1rem 2rem;     /* 2rem bottom padding under image */
+    padding: 12px 1rem 2rem;   /* keep your mobile bottom padding */
     gap: 12px;
   }
 
-  /* Inner info box: add a bit more side padding */
   .botd-info {
     padding-left: 1rem;
     padding-right: 1rem;
-    border-radius: 8px;          /* keep your slight curve */
+    border-radius: 8px;
   }
 
-  /* Make image a square and never let it force the card to clip */
   .botd-image {
-    aspect-ratio: 1 / 1;         /* square */
+    aspect-ratio: 1 / 1;       /* square on mobile */
     height: auto;
-    min-height: 0 !important;    /* override old min-heights */
-    margin-bottom: 0;            /* bottom space comes from body padding */
   }
 
   .botd-image img {
@@ -2650,60 +2554,5 @@ header.aps-header button.aps-filters-toggle {
     object-fit: cover;
     object-position: center;
     display: block;
-  }
-}
-/* =========================================================
-   BOTD – DESKTOP: restore visible orange padding under image
-   (internal only; does not affect mosaic spacing)
-   ========================================================= */
-@media (min-width: 768px) {
-
-  /* Give the card body an explicit bottom cushion */
-  .botd-card-body {
-    padding-bottom: 2rem !important;
-  }
-
-  /* Constrain image box so it doesn't consume the bottom padding */
-  .botd-image {
-    aspect-ratio: 3 / 4;      /* predictable crop box (tune if you prefer 1/1) */
-  }
-
-  .botd-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-}
-
-/* =========================================================
-   BOTD – DESKTOP: prevent image from consuming padding space
-   ========================================================= */
-@media (min-width: 768px) {
-
-  /* Keep the card fixed for mosaic layout */
-  .botd-card {
-    height: 360px;
-    overflow: hidden;
-  }
-
-  /* Constrain image so padding can exist */
-  .botd-image {
-    aspect-ratio: 4 / 3;
-    max-height: 190px;     /* <-- key line */
-    overflow: hidden;
-  }
-
-  /* Ensure image fills its box */
-  .botd-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-  }
-
-  /* Now padding below the image will always be visible */
-  .botd-card-body {
-    padding-bottom: 2rem;
   }
 }
