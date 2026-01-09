@@ -2556,3 +2556,33 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
+/* Constrain BOTD mosaic width on desktop (one card = previous width) */
+@media (min-width: 768px) {
+  .botd-slot {
+    max-width: 520px;
+  }
+}
+
+/* When you add a 2nd card later, allow 2-up without spilling */
+@media (min-width: 900px) {
+  .botd-slot {
+    max-width: 1040px; /* 2 * 520 */
+    grid-template-columns: 1fr 1fr;
+  }
+}
+/* Desktop: image slightly wider than tall (4/3), cropped and contained */
+@media (min-width: 768px) {
+  .botd-image {
+    aspect-ratio: 3 / 4;
+    height: auto;
+    max-height: 190px; /* tune if you want it a touch taller */
+  }
+
+  .botd-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+}
