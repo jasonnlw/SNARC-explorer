@@ -2660,7 +2660,7 @@ header.aps-header button.aps-filters-toggle {
 
   /* Constrain image box so it doesn't consume the bottom padding */
   .botd-image {
-    aspect-ratio: 4 / 3;      /* predictable crop box (tune if you prefer 1/1) */
+    aspect-ratio: 3 / 4;      /* predictable crop box (tune if you prefer 1/1) */
     height: auto;
     min-height: 0 !important;
   }
