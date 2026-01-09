@@ -2472,9 +2472,14 @@ header.aps-header button.aps-filters-toggle {
   display: grid;
   grid-template-rows: auto 1fr;  /* info then image */
   gap: 10px;
-
-  /* Encourage a broadly square footprint */
   min-height: 320px;
+}
+
+/* Desktop fix: stop the image row stretching */
+@media (min-width: 768px) {
+  .botd-card-body {
+    grid-template-rows: auto auto;  /* info then image (no stretch) */
+  }
 }
 
 /* White info sub-box */
@@ -2655,7 +2660,7 @@ header.aps-header button.aps-filters-toggle {
 
   /* Give the card body an explicit bottom cushion */
   .botd-card-body {
-    padding-bottom: 4rem !important;
+    padding-bottom: 2rem !important;
   }
 
   /* Constrain image box so it doesn't consume the bottom padding */
