@@ -2647,4 +2647,29 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
+/* =========================================================
+   BOTD – DESKTOP: restore visible orange padding under image
+   (internal only; does not affect mosaic spacing)
+   ========================================================= */
+@media (min-width: 768px) {
+
+  /* Give the card body an explicit bottom cushion */
+  .botd-card-body {
+    padding-bottom: 2rem !important;
+  }
+
+  /* Constrain image box so it doesn't consume the bottom padding */
+  .botd-image {
+    aspect-ratio: 4 / 3;      /* predictable crop box (tune if you prefer 1/1) */
+    height: auto;
+    min-height: 0 !important;
+  }
+
+  .botd-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+}
 
