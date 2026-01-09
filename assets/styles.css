@@ -2549,11 +2549,6 @@ header.aps-header button.aps-filters-toggle {
   }
 }
 
-/* Mobile: fit full width */
-@media (max-width: 600px) {
-  .botd-slot {
-    max-width: none;
-  }
 
   .botd-card-body {
     min-height: 0;
@@ -2610,87 +2605,46 @@ header.aps-header button.aps-filters-toggle {
     padding-right: 0;
   }
 }
-/* =========================================================
-   BOTD – MOBILE PROPORTION + PADDING FIXES (MOBILE ONLY)
-   ========================================================= */
 
+/* =========================================================
+   BOTD – MOBILE (single source of truth)
+   Prevent clipping + keep proportions + add bottom padding
+   ========================================================= */
 @media (max-width: 767px) {
 
-  /* 1. Keep mobile proportions aligned with desktop */
+  /* Keep similar proportions but allow content to breathe */
   .botd-card {
-    height: 420px;          /* same visual depth as desktop */
+    height: auto !important;     /* stop hard clipping */
+    min-height: 360px;           /* keeps desktop-like feel */
   }
 
-  /* 2. Add more horizontal breathing room inside the card */
+  /* Card body spacing */
   .botd-card-body {
-    padding-left: 1rem;     /* +1rem left */
-    padding-right: 1rem;    /* +1rem right */
+    padding: 12px 1rem 2rem;     /* 2rem bottom padding under image */
+    gap: 12px;
   }
 
-  /* 3. Inner white info box gets extra side padding */
+  /* Inner info box: add a bit more side padding */
   .botd-info {
     padding-left: 1rem;
     padding-right: 1rem;
+    border-radius: 8px;          /* keep your slight curve */
   }
 
-  /* 4. Image block: fixed crop + visible bottom breathing space */
+  /* Make image a square and never let it force the card to clip */
   .botd-image {
-    height: 190px;
-    min-height: 180px;
-    margin-bottom: 1.5rem;    /* requested 2rem beneath image */
+    aspect-ratio: 1 / 1;         /* square */
+    height: auto;
+    min-height: 0 !important;    /* override old min-heights */
+    margin-bottom: 0;            /* bottom space comes from body padding */
   }
 
-/* =========================================================
-   BOTD – MOBILE: FORCE SQUARE IMAGE + LOCK CARD DEPTH
-   ========================================================= */
-
-@media (max-width: 767px) {
-
-  /* Lock the card height so it cannot collapse */
-  .botd-card {
-    height: 360px !important;
-  }
-
-  /* Force the image container to be square */
-  .botd-image {
-    aspect-ratio: 1 / 1;      /* square */
-    height: auto !important;
-    min-height: 0 !important;
-    max-height: none !important;
-  }
-
-  /* Ensure the image fills the square and does not stretch it */
   .botd-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+    display: block;
   }
-
-  /* Prevent body content from pushing card taller/shorter */
-  .botd-card-body {
-    grid-template-rows: auto 1fr; /* info then fixed image block */
-  }
-
 }
-/* =========================================================
-   BOTD – MOBILE: PREVENT MAP HEADER OVERLAP
-   ========================================================= */
-
-@media (max-width: 767px) {
-
-  /* Ensure BOTD fully participates in document flow */
-  .botd-block {
-    position: relative;
-    z-index: 1;
-    margin-bottom: 2rem; /* reserve space above Map Explorer */
-  }
-
-  /* Ensure Map Explorer starts AFTER BOTD */
-  .botd-block + .map-block {
-    margin-top: 0 !important;
-  }
-
-}
-
 
