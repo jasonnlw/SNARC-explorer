@@ -142,16 +142,26 @@ function buildCardHTML(data, lang) {
   let birthText = "";
   if (data.birthDate) {
     // Wikibase timeValue is ISO; Date can parse it
-    const d = new Date(data.birthDate);
 
-    // If you allow year-only precision later, you can branch here:
-    // if (data.prec === 9) { birthText = String(d.getUTCFullYear()); } else ...
-    birthText = new Intl.DateTimeFormat(locale, {
-      timeZone: tz,
-      day: "numeric",
-      month: "long",
-      year: "numeric"
-    }).format(d);
+// Treat Wikibase timeValue as a *date*, not a timestamp, to avoid TZ drift.
+const m = String(data.birthDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
+if (m) {
+  const y = Number(m[1]);
+  const mo = Number(m[2]); // 1-12
+  const da = Number(m[3]); // 1-31
+
+  // Build a UTC date from components (no timezone interpretation of the original string)
+  const d = new Date(Date.UTC(y, mo - 1, da));
+
+  birthText = new Intl.DateTimeFormat(locale, {
+    timeZone: "UTC",          // critical: keep the calendar day stable
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(d);
+} else {
+  birthText = "";
+}    
   }
 
   const title = (lang === "cy") ? "Ganwyd ar y dydd hwn" : "Born on this day";
