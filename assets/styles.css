@@ -2591,22 +2591,3 @@ header.aps-header button.aps-filters-toggle {
   margin-top: 0 !important;
 }
 
-/* Desktop: constrain BOTD tile width */
-@media (min-width: 768px) {
-  .botd-slot {
-    width: 520px;
-    max-width: 520px;
-  }
-  .botd-card {
-    width: 100%;
-  }
-}
-
-/* Desktop 2-up later */
-@media (min-width: 900px) {
-  .botd-slot {
-    width: 1040px;
-    max-width: 1040px;
-    grid-template-columns: 1fr 1fr;
-  }
-}
