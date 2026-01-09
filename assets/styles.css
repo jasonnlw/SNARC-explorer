@@ -2586,3 +2586,8 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
+/* Home: BOTD must sit flush with Map Explorer */
+.botd-block ~ .map-block {
+  margin-top: 0 !important;
+}
+
