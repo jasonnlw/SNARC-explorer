@@ -3006,4 +3006,44 @@ header.aps-header button.aps-filters-toggle {
     display: none;                /* Chrome, Safari, Edge */
   }
 }
+/* =========================================================
+   MOBILE ONLY (<=767px)
+   Force 1 image per view (override desktop variable-width logic)
+   ========================================================= */
+@media (max-width: 767px){
+
+  /* Keep viewport clipped to a single slide width */
+  .hic-viewport{
+    overflow-x: hidden;   /* no need for manual scrolling on mobile */
+    overflow-y: hidden;
+  }
+
+  /* Track can remain flex; do not allow wrap */
+  .hic-track{
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
+  /* Each slide must occupy the full viewport width */
+  .hic-slide{
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: 100%;
+    border-right: 0;      /* optional: remove inter-slide gap on mobile */
+  }
+
+  /* Image fills slide; crop (mobile behaviour) */
+  .hic-img{
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hic-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    display: block;
+  }
+}
 
