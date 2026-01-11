@@ -2535,7 +2535,9 @@ header.aps-header button.aps-filters-toggle {
 /* =========================================================
    DESKTOP (>=768px)
    - Fixed-width track (no stretch)
-   - Image expands to fill depth; info stays natural height
+   - Image expands to fill depth
+   - Info stays natural height
+   - Gap between image and info preserved (no overlap)
    ========================================================= */
 @media (min-width: 768px){
 
@@ -2562,22 +2564,26 @@ header.aps-header button.aps-filters-toggle {
     height: var(--botd-card-h);
   }
 
-  /* Body fills remaining height; image grows, info stays auto height */
+  /* Body fills remaining height; flex stack prevents overlap */
   .botd-card-body{
     height: 100%;
     padding: var(--botd-pad-top) var(--botd-pad-x) var(--botd-pad-bottom);
-    display: grid;
-    grid-template-rows: 1fr auto; /* IMPORTANT: image row flexes */
-    gap: 10px;
-    min-height: 0;               /* critical so 1fr can actually shrink/grow */
+
+    display: flex;
+    flex-direction: column;
+    gap: 10px;        /* this is the padding between image and info */
+    min-height: 0;    /* critical so the image can shrink/grow safely */
   }
 
-  /* Image fills the flexible row */
+  /* Image grows to consume leftover depth */
   .botd-image{
-    height: 100%;   /* fill the 1fr track */
-    min-height: 0;
-    overflow: hidden;
+    flex: 1 1 auto;                 /* take remaining height */
+    min-height: var(--botd-image-h);/* keeps it from becoming too short */
     background: #fff;
+    overflow: hidden;
+
+    /* safety: ensure it participates in normal flow */
+    position: static;
   }
 
   .botd-image img{
@@ -2588,10 +2594,10 @@ header.aps-header button.aps-filters-toggle {
     object-position: center;
   }
 
-  /* Info should NOT stretch */
+  /* Info remains natural height (never overlaps) */
   .botd-info{
-    align-self: start; /* belt-and-braces: keep it natural height */
-    min-height: 0;
+    flex: 0 0 auto;
+    position: static;
   }
 }
 
