@@ -302,6 +302,13 @@ if (window.BornOnThisDay && typeof window.BornOnThisDay.render === "function") {
   }
 }
 
+if (window.HomeImageCarousel && typeof window.HomeImageCarousel.render === "function") {
+  try {
+    await window.HomeImageCarousel.render();
+  } catch (err) {
+    console.error("HomeImageCarousel.render failed:", err);
+  }
+}
 
      // ---------------------------------------------------------
   // NEW: Load facet JSON data and initialise Advanced Search
