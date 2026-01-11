@@ -2800,15 +2800,72 @@ header.aps-header button.aps-filters-toggle {
 }
 
 /* Mobile: carousel card stacks under BOTD and uses natural height */
+/* =========================================================
+   MOBILE ONLY (<=767px)
+   - Fixed card height (360px)
+   - Crop images to fit
+   ========================================================= */
 @media (max-width: 767px){
   .hic-card{
-    height: auto;
-    min-height: 360px;
+    height: 360px;          /* fixed */
+    min-height: 360px;      /* enforce */
   }
 
+  /* Keep head + body predictable within 360px */
   .hic-body{
-    padding: 12px 1rem 2rem;
+    min-height: 0;
+    height: 100%;
   }
+
+  /* Ensure the viewport and slide fill available height */
+  .hic-viewport{
+    height: 100%;
+  }
+
+  .hic-track{
+    height: 100%;
+  }
+
+  .hic-slide{
+    height: 100%;
+  }
+
+  .hic-img{
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hic-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;      /* crop */
+    object-position: center;
+    display: block;
+  }
+}
+/* =========================================================
+   MOBILE ONLY (<=767px)
+   - Title first with 2rem left padding
+   - Randomize button on right with 2rem right padding
+   ========================================================= */
+@media (max-width: 767px){
+  .hic-head{
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  /* Ensure title comes first visually */
+  .hic-title{
+    order: 0;
+  }
+
+  /* Move Randomize to the far right */
+  .hic-randomize{
+    order: 1;
+    margin-left: auto;
+  }
+}
+
 
   /* One image at a time on mobile */
   :root{
