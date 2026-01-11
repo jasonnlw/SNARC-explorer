@@ -2562,6 +2562,8 @@ header.aps-header button.aps-filters-toggle {
     grid-template-rows: auto 1fr;
     width: var(--botd-card-w);
     height: var(--botd-card-h);
+    padding-left: 1rem;
+    box-sizing: border-box;
   }
 
   /* Body fills remaining height; flex stack prevents overlap */
@@ -2601,12 +2603,7 @@ header.aps-header button.aps-filters-toggle {
   }
 }
 
-  /* Desktop: add left inset to the whole card (same colour as card) */
-  .botd-card{
-    padding-left: 1rem;
-    box-sizing: border-box;
-  }
-
+ 
 
 /* Home hero layout: BOTD + Carousel */
 .botd-slot{
@@ -2636,6 +2633,7 @@ header.aps-header button.aps-filters-toggle {
   .botd-card{
     height: auto !important;
     min-height: 360px;
+    box-sizing: border-box;
   }
 
   .botd-card-body{
