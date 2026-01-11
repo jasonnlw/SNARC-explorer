@@ -1,22 +1,100 @@
-/* =========================================================
-   Home Image Carousel (inject + run)
-   Requires: IMAGES.csv in repo (qid,image,label)
-   ========================================================= */
-
+// js/home-image-carousel.js
 (function () {
-  const CSV_URL = "data/IMAGES.csv"; // <-- adjust to your repo path
+  const CSV_URL = "data/IMAGES.csv"; // adjust path
   const ITEM_URL = (qid) => `https://jasonnlw.github.io/SNARC-explorer/#/item/${encodeURIComponent(qid)}`;
-
   const AUTO_MS = 5000;
   const PICK_N = 10;
 
-  // Multi-image range logic preserved from your gallery loader
   const isMultiRange = (baseId) => (baseId >= 1448577 && baseId <= 1588867);
 
-  function ensureCarouselShell() {
+  function escapeHtml(s) {
+    return String(s ?? "")
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+  function parseCSV(text) {
+    const rows = [];
+    let i = 0, field = "", row = [], inQuotes = false;
+
+    function pushField(){ row.push(field); field = ""; }
+    function pushRow(){ if (row.length) rows.push(row); row = []; }
+
+    while (i < text.length) {
+      const c = text[i];
+      if (c === '"') {
+        if (inQuotes && text[i + 1] === '"') { field += '"'; i += 2; continue; }
+        inQuotes = !inQuotes; i++; continue;
+      }
+      if (!inQuotes && c === ",") { pushField(); i++; continue; }
+      if (!inQuotes && (c === "\n" || c === "\r")) {
+        if (c === "\r" && text[i + 1] === "\n") i++;
+        pushField(); pushRow(); i++; continue;
+      }
+      field += c; i++;
+    }
+    if (field.length || row.length) { pushField(); pushRow(); }
+
+    const header = (rows.shift() || []).map(h => h.trim());
+    return rows
+      .filter(r => r.length >= header.length)
+      .map(r => {
+        const obj = {};
+        header.forEach((h, idx) => obj[h] = (r[idx] ?? "").trim());
+        return obj;
+      });
+  }
+
+  function sampleUnique(arr, n) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a.slice(0, Math.min(n, a.length));
+  }
+
+  function extractBaseId(imageField) {
+    if (!imageField) return null;
+    const m = String(imageField).match(/(\d{6,})/);
+    return m ? parseInt(m[1], 10) : null;
+  }
+
+  async function resolveIIIFThumb(baseId) {
+    const multi = isMultiRange(baseId);
+    const imageId = multi ? baseId + 1 : baseId;
+
+    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/600,/0/default.jpg`;
+    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/600,/0/default.jpg`;
+
+    return await new Promise((resolve) => {
+      const tryLoad = (urls) => {
+        if (!urls.length) return resolve(null);
+        const url = urls.shift();
+        const img = new Image();
+        img.onload = () => resolve({ thumbUrl: url });
+        img.onerror = () => tryLoad(urls);
+        img.src = url;
+      };
+      tryLoad([url1, url2]);
+    });
+  }
+
+  async function loadCSV() {
+    const res = await fetch(CSV_URL, { cache: "no-cache" });
+    if (!res.ok) throw new Error(`Failed to fetch CSV: ${res.status}`);
+    const text = await res.text();
+    return parseCSV(text);
+  }
+
+  function ensureShell() {
     const slot = document.querySelector(".botd-slot");
     if (!slot) return null;
 
+    // Guard: don’t inject twice on route re-entry
     let host = document.getElementById("home-image-carousel");
     if (host) return host;
 
@@ -40,135 +118,26 @@
       </div>
     `;
 
-    // Insert AFTER BOTD card if present; otherwise append
+    // Insert after BOTD card if present; otherwise append into slot
     const botdCard = slot.querySelector(".botd-card");
-    if (botdCard && botdCard.parentElement === slot) {
-      botdCard.insertAdjacentElement("afterend", host);
-    } else {
-      slot.appendChild(host);
-    }
+    if (botdCard) botdCard.insertAdjacentElement("afterend", host);
+    else slot.appendChild(host);
 
     return host;
   }
 
-  // Robust-enough CSV parser (handles quoted fields with commas)
-  function parseCSV(text) {
-    const rows = [];
-    let i = 0, field = "", row = [], inQuotes = false;
-
-    function pushField() {
-      row.push(field);
-      field = "";
-    }
-    function pushRow() {
-      if (row.length) rows.push(row);
-      row = [];
-    }
-
-    while (i < text.length) {
-      const c = text[i];
-
-      if (c === '"' ) {
-        // double-quote escape inside quoted field
-        if (inQuotes && text[i + 1] === '"') {
-          field += '"';
-          i += 2;
-          continue;
-        }
-        inQuotes = !inQuotes;
-        i += 1;
-        continue;
-      }
-
-      if (!inQuotes && (c === ",")) {
-        pushField();
-        i += 1;
-        continue;
-      }
-
-      if (!inQuotes && (c === "\n" || c === "\r")) {
-        // handle CRLF
-        if (c === "\r" && text[i + 1] === "\n") i += 1;
-        pushField();
-        pushRow();
-        i += 1;
-        continue;
-      }
-
-      field += c;
-      i += 1;
-    }
-
-    // trailing field/row
-    if (field.length || row.length) {
-      pushField();
-      pushRow();
-    }
-
-    // Convert to objects using header
-    const header = rows.shift()?.map(h => h.trim()) || [];
-    return rows
-      .filter(r => r.length >= 3)
-      .map(r => {
-        const obj = {};
-        header.forEach((h, idx) => obj[h] = (r[idx] ?? "").trim());
-        return obj;
-      });
-  }
-
-  function sampleUnique(arr, n) {
-    const a = arr.slice();
-    // Fisher–Yates shuffle then slice
-    for (let i = a.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [a[i], a[j]] = [a[j], a[i]];
-    }
-    return a.slice(0, Math.min(n, a.length));
-  }
-
-  function extractBaseId(imageField) {
-    if (!imageField) return null;
-    const s = String(imageField);
-    const m = s.match(/(\d{6,})/); // your pattern: first 6+ digit run
-    return m ? parseInt(m[1], 10) : null;
-  }
-
-  async function resolveIIIFThumb(baseId) {
-    const multi = isMultiRange(baseId);
-    const imageId = multi ? baseId + 1 : baseId;
-
-    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/600,/0/default.jpg`;
-    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/600,/0/default.jpg`;
-
-    return await new Promise((resolve) => {
-      const tryLoad = (urls) => {
-        if (!urls.length) return resolve(null);
-        const url = urls.shift();
-        const img = new Image();
-        img.onload = () => resolve({ thumbUrl: url, baseId, imageId, multi });
-        img.onerror = () => tryLoad(urls);
-        img.src = url;
-      };
-      tryLoad([url1, url2]);
-    });
-  }
-
-  function getSlideWidthPx(host) {
-    // Read --hic-slide-w from computed style. Fallback.
-    const w = getComputedStyle(document.documentElement).getPropertyValue("--hic-slide-w").trim();
-    if (!w) return 260;
-    if (w.endsWith("px")) return parseFloat(w);
-    // If it is calc(100%...) on mobile, treat as viewport width => 1 slide
-    return null;
-  }
-
   function computePerView(host) {
     const viewport = host.querySelector(".hic-viewport");
-    const sw = getSlideWidthPx(host);
     if (!viewport) return 1;
 
-    if (sw == null) return 1; // mobile calc -> 1
     const vw = viewport.clientWidth || 1;
+    const root = getComputedStyle(document.documentElement);
+    const swRaw = root.getPropertyValue("--hic-slide-w").trim();
+
+    // If mobile uses calc(100%...) treat as 1
+    if (!swRaw || swRaw.startsWith("calc") || swRaw.includes("%")) return 1;
+
+    const sw = swRaw.endsWith("px") ? parseFloat(swRaw) : 260;
     return Math.max(1, Math.floor(vw / sw));
   }
 
@@ -181,14 +150,15 @@
     let index = 0;
     let timer = null;
 
-    const stop = () => {
-      if (timer) clearInterval(timer);
-      timer = null;
-    };
+    const stop = () => { if (timer) clearInterval(timer); timer = null; };
+    const start = () => { stop(); timer = setInterval(() => move(1), AUTO_MS); };
 
-    const start = () => {
-      stop();
-      timer = setInterval(() => move(1), AUTO_MS);
+    const snap = () => {
+      const slides = Array.from(track.children);
+      if (!slides.length) return;
+      const first = slides[0];
+      const stepPx = first.getBoundingClientRect().width || 0;
+      track.style.transform = `translateX(${-index * stepPx}px)`;
     };
 
     const move = (dir) => {
@@ -202,55 +172,36 @@
       if (index > maxIndex) index = 0;
       if (index < 0) index = maxIndex;
 
-      // slide width: use first slide actual width
-      const first = slides[0];
-      const stepPx = first ? first.getBoundingClientRect().width : 0;
-      track.style.transform = `translateX(${-index * stepPx}px)`;
+      snap();
     };
 
     btnPrev?.addEventListener("click", () => { move(-1); start(); });
     btnNext?.addEventListener("click", () => { move(1); start(); });
 
-    // Pause on hover (desktop)
     host.addEventListener("mouseenter", stop);
     host.addEventListener("mouseleave", start);
 
-    // Recompute layout on resize
-    window.addEventListener("resize", () => {
-      // Snap transform to current index based on updated slide width
-      const slides = Array.from(track.children);
-      if (!slides.length) return;
-      const first = slides[0];
-      const stepPx = first ? first.getBoundingClientRect().width : 0;
-      track.style.transform = `translateX(${-index * stepPx}px)`;
-    });
+    window.addEventListener("resize", snap);
 
-    return { start, stop, move, setIndex: (i) => (index = i), getIndex: () => index };
+    return { start, stop, setIndex: (i) => (index = i), snap };
   }
 
   async function buildSlides(host, rows) {
     const track = host.querySelector(".hic-track");
     if (!track) return;
 
-    track.innerHTML = ""; // clear
+    track.innerHTML = "";
 
-    // Resolve thumbs in parallel with fallback logic
     const enriched = await Promise.all(rows.map(async (r) => {
       const baseId = extractBaseId(r.image);
       if (!baseId) return null;
       const resolved = await resolveIIIFThumb(baseId);
       if (!resolved) return null;
-
-      return {
-        qid: r.qid,
-        label: r.label,
-        thumbUrl: resolved.thumbUrl
-      };
+      return { qid: r.qid, label: r.label, thumbUrl: resolved.thumbUrl };
     }));
 
     const items = enriched.filter(Boolean);
 
-    // Build DOM
     const frag = document.createDocumentFragment();
     items.forEach((it) => {
       const slide = document.createElement("div");
@@ -269,66 +220,57 @@
     track.appendChild(frag);
   }
 
-  function escapeHtml(s) {
-    return String(s ?? "")
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+  // Public API
+  window.HomeImageCarousel = {
+    _rows: null,
+    _controller: null,
 
-  async function loadCSV() {
-    const res = await fetch(CSV_URL, { cache: "no-cache" });
-    if (!res.ok) throw new Error(`Failed to fetch CSV: ${res.status}`);
-    const text = await res.text();
-    return parseCSV(text);
-  }
+    async render() {
+      const host = ensureShell();
+      if (!host) {
+        console.warn("HomeImageCarousel: .botd-slot not found (home not rendered yet).");
+        return;
+      }
 
-  async function run() {
-    const host = ensureCarouselShell();
-    if (!host) return;
+      // Load CSV once per session
+      if (!this._rows) {
+        try {
+          this._rows = await loadCSV();
+        } catch (err) {
+          console.error("HomeImageCarousel: CSV load failed", err);
+          const track = host.querySelector(".hic-track");
+          if (track) track.innerHTML = `<div style="padding:1rem;color:#fff;font-weight:700;">Images unavailable.</div>`;
+          return;
+        }
+      }
 
-    const btnRand = host.querySelector(".hic-randomize");
-    const track = host.querySelector(".hic-track");
+      // Wire controls once
+      if (!this._controller) {
+        this._controller = wireCarousel(host);
 
-    const controller = wireCarousel(host);
+        const btnRand = host.querySelector(".hic-randomize");
+        btnRand?.addEventListener("click", () => this.randomize());
+      }
 
-    let allRows = [];
-    try {
-      allRows = await loadCSV();
-    } catch (err) {
-      console.error("Home carousel: CSV load failed", err);
-      if (track) track.innerHTML = `<div style="padding:1rem;color:#fff;font-weight:700;">Images unavailable.</div>`;
-      return;
-    }
+      await this.randomize();
+    },
 
-    async function randomizeAndRender() {
-      controller?.stop?.();
-      controller?.setIndex?.(0);
+    async randomize() {
+      const host = document.getElementById("home-image-carousel") || ensureShell();
+      if (!host || !this._rows) return;
 
-      const pick = sampleUnique(allRows, PICK_N);
+      this._controller?.stop?.();
+      this._controller?.setIndex?.(0);
+
+      const pick = sampleUnique(this._rows, PICK_N);
       await buildSlides(host, pick);
 
-      // reset transform
-      const slides = Array.from(host.querySelectorAll(".hic-slide"));
-      if (slides.length) {
-        host.querySelector(".hic-track").style.transform = "translateX(0px)";
-        controller?.start?.();
-      }
+      // reset
+      const track = host.querySelector(".hic-track");
+      if (track) track.style.transform = "translateX(0px)";
+
+      this._controller?.snap?.();
+      this._controller?.start?.();
     }
-
-    btnRand?.addEventListener("click", () => {
-      randomizeAndRender();
-    });
-
-    await randomizeAndRender();
-  }
-
-  // Run after DOM is ready (supports injection timing)
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", run);
-  } else {
-    run();
-  }
+  };
 })();
