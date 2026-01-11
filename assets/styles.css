@@ -2751,20 +2751,8 @@ header.aps-header button.aps-filters-toggle {
   will-change: transform;
 }
 
-/* Slide sizing: JS will compute slides-per-view.
-   Make slide width a variable so you can tune density. */
-:root{
-  --hic-slide-w: 260px; /* desktop slide width baseline */
-}
 
-.hic-slide{
-  flex: 0 0 var(--hic-slide-w);
-  height: 100%;
-  display: grid;
-  grid-template-rows: 1fr auto; /* image + title */
-  border-right: 10px solid transparent; /* breathing room between slides */
-  box-sizing: border-box;
-}
+
 
 .hic-slide a{
   display: grid;
@@ -2918,46 +2906,6 @@ header.aps-header button.aps-filters-toggle {
     background: #FF9F00; /* reaffirm to ensure padding matches */
   }
 }
-@media (min-width: 900px){
-  /* Force desktop slide width so multiple items can appear */
-  :root{
-    --hic-slide-w: 260px; /* adjust smaller/larger to change how many show */
-  }
-
-  /* Ensure the viewport/track aren’t constraining to one slide */
-  .hic-viewport{
-    height: 100%;
-    overflow: hidden;
-  }
-
-  .hic-track{
-    height: 100%;
-    display: flex;
-  }
-
-  /* Each slide has a fixed width and full height; spacing preserved */
-  .hic-slide{
-    flex: 0 0 var(--hic-slide-w);
-    height: 100%;
-    border-right: 10px solid transparent; /* keep the gap between slides */
-    box-sizing: border-box;
-  }
-
-  /* Let image take full available slide width; keep cropping by height */
-  .hic-img{
-    height: 100%;
-    overflow: hidden;
-    background: #fff;
-  }
-
-  .hic-img img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;    /* crop vertically to fit carousel height */
-    object-position: center;
-    display: block;
-  }
-}
 
 @media (min-width: 900px){
   /* Show full image (no crop) within the fixed carousel height */
@@ -2980,3 +2928,68 @@ header.aps-header button.aps-filters-toggle {
     grid-template-columns: var(--botd-card-w) minmax(0, 1fr);
   }
 }
+
+@media (min-width: 900px){
+  /* Critical: allow grid children to shrink inside minmax(0,1fr) */
+  #botd-card-slot,
+  .botd-slot > *{
+    min-width: 0;
+  }
+
+  /* Belt-and-braces: prevent any horizontal bleed */
+  .botd-block{
+    overflow-x: hidden;
+  }
+}
+@media (min-width: 900px){
+  #home-image-carousel{
+    min-width: 0;          /* critical in CSS Grid */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+}
+@media (min-width: 900px){
+  /* Desktop carousel uses native horizontal scroll instead of fixed-width translate */
+  #home-image-carousel .hic-viewport{
+    overflow-x: auto;                 /* allow horizontal scroll */
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  #home-image-carousel .hic-track{
+    display: flex;
+    height: 100%;
+    transition: none;                 /* disable transform animation on desktop */
+    will-change: auto;
+  }
+
+  /* Variable-width slides (natural width) */
+  #home-image-carousel .hic-slide{
+    flex: 0 0 auto;                   /* NOT fixed width */
+    height: 100%;
+    border-right: 10px solid transparent; /* keep your spacing */
+    scroll-snap-align: start;
+    box-sizing: border-box;
+  }
+
+  /* Make image define slide width by its natural aspect ratio at fixed height */
+  #home-image-carousel .hic-img{
+    height: 100%;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  #home-image-carousel .hic-img img{
+    height: 100%;
+    width: auto;                      /* key: natural width */
+    object-fit: contain;              /* no cropping */
+    display: block;
+  }
+
+  /* Caption stays full slide width */
+  #home-image-carousel .hic-caption{
+    width: 100%;
+  }
+}
+
