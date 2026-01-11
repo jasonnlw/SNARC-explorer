@@ -304,7 +304,7 @@ if (window.BornOnThisDay && typeof window.BornOnThisDay.render === "function") {
 
 if (window.HomeImageCarousel && typeof window.HomeImageCarousel.render === "function") {
   try {
-    await window.HomeImageCarousel.render();
+    await window.HomeImageCarousel.render(lang);
   } catch (err) {
     console.error("HomeImageCarousel.render failed:", err);
   }
