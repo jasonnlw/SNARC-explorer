@@ -2802,13 +2802,13 @@ header.aps-header button.aps-filters-toggle {
 /* Mobile: carousel card stacks under BOTD and uses natural height */
 /* =========================================================
    MOBILE ONLY (<=767px)
-   - Fixed card height (360px)
+   - Fixed card height (450px)
    - Crop images to fit
    ========================================================= */
 @media (max-width: 767px){
   .hic-card{
-    height: 360px;          /* fixed */
-    min-height: 360px;      /* enforce */
+    height: 450px;          /* fixed */
+    min-height: 450px;      /* enforce */
   }
 
   /* Keep head + body predictable within 360px */
