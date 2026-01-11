@@ -2608,12 +2608,25 @@ header.aps-header button.aps-filters-toggle {
   }
 
 
-/* 2-up mosaic when you add the next card */
+/* Home hero layout: BOTD + Carousel */
+.botd-slot{
+  display: grid;
+  grid-template-columns: 1fr;  /* stack by default */
+  gap: 0 !important;           /* keep your mosaic tight */
+}
+
+/* Desktop: BOTD fixed, carousel fills remaining width */
 @media (min-width: 900px){
   .botd-slot{
-    grid-template-columns: var(--botd-card-w) var(--botd-card-w);
+    gap: var(--botd-gap) !important;
+    grid-template-columns: var(--botd-card-w) minmax(0, 1fr);
+    align-items: stretch;
+    justify-content: start;
+    width: auto;               /* allow flexible second column */
+    max-width: 100%;
   }
 }
+
 
 /* =========================================================
    MOBILE (<=767px) — keep as your source of truth
