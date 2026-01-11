@@ -205,7 +205,7 @@ const img = data.image
        decoding="async"
      >`
   : "";
-const img = data.image ? `<img src="${esc(data.image)}" alt="${esc(data.label)}">` : "";
+
 
 return `
   <a class="botd-card" href="${esc(href)}" aria-label="${esc(title)}: ${esc(data.label)}">
