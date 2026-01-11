@@ -67,8 +67,8 @@
     const multi = isMultiRange(baseId);
     const imageId = multi ? baseId + 1 : baseId;
 
-    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/600,/0/default.jpg`;
-    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/600,/0/default.jpg`;
+    const url1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/450,/0/default.jpg`;
+    const url2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/450,/0/default.jpg`;
 
     return await new Promise((resolve) => {
       const tryLoad = (urls) => {
