@@ -141,50 +141,63 @@
     return Math.max(1, Math.floor(vw / sw));
   }
 
-  function wireCarousel(host) {
-    const track = host.querySelector(".hic-track");
-    const btnPrev = host.querySelector(".hic-arrow.prev");
-    const btnNext = host.querySelector(".hic-arrow.next");
-    const btnRand = host.querySelector(".hic-randomize");
+function wireCarousel(host) {
+  const viewport = host.querySelector(".hic-viewport");
+  const btnPrev = host.querySelector(".hic-arrow.prev");
+  const btnNext = host.querySelector(".hic-arrow.next");
 
-    let index = 0;
-    let timer = null;
+  let timer = null;
 
-    const stop = () => { if (timer) clearInterval(timer); timer = null; };
-    const start = () => { stop(); timer = setInterval(() => move(1), AUTO_MS); };
+  const isDesktop = () => window.matchMedia("(min-width: 900px)").matches;
 
-    const snap = () => {
-      const slides = Array.from(track.children);
-      if (!slides.length) return;
-      const first = slides[0];
-      const stepPx = first.getBoundingClientRect().width || 0;
-      track.style.transform = `translateX(${-index * stepPx}px)`;
-    };
+  const stop = () => {
+    if (timer) clearInterval(timer);
+    timer = null;
+  };
 
-    const move = (dir) => {
-      const slides = Array.from(track.children);
-      if (!slides.length) return;
+  const start = () => {
+    stop();
+    timer = setInterval(() => move(1), AUTO_MS);
+  };
 
-      const perView = computePerView(host);
-      const maxIndex = Math.max(0, slides.length - perView);
+  const move = (dir) => {
+    if (!viewport) return;
 
-      index = index + (dir * perView);
-      if (index > maxIndex) index = 0;
-      if (index < 0) index = maxIndex;
+    // Scroll by (almost) one viewport width so multiple images remain visible
+    const step = Math.max(200, Math.floor(viewport.clientWidth * 0.85));
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
 
-      snap();
-    };
+    let next = viewport.scrollLeft + (dir * step);
 
-    btnPrev?.addEventListener("click", () => { move(-1); start(); });
-    btnNext?.addEventListener("click", () => { move(1); start(); });
+    // Wrap around
+    if (next > maxScroll - 5) next = 0;
+    if (next < 0) next = maxScroll;
 
-    host.addEventListener("mouseenter", stop);
-    host.addEventListener("mouseleave", start);
+    viewport.scrollTo({ left: next, behavior: "smooth" });
+  };
 
-    window.addEventListener("resize", snap);
+  btnPrev?.addEventListener("click", () => { move(-1); start(); });
+  btnNext?.addEventListener("click", () => { move(1); start(); });
 
-    return { start, stop, setIndex: (i) => (index = i), snap };
-  }
+  // Pause on hover (desktop only)
+  host.addEventListener("mouseenter", () => { if (isDesktop()) stop(); });
+  host.addEventListener("mouseleave", () => { if (isDesktop()) start(); });
+
+  // Keep scroll position valid on resize
+  window.addEventListener("resize", () => {
+    if (!viewport) return;
+    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+    if (viewport.scrollLeft > maxScroll) viewport.scrollLeft = maxScroll;
+  });
+
+  // Keep API compatible with your existing code
+  return {
+    start,
+    stop,
+    setIndex: () => {}, // no-op (indexing not used in scroll model)
+    snap: () => {}      // no-op (transform snapping not used)
+  };
+}
 
   async function buildSlides(host, rows) {
     const track = host.querySelector(".hic-track");
@@ -264,6 +277,10 @@
 
       const pick = sampleUnique(this._rows, PICK_N);
       await buildSlides(host, pick);
+
+      const viewport = host.querySelector(".hic-viewport");
+if (viewport) viewport.scrollLeft = 0;
+
 
       // reset
       const track = host.querySelector(".hic-track");
