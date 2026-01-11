@@ -2620,12 +2620,13 @@ header.aps-header button.aps-filters-toggle {
   .botd-slot{
     gap: var(--botd-gap) !important;
     grid-template-columns: var(--botd-card-w) minmax(0, 1fr);
-    align-items: stretch;
     justify-content: start;
-    width: auto;               /* allow flexible second column */
+
+    width: auto;       /* override shrink-wrap */
     max-width: 100%;
   }
 }
+
 
 
 /* =========================================================
@@ -2867,9 +2868,10 @@ header.aps-header button.aps-filters-toggle {
 }
 
 
-  /* One image at a time on mobile */
+ /* MOBILE ONLY (<=767px): one image at a time + arrow sizing */
+@media (max-width: 767px){
   :root{
-    --hic-slide-w: calc(100% - 0px);
+    --hic-slide-w: 100%;
   }
 
   .hic-arrow{
@@ -2954,5 +2956,27 @@ header.aps-header button.aps-filters-toggle {
     object-fit: cover;    /* crop vertically to fit carousel height */
     object-position: center;
     display: block;
+  }
+}
+
+@media (min-width: 900px){
+  /* Show full image (no crop) within the fixed carousel height */
+  .hic-img{
+    overflow: hidden;          /* keep tidy inside slide */
+    background: #fff;          /* letterbox background */
+  }
+
+  .hic-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: contain;       /* key change: no cropping */
+    object-position: center;
+  }
+}
+@media (min-width: 900px){
+  .botd-slot{
+    width: auto;          /* important: stop shrink-wrap */
+    max-width: 100%;
+    grid-template-columns: var(--botd-card-w) minmax(0, 1fr);
   }
 }
