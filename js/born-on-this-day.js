@@ -139,7 +139,11 @@ LIMIT 1
 function commonsThumb(url, width = 420) {
   if (!url) return "";
 
-  const u = String(url);
+ let u = String(url).trim();
+
+// Force HTTPS to avoid mixed content on GitHub Pages
+u = u.replace(/^http:\/\//i, "https://");
+
 
   // If it's already requesting a specific width/height, don't override.
   if (/[?&](width|height)=\d+/i.test(u)) return u;
