@@ -2601,6 +2601,11 @@ header.aps-header button.aps-filters-toggle {
   }
 }
 
+  /* Desktop: add left inset to the whole card (same colour as card) */
+  .botd-card{
+    padding-left: 1rem;
+    box-sizing: border-box;
+  }
 
 
 /* 2-up mosaic when you add the next card */
