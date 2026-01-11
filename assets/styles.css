@@ -2884,3 +2884,75 @@ header.aps-header button.aps-filters-toggle {
     --hic-slide-w: 300px;
   }
 }
+/* =========================================================
+   DESKTOP ONLY (>=900px)
+   ========================================================= */
+@media (min-width: 900px){
+  /* Title first, Randomize floated right */
+  .hic-head{
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+
+  .hic-title{
+    order: 0;
+  }
+
+  .hic-randomize{
+    order: 1;
+    margin-left: auto;
+  }
+
+  /* Optional: remove the hard-coded spacer div effect if present */
+  #home-image-carousel .hic-head > div[style*="width"]{
+    display: none;
+  }
+}
+@media (min-width: 900px){
+  .hic-card{
+    padding-left: 1rem;
+    padding-right: 1rem;
+    box-sizing: border-box;
+    background: #FF9F00; /* reaffirm to ensure padding matches */
+  }
+}
+@media (min-width: 900px){
+  /* Force desktop slide width so multiple items can appear */
+  :root{
+    --hic-slide-w: 260px; /* adjust smaller/larger to change how many show */
+  }
+
+  /* Ensure the viewport/track aren’t constraining to one slide */
+  .hic-viewport{
+    height: 100%;
+    overflow: hidden;
+  }
+
+  .hic-track{
+    height: 100%;
+    display: flex;
+  }
+
+  /* Each slide has a fixed width and full height; spacing preserved */
+  .hic-slide{
+    flex: 0 0 var(--hic-slide-w);
+    height: 100%;
+    border-right: 10px solid transparent; /* keep the gap between slides */
+    box-sizing: border-box;
+  }
+
+  /* Let image take full available slide width; keep cropping by height */
+  .hic-img{
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .hic-img img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;    /* crop vertically to fit carousel height */
+    object-position: center;
+    display: block;
+  }
+}
