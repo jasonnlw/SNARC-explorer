@@ -2423,68 +2423,91 @@ header.aps-header button.aps-filters-toggle {
 
 /* =========================================================
    Born on This Day – consolidated rules (desktop + mobile)
+   Clean replacement (redundancy removed; desktop fixed width,
+   mobile unchanged; easy future resizing via CSS variables)
    ========================================================= */
 
-/* Mosaic container */
-.botd-block {
+/* -------------------------
+   Desktop sizing “knobs”
+   ------------------------- */
+:root{
+  --botd-card-w: 350px;     /* desktop card width */
+  --botd-card-h: 500px;     /* desktop card depth */
+  --botd-gap: 16px;         /* gap between cards when 2-up */
+  --botd-pad-x: 10px;       /* body padding left/right */
+  --botd-pad-top: 10px;     /* body padding top */
+  --botd-pad-bottom: 2rem;  /* body bottom padding */
+  --botd-image-h: 190px;    /* deterministic desktop image height */
+}
+
+/* -------------------------
+   Mosaic container
+   ------------------------- */
+.botd-block{
   margin: 0 !important;
   padding: 0 !important;
 }
 
-.botd-slot {
+.botd-slot{
   display: grid;
-  grid-template-columns: 1fr;
-  gap: 0 !important; /* mosaic: no whitespace */
+  grid-template-columns: 1fr; /* mobile/default */
+  gap: 0 !important;          /* mosaic: no whitespace */
 }
 
-/* Card shell */
-.botd-card {
+/* -------------------------
+   Card shell
+   ------------------------- */
+.botd-card{
   display: block;
   text-decoration: none;
   color: inherit;
 
-  height: 360px;              /* desktop tile height */
   background: #F4631E;
   border: 2px solid #F4631E;
   border-radius: 0;
   overflow: hidden;
+
+  /* Desktop default; mobile overrides below */
+  height: 360px;
 }
 
-.botd-card-head {
+.botd-card-head{
   background: #F4631E;
   color: #fff;
   font-weight: 700;
   padding: 0.75rem 1rem;
   line-height: 1.2;
-  font-size: 1.25rem;         /* matches APS/Map header scale */
+  font-size: 1.25rem;
   border-bottom: 2px solid #F4631E;
 }
 
-.botd-card-body {
-  padding: 10px 10px 2rem;    /* bottom padding always visible */
+.botd-card-body{
+  padding: 10px 10px 2rem;
   display: grid;
-  grid-template-rows: auto auto; /* no stretching row */
+  grid-template-rows: auto auto;
   gap: 10px;
 }
 
-/* Info box */
-.botd-info {
+/* -------------------------
+   Info box
+   ------------------------- */
+.botd-info{
   background: #fff;
   color: #111;
   border-radius: 6px;
   padding: 8px 9px;
 }
 
-.botd-title-line {
+.botd-title-line{
   font-weight: 800;
   font-size: 0.95rem;
   line-height: 1.25;
   margin-bottom: 6px;
 }
 
-.botd-sep { opacity: 0.6; }
+.botd-sep{ opacity: 0.6; }
 
-.botd-desc {
+.botd-desc{
   font-size: 0.88rem;
   opacity: 0.9;
   overflow: hidden;
@@ -2493,14 +2516,15 @@ header.aps-header button.aps-filters-toggle {
   -webkit-line-clamp: 3;
 }
 
-/* Desktop image: fixed height (cropped), avoids aspect-ratio conflicts */
-.botd-image {
+/* -------------------------
+   Image (base)
+   ------------------------- */
+.botd-image{
   background: #fff;
   overflow: hidden;
-  height: 190px;              /* key: deterministic */
 }
 
-.botd-image img {
+.botd-image img{
   width: 100%;
   height: 100%;
   display: block;
@@ -2508,47 +2532,75 @@ header.aps-header button.aps-filters-toggle {
   object-position: center;
 }
 
-/* Desktop alignment gutter (orange) */
-@media (min-width: 768px) {
-  .botd-block {
+/* =========================================================
+   DESKTOP (>=768px)
+   - Fixed-width track to prevent stretch
+   - Card size controlled via CSS variables
+   ========================================================= */
+@media (min-width: 768px){
+  /* Desktop alignment gutter (orange) */
+  .botd-block{
     padding-left: 2rem;
     background: #F4631E;
   }
+
+  /* 1-up: fixed card width; shrink-wrap grid so it doesn't stretch */
+  .botd-slot{
+    gap: var(--botd-gap) !important;
+    grid-template-columns: var(--botd-card-w);
+    justify-content: start;
+    width: max-content;
+    max-width: 100%;
+  }
+
+  .botd-card{
+    width: var(--botd-card-w);
+    height: var(--botd-card-h);
+  }
+
+  .botd-card-body{
+    padding: var(--botd-pad-top) var(--botd-pad-x) var(--botd-pad-bottom);
+  }
+
+  /* Deterministic desktop image size (no aspect-ratio conflicts) */
+  .botd-image{
+    height: var(--botd-image-h);
+  }
 }
 
-/* Two-up mosaic when you add the next card */
-@media (min-width: 900px) {
-  .botd-slot {
-    grid-template-columns: 1fr 1fr;
+/* 2-up mosaic when you add the next card */
+@media (min-width: 900px){
+  .botd-slot{
+    grid-template-columns: var(--botd-card-w) var(--botd-card-w);
   }
 }
 
 /* =========================================================
-   BOTD – MOBILE (single source of truth)
+   MOBILE (<=767px) — keep as your source of truth
    ========================================================= */
-@media (max-width: 767px) {
-  .botd-card {
+@media (max-width: 767px){
+  .botd-card{
     height: auto !important;
     min-height: 360px;
   }
 
-  .botd-card-body {
-    padding: 12px 1rem 2rem;   /* keep your mobile bottom padding */
+  .botd-card-body{
+    padding: 12px 1rem 2rem;
     gap: 12px;
   }
 
-  .botd-info {
+  .botd-info{
     padding-left: 1rem;
     padding-right: 1rem;
     border-radius: 8px;
   }
 
-  .botd-image {
-    aspect-ratio: 1 / 1;       /* square on mobile */
+  .botd-image{
+    aspect-ratio: 1 / 1; /* square on mobile */
     height: auto;
   }
 
-  .botd-image img {
+  .botd-image img{
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -2556,38 +2608,9 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
-/* Constrain BOTD mosaic width on desktop (one card = previous width) */
-@media (min-width: 768px) {
-  .botd-slot {
-    max-width: 520px;
-  }
-}
 
-/* When you add a 2nd card later, allow 2-up without spilling */
-@media (min-width: 900px) {
-  .botd-slot {
-    max-width: 1040px; /* 2 * 520 */
-    grid-template-columns: 1fr 1fr;
-  }
-}
-/* Desktop: image slightly wider than tall (4/3), cropped and contained */
-@media (min-width: 768px) {
-  .botd-image {
-    aspect-ratio: 3 / 4;
-    height: auto;
-    max-height: 190px; /* tune if you want it a touch taller */
-  }
-
-  .botd-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    display: block;
-  }
-}
-/* Home: BOTD must sit flush with Map Explorer */
-.botd-block ~ .map-block {
+/* Home: BOTD must sit flush with Map Explorer
+   Use adjacent sibling if .map-block immediately follows .botd-block */
+.botd-block + .map-block{
   margin-top: 0 !important;
 }
-
