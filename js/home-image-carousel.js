@@ -102,10 +102,21 @@
     host.id = "home-image-carousel";
     host.className = "hic-card";
     host.innerHTML = `
-<div class="hic-head">
-  <div class="hic-title">Featured Images</div>
-  <button type="button" class="hic-randomize" aria-label="Randomize images">Randomize</button>
-</div>
+  <div class="hic-head">
+    <div class="hic-title"
+         data-i18n-en="Featured Images"
+         data-i18n-cy="Delweddau Nodwedd">
+      Featured Images
+    </div>
+
+    <button type="button"
+            class="hic-randomize"
+            aria-label="Randomize images"
+            data-i18n-en="Randomize"
+            data-i18n-cy="Hapio">
+      Randomize
+    </button>
+  </div>
 
 
       <div class="hic-body">
@@ -261,12 +272,20 @@ const move = (dir) => {
     _rows: null,
     _controller: null,
 
-    async render() {
+    async render(lang = "en") {
       const host = ensureShell();
       if (!host) {
         console.warn("HomeImageCarousel: .botd-slot not found (home not rendered yet).");
         return;
       }
+applyCarouselLanguage(host, lang);
+      function applyCarouselLanguage(host, langPref) {
+  const attr = (langPref === "cy") ? "data-i18n-cy" : "data-i18n-en";
+  host.querySelectorAll("[data-i18n-en]").forEach(el => {
+    const txt = el.getAttribute(attr);
+    if (txt) el.textContent = txt;
+  });
+}
 
       // Load CSV once per session
       if (!this._rows) {
