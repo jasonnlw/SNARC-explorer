@@ -2992,4 +2992,18 @@ header.aps-header button.aps-filters-toggle {
     width: 100%;
   }
 }
+/* =========================================================
+   DESKTOP ONLY (>=900px)
+   Hide native horizontal scrollbar (keep scroll functionality)
+   ========================================================= */
+@media (min-width: 900px){
+  .hic-viewport{
+    scrollbar-width: none;        /* Firefox */
+    -ms-overflow-style: none;     /* IE 10+ / old Edge */
+  }
+
+  .hic-viewport::-webkit-scrollbar{
+    display: none;                /* Chrome, Safari, Edge */
+  }
+}
 
