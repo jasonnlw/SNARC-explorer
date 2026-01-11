@@ -102,11 +102,11 @@
     host.id = "home-image-carousel";
     host.className = "hic-card";
     host.innerHTML = `
-      <div class="hic-head">
-        <button type="button" class="hic-randomize" aria-label="Randomize images">Randomize</button>
-        <div class="hic-title">Featured Images</div>
-        <div style="width: 84px;"></div>
-      </div>
+<div class="hic-head">
+  <div class="hic-title">Featured Images</div>
+  <button type="button" class="hic-randomize" aria-label="Randomize images">Randomize</button>
+</div>
+
 
       <div class="hic-body">
         <button type="button" class="hic-arrow prev" aria-label="Previous">&#8592;</button>
