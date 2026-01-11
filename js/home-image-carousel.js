@@ -113,7 +113,7 @@
             class="hic-randomize"
             aria-label="Randomize images"
             data-i18n-en="Randomize"
-            data-i18n-cy="Hapio">
+            data-i18n-cy="Ar Hap">
       Randomize
     </button>
   </div>
