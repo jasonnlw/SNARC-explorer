@@ -2850,8 +2850,8 @@ header.aps-header button.aps-filters-toggle {
    ========================================================= */
 @media (max-width: 767px){
   .hic-head{
-    padding-left: 2rem;
-    padding-right: 2rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
   }
 
   /* Ensure title comes first visually */
