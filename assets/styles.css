@@ -2667,3 +2667,163 @@ header.aps-header button.aps-filters-toggle {
 .botd-block + .map-block{
   margin-top: 0 !important;
 }
+/* =========================================================
+   Home Image Carousel Card
+   ========================================================= */
+
+.hic-card{
+  background: #FF9F00;
+  border: 2px solid #FF9F00;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: auto 1fr; /* header + content */
+  height: var(--botd-card-h);   /* match BOTD on desktop */
+  text-decoration: none;
+  color: inherit;
+}
+
+.hic-head{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-weight: 700;
+  line-height: 1.2;
+  font-size: 1.25rem;
+}
+
+.hic-randomize{
+  appearance: none;
+  border: 2px solid rgba(255,255,255,0.8);
+  background: rgba(255,255,255,0.15);
+  color: #fff;
+  padding: 0.35rem 0.6rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.hic-randomize:hover{
+  background: rgba(255,255,255,0.25);
+}
+
+.hic-body{
+  position: relative;
+  padding: 10px 10px 2rem; /* keep “2rem bottom padding” analogue */
+  min-height: 0;          /* allow internal scrollers/fit */
+}
+
+/* Nav arrows */
+.hic-arrow{
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 3;
+  width: 40px;
+  height: 40px;
+  border: 2px solid rgba(255,255,255,0.85);
+  background: rgba(0,0,0,0.25);
+  color: #fff;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+}
+
+.hic-arrow:hover{ background: rgba(0,0,0,0.35); }
+
+.hic-arrow.prev{ left: 10px; }
+.hic-arrow.next{ right: 10px; }
+
+/* Carousel viewport/track */
+.hic-viewport{
+  height: 100%;
+  overflow: hidden;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.15);
+}
+
+.hic-track{
+  height: 100%;
+  display: flex;
+  transition: transform 300ms ease;
+  will-change: transform;
+}
+
+/* Slide sizing: JS will compute slides-per-view.
+   Make slide width a variable so you can tune density. */
+:root{
+  --hic-slide-w: 260px; /* desktop slide width baseline */
+}
+
+.hic-slide{
+  flex: 0 0 var(--hic-slide-w);
+  height: 100%;
+  display: grid;
+  grid-template-rows: 1fr auto; /* image + title */
+  border-right: 10px solid transparent; /* breathing room between slides */
+  box-sizing: border-box;
+}
+
+.hic-slide a{
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.hic-img{
+  background: #fff;
+  overflow: hidden;
+}
+
+.hic-img img{
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center;
+}
+
+.hic-caption{
+  background: rgba(0,0,0,0.55);
+  color: #fff;
+  padding: 0.5rem 0.6rem;
+  font-weight: 700;
+  font-size: 0.9rem;
+  line-height: 1.2;
+
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+/* Mobile: carousel card stacks under BOTD and uses natural height */
+@media (max-width: 767px){
+  .hic-card{
+    height: auto;
+    min-height: 360px;
+  }
+
+  .hic-body{
+    padding: 12px 1rem 2rem;
+  }
+
+  /* One image at a time on mobile */
+  :root{
+    --hic-slide-w: calc(100% - 0px);
+  }
+
+  .hic-arrow{
+    width: 36px;
+    height: 36px;
+  }
+}
+
+/* Tablet: still likely 1-up, but allow slightly wider slides */
+@media (min-width: 768px) and (max-width: 899px){
+  :root{
+    --hic-slide-w: 300px;
+  }
+}
