@@ -134,6 +134,29 @@ LIMIT 1
 }
 };
 
+// Convert a Wikimedia Commons file URL into a smaller thumbnail URL.
+// Works best when the URL is Special:FilePath/<filename>.
+function commonsThumb(url, width = 420) {
+  if (!url) return "";
+
+  const u = String(url);
+
+  // If it's already requesting a specific width/height, don't override.
+  if (/[?&](width|height)=\d+/i.test(u)) return u;
+
+  // Commons pattern commonly returned by Wikidata/Wikibase:
+  // https://commons.wikimedia.org/wiki/Special:FilePath/Filename.jpg
+  // Commons supports: ?width=XXX
+  if (u.includes("commons.wikimedia.org/wiki/Special:FilePath/")) {
+    return u + (u.includes("?") ? "&" : "?") + "width=" + encodeURIComponent(width);
+  }
+
+  // If it's already a /thumb/ URL, it is a thumbnail; leave it alone.
+  if (u.includes("/thumb/")) return u;
+
+  // Otherwise, we don't know how to safely thumb it; return as-is.
+  return u;
+}
 
 function buildCardHTML(data, lang) {
   const tz = "Europe/London";
@@ -170,8 +193,19 @@ if (m) {
   const esc = (s) => String(s || "").replace(/[&<>"']/g, c => ({
     "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"
   }[c]));
+const thumb1x = data.image ? commonsThumb(data.image, 420) : "";
+const thumb2x = data.image ? commonsThumb(data.image, 840) : "";
 
-  const img = data.image ? `<img src="${esc(data.image)}" alt="${esc(data.label)}">` : "";
+const img = data.image
+  ? `<img
+       src="${esc(thumb1x)}"
+       srcset="${esc(thumb1x)} 1x, ${esc(thumb2x)} 2x"
+       alt="${esc(data.label)}"
+       loading="lazy"
+       decoding="async"
+     >`
+  : "";
+const img = data.image ? `<img src="${esc(data.image)}" alt="${esc(data.label)}">` : "";
 
 return `
   <a class="botd-card" href="${esc(href)}" aria-label="${esc(title)}: ${esc(data.label)}">
