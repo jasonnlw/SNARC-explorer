@@ -2695,19 +2695,41 @@ header.aps-header button.aps-filters-toggle {
   font-size: 1.25rem;
 }
 
+/* =========================================================
+   Carousel – Randomize button (match global button style)
+   ========================================================= */
 .hic-randomize{
-  appearance: none;
-  border: 2px solid rgba(255,255,255,0.8);
-  background: rgba(255,255,255,0.15);
-  color: #fff;
-  padding: 0.35rem 0.6rem;
-  font-weight: 700;
+  margin-left: 0.25rem;
+  padding: 0.4rem 0.6rem;
+
+  border: 1px solid #ccc;
+  background: #fff;
+  border-radius: 8px;
+
   cursor: pointer;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #FF9F00;
+
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  /* reset earlier carousel-specific styling */
+  appearance: none;
+  box-shadow: none;
 }
 
+/* Hover / focus states to match other controls */
 .hic-randomize:hover{
-  background: rgba(255,255,255,0.25);
+  background: #f7f7f7;
 }
+
+.hic-randomize:focus-visible{
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(48,152,152,0.25);
+}
+
 
 .hic-body{
   position: relative;
