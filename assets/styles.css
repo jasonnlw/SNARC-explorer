@@ -2534,17 +2534,18 @@ header.aps-header button.aps-filters-toggle {
 
 /* =========================================================
    DESKTOP (>=768px)
-   - Fixed-width track to prevent stretch
-   - Card size controlled via CSS variables
+   - Fixed-width track (no stretch)
+   - Deterministic vertical layout (no dead space)
    ========================================================= */
 @media (min-width: 768px){
+
   /* Desktop alignment gutter (orange) */
   .botd-block{
     padding-left: 2rem;
     background: #F4631E;
   }
 
-  /* 1-up: fixed card width; shrink-wrap grid so it doesn't stretch */
+  /* 1-up fixed-width mosaic */
   .botd-slot{
     gap: var(--botd-gap) !important;
     grid-template-columns: var(--botd-card-w);
@@ -2553,20 +2554,35 @@ header.aps-header button.aps-filters-toggle {
     max-width: 100%;
   }
 
+  /* Card = header + body fills remainder */
   .botd-card{
+    display: grid;
+    grid-template-rows: auto 1fr;
     width: var(--botd-card-w);
     height: var(--botd-card-h);
   }
 
+  /* Body fills remaining height and controls internal layout */
   .botd-card-body{
+    height: 100%;
     padding: var(--botd-pad-top) var(--botd-pad-x) var(--botd-pad-bottom);
+    display: grid;
+    grid-template-rows: var(--botd-image-h) 1fr;
+    gap: 10px;
+    min-height: 0;
   }
 
-  /* Deterministic desktop image size (no aspect-ratio conflicts) */
+  /* Image fills its grid row */
   .botd-image{
-    height: var(--botd-image-h);
+    height: auto;
+    min-height: 0;
+  }
+
+  .botd-info{
+    min-height: 0;
   }
 }
+
 
 /* 2-up mosaic when you add the next card */
 @media (min-width: 900px){
