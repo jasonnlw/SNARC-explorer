@@ -160,21 +160,38 @@ function wireCarousel(host) {
     timer = setInterval(() => move(1), AUTO_MS);
   };
 
-  const move = (dir) => {
-    if (!viewport) return;
+const move = (dir) => {
+  if (!viewport) return;
 
-    // Scroll by (almost) one viewport width so multiple images remain visible
+  const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
+
+  if (isDesktop()) {
+    // Desktop: keep your existing behaviour (natural width, multiple visible)
     const step = Math.max(200, Math.floor(viewport.clientWidth * 0.85));
-    const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
-
     let next = viewport.scrollLeft + (dir * step);
 
-    // Wrap around
     if (next > maxScroll - 5) next = 0;
     if (next < 0) next = maxScroll;
 
     viewport.scrollTo({ left: next, behavior: "smooth" });
-  };
+    return;
+  }
+
+  // Mobile: EXACT one-slide stepping using viewport width
+  const step = Math.max(1, viewport.clientWidth);
+
+  // snap current position to nearest slide boundary first
+  const current = Math.round(viewport.scrollLeft / step) * step;
+
+  let next = current + (dir * step);
+
+  // wrap around cleanly
+  if (next > maxScroll) next = 0;
+  if (next < 0) next = Math.round(maxScroll / step) * step;
+
+  viewport.scrollTo({ left: next, behavior: "smooth" });
+};
+
 
   btnPrev?.addEventListener("click", () => { move(-1); start(); });
   btnNext?.addEventListener("click", () => { move(1); start(); });
@@ -185,10 +202,16 @@ function wireCarousel(host) {
 
   // Keep scroll position valid on resize
   window.addEventListener("resize", () => {
-    if (!viewport) return;
+  if (!viewport) return;
+  if (!isDesktop()) {
+    const step = Math.max(1, viewport.clientWidth);
+    viewport.scrollLeft = Math.round(viewport.scrollLeft / step) * step;
+  } else {
     const maxScroll = Math.max(0, viewport.scrollWidth - viewport.clientWidth);
     if (viewport.scrollLeft > maxScroll) viewport.scrollLeft = maxScroll;
-  });
+  }
+});
+
 
   // Keep API compatible with your existing code
   return {
