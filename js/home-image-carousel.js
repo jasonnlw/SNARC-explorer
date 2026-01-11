@@ -271,44 +271,55 @@ const move = (dir) => {
   window.HomeImageCarousel = {
     _rows: null,
     _controller: null,
+    _hostEl: null,
 
-    async render(lang = "en") {
-      const host = ensureShell();
-      if (!host) {
-        console.warn("HomeImageCarousel: .botd-slot not found (home not rendered yet).");
-        return;
+   async render(lang = "en") {
+  const host = ensureShell();
+  if (!host) {
+    console.warn("HomeImageCarousel: .botd-slot not found (home not rendered yet).");
+    return;
+  }
+
+  // Apply EN/CY labels
+  applyCarouselLanguage(host, lang);
+
+  // IMPORTANT: If the home page has been re-rendered, this is a new DOM element.
+  // Rebind arrow + randomize handlers to the new buttons.
+  if (this._hostEl !== host) {
+    // Stop any previous autoplay timer
+    this._controller?.stop?.();
+
+    // Track current host instance
+    this._hostEl = host;
+
+    // Re-wire arrow navigation (binds to elements inside this host)
+    this._controller = wireCarousel(host);
+
+    // Bind Randomize once per host element
+    const btnRand = host.querySelector(".hic-randomize");
+    if (btnRand && !btnRand.dataset.hicBound) {
+      btnRand.dataset.hicBound = "1";
+      btnRand.addEventListener("click", () => this.randomize());
+    }
+  }
+
+  // Load CSV once per session
+  if (!this._rows) {
+    try {
+      this._rows = await loadCSV();
+    } catch (err) {
+      console.error("HomeImageCarousel: CSV load failed", err);
+      const track = host.querySelector(".hic-track");
+      if (track) {
+        track.innerHTML = `<div style="padding:1rem;color:#fff;font-weight:700;">Images unavailable.</div>`;
       }
-applyCarouselLanguage(host, lang);
-      function applyCarouselLanguage(host, langPref) {
-  const attr = (langPref === "cy") ? "data-i18n-cy" : "data-i18n-en";
-  host.querySelectorAll("[data-i18n-en]").forEach(el => {
-    const txt = el.getAttribute(attr);
-    if (txt) el.textContent = txt;
-  });
-}
+      return;
+    }
+  }
 
-      // Load CSV once per session
-      if (!this._rows) {
-        try {
-          this._rows = await loadCSV();
-        } catch (err) {
-          console.error("HomeImageCarousel: CSV load failed", err);
-          const track = host.querySelector(".hic-track");
-          if (track) track.innerHTML = `<div style="padding:1rem;color:#fff;font-weight:700;">Images unavailable.</div>`;
-          return;
-        }
-      }
+  await this.randomize();
+},
 
-      // Wire controls once
-      if (!this._controller) {
-        this._controller = wireCarousel(host);
-
-        const btnRand = host.querySelector(".hic-randomize");
-        btnRand?.addEventListener("click", () => this.randomize());
-      }
-
-      await this.randomize();
-    },
 
     async randomize() {
       const host = document.getElementById("home-image-carousel") || ensureShell();
@@ -331,5 +342,16 @@ if (viewport) viewport.scrollLeft = 0;
       this._controller?.snap?.();
       this._controller?.start?.();
     }
+
+    // BFCache: when returning via Back/Forward, restart autoplay if carousel exists
+window.addEventListener("pageshow", (e) => {
+  if (!e.persisted) return; // only BFCache restores
+  try {
+    window.HomeImageCarousel?._controller?.start?.();
+  } catch (err) {
+    console.warn("HomeImageCarousel pageshow restart failed", err);
+  }
+});
+
   };
 })();
