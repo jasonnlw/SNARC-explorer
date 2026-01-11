@@ -3046,4 +3046,39 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
+@media (max-width: 767px){
+  .hic-viewport{
+    overflow: hidden; /* arrows control movement; avoids partial manual scroll */
+  }
+
+  .hic-track{
+    display: flex;
+    flex-wrap: nowrap;
+    height: 100%;
+  }
+
+  /* One slide = exactly one viewport width */
+  .hic-slide{
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: 100%;
+    border-right: 0 !important;
+    box-sizing: border-box;
+  }
+
+  /* Mobile uses cropped fill */
+  .hic-img{
+    height: 100%;
+    overflow: hidden;
+    background: #fff;
+  }
+
+  .hic-img img{
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center;
+    display: block;
+  }
+}
 
