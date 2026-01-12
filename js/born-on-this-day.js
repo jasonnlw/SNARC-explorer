@@ -180,17 +180,28 @@ if (m) {
   // Build a UTC date from components (no timezone interpretation of the original string)
   const d = new Date(Date.UTC(y, mo - 1, da));
 
-  birthText = new Intl.DateTimeFormat(locale, {
-    timeZone: "UTC",          // critical: keep the calendar day stable
+const dayNum = d.getUTCDate();
+const yearNum = d.getUTCFullYear();
+
+if (lang === "cy") {
+  const monthsCy = [
+    "Ionawr", "Chwefror", "Mawrth", "Ebrill", "Mai", "Mehefin",
+    "Gorffennaf", "Awst", "Medi", "Hydref", "Tachwedd", "Rhagfyr"
+  ];
+  const monthNameCy = monthsCy[d.getUTCMonth()];
+  birthText = `${dayNum} ${monthNameCy} ${yearNum}`;
+} else {
+  // Keep Intl for English (and any future locales you may add)
+  birthText = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "UTC",
     day: "numeric",
     month: "long",
-    year: "numeric"
-  }).format(d);
+    year: "numeric",
+}).format(d);
+  }
 } else {
   birthText = "";
-}    
-  }
-
+}
   const title = (lang === "cy") ? "Ganwyd ar y dydd hwn" : "Born on this day";
 
   // Basic HTML escaping for text fields
