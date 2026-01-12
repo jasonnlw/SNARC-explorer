@@ -41,7 +41,7 @@ home.innerHTML = `
     <h1>${lang === "cy" ? "Chwilio. Archwilio. Darganfod" : "Search. Explore. Discover."}</h1>
     <p>${lang === "cy"
       ? "Defnyddiwch y blwch chwilio a'r offer isod i archwilio endidau sy'n gysylltiedig â chasgliadau Llyfrgell Genedlaethol Cymru a chynnwys treftadaeth Gymreig arall."
-      : "Use the search bar and tools below to explore entities conected with National Library of Wales collections and other Welsh heritage content"}
+      : "Use the search bar and tools below to explore entities connected with National Library of Wales collections and other Welsh heritage content"}
     </p>
   </div>
 </section>
