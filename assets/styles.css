@@ -3246,7 +3246,7 @@ header.aps-header button.aps-filters-toggle {
 .home-hero-content{
   position: relative;
   z-index: 1;
-  padding: 1.25rem 2rem 4rem;  /* extra depth: increase bottom padding */
+  padding: 1.25rem 2rem 5rem;  /* extra depth: increase bottom padding */
 }
 
 /* Optional: tighten headings if needed */
@@ -3260,7 +3260,7 @@ header.aps-header button.aps-filters-toggle {
   .home-hero-content{
     padding-left: 1rem;
     padding-right: 1rem;
-    padding-bottom: 2rem;
+    padding-bottom: 3rem;
   }
 }
 .home-hero-content h1{
@@ -3274,7 +3274,7 @@ header.aps-header button.aps-filters-toggle {
 }
 
 .home-hero-content h1{
-  color: #fff;
+  color: #CB0404;
   font-weight: 800;         /* slightly bolder than default */
   letter-spacing: 0.2px;   /* subtle emphasis (optional) */
 }
