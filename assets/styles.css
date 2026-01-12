@@ -36,8 +36,8 @@ body {
 /* ===== Remove frame on desktop ===== */
 main {
   max-width: 2500px;
-  margin: 1rem auto;
-  padding: 0; /* no page frame */
+  margin: 0 auto;   /* no vertical gap */
+  padding: 0;
 }
 
 /* ===== Full-width mobile layout ===== */
