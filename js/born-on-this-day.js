@@ -166,42 +166,46 @@ function buildCardHTML(data, lang) {
   const tz = "Europe/London";
   const locale = (lang === "cy") ? "cy-GB" : "en-GB";
   const href = `#/item/${data.qid}`;
-  let birthText = "";
-  if (data.birthDate) {
-    // Wikibase timeValue is ISO; Date can parse it
+  
+ let birthText = "";
 
-// Treat Wikibase timeValue as a *date*, not a timestamp, to avoid TZ drift.
-const m = String(data.birthDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
-if (m) {
-  const y = Number(m[1]);
-  const mo = Number(m[2]); // 1-12
-  const da = Number(m[3]); // 1-31
+if (data.birthDate) {
+  // Treat Wikibase timeValue as a *date*, not a timestamp, to avoid TZ drift.
+  const m = String(data.birthDate).match(/^(\d{4})-(\d{2})-(\d{2})/);
 
-  // Build a UTC date from components (no timezone interpretation of the original string)
-  const d = new Date(Date.UTC(y, mo - 1, da));
+  if (m) {
+    const y = Number(m[1]);
+    const mo = Number(m[2]); // 1-12
+    const da = Number(m[3]); // 1-31
 
-const dayNum = d.getUTCDate();
-const yearNum = d.getUTCFullYear();
+    // Build a UTC date from components (no timezone interpretation of the original string)
+    const d = new Date(Date.UTC(y, mo - 1, da));
 
-if (lang === "cy") {
-  const monthsCy = [
-    "Ionawr", "Chwefror", "Mawrth", "Ebrill", "Mai", "Mehefin",
-    "Gorffennaf", "Awst", "Medi", "Hydref", "Tachwedd", "Rhagfyr"
-  ];
-  const monthNameCy = monthsCy[d.getUTCMonth()];
-  birthText = `${dayNum} ${monthNameCy} ${yearNum}`;
-} else {
-  // Keep Intl for English (and any future locales you may add)
-  birthText = new Intl.DateTimeFormat("en-GB", {
-    timeZone: "UTC",
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-}).format(d);
+    const dayNum = d.getUTCDate();
+    const yearNum = d.getUTCFullYear();
+
+    if (lang === "cy") {
+      const monthsCy = [
+        "Ionawr", "Chwefror", "Mawrth", "Ebrill", "Mai", "Mehefin",
+        "Gorffennaf", "Awst", "Medi", "Hydref", "Tachwedd", "Rhagfyr"
+      ];
+      const monthNameCy = monthsCy[d.getUTCMonth()];
+      birthText = `${dayNum} ${monthNameCy} ${yearNum}`;
+    } else {
+      birthText = new Intl.DateTimeFormat("en-GB", {
+        timeZone: "UTC",
+        day: "numeric",
+        month: "long",
+        year: "numeric"
+      }).format(d);
+    }
+  } else {
+    birthText = "";
   }
 } else {
   birthText = "";
 }
+
   const title = (lang === "cy") ? "Ganwyd ar y dydd hwn" : "Born on this day";
 
   // Basic HTML escaping for text fields
