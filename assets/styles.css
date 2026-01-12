@@ -3227,7 +3227,7 @@ header.aps-header button.aps-filters-toggle {
    ========================================================= */
 .home-hero{
   position: relative;
-  background: #fff;              /* white behind video */
+  background: #421706;              /* white behind video */
   overflow: hidden;
 }
 
@@ -3270,11 +3270,11 @@ header.aps-header button.aps-filters-toggle {
    Home hero text styling
    ========================================================= */
 .home-hero-content{
-  color: #CB0404;              /* default text colour */
+  color: #fff;              /* default text colour */
 }
 
 .home-hero-content h1{
-  color: #CB0404;
+  color: #fff;
   font-weight: 800;         /* slightly bolder than default */
   letter-spacing: 0.2px;   /* subtle emphasis (optional) */
 }
