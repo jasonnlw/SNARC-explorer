@@ -3197,4 +3197,29 @@ header.aps-header button.aps-filters-toggle {
   }
 }
 
+/* Footer: remove centered max-width on desktop (full-bleed content with 2rem padding) */
+@media (min-width: 768px){
+  .site-footer-inner{
+    max-width: none;
+    width: 100%;
+    margin: 0;           /* remove auto-centering */
+  }
+}
+/* Home (mobile): eliminate any trailing whitespace below footer */
+@media (max-width: 767px){
+  #homeContainer .home-wrapper{
+    padding-bottom: 0 !important;
+    margin-bottom: 0 !important;
+  }
+
+  #homeContainer #advanced-person-search.aps-section{
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+
+  #homeContainer .aps-pagination{
+    margin-bottom: 0 !important;
+    padding-bottom: 0 !important;
+  }
+}
 
