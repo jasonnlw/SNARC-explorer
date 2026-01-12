@@ -26,13 +26,26 @@ home.innerHTML = `
 
     <div class="home-wrapper">
 
-      <section class="home-header">
-        <h1>${lang === "cy" ? "Croeso i SNARC Explorer" : "Welcome to SNARC Explorer"}</h1>
-        <p>${lang === "cy"
-          ? "Defnyddiwch y bar chwilio uchod neu archwiliwch y map."
-          : "Use the search bar above or explore the map below."}
-        </p>
-      </section>
+     <section class="home-header home-hero">
+  <video class="home-hero-video"
+         autoplay
+         muted
+         loop
+         playsinline
+         preload="metadata"
+         aria-hidden="true">
+    <source src="assets/150521-798441460_small.mp4" type="video/mp4">
+  </video>
+
+  <div class="home-hero-content">
+    <h1>${lang === "cy" ? "Croeso i SNARC Explorer" : "Welcome to SNARC Explorer"}</h1>
+    <p>${lang === "cy"
+      ? "Defnyddiwch y bar chwilio uchod neu archwiliwch y map."
+      : "Use the search bar above or explore the map below."}
+    </p>
+  </div>
+</section>
+
 
 <section class="botd-block" aria-label="Born on this day">
   <div id="botd-card-slot" class="botd-slot">
