@@ -17,6 +17,8 @@ Home.initHomePage = async function (lang = "en") {
   home.style.display = "block";
   app.style.display = "none";
 
+// Force home page to start at top (immediately)
+window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   // ---------------------------------------------------------
   // Render homepage content (map block included)
   // ---------------------------------------------------------
@@ -277,6 +279,10 @@ home.innerHTML = `
     </div>
   `;
 
+// Force again after DOM injection (prevents restored scroll/BFCache oddities)
+requestAnimationFrame(() => {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+});
 
 
 
@@ -309,6 +315,12 @@ if (window.HomeImageCarousel && typeof window.HomeImageCarousel.render === "func
     console.error("HomeImageCarousel.render failed:", err);
   }
 }
+
+  // Final clamp after top-of-page features load
+requestAnimationFrame(() => {
+  window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+});
+
 
      // ---------------------------------------------------------
   // NEW: Load facet JSON data and initialise Advanced Search
@@ -357,3 +369,20 @@ if (window.HomeImageCarousel && typeof window.HomeImageCarousel.render === "func
   }
 
 };
+// BFCache: when returning via Back/Forward to home, force top
+window.addEventListener("pageshow", (e) => {
+  if (!e.persisted) return;
+
+  // Only force top if home is the active view
+  const home = document.getElementById("homeContainer");
+  const app = document.getElementById("app");
+
+  const homeVisible = home && home.style.display !== "none";
+  const appHidden = app && app.style.display === "none";
+
+  if (homeVisible && appHidden) {
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    });
+  }
+});
