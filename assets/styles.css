@@ -3227,7 +3227,7 @@ header.aps-header button.aps-filters-toggle {
    ========================================================= */
 .home-hero{
   position: relative;
-  background: #421706;              /* white behind video */
+  background: #2e140a;              /* white behind video */
   overflow: hidden;
 }
 
@@ -3238,7 +3238,7 @@ header.aps-header button.aps-filters-toggle {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  opacity: 0.2;                  /* 50% transparency */
+  opacity: 0.3;                  /* 50% transparency */
   pointer-events: none;          /* avoid clicks */
 }
 
