@@ -3101,4 +3101,68 @@ header.aps-header button.aps-filters-toggle {
     display: block;
   }
 }
+/* =========================================================
+   Site Footer (EN/CY via data-i18n)
+   ========================================================= */
+.site-footer{
+  background: #2b2b2b;          /* charcoal */
+  color: #fff;
+  margin-top: 0;
+  padding: 1.25rem 1rem;
+}
+
+.site-footer-inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.25rem;
+}
+
+.site-footer-title{
+  font-size: 0.95rem;
+  margin: 0 0 0.5rem 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.site-footer-link{
+  color: #fff;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-weight: 600;
+}
+
+.site-footer-link:hover{
+  opacity: 0.9;
+}
+
+.site-footer-text{
+  margin: 0;
+  line-height: 1.5;
+  font-size: 0.95rem;
+  opacity: 0.95;
+}
+
+.site-footer-credit{
+  margin: 0.75rem 0 0 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  opacity: 0.95;
+}
+
+/* Desktop layout */
+@media (min-width: 900px){
+  .site-footer{
+    padding: 1.5rem 2rem;
+  }
+
+  .site-footer-inner{
+    grid-template-columns: 320px 1fr;  /* links column + info column */
+    align-items: start;
+  }
+}
 
