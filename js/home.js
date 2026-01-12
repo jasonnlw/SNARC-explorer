@@ -284,14 +284,14 @@ home.innerHTML = `
 // Update homepage bilingual labels (Map header etc.)
 // ---------------------------------------------------------
 {
-  const root = home;
   const attr = (lang === "cy") ? "data-i18n-cy" : "data-i18n-en";
 
-  root.querySelectorAll("[data-i18n-en]").forEach(el => {
+  document.querySelectorAll("[data-i18n-en]").forEach(el => {
     const txt = el.getAttribute(attr);
     if (txt) el.textContent = txt;
   });
 }
+
 
   // Born on This Day card
 if (window.BornOnThisDay && typeof window.BornOnThisDay.render === "function") {
