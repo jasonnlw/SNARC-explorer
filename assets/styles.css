@@ -36,8 +36,8 @@ body {
 /* ===== Remove frame on desktop ===== */
 main {
   max-width: 2500px;
-  margin: 0 auto;   /* no vertical gap */
-  padding: 0;
+  margin: 0 auto;
+  padding: 2rem;
 }
 
 /* ===== Full-width mobile layout ===== */
@@ -3222,6 +3222,15 @@ header.aps-header button.aps-filters-toggle {
     padding-bottom: 0 !important;
   }
 }
+
+main {
+  padding: 2rem;
+}
+
+main#homeContainer {
+  padding: 0;
+}
+
 /* =========================================================
    Home hero header with looping video background
    ========================================================= */
