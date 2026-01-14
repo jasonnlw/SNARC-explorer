@@ -3223,16 +3223,22 @@ header.aps-header button.aps-filters-toggle {
   }
 }
 
-main {
+/* NON-HOME pages only: space below header */
+main:not(#homeContainer){
   padding-top: 2rem !important;
   padding-left: 0 !important;
   padding-right: 0 !important;
   padding-bottom: 0 !important;
 }
 
-main#homeContainer {
-  padding: 0;
+/* HOME page: keep flush */
+main#homeContainer{
+  padding-top: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  padding-bottom: 0 !important;
 }
+
 
 /* =========================================================
    Home hero header with looping video background
