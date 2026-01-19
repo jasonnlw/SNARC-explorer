@@ -81,6 +81,14 @@ a { color: #0645ad; }
   margin: 10px 0 20px;
 }
 
+@media (min-width: 768px) {
+.gallery {
+  background: #CB0404;
+  padding: 10px;
+  border-radius: 10px;
+}
+}
+
 .gallery-item {
   display: flex;
   justify-content: center;
