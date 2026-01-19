@@ -137,36 +137,39 @@ a { color: #0645ad; }
 
 .gallery-item:hover img { transform: scale(1.03); }
 
-/* Desktop-only: full-bleed background WITHOUT changing gallery width */
+/* Desktop-only: full-bleed band background, constrained gallery */
 @media (min-width: 768px) {
   .gallery-band{
     position: relative;
-    padding: 10px 0;      /* vertical spacing only */
+    padding: 10px 0;      /* vertical band padding only */
+    z-index: 0;           /* create a stacking context */
   }
 
+  /* Full-bleed background layer (painted behind content, not behind the page) */
   .gallery-band::before{
     content: "";
     position: absolute;
     top: 0;
     bottom: 0;
 
-    /* Full-bleed background while the content stays constrained */
     left: 50%;
-    right: 50%;
-    margin-left: -50vw;
-    margin-right: -50vw;
+    width: 100vw;
+    transform: translateX(-50%);
 
     background: #f3f3f3;
-    z-index: -1;
+    z-index: 0;           /* IMPORTANT: not negative */
+    pointer-events: none;
   }
 
-  /* Keep your existing internal spacing */
-  .gallery-band .gallery{
-    padding: 10px;
+  /* Ensure gallery content is above the background */
+  .gallery-band > .gallery{
+    position: relative;
+    z-index: 1;
+    padding: 10px;        /* keep your inner padding */
   }
 }
 
-/* Mobile: no special behaviour */
+/* Mobile: no band behaviour */
 @media (max-width: 767px) {
   .gallery-band{
     padding: 0;
@@ -175,6 +178,7 @@ a { color: #0645ad; }
     content: none;
   }
 }
+
 
 
 
