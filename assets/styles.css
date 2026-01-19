@@ -137,26 +137,48 @@ a { color: #0645ad; }
 
 .gallery-item:hover img { transform: scale(1.03); }
 
-/* Desktop-only: full-bleed band, constrained gallery (matches your working pattern) */
+/* Desktop-only: full-bleed band background, constrained gallery */
 @media (min-width: 768px) {
-  .gallery-band {
-    width: 100vw;
-    margin-left: 50%;
-    transform: translateX(-50%);
-    background: #CB0404;
-    padding: 10px 0;        /* vertical band padding */
+  .gallery-band{
+    position: relative;
+    padding: 10px 0;      /* vertical band padding only */
+    z-index: 0;           /* create a stacking context */
   }
 
-  /* Constrain the gallery back to its original “page” width */
-  .gallery-band > .gallery {
-    display: block;        /* FORCE block context */
-    max-width: 80%;        /* match site content width */
-    margin-left: auto;     /* center horizontally */
-    margin-right: auto;
-    padding: 0 10px;
-    box-sizing: border-box;
+  /* Full-bleed background layer (painted behind content, not behind the page) */
+  .gallery-band::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+
+    background: #CB0404;
+    z-index: 0;           /* IMPORTANT: not negative */
+    pointer-events: none;
+  }
+
+  /* Ensure gallery content is above the background */
+  .gallery-band > .gallery{
+    position: relative;
+    z-index: 1;
+    padding: 10px;        /* keep your inner padding */
   }
 }
+
+/* Mobile: no band behaviour */
+@media (max-width: 767px) {
+  .gallery-band{
+    padding: 0;
+  }
+  .gallery-band::before{
+    content: none;
+  }
+}
+
 
 
 
