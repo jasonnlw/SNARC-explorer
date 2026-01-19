@@ -137,28 +137,45 @@ a { color: #0645ad; }
 
 .gallery-item:hover img { transform: scale(1.03); }
 
-/* Desktop-only full-bleed gallery background */
+/* Desktop-only: full-bleed background WITHOUT changing gallery width */
 @media (min-width: 768px) {
-  .gallery-band {
-    width: 100vw;
-    margin-left: calc(50% - 50vw);
-    background: #f3f3f3;
-    padding: 10px 0;
-    overflow-x: hidden;
+  .gallery-band{
+    position: relative;
+    padding: 10px 0;      /* vertical spacing only */
   }
 
-  .gallery-band .gallery {
+  .gallery-band::before{
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    /* Full-bleed background while the content stays constrained */
+    left: 50%;
+    right: 50%;
+    margin-left: -50vw;
+    margin-right: -50vw;
+
+    background: #f3f3f3;
+    z-index: -1;
+  }
+
+  /* Keep your existing internal spacing */
+  .gallery-band .gallery{
     padding: 10px;
   }
 }
+
+/* Mobile: no special behaviour */
 @media (max-width: 767px) {
-  .gallery-band {
-    width: auto;
-    margin-left: 0;
-    background: transparent;
+  .gallery-band{
     padding: 0;
   }
+  .gallery-band::before{
+    content: none;
+  }
 }
+
 
 
 /* ========== MAP THUMBNAILS ========== */
