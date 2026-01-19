@@ -149,9 +149,11 @@ a { color: #0645ad; }
 
   /* Constrain the gallery back to its original “page” width */
   .gallery-band > .gallery {
-    max-width: 80%;         /* <-- match your site’s content width */
-    margin: 0 auto;
-    padding: 0 10px;        /* optional: keep inner breathing room */
+    display: block;        /* FORCE block context */
+    max-width: 80%;        /* match site content width */
+    margin-left: auto;     /* center horizontally */
+    margin-right: auto;
+    padding: 0 10px;
     box-sizing: border-box;
   }
 }
