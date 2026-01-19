@@ -763,7 +763,10 @@ return `
     let galleryHTML = "";
     if (window.currentMediaStmts && window.currentMediaStmts.length) {
        // We add the classes so it occupies space and the mobile ribbon finds it
-       galleryHTML = `<div class="gallery adaptive-gallery-container loading-placeholder" style="min-height:100px;"></div>`;
+       galleryHTML = `
+  <div class="gallery-band">
+    <div class="gallery adaptive-gallery-container loading-placeholder" style="min-height:100px;"></div>
+  </div>`;
     }
 
     // --- Profile + collections tiles ---------------------------------
