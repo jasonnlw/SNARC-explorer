@@ -630,7 +630,7 @@ a { color: #0645ad; }
   width: 100vw;                   /* full screen width */
   margin-left: 50%;
   transform: translateX(-50%);   /* escape parent centering */
-  background: #309898;           /* same grey */
+  background: #F4631E;           /* same grey */
   padding: 2rem 0;               /* keep vertical space */
 }
 
@@ -1047,7 +1047,7 @@ a { color: #0645ad; }
   }
 
   /* Colour themes */
-  .mobile-toggle-info         { background: #309898; }
+  .mobile-toggle-info         { background: #F4631E; }
   .mobile-toggle-collections  { background: #5FCD96; }
   .mobile-toggle-family       { background: #FFB233; }
   .mobile-toggle-images       { background: #FA0808; }
