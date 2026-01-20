@@ -139,7 +139,8 @@ jobs:
           }
           GROUP BY ?item ?itemLabel ?itemDescription ?image ?coords
           `.trim(),
-
+            // NOTE: peoplePlaces is generated via THREE smaller queries below (birth/death/residence)
+            // and merged client-side here to reduce timeout risk.
             peoplePlaces: (langPref) => `
           PREFIX wikibase: <http://wikiba.se/ontology#>
           PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
@@ -150,23 +151,8 @@ jobs:
                  ?birthplacecoords ?deathplacecoords ?residencecoords
                  ?image
           WHERE {
-            OPTIONAL {
-              ?item wdt:P21 ?birthplace .
-              OPTIONAL { ?birthplace wdt:P26 ?birthplacecoords . }
-            }
-            OPTIONAL {
-              ?item wdt:P22 ?deathplace .
-              OPTIONAL { ?deathplace wdt:P26 ?deathplacecoords . }
-            }
-            OPTIONAL {
-              ?item wdt:P78 ?residence .
-              OPTIONAL { ?residence wdt:P26 ?residencecoords . }
-            }
-
-            OPTIONAL { ?item wdt:P31 ?image }
-
-            FILTER(BOUND(?birthplace) || BOUND(?deathplace) || BOUND(?residence))
-
+            # Placeholder (not executed). See PEOPLE_PLACES_QUERIES + runPeoplePlaces().
+            FILTER(false)
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
           }
           `.trim(),
@@ -222,7 +208,133 @@ jobs:
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
           }
           `.trim()
+  };
+
+          // --- Split peoplePlaces into smaller queries to reduce timeouts ---
+          const PEOPLE_PLACES_QUERIES = {
+            birth: (langPref) => `
+          PREFIX wikibase: <http://wikiba.se/ontology#>
+          PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+          PREFIX bd: <http://www.bigdata.com/rdf#>
+
+          SELECT ?item ?itemLabel ?itemDescription
+                 ?birthplace ?birthplacecoords
+                 ?image
+          WHERE {
+            ?item wdt:P21 ?birthplace .
+            OPTIONAL { ?birthplace wdt:P26 ?birthplacecoords . }
+            OPTIONAL { ?item wdt:P31 ?image }
+
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+          }
+          `.trim(),
+
+            death: (langPref) => `
+          PREFIX wikibase: <http://wikiba.se/ontology#>
+          PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+          PREFIX bd: <http://www.bigdata.com/rdf#>
+
+          SELECT ?item ?itemLabel ?itemDescription
+                 ?deathplace ?deathplacecoords
+                 ?image
+          WHERE {
+            ?item wdt:P22 ?deathplace .
+            OPTIONAL { ?deathplace wdt:P26 ?deathplacecoords . }
+            OPTIONAL { ?item wdt:P31 ?image }
+
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+          }
+          `.trim(),
+
+            residence: (langPref) => `
+          PREFIX wikibase: <http://wikiba.se/ontology#>
+          PREFIX wdt: <https://snarc-llgc.wikibase.cloud/prop/direct/>
+          PREFIX bd: <http://www.bigdata.com/rdf#>
+
+          SELECT ?item ?itemLabel ?itemDescription
+                 ?residence ?residencecoords
+                 ?image
+          WHERE {
+            ?item wdt:P78 ?residence .
+            OPTIONAL { ?residence wdt:P26 ?residencecoords . }
+            OPTIONAL { ?item wdt:P31 ?image }
+
+            SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
+          }
+          `.trim()
           };
+
+          function mergePeoplePlaceBindings(...bindingArrays) {
+            // Goal: replicate the single-query output shape (SPARQL JSON bindings),
+            // while avoiding timeouts by splitting into three smaller result sets.
+            //
+            // Strategy:
+            // - Group by item URI.
+            // - Merge non-conflicting bindings into the same row.
+            // - If the same item has multiple distinct values for the same field (rare but possible),
+            //   create additional rows to avoid data loss.
+
+            const byItem = new Map(); // itemUri -> [bindingRow, ...]
+
+            const SHARED_KEYS = new Set(["item", "itemLabel", "itemDescription", "image"]);
+
+            function canMergeRow(row, incoming) {
+              for (const [k, v] of Object.entries(incoming)) {
+                if (SHARED_KEYS.has(k)) continue;
+                if (!row[k]) continue;
+                if (row[k].value !== v.value) return false;
+              }
+              return true;
+            }
+
+            function mergeIntoRow(row, incoming) {
+              for (const [k, v] of Object.entries(incoming)) {
+                if (!row[k]) row[k] = v;
+              }
+              return row;
+            }
+
+            function baseFromRow(row) {
+              const out = {};
+              for (const k of SHARED_KEYS) {
+                if (row[k]) out[k] = row[k];
+              }
+              return out;
+            }
+
+            for (const arr of bindingArrays) {
+              for (const b of (arr || [])) {
+                const itemUri = b && b.item && b.item.value;
+                if (!itemUri) continue;
+
+                const rows = byItem.get(itemUri) || [];
+
+                // Try to merge into an existing compatible row
+                let merged = false;
+                for (const r of rows) {
+                  if (canMergeRow(r, b)) {
+                    mergeIntoRow(r, b);
+                    merged = true;
+                    break;
+                  }
+                }
+
+                if (!merged) {
+                  // Create a new row, inheriting shared fields where possible
+                  const seed = rows.length ? baseFromRow(rows[0]) : {};
+                  rows.push(mergeIntoRow(seed, b));
+                }
+
+                byItem.set(itemUri, rows);
+              }
+            }
+
+            // Flatten to array
+            const out = [];
+            for (const rows of byItem.values()) out.push(...rows);
+            return out;
+          }
+
 
           async function fetchWithRetry(url, tries = 3) {
             let lastErr;
@@ -251,7 +363,34 @@ jobs:
             return `${ENDPOINT}?query=${encodeURIComponent(query)}&format=json`;
           }
 
+          
+          async function runPeoplePlaces(langPref) {
+            const qBirth = PEOPLE_PLACES_QUERIES.birth(langPref);
+            const qDeath = PEOPLE_PLACES_QUERIES.death(langPref);
+            const qRes = PEOPLE_PLACES_QUERIES.residence(langPref);
+
+            const [jsonBirth, jsonDeath, jsonRes] = await Promise.all([
+              fetchWithRetry(snapshotUrl(qBirth), 3),
+              fetchWithRetry(snapshotUrl(qDeath), 3),
+              fetchWithRetry(snapshotUrl(qRes), 3)
+            ]);
+
+            const bBirth = (jsonBirth && jsonBirth.results && jsonBirth.results.bindings) ? jsonBirth.results.bindings : [];
+            const bDeath = (jsonDeath && jsonDeath.results && jsonDeath.results.bindings) ? jsonDeath.results.bindings : [];
+            const bRes   = (jsonRes   && jsonRes.results   && jsonRes.results.bindings)   ? jsonRes.results.bindings   : [];
+
+            const merged = mergePeoplePlaceBindings(bBirth, bDeath, bRes);
+
+            const outPath = path.join(OUT_DIR, `peoplePlaces.${langPref}.json`);
+            fs.writeFileSync(outPath, JSON.stringify(merged, null, 2), "utf8");
+            return { datasetKey: "peoplePlaces", langPref, count: merged.length };
+          }
+
           async function runOne(datasetKey, langPref) {
+            if (datasetKey === "peoplePlaces") {
+              return await runPeoplePlaces(langPref);
+            }
+
             const q = QUERIES[datasetKey](langPref);
             const url = snapshotUrl(q);
             const json = await fetchWithRetry(url, 3);
@@ -261,6 +400,7 @@ jobs:
             fs.writeFileSync(outPath, JSON.stringify(bindings, null, 2), "utf8");
             return { datasetKey, langPref, count: bindings.length };
           }
+
 
           (async () => {
             const datasetKeys = Object.keys(QUERIES);
