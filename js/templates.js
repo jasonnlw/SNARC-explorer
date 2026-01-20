@@ -1261,23 +1261,63 @@ async function loadGalleryAsync(mediaStmts) {
       if (!restImgs.length) return;
 
       // Prefer IntersectionObserver; fallback to sequential idle activation.
-      if ("IntersectionObserver" in window) {
-        const io = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (!entry.isIntersecting) return;
-            const img = entry.target;
-            setSrcFromDataset(img);
-            io.unobserve(img);
-          });
-        }, { root: null, rootMargin: "400px 0px", threshold: 0.01 });
+// Desktop-only: limit concurrent image loads to avoid burst failures
+const isDesktop = window.matchMedia("(min-width: 1024px)").matches;
+const MAX_CONCURRENT = isDesktop ? 6 : Infinity; // do not constrain mobile
 
-        restImgs.forEach(img => io.observe(img));
-      } else {
-        // fallback: activate progressively
-        restImgs.forEach((img, i) => {
-          setTimeout(() => setSrcFromDataset(img), 50 * i);
-        });
-      }
+let inFlight = 0;
+const queue = [];
+
+const startNext = () => {
+  while (inFlight < MAX_CONCURRENT && queue.length) {
+    const img = queue.shift();
+    if (!img || img.dataset.activated) continue;
+
+    inFlight += 1;
+
+    const done = () => {
+      inFlight -= 1;
+      startNext();
+    };
+
+    // count BOTH load and error as "done" so the queue continues
+    img.addEventListener("load", done, { once: true });
+    img.addEventListener("error", done, { once: true });
+
+    setSrcFromDataset(img);
+  }
+};
+
+if ("IntersectionObserver" in window) {
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (!entry.isIntersecting) return;
+      const img = entry.target;
+      io.unobserve(img);
+
+      // enqueue instead of activating immediately
+      queue.push(img);
+    });
+
+    startNext();
+  }, {
+    root: null,
+    // Smaller margin on desktop reduces "everything triggers at once" in 5-column layouts
+    rootMargin: isDesktop ? "150px 0px" : "400px 0px",
+    threshold: 0.01
+  });
+
+  restImgs.forEach(img => io.observe(img));
+} else {
+  // fallback: activate progressively (also concurrency-safe by nature)
+  restImgs.forEach((img, i) => {
+    setTimeout(() => {
+      queue.push(img);
+      startNext();
+    }, 50 * i);
+  });
+}
+
     };
 
     let pending = eagerImgs.length;
