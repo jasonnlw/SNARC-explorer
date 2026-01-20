@@ -848,7 +848,12 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
      window.scrollTo(0, 0);
      injectGalleryDesktopCssOnce();
 
-
+   // --- 1. Trigger Async Gallery Load (Background Process) ---
+    if (window.currentMediaStmts && window.currentMediaStmts.length) {
+      // This runs in parallel and updates the DOM when images are ready
+      loadGalleryAsync(window.currentMediaStmts);
+    }
+     
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
     const treeContainer = document.getElementById("familyChartContainer");
     if (treeContainer) {
@@ -1024,24 +1029,13 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
       
 
       // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
-if (nowOpen) {
-  if (typeof initLeafletMaps === "function") {
-    initLeafletMaps(sec);
-  }
-
-  if (type === "images" && typeof window.__snarcGallerySync === "function") {
-    window.__snarcGallerySync();
-  }
-}
-
-});
+      if (nowOpen) {
+        initLeafletMaps(sec);
+      }
+    });
 
   }); // <-- Closes mobileSections.forEach
 })(); // <-- Closes setupMobileRibbonSystem IIFE
-// --- Trigger Async Gallery Load AFTER mobile gallery clone exists ---
-if (window.currentMediaStmts && window.currentMediaStmts.length) {
-  loadGalleryAsync(window.currentMediaStmts);
-}
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
@@ -1125,200 +1119,104 @@ initLeafletMaps(document);
 
 } // <-- Closes postRender function
 
-     
-
 // ---------- Async Gallery Loader ----------
-async function loadGalleryAsync(mediaStmts) {
-  const FIRST_BATCH = 10;
-  const CONCURRENCY = 4;
+  async function loadGalleryAsync(mediaStmts) {
+    // 1. Define the HTML builder (Logic preserved from previous versions)
+    const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+      const iconHTML = isMulti
+        ? `<span class="multi-icon" title="Multiple images">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+              <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+              <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
+              <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
+            </svg>
+          </span>`
+        : "";
+        
+      // Use standard src with loading="lazy" for best performance after async injection
+      return `
+        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
+          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+          ${iconHTML}
+        </a>`;
+    };
 
-  // Keep a global cache of resolved HTML snippets (for late-cloned mobile gallery)
-  window.__snarcGalleryItems = window.__snarcGalleryItems || [];
+    // 2. Process URLs (Check for valid IIIF paths)
+    const imagePromises = mediaStmts.map(async stmt => {
+      const v = Utils.firstValue(stmt);
+      if (!v || typeof v !== "string") return "";
 
-  const getContainers = () =>
-    Array.from(document.querySelectorAll(".gallery.adaptive-gallery-container"));
+      const idMatch = v.match(/(\d{6,})/);
+      if (!idMatch) return "";
+      const baseId = parseInt(idMatch[1], 10);
+      const isMulti = baseId >= 1448577 && baseId <= 1588867;
+      const imageId = isMulti ? baseId + 1 : baseId;
 
-  const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
+      return new Promise(resolve => {
+        const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+        const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+        const rootUrl = `https://viewer.library.wales/${baseId}`;
 
-  const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
-    const iconHTML = isMulti
-      ? `<span class="multi-icon" title="Multiple images">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-            <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-            <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
-            <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
-          </svg>
-        </span>`
-      : "";
+        const tryLoad = (urlList) => {
+          if (!urlList.length) return resolve(""); 
+          const url = urlList.shift();
+          const img = new Image();
+          img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
+          img.onerror = () => tryLoad(urlList); 
+          img.src = url;
+        };
 
-    return `
-      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
-        <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
-        ${iconHTML}
-      </a>`;
-  };
-
-  const resolveThumb = (stmt) => {
-    const v = Utils.firstValue(stmt);
-    if (!v || typeof v !== "string") return Promise.resolve("");
-
-    const idMatch = v.match(/(\d{6,})/);
-    if (!idMatch) return Promise.resolve("");
-
-    const baseId = parseInt(idMatch[1], 10);
-    const isMulti = baseId >= 1448577 && baseId <= 1588867;
-    const imageId = isMulti ? baseId + 1 : baseId;
-
-    const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-    const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
-    const rootUrl  = `https://viewer.library.wales/${baseId}`;
-
-    return new Promise(resolve => {
-      const tryLoad = (urlList) => {
-        if (!urlList.length) return resolve("");
-        const url = urlList.shift();
-        const img = new Image();
-        img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
-        img.onerror = () => tryLoad(urlList);
-        img.src = url;
-      };
-      tryLoad([baseUrl1, baseUrl2]);
+        tryLoad([baseUrl1, baseUrl2]);
+      });
     });
-  };
 
-  function ensureDesktopScaffold(container) {
-    if (!isDesktop()) return null;
+    // 3. Wait for all checks to finish
+    const images = await Promise.all(imagePromises);
+    const validImages = images.filter(Boolean);
 
-    let colsWrap = container.querySelector(".snarc-gallery-cols");
-    if (colsWrap) return Array.from(colsWrap.querySelectorAll(".snarc-gallery-col"));
-
-    container.innerHTML = `
-      <div class="snarc-gallery-cols">
-        <div class="snarc-gallery-col"></div>
-        <div class="snarc-gallery-col"></div>
-        <div class="snarc-gallery-col"></div>
-        <div class="snarc-gallery-col"></div>
-        <div class="snarc-gallery-col"></div>
-      </div>
-    `;
-    colsWrap = container.querySelector(".snarc-gallery-cols");
-    return Array.from(colsWrap.querySelectorAll(".snarc-gallery-col"));
-  }
-
-  function appendItemToContainer(container, html) {
-    if (!html) return;
-
-    // Desktop: append to the shortest column (stable; never inserts “at top”)
-    if (isDesktop()) {
-      const cols = ensureDesktopScaffold(container);
-      if (!cols || !cols.length) return;
-
-      let target = cols[0];
-      for (const c of cols) {
-        if (c.offsetHeight < target.offsetHeight) target = c;
-      }
-      target.insertAdjacentHTML("beforeend", html);
-      return;
-    }
-
-    // Mobile: simple list append
-    container.insertAdjacentHTML("beforeend", html);
-  }
-
-  function renderAllCachedInto(container) {
-    if (!container || !container.isConnected) return;
-
-    // Clear placeholder state
-    container.classList.remove("loading-placeholder");
-    container.style.minHeight = "";
-
-    if (isDesktop()) {
-      ensureDesktopScaffold(container);
-      // Rebuild columns from scratch for deterministic result
-      const cols = Array.from(container.querySelectorAll(".snarc-gallery-col"));
-      cols.forEach(c => (c.innerHTML = ""));
-      window.__snarcGalleryItems.forEach(html => appendItemToContainer(container, html));
+    // 4. Update the DOM (Target both Desktop placeholder and Mobile Clone)
+    if (validImages.length) {
+       const html = validImages.join("");
+       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => {
+           el.innerHTML = html;
+           el.classList.remove('loading-placeholder');
+           el.style.minHeight = ""; // Remove placeholder height
+       });
     } else {
-      container.innerHTML = "";
-      window.__snarcGalleryItems.forEach(html => appendItemToContainer(container, html));
+       // If no valid images found after check, hide the containers
+       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => el.remove());
+       // Hide mobile ribbon buttons if empty
+       document.querySelectorAll('.mobile-toggle-images').forEach(btn => btn.style.display = 'none');
     }
-  }
-
-  // Expose a sync hook so newly cloned mobile galleries can populate later
-  window.__snarcGallerySync = () => {
-    getContainers().forEach(renderAllCachedInto);
-  };
-
-  // If we already loaded some images (e.g., navigating back), just sync and continue
-  if (window.__snarcGalleryItems.length) {
-    window.__snarcGallerySync();
-  }
-
-  const first = mediaStmts.slice(0, FIRST_BATCH);
-  const rest  = mediaStmts.slice(FIRST_BATCH);
-
-  // Load + render first batch quickly
-  const firstResults = await Promise.allSettled(first.map(resolveThumb));
-  firstResults.forEach(r => {
-    if (r.status === "fulfilled" && r.value) window.__snarcGalleryItems.push(r.value);
-  });
-  window.__snarcGallerySync();
-
-  // Background load the rest with limited concurrency
-  let idx = 0;
-  async function worker() {
-    while (idx < rest.length) {
-      const stmt = rest[idx++];
-      const html = await resolveThumb(stmt).catch(() => "");
-      if (html) {
-        window.__snarcGalleryItems.push(html);
-        // Append incrementally (avoids rebuilding every time)
-        getContainers().forEach(c => {
-          if (!c || !c.isConnected) return;
-          c.classList.remove("loading-placeholder");
-          c.style.minHeight = "";
-          appendItemToContainer(c, html);
-        });
-      }
-    }
-  }
-
-  await Promise.allSettled(Array.from({ length: CONCURRENCY }, worker));
-
-  // If nothing was found at all, remove/hide as before
-  if (!window.__snarcGalleryItems.length) {
-    document.querySelectorAll(".gallery.adaptive-gallery-container").forEach(el => el.remove());
-    document.querySelectorAll(".mobile-toggle-images").forEach(btn => (btn.style.display = "none"));
-  }
-}
-
-  
+  }   
 function injectGalleryDesktopCssOnce() {
   if (document.getElementById("snarc-gallery-desktop-css")) return;
 
   const style = document.createElement("style");
   style.id = "snarc-gallery-desktop-css";
   style.textContent = `
+    /* Desktop-only: 5-column masonry (preserves the "tight mosaic" packing) */
     @media (min-width: 1024px) {
       .gallery.adaptive-gallery-container {
         --snarc-gallery-gap: 0.75rem;
-      }
 
-      /* 5 explicit masonry columns */
-      .gallery.adaptive-gallery-container .snarc-gallery-cols {
-        display: flex;
-        gap: var(--snarc-gallery-gap);
-        align-items: flex-start;
-      }
+        /* Masonry via CSS columns */
+        column-count: 5;
+        column-gap: var(--snarc-gallery-gap);
 
-      .gallery.adaptive-gallery-container .snarc-gallery-col {
-        flex: 1 1 0;
-        min-width: 0;
+        /* Ensure we're NOT using the row model */
+        display: block !important;
       }
 
       .gallery.adaptive-gallery-container .gallery-link {
-        display: block;
+        /* Each item becomes a column block that won't split */
+        display: inline-block;
+        width: 100%;
         margin: 0 0 var(--snarc-gallery-gap) 0;
+
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
       }
 
       .gallery.adaptive-gallery-container .gallery-image {
@@ -1330,7 +1228,6 @@ function injectGalleryDesktopCssOnce() {
   `;
   document.head.appendChild(style);
 }
-
 
 
    
