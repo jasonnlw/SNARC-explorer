@@ -348,7 +348,22 @@ jobs:
                 const text = await res.text();
                 if (!res.ok) throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`);
 
-                const json = JSON.parse(text);
+                // Some large SPARQL JSON responses can contain raw control characters (proxy/endpoint issue).
+// Sanitize them so JSON.parse does not crash.
+const cleaned = text
+  .replace(/^\uFEFF/, "")              // drop BOM if present
+  .replace(/[\u0000-\u001F]/g, " ");   // replace ASCII control chars with spaces
+
+let json;
+try {
+  json = JSON.parse(cleaned);
+} catch (e) {
+  // Helpful debug: write the raw response to disk so you can inspect it in the repo artifacts if needed
+  fs.writeFileSync(path.join(OUT_DIR, "__last_bad_response.txt"), text, "utf8");
+  throw e;
+}
+return json;
+
                 return json;
               } catch (e) {
                 lastErr = e;
