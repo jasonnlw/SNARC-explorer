@@ -1024,18 +1024,24 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
       
 
       // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
- if (nowOpen) {
+if (nowOpen) {
+  if (typeof initLeafletMaps === "function") {
     initLeafletMaps(sec);
-
-    // If the gallery was cloned after initial load, ensure it gets populated
-    if (type === "images" && typeof window.__snarcGallerySync === "function") {
-      window.__snarcGallerySync();
-    }
   }
+
+  if (type === "images" && typeof window.__snarcGallerySync === "function") {
+    window.__snarcGallerySync();
+  }
+}
+
 });
 
   }); // <-- Closes mobileSections.forEach
 })(); // <-- Closes setupMobileRibbonSystem IIFE
+// --- Trigger Async Gallery Load AFTER mobile gallery clone exists ---
+if (window.currentMediaStmts && window.currentMediaStmts.length) {
+  loadGalleryAsync(window.currentMediaStmts);
+}
 
 
     // --- Map logic (only if Leaflet is loaded) -----------------------
@@ -1119,11 +1125,6 @@ initLeafletMaps(document);
 
 } // <-- Closes postRender function
 
-      // --- 1. Trigger Async Gallery Load (Background Process) ---
-    if (window.currentMediaStmts && window.currentMediaStmts.length) {
-      // This runs in parallel and updates the DOM when images are ready
-      loadGalleryAsync(window.currentMediaStmts);
-    }
      
 
 // ---------- Async Gallery Loader ----------
