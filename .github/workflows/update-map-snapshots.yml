@@ -222,7 +222,7 @@ jobs:
                  ?image
           WHERE {
             ?item wdt:P21 ?birthplace .
-            OPTIONAL { ?birthplace wdt:P26 ?birthplacecoords . }
+           ?birthplace wdt:P26 ?birthplacecoords . 
             OPTIONAL { ?item wdt:P31 ?image }
 
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
@@ -239,7 +239,7 @@ jobs:
                  ?image
           WHERE {
             ?item wdt:P22 ?deathplace .
-            OPTIONAL { ?deathplace wdt:P26 ?deathplacecoords . }
+            ?deathplace wdt:P26 ?deathplacecoords .
             OPTIONAL { ?item wdt:P31 ?image }
 
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
@@ -256,7 +256,7 @@ jobs:
                  ?image
           WHERE {
             ?item wdt:P78 ?residence .
-            OPTIONAL { ?residence wdt:P26 ?residencecoords . }
+            ?residence wdt:P26 ?residencecoords .
             OPTIONAL { ?item wdt:P31 ?image }
 
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
