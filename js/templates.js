@@ -1195,19 +1195,28 @@ function injectGalleryDesktopCssOnce() {
   const style = document.createElement("style");
   style.id = "snarc-gallery-desktop-css";
   style.textContent = `
-    /* Desktop-only: force 5 thumbnails per row without stretching when fewer exist */
-    @media (min-width: 768px) {
+    /* Desktop-only: 5-column masonry (preserves the "tight mosaic" packing) */
+    @media (min-width: 1024px) {
       .gallery.adaptive-gallery-container {
         --snarc-gallery-gap: 0.75rem;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: flex-start; /* prevents "fill" behaviour */
-        gap: var(--snarc-gallery-gap);
+
+        /* Masonry via CSS columns */
+        column-count: 5;
+        column-gap: var(--snarc-gallery-gap);
+
+        /* Ensure we're NOT using the row model */
+        display: block !important;
       }
 
       .gallery.adaptive-gallery-container .gallery-link {
-        flex: 0 0 calc((100% - (var(--snarc-gallery-gap) * 4)) / 5);
-        max-width: calc((100% - (var(--snarc-gallery-gap) * 4)) / 5);
+        /* Each item becomes a column block that won't split */
+        display: inline-block;
+        width: 100%;
+        margin: 0 0 var(--snarc-gallery-gap) 0;
+
+        break-inside: avoid;
+        -webkit-column-break-inside: avoid;
+        page-break-inside: avoid;
       }
 
       .gallery.adaptive-gallery-container .gallery-image {
@@ -1219,6 +1228,7 @@ function injectGalleryDesktopCssOnce() {
   `;
   document.head.appendChild(style);
 }
+
 
    
   // ---------- Exports ----------
