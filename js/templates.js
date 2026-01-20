@@ -846,6 +846,8 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   // ---------- Post-render ----------
   function postRender() {
      window.scrollTo(0, 0);
+     injectGalleryDesktopCssOnce();
+
    // --- 1. Trigger Async Gallery Load (Background Process) ---
     if (window.currentMediaStmts && window.currentMediaStmts.length) {
       // This runs in parallel and updates the DOM when images are ready
@@ -1187,6 +1189,38 @@ initLeafletMaps(document);
        document.querySelectorAll('.mobile-toggle-images').forEach(btn => btn.style.display = 'none');
     }
   }   
+function injectGalleryDesktopCssOnce() {
+  if (document.getElementById("snarc-gallery-desktop-css")) return;
+
+  const style = document.createElement("style");
+  style.id = "snarc-gallery-desktop-css";
+  style.textContent = `
+    /* Desktop-only: force 5 thumbnails per row without stretching when fewer exist */
+    @media (min-width: 768px) {
+      .gallery.adaptive-gallery-container {
+        --snarc-gallery-gap: 0.75rem;
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: flex-start; /* prevents "fill" behaviour */
+        gap: var(--snarc-gallery-gap);
+      }
+
+      .gallery.adaptive-gallery-container .gallery-link {
+        flex: 0 0 calc((100% - (var(--snarc-gallery-gap) * 4)) / 5);
+        max-width: calc((100% - (var(--snarc-gallery-gap) * 4)) / 5);
+      }
+
+      .gallery.adaptive-gallery-container .gallery-image {
+        width: 100%;
+        height: auto;
+        display: block;
+      }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+   
   // ---------- Exports ----------
   return { renderGeneric, postRender };
 
