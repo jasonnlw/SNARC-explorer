@@ -761,7 +761,14 @@ window.__snarcGalleryRunId = (window.__snarcGalleryRunId || 0) + 1;
 // --- IIIF image gallery (P50) - DEFERRED LOAD ---
     // 1. Store the raw statements to process later (in postRender)
     window.currentMediaStmts = claims["P50"];
-    
+     
+  // New entity render → allow gallery to load again
+window.__snarcGalleryRunId = (window.__snarcGalleryRunId || 0) + 1;
+
+// Remove any legacy "run once" guards from earlier patches
+delete window.__snarcGalleryBuilt;
+delete window.__snarcGalleryLoadStarted;
+  
     // 2. Render a placeholder immediately so the layout is stable
     let galleryHTML = "";
     if (window.currentMediaStmts && window.currentMediaStmts.length) {
@@ -857,11 +864,10 @@ const hasMedia = window.currentMediaStmts && window.currentMediaStmts.length;
 const isMobileViewport = window.matchMedia("(max-width: 767px)").matches;
 
 if (hasMedia && !isMobileViewport) {
-  if (!window.__snarcGalleryLoadStarted) {
-    window.__snarcGalleryLoadStarted = true;
-    loadGalleryAsync(window.currentMediaStmts);
-  }
+  const runId = window.__snarcGalleryRunId || 0;
+  startGalleryWhenReady(window.currentMediaStmts, runId);
 }
+
 
      
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
@@ -879,6 +885,22 @@ if (hasMedia && !isMobileViewport) {
       }
     }
 
+function startGalleryWhenReady(mediaStmts, runId, attempts = 10) {
+  // Stop if user navigated again
+  if ((window.__snarcGalleryRunId || 0) !== runId) return;
+
+  const hasContainer = document.querySelector(".gallery.adaptive-gallery-container");
+  if (hasContainer) {
+    loadGalleryAsync(mediaStmts);
+    return;
+  }
+
+  if (attempts <= 0) return;
+
+  // Try again next frame; handles SPA re-render timing
+  requestAnimationFrame(() => startGalleryWhenReady(mediaStmts, runId, attempts - 1));
+}
+     
 // =====================================================================
 // MOBILE COLLAPSIBLE SECTIONS (Unified Ribbon System)
 // =====================================================================
@@ -1045,7 +1067,9 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
    if (type === "images" && window.currentMediaStmts && window.currentMediaStmts.length) {
      if (!window.__snarcGalleryLoadStarted) {
        window.__snarcGalleryLoadStarted = true;
-       loadGalleryAsync(window.currentMediaStmts);
+       const runId = window.__snarcGalleryRunId || 0;
+startGalleryWhenReady(window.currentMediaStmts, runId);
+
     }
    }
       }
