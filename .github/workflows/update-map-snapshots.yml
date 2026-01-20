@@ -222,7 +222,7 @@ jobs:
                  ?image
           WHERE {
             ?item wdt:P21 ?birthplace .
-           ?birthplace wdt:P26 ?birthplacecoords . 
+            ?birthplace wdt:P26 ?birthplacecoords .
             OPTIONAL { ?item wdt:P31 ?image }
 
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
