@@ -1120,75 +1120,147 @@ initLeafletMaps(document);
 } // <-- Closes postRender function
 
 // ---------- Async Gallery Loader ----------
-  async function loadGalleryAsync(mediaStmts) {
-    // 1. Define the HTML builder (Logic preserved from previous versions)
-    const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
-      const iconHTML = isMulti
-        ? `<span class="multi-icon" title="Multiple images">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
-              <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
-              <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
-              <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
-            </svg>
-          </span>`
-        : "";
-        
-      // Use standard src with loading="lazy" for best performance after async injection
-      return `
-        <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
-          <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
-          ${iconHTML}
-        </a>`;
-    };
+// ---------- Async Gallery Loader ----------
+async function loadGalleryAsync(mediaStmts) {
+  // Target both Desktop placeholder and Mobile Clone (same as your current logic)
+  const containers = Array.from(document.querySelectorAll(".gallery.adaptive-gallery-container"));
+  if (!containers.length) return;
 
-    // 2. Process URLs (Check for valid IIIF paths)
-    const imagePromises = mediaStmts.map(async stmt => {
-      const v = Utils.firstValue(stmt);
-      if (!v || typeof v !== "string") return "";
+  // Helper: stop work if user navigated away / containers removed
+  const containersAlive = () => containers.some(el => el && el.isConnected);
 
-      const idMatch = v.match(/(\d{6,})/);
-      if (!idMatch) return "";
-      const baseId = parseInt(idMatch[1], 10);
-      const isMulti = baseId >= 1448577 && baseId <= 1588867;
-      const imageId = isMulti ? baseId + 1 : baseId;
+  // 1) Define the HTML builder (your existing logic preserved)
+  const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
+    const iconHTML = isMulti
+      ? `<span class="multi-icon" title="Multiple images">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="18" height="18" fill="currentColor">
+            <rect x="3" y="5" width="18" height="14" rx="2" ry="2" stroke="currentColor" stroke-width="1.5" fill="none"/>
+            <line x1="3" y1="9" y2="9" x2="21" stroke="currentColor" stroke-width="1.5"/>
+            <line x1="3" y1="13" y2="13" x2="21" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+        </span>`
+      : "";
 
-      return new Promise(resolve => {
-        const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
-        const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
-        const rootUrl = `https://viewer.library.wales/${baseId}`;
+    return `
+      <a href="${rootUrl}" target="_blank" rel="noopener" class="gallery-link" title="View image ${id}">
+        <img src="${thumbUrl}" alt="Image ${id}" loading="lazy" class="gallery-image">
+        ${iconHTML}
+      </a>`;
+  };
 
-        const tryLoad = (urlList) => {
-          if (!urlList.length) return resolve(""); 
-          const url = urlList.shift();
-          const img = new Image();
-          img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
-          img.onerror = () => tryLoad(urlList); 
-          img.src = url;
-        };
+  // 2) Resolve ONE statement into ONE thumbnail HTML (keeps your IIIF fallback test)
+  const resolveThumb = (stmt) => {
+    const v = Utils.firstValue(stmt);
+    if (!v || typeof v !== "string") return Promise.resolve("");
 
-        tryLoad([baseUrl1, baseUrl2]);
-      });
+    const idMatch = v.match(/(\d{6,})/);
+    if (!idMatch) return Promise.resolve("");
+
+    const baseId = parseInt(idMatch[1], 10);
+    const isMulti = baseId >= 1448577 && baseId <= 1588867;
+    const imageId = isMulti ? baseId + 1 : baseId;
+
+    const baseUrl1 = `https://damsssl.llgc.org.uk/iiif/image/${imageId}/full/300,/0/default.jpg`;
+    const baseUrl2 = `https://damsssl.llgc.org.uk/iiif/2.0/image/${imageId}/full/300,/0/default.jpg`;
+    const rootUrl  = `https://viewer.library.wales/${baseId}`;
+
+    return new Promise(resolve => {
+      const tryLoad = (urlList) => {
+        if (!urlList.length) return resolve("");
+        const url = urlList.shift();
+
+        const img = new Image();
+        img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
+        img.onerror = () => tryLoad(urlList);
+        img.src = url;
+      };
+
+      tryLoad([baseUrl1, baseUrl2]);
     });
+  };
 
-    // 3. Wait for all checks to finish
-    const images = await Promise.all(imagePromises);
-    const validImages = images.filter(Boolean);
+  // 3) Utility: append HTML to all containers safely
+  const setAll = (html) => {
+    containers.forEach(el => { if (el && el.isConnected) el.innerHTML = html; });
+  };
+  const appendAll = (html) => {
+    if (!html) return;
+    containers.forEach(el => { if (el && el.isConnected) el.insertAdjacentHTML("beforeend", html); });
+  };
+  const clearLoadingState = () => {
+    containers.forEach(el => {
+      if (!el || !el.isConnected) return;
+      el.classList.remove("loading-placeholder");
+      el.style.minHeight = "";
+    });
+  };
 
-    // 4. Update the DOM (Target both Desktop placeholder and Mobile Clone)
-    if (validImages.length) {
-       const html = validImages.join("");
-       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => {
-           el.innerHTML = html;
-           el.classList.remove('loading-placeholder');
-           el.style.minHeight = ""; // Remove placeholder height
-       });
+  // 4) Split into “first 10 now” + “rest later”
+  const FIRST_BATCH = 10;
+  const first = mediaStmts.slice(0, FIRST_BATCH);
+  const rest  = mediaStmts.slice(FIRST_BATCH);
+
+  // Render first batch ASAP (do NOT wait for the rest)
+  try {
+    const firstResults = await Promise.allSettled(first.map(resolveThumb));
+    if (!containersAlive()) return;
+
+    const firstHtml = firstResults
+      .filter(r => r.status === "fulfilled" && r.value)
+      .map(r => r.value)
+      .join("");
+
+    if (firstHtml) {
+      setAll(firstHtml);
+      clearLoadingState();
     } else {
-       // If no valid images found after check, hide the containers
-       document.querySelectorAll('.gallery.adaptive-gallery-container').forEach(el => el.remove());
-       // Hide mobile ribbon buttons if empty
-       document.querySelectorAll('.mobile-toggle-images').forEach(btn => btn.style.display = 'none');
+      // keep placeholder for now; we may still find valid images in the rest
     }
-  }   
+  } catch (err) {
+    // Don’t hard-fail the page; continue to background load
+  }
+
+  // 5) Background load the rest progressively with throttled concurrency
+  const CONCURRENCY = 4;
+  let index = 0;
+
+  const worker = async () => {
+    while (index < rest.length) {
+      if (!containersAlive()) return;
+
+      const stmt = rest[index++];
+      try {
+        const html = await resolveThumb(stmt);
+        if (!containersAlive()) return;
+        if (html) {
+          // If nothing has rendered yet (rare), start cleanly
+          if (containersAlive() && containers.some(el => el && el.isConnected && el.classList.contains("loading-placeholder"))) {
+            // First valid image discovered late: replace placeholder rather than append into empty placeholder
+            setAll(html);
+            clearLoadingState();
+          } else {
+            appendAll(html);
+          }
+        }
+      } catch (e) {
+        // ignore individual failures
+      }
+    }
+  };
+
+  // Start N workers
+  const workers = Array.from({ length: CONCURRENCY }, () => worker());
+  await Promise.allSettled(workers);
+
+  // 6) If after all attempts we found nothing, remove galleries (preserves your original behaviour)
+  if (!containersAlive()) return;
+  const anyHasImages = containers.some(el => el && el.isConnected && el.querySelector(".gallery-link"));
+  if (!anyHasImages) {
+    document.querySelectorAll(".gallery.adaptive-gallery-container").forEach(el => el.remove());
+    document.querySelectorAll(".mobile-toggle-images").forEach(btn => (btn.style.display = "none"));
+  }
+}
+  
 function injectGalleryDesktopCssOnce() {
   if (document.getElementById("snarc-gallery-desktop-css")) return;
 
