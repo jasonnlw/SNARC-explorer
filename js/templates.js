@@ -848,12 +848,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
      window.scrollTo(0, 0);
      injectGalleryDesktopCssOnce();
 
-   // --- 1. Trigger Async Gallery Load (Background Process) ---
-    if (window.currentMediaStmts && window.currentMediaStmts.length) {
-      // This runs in parallel and updates the DOM when images are ready
-      loadGalleryAsync(window.currentMediaStmts);
-    }
-     
+
     // --- Family tree injection (runs AFTER DOM is rendered) ----------
     const treeContainer = document.getElementById("familyChartContainer");
     if (treeContainer) {
@@ -1029,10 +1024,15 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
       
 
       // 🔹 If the section has just been opened, refresh any Leaflet maps inside it
-      if (nowOpen) {
-        initLeafletMaps(sec);
-      }
-    });
+ if (nowOpen) {
+    initLeafletMaps(sec);
+
+    // If the gallery was cloned after initial load, ensure it gets populated
+    if (type === "images" && typeof window.__snarcGallerySync === "function") {
+      window.__snarcGallerySync();
+    }
+  }
+});
 
   }); // <-- Closes mobileSections.forEach
 })(); // <-- Closes setupMobileRibbonSystem IIFE
@@ -1119,17 +1119,26 @@ initLeafletMaps(document);
 
 } // <-- Closes postRender function
 
-// ---------- Async Gallery Loader ----------
+      // --- 1. Trigger Async Gallery Load (Background Process) ---
+    if (window.currentMediaStmts && window.currentMediaStmts.length) {
+      // This runs in parallel and updates the DOM when images are ready
+      loadGalleryAsync(window.currentMediaStmts);
+    }
+     
+
 // ---------- Async Gallery Loader ----------
 async function loadGalleryAsync(mediaStmts) {
-  // Target both Desktop placeholder and Mobile Clone (same as your current logic)
-  const containers = Array.from(document.querySelectorAll(".gallery.adaptive-gallery-container"));
-  if (!containers.length) return;
+  const FIRST_BATCH = 10;
+  const CONCURRENCY = 4;
 
-  // Helper: stop work if user navigated away / containers removed
-  const containersAlive = () => containers.some(el => el && el.isConnected);
+  // Keep a global cache of resolved HTML snippets (for late-cloned mobile gallery)
+  window.__snarcGalleryItems = window.__snarcGalleryItems || [];
 
-  // 1) Define the HTML builder (your existing logic preserved)
+  const getContainers = () =>
+    Array.from(document.querySelectorAll(".gallery.adaptive-gallery-container"));
+
+  const isDesktop = () => window.matchMedia("(min-width: 1024px)").matches;
+
   const buildThumbHTML = (thumbUrl, rootUrl, id, isMulti = false) => {
     const iconHTML = isMulti
       ? `<span class="multi-icon" title="Multiple images">
@@ -1148,7 +1157,6 @@ async function loadGalleryAsync(mediaStmts) {
       </a>`;
   };
 
-  // 2) Resolve ONE statement into ONE thumbnail HTML (keeps your IIIF fallback test)
   const resolveThumb = (stmt) => {
     const v = Utils.firstValue(stmt);
     if (!v || typeof v !== "string") return Promise.resolve("");
@@ -1168,98 +1176,121 @@ async function loadGalleryAsync(mediaStmts) {
       const tryLoad = (urlList) => {
         if (!urlList.length) return resolve("");
         const url = urlList.shift();
-
         const img = new Image();
         img.onload  = () => resolve(buildThumbHTML(url, rootUrl, imageId, isMulti));
         img.onerror = () => tryLoad(urlList);
         img.src = url;
       };
-
       tryLoad([baseUrl1, baseUrl2]);
     });
   };
 
-  // 3) Utility: append HTML to all containers safely
-  const setAll = (html) => {
-    containers.forEach(el => { if (el && el.isConnected) el.innerHTML = html; });
-  };
-  const appendAll = (html) => {
+  function ensureDesktopScaffold(container) {
+    if (!isDesktop()) return null;
+
+    let colsWrap = container.querySelector(".snarc-gallery-cols");
+    if (colsWrap) return Array.from(colsWrap.querySelectorAll(".snarc-gallery-col"));
+
+    container.innerHTML = `
+      <div class="snarc-gallery-cols">
+        <div class="snarc-gallery-col"></div>
+        <div class="snarc-gallery-col"></div>
+        <div class="snarc-gallery-col"></div>
+        <div class="snarc-gallery-col"></div>
+        <div class="snarc-gallery-col"></div>
+      </div>
+    `;
+    colsWrap = container.querySelector(".snarc-gallery-cols");
+    return Array.from(colsWrap.querySelectorAll(".snarc-gallery-col"));
+  }
+
+  function appendItemToContainer(container, html) {
     if (!html) return;
-    containers.forEach(el => { if (el && el.isConnected) el.insertAdjacentHTML("beforeend", html); });
-  };
-  const clearLoadingState = () => {
-    containers.forEach(el => {
-      if (!el || !el.isConnected) return;
-      el.classList.remove("loading-placeholder");
-      el.style.minHeight = "";
-    });
+
+    // Desktop: append to the shortest column (stable; never inserts “at top”)
+    if (isDesktop()) {
+      const cols = ensureDesktopScaffold(container);
+      if (!cols || !cols.length) return;
+
+      let target = cols[0];
+      for (const c of cols) {
+        if (c.offsetHeight < target.offsetHeight) target = c;
+      }
+      target.insertAdjacentHTML("beforeend", html);
+      return;
+    }
+
+    // Mobile: simple list append
+    container.insertAdjacentHTML("beforeend", html);
+  }
+
+  function renderAllCachedInto(container) {
+    if (!container || !container.isConnected) return;
+
+    // Clear placeholder state
+    container.classList.remove("loading-placeholder");
+    container.style.minHeight = "";
+
+    if (isDesktop()) {
+      ensureDesktopScaffold(container);
+      // Rebuild columns from scratch for deterministic result
+      const cols = Array.from(container.querySelectorAll(".snarc-gallery-col"));
+      cols.forEach(c => (c.innerHTML = ""));
+      window.__snarcGalleryItems.forEach(html => appendItemToContainer(container, html));
+    } else {
+      container.innerHTML = "";
+      window.__snarcGalleryItems.forEach(html => appendItemToContainer(container, html));
+    }
+  }
+
+  // Expose a sync hook so newly cloned mobile galleries can populate later
+  window.__snarcGallerySync = () => {
+    getContainers().forEach(renderAllCachedInto);
   };
 
-  // 4) Split into “first 10 now” + “rest later”
-  const FIRST_BATCH = 10;
+  // If we already loaded some images (e.g., navigating back), just sync and continue
+  if (window.__snarcGalleryItems.length) {
+    window.__snarcGallerySync();
+  }
+
   const first = mediaStmts.slice(0, FIRST_BATCH);
   const rest  = mediaStmts.slice(FIRST_BATCH);
 
-  // Render first batch ASAP (do NOT wait for the rest)
-  try {
-    const firstResults = await Promise.allSettled(first.map(resolveThumb));
-    if (!containersAlive()) return;
+  // Load + render first batch quickly
+  const firstResults = await Promise.allSettled(first.map(resolveThumb));
+  firstResults.forEach(r => {
+    if (r.status === "fulfilled" && r.value) window.__snarcGalleryItems.push(r.value);
+  });
+  window.__snarcGallerySync();
 
-    const firstHtml = firstResults
-      .filter(r => r.status === "fulfilled" && r.value)
-      .map(r => r.value)
-      .join("");
-
-    if (firstHtml) {
-      setAll(firstHtml);
-      clearLoadingState();
-    } else {
-      // keep placeholder for now; we may still find valid images in the rest
-    }
-  } catch (err) {
-    // Don’t hard-fail the page; continue to background load
-  }
-
-  // 5) Background load the rest progressively with throttled concurrency
-  const CONCURRENCY = 4;
-  let index = 0;
-
-  const worker = async () => {
-    while (index < rest.length) {
-      if (!containersAlive()) return;
-
-      const stmt = rest[index++];
-      try {
-        const html = await resolveThumb(stmt);
-        if (!containersAlive()) return;
-        if (html) {
-          // If nothing has rendered yet (rare), start cleanly
-          if (containersAlive() && containers.some(el => el && el.isConnected && el.classList.contains("loading-placeholder"))) {
-            // First valid image discovered late: replace placeholder rather than append into empty placeholder
-            setAll(html);
-            clearLoadingState();
-          } else {
-            appendAll(html);
-          }
-        }
-      } catch (e) {
-        // ignore individual failures
+  // Background load the rest with limited concurrency
+  let idx = 0;
+  async function worker() {
+    while (idx < rest.length) {
+      const stmt = rest[idx++];
+      const html = await resolveThumb(stmt).catch(() => "");
+      if (html) {
+        window.__snarcGalleryItems.push(html);
+        // Append incrementally (avoids rebuilding every time)
+        getContainers().forEach(c => {
+          if (!c || !c.isConnected) return;
+          c.classList.remove("loading-placeholder");
+          c.style.minHeight = "";
+          appendItemToContainer(c, html);
+        });
       }
     }
-  };
+  }
 
-  // Start N workers
-  const workers = Array.from({ length: CONCURRENCY }, () => worker());
-  await Promise.allSettled(workers);
+  await Promise.allSettled(Array.from({ length: CONCURRENCY }, worker));
 
-  // 6) If after all attempts we found nothing, remove galleries (preserves your original behaviour)
-  if (!containersAlive()) return;
-  const anyHasImages = containers.some(el => el && el.isConnected && el.querySelector(".gallery-link"));
-  if (!anyHasImages) {
+  // If nothing was found at all, remove/hide as before
+  if (!window.__snarcGalleryItems.length) {
     document.querySelectorAll(".gallery.adaptive-gallery-container").forEach(el => el.remove());
     document.querySelectorAll(".mobile-toggle-images").forEach(btn => (btn.style.display = "none"));
   }
 }
+
   
 function injectGalleryDesktopCssOnce() {
   if (document.getElementById("snarc-gallery-desktop-css")) return;
@@ -1267,28 +1298,26 @@ function injectGalleryDesktopCssOnce() {
   const style = document.createElement("style");
   style.id = "snarc-gallery-desktop-css";
   style.textContent = `
-    /* Desktop-only: 5-column masonry (preserves the "tight mosaic" packing) */
     @media (min-width: 1024px) {
       .gallery.adaptive-gallery-container {
         --snarc-gallery-gap: 0.75rem;
+      }
 
-        /* Masonry via CSS columns */
-        column-count: 5;
-        column-gap: var(--snarc-gallery-gap);
+      /* 5 explicit masonry columns */
+      .gallery.adaptive-gallery-container .snarc-gallery-cols {
+        display: flex;
+        gap: var(--snarc-gallery-gap);
+        align-items: flex-start;
+      }
 
-        /* Ensure we're NOT using the row model */
-        display: block !important;
+      .gallery.adaptive-gallery-container .snarc-gallery-col {
+        flex: 1 1 0;
+        min-width: 0;
       }
 
       .gallery.adaptive-gallery-container .gallery-link {
-        /* Each item becomes a column block that won't split */
-        display: inline-block;
-        width: 100%;
+        display: block;
         margin: 0 0 var(--snarc-gallery-gap) 0;
-
-        break-inside: avoid;
-        -webkit-column-break-inside: avoid;
-        page-break-inside: avoid;
       }
 
       .gallery.adaptive-gallery-container .gallery-image {
@@ -1300,6 +1329,7 @@ function injectGalleryDesktopCssOnce() {
   `;
   document.head.appendChild(style);
 }
+
 
 
    
