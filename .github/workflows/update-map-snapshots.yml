@@ -208,7 +208,7 @@ jobs:
             SERVICE wikibase:label { bd:serviceParam wikibase:language "${langPref}". }
           }
           `.trim()
-  };
+          };
 
           // --- Split peoplePlaces into smaller queries to reduce timeouts ---
           const PEOPLE_PLACES_QUERIES = {
@@ -334,37 +334,31 @@ jobs:
             for (const rows of byItem.values()) out.push(...rows);
             return out;
           }
-
-
           async function fetchWithRetry(url, tries = 3) {
             let lastErr;
             for (let i = 0; i < tries; i++) {
               try {
                 const controller = new AbortController();
                 const timeout = setTimeout(() => controller.abort(), 120000); // 120s
-                const res = await fetch(url, { method: "GET", signal: controller.signal });
+                const res = await fetch(url, { method: 'GET', signal: controller.signal });
                 clearTimeout(timeout);
-
+          
                 const text = await res.text();
                 if (!res.ok) throw new Error(`HTTP ${res.status}: ${text.slice(0, 300)}`);
-
+          
                 // Some large SPARQL JSON responses can contain raw control characters (proxy/endpoint issue).
-// Sanitize them so JSON.parse does not crash.
-const cleaned = text
-  .replace(/^\uFEFF/, "")              // drop BOM if present
-  .replace(/[\u0000-\u001F]/g, " ");   // replace ASCII control chars with spaces
-
-let json;
-try {
-  json = JSON.parse(cleaned);
-} catch (e) {
-  // Helpful debug: write the raw response to disk so you can inspect it in the repo artifacts if needed
-  fs.writeFileSync(path.join(OUT_DIR, "__last_bad_response.txt"), text, "utf8");
-  throw e;
-}
-return json;
-
-                return json;
+                // Sanitize them so JSON.parse does not crash.
+                const cleaned = text
+                  .replace(/^\uFEFF/, '')              // drop BOM if present
+                  .replace(/[\u0000-\u001F]/g, ' ');   // replace ASCII control chars with spaces
+          
+                try {
+                  return JSON.parse(cleaned);
+                } catch (e) {
+                  // Write the raw response for diagnostics
+                  fs.writeFileSync(path.join(OUT_DIR, '__last_bad_response.txt'), text, 'utf8');
+                  throw e;
+                }
               } catch (e) {
                 lastErr = e;
                 const backoff = 2000 * (i + 1);
@@ -373,7 +367,6 @@ return json;
             }
             throw lastErr;
           }
-
           function snapshotUrl(query) {
             return `${ENDPOINT}?query=${encodeURIComponent(query)}&format=json`;
           }
