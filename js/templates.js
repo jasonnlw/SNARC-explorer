@@ -1310,14 +1310,14 @@ function injectGalleryDesktopCssOnce() {
   style.id = "snarc-gallery-desktop-css";
   style.textContent = `
     /* Desktop-only: 5-column masonry (preserves the "tight mosaic" packing) */
-    @media (min-width: 1024px) {
+    @media (min-width: 1768px) {
       .gallery.adaptive-gallery-container {
         --snarc-gallery-gap: 0.75rem;
 
         /* Masonry via CSS columns */
         column-count: 5;
         column-gap: var(--snarc-gallery-gap);
-        column-fill: auto;
+        
 
         /* Ensure we're NOT using the row model */
         display: block !important;
