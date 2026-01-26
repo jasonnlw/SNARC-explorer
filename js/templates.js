@@ -1098,6 +1098,32 @@ startGalleryWhenReady(window.currentMediaStmts, runId);
 
     }
    }
+if (type === "family") {
+  const runId = window.__snarcFamilyTreeRunId || 0;
+  const wikidataId = window.currentWikidataId;
+  const lang = Utils.getLang();
+
+  // Ensure a real target container exists in the opened section
+  let mobileTarget = sec.querySelector("#mobileFamilyChartContainer");
+  if (!mobileTarget) {
+    sec.insertAdjacentHTML("beforeend", `<div id="mobileFamilyChartContainer" class="family-tree-container"></div>`);
+    mobileTarget = sec.querySelector("#mobileFamilyChartContainer");
+  }
+
+  // Temporarily point injector at mobile container by swapping IDs
+  // (or better: adapt injector to accept an element; but this is the smallest patch)
+  const desktop = document.getElementById("familyChartContainer");
+  if (desktop) desktop.id = "familyChartContainer_desktop_tmp";
+  mobileTarget.id = "familyChartContainer";
+
+  injectFamilyTreeWhenReady(wikidataId, lang, runId);
+
+  // Restore IDs
+  mobileTarget.id = "mobileFamilyChartContainer";
+  const tmp = document.getElementById("familyChartContainer_desktop_tmp");
+  if (tmp) tmp.id = "familyChartContainer";
+}
+         
       }
     });
 
