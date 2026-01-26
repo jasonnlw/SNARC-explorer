@@ -451,19 +451,19 @@ WHERE {
   // -----------------------------------------------------------
 
   const MARKER_STYLE = {
-    "places.landforms":     { className: "me-pin me-pin-places",     glyph: "⛰" },
+    "places.landforms":     { className: "me-pin me-pin-places",     glyph: "🏔" },
     "places.settlements":   { className: "me-pin me-pin-places",     glyph: "🏘" },
     "places.regions":       { className: "me-pin me-pin-places",     glyph: "🗺" },
     "places.buildings":     { className: "me-pin me-pin-places",     glyph: "🏛" },
 
     "people.birth":         { className: "me-pin me-pin-people",     glyph: "★" },
-    "people.death":         { className: "me-pin me-pin-people",     glyph: "✦" },
-    "people.residence":     { className: "me-pin me-pin-people",     glyph: "⌂" },
+    "people.death":         { className: "me-pin me-pin-people",     glyph: "⛫" },
+    "people.residence":     { className: "me-pin me-pin-people",     glyph: "🏠︎" },
 
-    "collections.images":   { className: "me-pin me-pin-images",     glyph: "▦" },
-    "collections.archives": { className: "me-pin me-pin-collections",glyph: "▣" },
-    "collections.manuscripts": { className: "me-pin me-pin-collections", glyph: "▤" },
-    "collections.clipcymru":{ className: "me-pin me-pin-collections",glyph: "▧" },
+    "collections.images":   { className: "me-pin me-pin-images",     glyph: "🖽" },
+    "collections.archives": { className: "me-pin me-pin-collections",glyph: "🗎" },
+    "collections.manuscripts": { className: "me-pin me-pin-collections", glyph: "🕮" },
+    "collections.clipcymru":{ className: "me-pin me-pin-collections",glyph: "▶" },
 
     "events.all":           { className: "me-pin me-pin-events",     glyph: "●" }
   };
