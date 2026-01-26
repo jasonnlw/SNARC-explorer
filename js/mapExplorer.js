@@ -426,9 +426,9 @@ WHERE {
         { key: "landforms",   label: { en: "Landforms",            cy: "Tirffurfiau" },      dataset: "landforms",   category: "places.landforms" },
         { key: "settlements", label: { en: "Human Settlements",    cy: "Anheddiadau Dynol" },dataset: "settlements", category: "places.settlements" },
         { key: "regions",     label: { en: "Regions",              cy: "Ardaloedd" },        dataset: "regions",     category: "places.regions" },
-        { key: "buildings",   label: { en: "Buildings & Structures",cy: "Adeiladau a Strwythurau" }, dataset: "buildings", category: "places.buildings" }
+        { key: "buildings",   label: { en: "Buildings & Structures",cy: "Adeiladau a Strwythurau" }, dataset: "buildings", category: "places.buildings" },
         { key: "schools", label: { en: "Schools", cy: "Ysgolion" }, dataset: "schools", category: "places.schools" },
-        { key: "welshTownsCities", label: { en: "Welsh Towns and Cities", cy: "Trefi a Dinasoedd Cymru" }, dataset: "welshTownsCities", category: "places.welshTownsCities" },
+        { key: "welshTownsCities", label: { en: "Welsh Towns and Cities", cy: "Trefi a Dinasoedd Cymru" }, dataset: "welshTownsCities", category: "places.welshTownsCities" }
       ]
     },
     {
