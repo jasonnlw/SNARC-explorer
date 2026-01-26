@@ -813,7 +813,7 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
          data-section-type="family"
          data-title-en="Family Tree"
          data-title-cy="Coeden deulu">
-      <div id="mobileFamilyTreeProxy"></div>
+      <div id="mobileFamilyChartContainer" class="family-tree-container"></div>
     </div>
   ` : ""}
 
@@ -830,6 +830,32 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
 
       </section>`;
   }
+
+function injectFamilyTreeInto(container, wikidataId, lang) {
+  if (!container || !wikidataId) return;
+
+  const key = `${wikidataId}::${lang}`;
+  if (container.dataset.treeKey === key && container.querySelector("iframe")) return;
+
+  container.dataset.treeKey = key;
+  container.innerHTML = "";
+
+  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
+
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <iframe
+        class="family-tree-iframe"
+        frameborder="0"
+        style="width:100%; display:block; border:0;"
+      ></iframe>
+    </div>`;
+
+  const iframe = container.querySelector("iframe");
+  if (iframe) iframe.src = treeUrl; // set src after DOM insertion
+}
+
+   
 
   // ---------- Family tree iframe injection ----------
 function injectFamilyTreeWhenReady(wikidataId, lang, runId, attempts = 30) {
@@ -1022,39 +1048,6 @@ cleanClone.querySelectorAll(".map-thumb-canvas").forEach(el => el.remove());
       sec.appendChild(boxRight.cloneNode(true));
     }
 
-    // --- 3. FAMILY TREE (Injects the actual tree) ---
-    if (type === "family" && treeDesktop) {
-      const proxy = sec.querySelector("#mobileFamilyTreeProxy");
-      if (proxy) {
-        // Clone the desktop family chart container for mobile
-        const clonedTree = treeDesktop.cloneNode(true);
-        clonedTree.removeAttribute('id'); // Ensure only one element has the ID
-        proxy.replaceWith(clonedTree);
-        
-        // Re-inject the family tree iframe into the new container
-        const newContainer = clonedTree.querySelector("#familyChartContainer");
-        if(newContainer) {
-            newContainer.id = "mobileFamilyChartContainer"; // Use a new ID
-            // Trigger the injection logic again pointing to the new container
-            const wikidataId = window.currentWikidataId;
-            const lang = Utils.getLang();
-            if (wikidataId) {
-                // Simplified injection to use the mobile container
-                const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
-                newContainer.innerHTML = `
-                    <div class="family-tree-wrapper">
-                        <iframe
-                        src="${treeUrl}"
-                        class="family-tree-iframe"
-                        loading="lazy"
-                        frameborder="0"
-                        style="width:100vw; max-width:100%; display:block; border:0;"
-                        ></iframe>
-                    </div>`;
-            }
-        }
-      }
-    }
 
     // --- 4. IMAGES/GALLERY ---
     if (type === "images" && galleryDesktop) {
@@ -1123,6 +1116,13 @@ if (type === "family") {
   const tmp = document.getElementById("familyChartContainer_desktop_tmp");
   if (tmp) tmp.id = "familyChartContainer";
 }
+if (type === "family") {
+  const wikidataId = window.currentWikidataId;
+  const lang = Utils.getLang();
+  const container = sec.querySelector("#mobileFamilyChartContainer");
+  injectFamilyTreeInto(container, wikidataId, lang);
+}
+
          
       }
     });
