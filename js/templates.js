@@ -709,7 +709,7 @@ return `
     if (!entity) return `<p>Entity not found.</p>`;
      // Reset gallery run state per entity render
 window.__snarcGalleryRunId = (window.__snarcGalleryRunId || 0) + 1;
-
+window.__snarcFamilyTreeRunId = (window.__snarcFamilyTreeRunId || 0) + 1;
 
     const title = entity.labels?.[lang]?.value || entity.labels?.en?.value || entity.id;
     const desc  = entity.descriptions?.[lang]?.value || entity.descriptions?.en?.value || "";
@@ -832,26 +832,50 @@ const tilesHTML = renderBoxes(entity, lang, labelMap);
   }
 
   // ---------- Family tree iframe injection ----------
-  function injectFamilyTree(wikidataId, lang) {
-    console.log("DEBUG injectFamilyTree CALLED:", { wikidataId, lang });
-    const container = document.getElementById("familyChartContainer");
-    if (!container || !wikidataId) return;
+function injectFamilyTreeWhenReady(wikidataId, lang, runId, attempts = 30) {
+  // Abort if user navigated and a new render started
+  if ((window.__snarcFamilyTreeRunId || 0) !== runId) return;
 
-    container.innerHTML = "";
-
-    const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
-
-    container.innerHTML = `
-      <div class="family-tree-wrapper">
-        <iframe
-          src="${treeUrl}"
-          class="family-tree-iframe"
-          loading="lazy"
-          frameborder="0"
-          style="width:100vw; max-width:100%; display:block; border:0;"
-        ></iframe>
-      </div>`;
+  const container = document.getElementById("familyChartContainer");
+  if (!wikidataId || !container) {
+    if (attempts > 0) requestAnimationFrame(() =>
+      injectFamilyTreeWhenReady(wikidataId, lang, runId, attempts - 1)
+    );
+    return;
   }
+
+  // If container is detached during rerenders, wait
+  if (!container.isConnected) {
+    if (attempts > 0) requestAnimationFrame(() =>
+      injectFamilyTreeWhenReady(wikidataId, lang, runId, attempts - 1)
+    );
+    return;
+  }
+
+  // Idempotency: if already injected for this entity/lang, do nothing
+  const key = `${wikidataId}::${lang}`;
+  if (container.dataset.treeKey === key && container.querySelector("iframe")) return;
+
+  container.dataset.treeKey = key;
+  container.innerHTML = "";
+
+  const treeUrl = `https://jasonnlw.github.io/entitree/embed.html?item=${wikidataId}&lang=${lang}`;
+
+  // IMPORTANT: do not use loading="lazy" here
+  container.innerHTML = `
+    <div class="family-tree-wrapper">
+      <iframe
+        class="family-tree-iframe"
+        frameborder="0"
+        style="width:100vw; max-width:100%; display:block; border:0;"
+      ></iframe>
+    </div>`;
+
+  // Set src AFTER insertion (more robust across reflow / interaction)
+  const iframe = container.querySelector("iframe");
+  if (iframe) iframe.src = treeUrl;
+}
+
 
   // ---------- Post-render ----------
   function postRender() {
@@ -878,11 +902,13 @@ if (hasMedia && !isMobileViewport) {
       const wikidataId = window.currentWikidataId;
       const lang = Utils.getLang();
 
-      if (isHuman && hasFamily && wikidataId) {
-        injectFamilyTree(wikidataId, lang);
-      } else {
-        treeContainer.innerHTML = "";
-      }
+if (isHuman && hasFamily && wikidataId) {
+  const runId = window.__snarcFamilyTreeRunId || 0;
+  injectFamilyTreeWhenReady(wikidataId, lang, runId);
+} else {
+  treeContainer.innerHTML = "";
+  delete treeContainer.dataset.treeKey;
+}
     }
 
 function startGalleryWhenReady(mediaStmts, runId, attempts = 10) {
