@@ -1,0 +1,3299 @@
+[
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8963"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanidloes"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.5402 52.449)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8966"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gorseinon"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.03 51.66)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8968"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ystradgynlais"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.751069444 51.781011111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8976"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abergele"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Abergele"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.58 53.28)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8983"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Crymlyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym mwrdeisdref sirol Caerffili yn ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.1368 51.6798)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8987"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Treffynnon"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "y bumed dref fwyaf yn Sir y Fflint, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.223 53.274)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8999"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abersychan"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cymuned ym mwrdeisdref sirol Torfaen yn ne-ddwyrain Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.067203 51.735824)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9009"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanilltud Faerdref"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym mwrdeisdref sirol Rhondda Cynon Taf"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3341 51.5578)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9013"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cydweli"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.307 51.736)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9022"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cei Connah"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn nwyrain Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.0573 53.2179)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9033"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pontarddulais"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeidref Sirol Abertawe"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.04 51.71)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9062"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pen-y-bont ar Ogwr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.5784 51.5072)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9064"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Treharris"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Merthyr Tudful"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.303888888 51.663888888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9140"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bedwas"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref fechan ym mwrdeistref sirol Caerffili, de Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2061 51.5926)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9144"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Glynrhedynog"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Rhondda Cynon Taf"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.44588 51.6577)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9426"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberdâr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Rhondda Cynon Taf, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.445 51.713055555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9428"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bae Colwyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeistref Sirol Conwy, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.7 53.29)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9430"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Brynbuga"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Fynwy, de-ddwyrain Cymru, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.901944444 51.703611111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9431"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Doc Penfro"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cymuned a thref yn Sir Benfro, De Orllewin Cymru, DU"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.9399 51.69222)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9434"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Coed-duon"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeistref Sirol Caerffili"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.19 51.67)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9435"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanfair-ym-Muallt"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng nghanolbarth Cymru, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.41 52.14)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9436"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pontypridd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng nghymuned tref Pontypridd, Rhondda Cynon Taf, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.33682 51.59672)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abergwaun"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref arfordirol yn Sir Benfro, de-orllewin Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9442"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberaeron"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Ngheredigion"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.25939 52.24245)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9443"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tredegar"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mlaenau Gwent, Cymru, Prydain"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.240688888 51.777611111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9444"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trefaldwyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref sirol Maldwyn, Cymru, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.1493 52.5628)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9445"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhuddlan"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngogledd Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.464 53.294)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9447"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ceinewydd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref glan môr yng Ngheredigion, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.358988888 52.212863888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9449"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trefyclo"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mhowys, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.048216 52.343917)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9451"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Corwen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Ddinbych"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.379 52.98)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9452"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Bont-faen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref farchnad ym Mro Morgannwg yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.448 51.4605)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9454"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanfyllin"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref farchnad yn y Canolbarth, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2725 52.766388888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9465"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trecelyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.136 51.67)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9467"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cyffordd Llandudno"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref mawr yng Ngogledd Cymru, DU"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.8 53.28)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9469"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tremeirchion"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Ddinbych, Cymru, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.37737 53.2455)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9470"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gelli-gaer"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeistref Sirol Caerffili, y Deyrnas Unedig"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.25 51.6667)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9584"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ystrad Mynach"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2405 51.6419)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9701"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trefdraeth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.836069 52.01975)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q17522"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trinant"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghrymlyn"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.15 51.6965)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q17568"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Wdig"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.992 52.003)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q19155"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhisga"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Fwrdeistref Sirol Caerffili"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.091 51.608)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q20549"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertyleri"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mlaenau Gwent"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.13 51.73)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q20576"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Saltney"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.922 53.179)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q30414"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Blaenau"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mlaenau Gwent"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.16 51.766111111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q30463"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Garnant"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.902 51.802)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q30634"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Benllech"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Ynys Môn"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.225833333 53.320277777)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32348"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Casllwchwr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ar aber yr Afon Llwchwr, yn sir Abertawe"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.06461 51.6626)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32351"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cwmaman"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref yn Rhondda Cynon Taf"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.4333 51.6833)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32447"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tiger Bay"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghaerdydd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 51.458)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32537"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ewloe"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.044 53.189)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q33109"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Glog"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentrefan yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.597 51.9625)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35464"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanfyrnach"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pentref bychan a phlwyf yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.59111 51.9503)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q39562"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Brychdyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mrychdyn a Bretton"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.985 53.169)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerdydd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifddinas Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertawe"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yn de Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2319"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Wrecsam"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yn Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.9932 53.0463)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1808"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Casnewydd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yng Nghasnewydd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.997777777 51.58861111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2185"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tyddewi"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-5.268611111 51.88222222)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2665"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanelwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yn gogledd ddwyrain Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.4416 53.2577)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2319"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Wrecsam"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dinas yn Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.9932 53.0463)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8609"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trefynwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Fynwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.72 51.81)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8611"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Bala"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.596 52.911)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8612"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Gelli Gandryll"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ar lannau Afon Gŵy ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.131388888 52.075833333)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8613"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Arberth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.7423 51.7989)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8615"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Betws-y-coed"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.792 53.092)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngheredigion, Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8620"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caergybi"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.633333333 53.316666666)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref arfordirol yng Ngogledd Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8628"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Penarth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mro Morgannwg"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 51.43)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8629"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Amlwch"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Ynys Môn"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.345662 53.410154)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8634"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Fenni"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Fynwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.017222222 51.833055555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8638"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Talgarth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.232 51.993)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8639"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Conwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.83 53.28)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8644"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanymddyfri"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref farchnad a chymuned yng ngogledd-ddwyrain Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.795 51.995)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8645"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Bermo"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref a chymuned yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.055 52.722)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8646"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Drenewydd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3141 52.5132)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Ddinbych lle cynhelir yr Eisteddfod Ryngwladol"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8649"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhuthun"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Ddinbych"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.310555555 53.114444444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8652"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangefni"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ar Ynys Môn"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.314 53.256)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8654"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pont-y-pŵl"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Nhorfaen"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.041 51.703)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Machynlleth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.849 52.591)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8657"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cil-y-coed"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Fynwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.749166666 51.590833333)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8658"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanbedr Pont Steffan"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.0821 52.1202)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandrindod"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.385469444 52.243538888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8665"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Harlech"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.105488888 52.860438888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8666"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bagillt"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentrefan a chymuned yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.168 53.268)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8670"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Trallwng"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.14725 52.659661111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8674"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pwllheli"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngwynedd (Sir Gaernarfon cyn 1974)"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.416666666 52.883333333)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8679"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Holt"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym mwrdeistref sirol Wrecsam"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.88958 53.0754)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8680"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cas-gwent"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.675 51.641944444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8684"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Merthyr Tudful"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3779499 51.747263)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberteifi"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngheredigion"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.657919444 52.084169444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8692"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanfairfechan"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tref fach a chymuned ar arfordir ogleddol Sir Conwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.973 53.253)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8694"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Barri"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Mro Morgannwg"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2667 51.4064)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8696"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Blaenafon"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cymuned a thref ym mwrdeisdref sirol Torfaen yn ne-ddwyrain Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.082780555 51.773630555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8702"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerfyrddin"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316388888 51.856944444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8711"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Port Talbot"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.58)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8713"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Deganwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn sir Conwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.83333 53.3)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8715"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cricieth"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.236261111 52.916969444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8717"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Dinbych"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.415711111 53.187169444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Dolgellau"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.885555555 52.743055555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8720"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Yr Wyddgrug"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.133 53.166)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberhonddu"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref farchnad ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39086 51.94677)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8726"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerffili"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.218 51.578)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8727"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Blaenau Ffestiniog"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref chwarel yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.9375 52.994444444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8735"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Porthmadog"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.133333333 52.928055555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8736"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerwys"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.307 53.246)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8737"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Hwlffordd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.969444444 51.801111111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8738"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Treforys"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cymuned yn Ninas Abertawe"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.93 51.67)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8740"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhymni"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Nghaerffili"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.283 51.759)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8741"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberdaugleddau"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-5.042738888 51.714180555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8743"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cwmbrân"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "dref yn ne bwrdeistref sirol Torfaen, de-ddwyrain Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.021 51.653)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8752"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Fflint"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.132 53.244)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8754"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tonypandy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Nghymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.451202777 51.622325)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8765"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanrwst"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym mwrdeistref sirol Conwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.79378 53.1371)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8767"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanwrtyd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.6411 52.1054)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8768"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Maesteg"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym mwrdeistref sirol Pen-y-bont ar Ogwr yn ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.65 51.61)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8779"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tywyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.089888888 52.582938888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8781"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Castellnewydd Emlyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tref farchnad yng ngogledd-orllewin Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.47 52.04)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8786"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tregaron"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.93517 52.2196)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8788"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhydaman"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.993 51.8)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8791"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanandras"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref a chymuned ym Mhowys"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.005277777 52.274444444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8793"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Crucywel"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Gymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.1372 51.8597)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8799"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pencoed"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.50474 51.5228)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8809"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llantrisant"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Rhondda Cynon Taf"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.37849 51.5423)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8811"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Y Waun"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym mwrdeistref sirol Wrecsam"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.05025 52.930261111)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8813"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Glynebwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym Mlaenau Gwent"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2117 51.7779)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8817"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Shotton"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir y Fflind"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.042 53.209)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8819"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanilltud Fawr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mro Morgannwg"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.47503 51.4062)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8825"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberpennar"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Rhondda Cynon Taf"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.37916 51.6814)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8831"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Hen Golwyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref ym mwrdeistref sirol Conwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.704 53.291)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8858"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Trelái"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "un o faestrefi Caerdydd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.24972 51.4792)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8892"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhaeadr Gwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng nghanolbarth Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.5 52.31)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8894"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Clydach"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Abertawe"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.91 51.69)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8896"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Penfro"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.9158 51.676038888)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8907"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aber-carn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cymuned a thref fechan ym mwrdeistref sirol Caerffili"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.13447 51.6456)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8909"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llansawel"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref yng Nghastell-nedd Port Talbot"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.83 51.64)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8915"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bethesda"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "pentref yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.0603 53.1794)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8916"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Glyn-nedd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref fechan a chymuned yng Nghastell-nedd Port Talbot"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.617 51.747)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8920"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Lacharn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.463055555 51.769444444)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8922"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Neyland"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Benfro"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.94523 51.7113)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8927"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Nefyn"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tref fechan a chymuned yng Ngwynedd"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.524988888 52.935030555)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Biwmares"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref hanesyddol a chymuned yn ne-ddwyrain Ynys Môn, ar lan Afon Menai"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.094 53.263)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8932"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Hendy-gwyn ar Daf"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.611 51.818)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Castell-nedd"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeistref Sirol Castell-nedd Port Talbot, de Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.66)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8937"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Pontardawe"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Nghastell-nedd Port Talbot"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.8534 51.7203)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8940"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanybydder"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref farchnad yn Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.15645 52.0728)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8942"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bwcle"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yn Sir y Fflint"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.086 53.172)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8944"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandysul"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Ngheredigion"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.30949 52.0411)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8945"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Queensferry"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yng Ngogledd Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.027222222 53.209166666)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8949"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Sanclêr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Sir Gaerfyrddin"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.50424 51.8204)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandeilo"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref yn Ne Cymru"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.99918 51.8841)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberafan"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned yng Nghastell-nedd Port Talbot"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.80194 51.59943)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8958"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Penmaenmawr"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref a chymuned ym Mwrdeisdref Sirol Conwy"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.928 53.27)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8960"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bargod"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "tref fechan yng Nghaerffili"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2296591 51.6851018)"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8961"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Porthaethwy"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gymuned yn y sir Gymreig Môn, yng Nghymru, a leolir ar arfordir gogledd orllewin y sir"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.172878943 53.232442562)"
+    }
+  }
+]
