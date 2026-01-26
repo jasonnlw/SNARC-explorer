@@ -349,6 +349,17 @@ WHERE {
 }
 `.trim(),
 
+schools: ({ langPref }) => `
+# snapshot-only dataset (schools)
+SELECT ?item ?itemLabel ?itemDescription ?coords WHERE { }
+`.trim(),
+
+welshTownsCities: ({ langPref }) => `
+# snapshot-only dataset (welsh towns/cities)
+SELECT ?item ?itemLabel ?itemDescription ?coords WHERE { }
+`.trim(),
+
+
     // Collections
     images: ({ langPref }) => `
 PREFIX wikibase: <http://wikiba.se/ontology#>
@@ -416,6 +427,8 @@ WHERE {
         { key: "settlements", label: { en: "Human Settlements",    cy: "Anheddiadau Dynol" },dataset: "settlements", category: "places.settlements" },
         { key: "regions",     label: { en: "Regions",              cy: "Ardaloedd" },        dataset: "regions",     category: "places.regions" },
         { key: "buildings",   label: { en: "Buildings & Structures",cy: "Adeiladau a Strwythurau" }, dataset: "buildings", category: "places.buildings" }
+        { key: "schools", label: { en: "Schools", cy: "Ysgolion" }, dataset: "schools", category: "places.schools" },
+        { key: "welshTownsCities", label: { en: "Welsh Towns and Cities", cy: "Trefi a Dinasoedd Cymru" }, dataset: "welshTownsCities", category: "places.welshTownsCities" },
       ]
     },
     {
@@ -455,6 +468,9 @@ WHERE {
     "places.settlements":   { className: "me-pin me-pin-places",     glyph: "🏘" },
     "places.regions":       { className: "me-pin me-pin-places",     glyph: "🗺" },
     "places.buildings":     { className: "me-pin me-pin-places",     glyph: "🏛" },
+    "places.schools":         { className: "me-pin me-pin-places", glyph: "🏛" },
+    "places.welshTownsCities":{ className: "me-pin me-pin-places", glyph: "🏘" },
+
 
     "people.birth":         { className: "me-pin me-pin-people",     glyph: "★" },
     "people.death":         { className: "me-pin me-pin-people",     glyph: "⛫" },
@@ -1173,6 +1189,9 @@ if (!window.__meImagesRingHandlersBound) {
       if (datasetKey === "regions") category = "places.regions";
       if (datasetKey === "buildings") category = "places.buildings";
       if (datasetKey === "events") category = "events.all";
+      if (datasetKey === "schools") category = "places.schools";
+      if (datasetKey === "welshTownsCities") category = "places.welshTownsCities";
+
 
       out.push({
         datasetKey,
