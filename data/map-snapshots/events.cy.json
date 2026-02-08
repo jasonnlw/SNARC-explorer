@@ -2,6 +2,2260 @@
   {
     "item": {
       "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q74074"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8736"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.307 53.246)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Caerwys 1567"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "sefydliad addysgol"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerwys"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q97477"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1302"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(2.0 47.0)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "rhyfel Ffranco-Prwsiaid"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "1870-1871 gwrthdaro milwrol yr Ail Ymerodraeth Ffrengig yn erbyn Prwsia a'i chynghreiriaid"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ffrainc"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Battle-Mars-Le-Tour-large.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Ryngwladol Llangollen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gwyl ryngwladol a leolir yn Llangollen"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Ryngwladol Llangollen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gwyl ryngwladol a leolir yn Llangollen"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Ryngwladol Llangollen"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gwyl ryngwladol a leolir yn Llangollen"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135173"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.80194 51.59943)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberafan 1932"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberafan, 1932"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberafan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135174"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.80194 51.59943)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberafan 1966"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberafan, 1966"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberafan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135175"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9426"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.445 51.713055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberdâr 1861"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberdâr, 1861"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberdâr"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/1860%20National%20Eisteddfod%20Ticket.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135176"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abergwaun 1936"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abergwaun, 1936"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abergwaun"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135177"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abergwaun 1986"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abergwaun, 1986"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abergwaun"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135178"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8825"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.37916 51.6814)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberpennar 1946"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberpennar, 1946"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberpennar"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135179"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1926"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abertawe, 1926"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertawe"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135180"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1964"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abertawe, 1964"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertawe"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135181"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1907"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abertawe, 1907"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertawe"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135182"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1982"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Abertawe, 1982"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Abertawe"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135183"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.657919444 52.084169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberteifi 1942"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberteifi, 1942"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberteifi"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135184"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.657919444 52.084169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberteifi 1976"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberteifi, 1976"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberteifi"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135185"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Aberystwyth 1916"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Aberystwyth, 1916"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aberystwyth%20Castle%20-%20geograph.org.uk%20-%20243578.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135186"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor 1890"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor, 1890"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Bangor%201890.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135187"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor 1902"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor, 1902"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135188"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor 1931"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor, 1931"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135189"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor 1915"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor, 1915"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberystwyth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135190"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor 1943"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor, 1943"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135191"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bangor a'r cylch 1971"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mangor a'r cylch, 1971"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135192"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8727"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.9375 52.994444444)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Blaenau Ffestiniog 1898"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mlaenau Ffestiniog, 1898"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Blaenau Ffestiniog"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Blaenau%20Ffestiniog%201898.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135193"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8633"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.196388888 51.775833333)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Blaenau Gwent a Blaenau'r Cymoedd 2010"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mlaenau Gwent a Blaenau'r Cymoedd, 2010"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Blaenau Gwent"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Y%20Lle%20Celf.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135194"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32987"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.994301 51.871567)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Bro Dinefwr 1996"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Mro Dinefwr, 1996"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ffair-fach"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135195"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8726"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.218 51.578)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caerffili 1950"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaerffili, 1950"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerffili"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135196"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caerdydd a'r Cylch 2008"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn ardal Caerdydd, 2008"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerdydd"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%202008%20-%20geograph.org.uk%20-%20914977%20%28cropped%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135197"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8702"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316388888 51.856944444)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caerfyrddin 1911"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaerfyrddin, 1911"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerfyrddin"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135198"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8620"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.633333333 53.316666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caergybi 1927"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaergybi, 1927"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caergybi"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135199"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caerdydd 1960"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaerdydd, 1960"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerdydd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135200"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1134"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.165544215 51.901799419)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caerfyrddin 1974"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaerfyrddin, 1974"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Sir Gaerfyrddin"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135201"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1979"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaernarfon, 1979"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135202"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1935"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaernarfon, 1935"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135203"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1808"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.997777777 51.58861111)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Casnewydd 1897"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghasnewydd, 1897"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Casnewydd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135204"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1959"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghaernarfon, 1959"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135205"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36784"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.031944444 51.563611111)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Casnewydd 2004"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghasnewydd, 2004"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Parc Tredegar"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135206"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.66)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Castell-nedd 1934"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghastell-nedd, 1934"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Castell-nedd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135207"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q13815"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.266461 51.778955)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Cwm Rhymni 1990"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghwm Rhymni, 1990"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Parc Bryn Bach"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rhymney%20Valley%20Gorsedd%20Stones.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135208"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8717"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.415711111 53.187169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Dinbych 1939"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Ddinbych, 1939"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Dinbych"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135209"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8669"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.0322 51.6496)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Dyffryn Lliw 1980"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Ddyffryn Lliw, 1980"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Tregŵyr"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135210"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.885555555 52.743055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Dolgellau 1949"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Ddolgellau, 1949"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Dolgellau"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135211"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8813"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2117 51.7779)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Glyn Ebwy 1958"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nglyn Ebwy, 1958"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Glynebwy"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%20Genedlaethol%20Cymru%2C%20Glynebwy%2C%201958.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135212"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2639"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.991944444 53.4075)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Lerpwl 1900"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Lerpwl, 1900"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Lerpwl"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135213"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.82 53.32)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Llandudno 1896"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Llandudno, 1896"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandudno"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135214"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.82 53.32)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Llandudno 1963"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Llandudno, 1963"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandudno"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/National%20Eisteddfod%201963%2C%20Llandudno.%20%287738638464%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135216"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8739"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.15 51.683333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Llanelli 1962"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Llanelli, 1962"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanelli"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135217"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8765"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.79378 53.1371)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Llanrwst 1951"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Llanrwst, 1951"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanrwst"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135220"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Llangollen 1908"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yn Llangollen, 1908"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangollen"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135221"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8684"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3779499 51.747263)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Merthyr Tudful 1901"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Merthyr Tudful, 1901"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Merthyr Tudful"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135222"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8652"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.314 53.256)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Môn 1983"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Môn, 1983"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llangefni"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135223"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.66)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Nedd a'r cyffiniau 1994"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl yng Nghastell Nedd, 1994"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Castell-nedd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135224"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35402"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.2367 53.3)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Eisteddfod Genedlaethol Cymru Môn 1999"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "prifwyl ym Môn, 1999"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanbedr-goch"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138338"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8972"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39529 52.1559)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Sioe Frenhinol Cymru"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "sioe amaethyddol ym Mhowys, Cymru"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llanelwedd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.094 53.263)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Regata Biwmares"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "regata a chynhalwyd ym Mhiwmares yn 1832"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Biwmares"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39086 51.94677)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gŵyl Jazz Aberhonddu"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gwyl gerddorol"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberhonddu"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cardiff international poetry competition"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cystadleuaeth barddoniaeth"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caerdydd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.385469444 52.243538888)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cynhadledd y Bedyddwyr, Llandrindod"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cynhadledd"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandrindod"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-0.7117 51.0899)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gwyl Haslemere"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gwyl gerddorol yn Haslemere"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Haslemere"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-1.149166666 52.955)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cynhadledd y Wesleaid, 1924"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "cynhadledd, Nottingham"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Nottingham"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.0 48.0)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cyfarfod Blynyddol Cymdeithas Archeolegol Cambrian, 1889"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Llydaw"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llydaw"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.10414 51.5272)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Llaneirwg"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llaneirwg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Rhostryfan"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Rhostryfan"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316666666 53.066666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Llandwrog"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandwrog"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.99918 51.8841)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ysgol Haf, Plaid Cymru, 1928"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Llandeilo"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandeilo"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.849 52.591)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Ysgol Haf, Plaid Cymru, 1926"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad ym Machynlleth"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Machynlleth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cymdeithasfa Chwarterol Eglwys y Methodistiaid Calfinaidd Cymreig"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Aberystwyth"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberystwyth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141884"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8863"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.35 52.1167)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gwersyll Bechgyn Ysgol Cymru, 1922"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yn Aberedw"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Aberedw"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141988"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1884"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yng Nghaernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q142017"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1885"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "digwyddiad yng Nghaernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q160453"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45133"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.189166666 55.953333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gŵyl Caeredin"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "gŵyl gelfyddydau"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Caeredin"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Edinburgh%20Fringe%20037.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
       "value": "https://snarc-llgc.wikibase.cloud/entity/Q135226"
     },
     "location": {
@@ -2951,2260 +5205,6 @@
     "image": {
       "type": "uri",
       "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%20Caerdydd%202018%2001.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q74074"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8736"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.307 53.246)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Caerwys 1567"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "sefydliad addysgol"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerwys"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q97477"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1302"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(2.0 47.0)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "rhyfel Ffranco-Prwsiaid"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "1870-1871 gwrthdaro milwrol yr Ail Ymerodraeth Ffrengig yn erbyn Prwsia a'i chynghreiriaid"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Ffrainc"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Battle-Mars-Le-Tour-large.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Ryngwladol Llangollen"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gwyl ryngwladol a leolir yn Llangollen"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Ryngwladol Llangollen"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gwyl ryngwladol a leolir yn Llangollen"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Ryngwladol Llangollen"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gwyl ryngwladol a leolir yn Llangollen"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135173"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.80194 51.59943)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberafan 1932"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberafan, 1932"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberafan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135174"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.80194 51.59943)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberafan 1966"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberafan, 1966"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberafan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135175"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9426"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.445 51.713055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberdâr 1861"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberdâr, 1861"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberdâr"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/1860%20National%20Eisteddfod%20Ticket.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135176"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.98041 51.9982)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abergwaun 1936"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abergwaun, 1936"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abergwaun"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135177"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.98041 51.9982)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abergwaun 1986"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abergwaun, 1986"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abergwaun"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135178"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8825"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.37916 51.6814)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberpennar 1946"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberpennar, 1946"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberpennar"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135179"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1926"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abertawe, 1926"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abertawe"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135180"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1964"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abertawe, 1964"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abertawe"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135181"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1907"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abertawe, 1907"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abertawe"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135182"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Abertawe 1982"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Abertawe, 1982"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Abertawe"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135183"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.657919444 52.084169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberteifi 1942"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberteifi, 1942"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberteifi"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135184"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.657919444 52.084169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberteifi 1976"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberteifi, 1976"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberteifi"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135185"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Aberystwyth 1916"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Aberystwyth, 1916"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aberystwyth%20Castle%20-%20geograph.org.uk%20-%20243578.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135186"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor 1890"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor, 1890"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Bangor"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Bangor%201890.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135187"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor 1902"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor, 1902"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135188"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor 1931"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor, 1931"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135189"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor 1915"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor, 1915"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberystwyth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135190"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor 1943"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor, 1943"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135191"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bangor a'r cylch 1971"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mangor a'r cylch, 1971"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135192"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8727"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.9375 52.994444444)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Blaenau Ffestiniog 1898"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mlaenau Ffestiniog, 1898"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Blaenau Ffestiniog"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Blaenau%20Ffestiniog%201898.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135193"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8633"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.196388888 51.775833333)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Blaenau Gwent a Blaenau'r Cymoedd 2010"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mlaenau Gwent a Blaenau'r Cymoedd, 2010"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Blaenau Gwent"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Y%20Lle%20Celf.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135194"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32987"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.994301 51.871567)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Bro Dinefwr 1996"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Mro Dinefwr, 1996"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Ffair-fach"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135195"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8726"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.218 51.578)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caerffili 1950"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaerffili, 1950"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerffili"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135196"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caerdydd a'r Cylch 2008"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn ardal Caerdydd, 2008"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerdydd"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%202008%20-%20geograph.org.uk%20-%20914977%20%28cropped%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135197"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8702"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.316388888 51.856944444)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caerfyrddin 1911"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaerfyrddin, 1911"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerfyrddin"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135198"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8620"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.633333333 53.316666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caergybi 1927"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaergybi, 1927"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caergybi"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135199"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caerdydd 1960"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaerdydd, 1960"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerdydd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135200"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1134"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.165544215 51.901799419)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caerfyrddin 1974"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaerfyrddin, 1974"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Sir Gaerfyrddin"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135201"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1979"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaernarfon, 1979"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135202"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1935"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaernarfon, 1935"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135203"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1808"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.997777777 51.58861111)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Casnewydd 1897"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghasnewydd, 1897"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Casnewydd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135204"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Caernarfon 1959"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghaernarfon, 1959"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135205"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36784"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.031944444 51.563611111)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Casnewydd 2004"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghasnewydd, 2004"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Parc Tredegar"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135206"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.81 51.66)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Castell-nedd 1934"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghastell-nedd, 1934"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Castell-nedd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135207"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q13815"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.266461 51.778955)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Cwm Rhymni 1990"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghwm Rhymni, 1990"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Parc Bryn Bach"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rhymney%20Valley%20Gorsedd%20Stones.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135208"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8717"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.415711111 53.187169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Dinbych 1939"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Ddinbych, 1939"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Dinbych"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135209"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8669"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.0322 51.6496)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Dyffryn Lliw 1980"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Ddyffryn Lliw, 1980"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Tregŵyr"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135210"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.885555555 52.743055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Dolgellau 1949"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Ddolgellau, 1949"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Dolgellau"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135211"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8813"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.2117 51.7779)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Glyn Ebwy 1958"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nglyn Ebwy, 1958"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Glynebwy"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%20Genedlaethol%20Cymru%2C%20Glynebwy%2C%201958.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135212"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2639"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.991944444 53.4075)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Lerpwl 1900"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Lerpwl, 1900"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Lerpwl"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135213"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.82 53.32)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Llandudno 1896"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Llandudno, 1896"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandudno"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135214"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.82 53.32)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Llandudno 1963"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Llandudno, 1963"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandudno"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/National%20Eisteddfod%201963%2C%20Llandudno.%20%287738638464%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135216"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8739"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.15 51.683333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Llanelli 1962"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Llanelli, 1962"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llanelli"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135217"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8765"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.79378 53.1371)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Llanrwst 1951"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Llanrwst, 1951"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llanrwst"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135220"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Llangollen 1908"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yn Llangollen, 1908"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llangollen"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135221"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8684"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.3779499 51.747263)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Merthyr Tudful 1901"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Merthyr Tudful, 1901"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Merthyr Tudful"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135222"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8652"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.314 53.256)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Môn 1983"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Môn, 1983"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llangefni"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135223"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.81 51.66)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Nedd a'r cyffiniau 1994"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl yng Nghastell Nedd, 1994"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Castell-nedd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135224"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35402"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.2367 53.3)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Eisteddfod Genedlaethol Cymru Môn 1999"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "prifwyl ym Môn, 1999"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llanbedr-goch"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138338"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8972"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39529 52.1559)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Sioe Frenhinol Cymru"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "sioe amaethyddol ym Mhowys, Cymru"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llanelwedd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.094 53.263)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Regata Biwmares"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "regata a chynhalwyd ym Mhiwmares yn 1832"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Biwmares"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39086 51.94677)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Gŵyl Jazz Aberhonddu"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gwyl gerddorol"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberhonddu"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cardiff international poetry competition"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "cystadleuaeth barddoniaeth"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caerdydd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.385469444 52.243538888)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cynhadledd y Bedyddwyr, Llandrindod"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "cynhadledd"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandrindod"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-0.7117 51.0899)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Gwyl Haslemere"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gwyl gerddorol yn Haslemere"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Haslemere"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-1.149166666 52.955)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cynhadledd y Wesleaid, 1924"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "cynhadledd, Nottingham"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Nottingham"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.0 48.0)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cyfarfod Blynyddol Cymdeithas Archeolegol Cambrian, 1889"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Llydaw"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llydaw"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.10414 51.5272)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Llaneirwg"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llaneirwg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Rhostryfan"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Rhostryfan"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.316666666 53.066666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Llandwrog"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandwrog"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.99918 51.8841)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Ysgol Haf, Plaid Cymru, 1928"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Llandeilo"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandeilo"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.849 52.591)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Ysgol Haf, Plaid Cymru, 1926"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad ym Machynlleth"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Machynlleth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cymdeithasfa Chwarterol Eglwys y Methodistiaid Calfinaidd Cymreig"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Aberystwyth"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberystwyth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141884"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8863"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.35 52.1167)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Gwersyll Bechgyn Ysgol Cymru, 1922"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yn Aberedw"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Aberedw"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141988"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1884"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yng Nghaernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q142017"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1885"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "digwyddiad yng Nghaernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q160453"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45133"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.189166666 55.953333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Gŵyl Caeredin"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "gŵyl gelfyddydau"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Caeredin"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Edinburgh%20Fringe%20037.jpg"
     }
   },
   {
@@ -11072,36 +11072,6 @@
   {
     "item": {
       "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139135"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139007"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-1.69 54.008055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Gwersyll Heddwch Menywod Menwith Hill"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "hen wersyll heddwch y tu allan i RAF Menwith Hill"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "RAF Menwith Hill"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
       "value": "https://snarc-llgc.wikibase.cloud/entity/Q141132"
     },
     "location": {
@@ -16340,6 +16310,36 @@
   {
     "item": {
       "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141879"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.82 53.32)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Cynhadledd y Blaid Ryddfrydol Gymreig, 1986"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "confensiwn yn Llandudno"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Llandudno"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
       "value": "https://snarc-llgc.wikibase.cloud/entity/Q141888"
     },
     "location": {
@@ -16395,6 +16395,36 @@
       "xml:lang": "cy",
       "type": "literal",
       "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139135"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139007"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-1.69 54.008055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "Gwersyll Heddwch Menywod Menwith Hill"
+    },
+    "itemDescription": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "hen wersyll heddwch y tu allan i RAF Menwith Hill"
+    },
+    "locationLabel": {
+      "xml:lang": "cy",
+      "type": "literal",
+      "value": "RAF Menwith Hill"
     }
   },
   {
@@ -19073,36 +19103,6 @@
       "xml:lang": "cy",
       "type": "literal",
       "value": "Abertawe"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141879"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.82 53.32)"
-    },
-    "itemLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Cynhadledd y Blaid Ryddfrydol Gymreig, 1986"
-    },
-    "itemDescription": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "confensiwn yn Llandudno"
-    },
-    "locationLabel": {
-      "xml:lang": "cy",
-      "type": "literal",
-      "value": "Llandudno"
     }
   },
   {
