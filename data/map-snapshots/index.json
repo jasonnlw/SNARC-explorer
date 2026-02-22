@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-02-15T04:56:46.973Z",
+  "generatedAt": "2026-02-22T04:50:59.201Z",
   "endpoint": "https://snarc-proxy.onrender.com/query",
   "files": [
     {
@@ -35,7 +35,7 @@
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "en",
-      "count": 10667
+      "count": 10666
     },
     {
       "datasetKey": "events",
@@ -75,7 +75,7 @@
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "cy",
-      "count": 10665
+      "count": 10666
     },
     {
       "datasetKey": "events",

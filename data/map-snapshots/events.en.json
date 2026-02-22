@@ -2956,6 +2956,2260 @@
   {
     "item": {
       "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q74074"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8736"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.307 53.246)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Eisteddfod of 1567"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "eisteddfod held in Caerwys, Flintshire, in 1567"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caerwys"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q97477"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1302"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(2.0 47.0)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Franco-Prussian War"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1870–1871 military conflict of the Second French Empire versus Prussia and its allies"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "France"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Battle-Mars-Le-Tour-large.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen International Musical Eisteddfod"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual music festival, held in Llangollen, Wales"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen International Musical Eisteddfod"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual music festival, held in Llangollen, Wales"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen International Musical Eisteddfod"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual music festival, held in Llangollen, Wales"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135173"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.80194 51.59943)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1932 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Aberavon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberafan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135174"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.80194 51.59943)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1966 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Aberavon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberafan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135175"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9426"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.445 51.713055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1861 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Aberdare"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberdare"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/1860%20National%20Eisteddfod%20Ticket.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135176"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1936 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Fishguard"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Fishguard"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135177"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1986 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Fishguard"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Fishguard"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135178"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8825"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.37916 51.6814)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1946 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Mountain Ash"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Mountain Ash"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135179"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1926 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Swansea"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135180"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1964 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Swansea"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135181"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1907 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Swansea"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135182"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1982 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Swansea"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135183"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.657919444 52.084169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1942 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Cardigan"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardigan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135184"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.657919444 52.084169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1976 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Cardigan"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardigan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135185"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1916 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Aberystwyth"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aberystwyth%20Castle%20-%20geograph.org.uk%20-%20243578.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135186"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1890 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Bangor"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Bangor"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Bangor%201890.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135187"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1902 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Bangor"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135188"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1931 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Bangor"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135189"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1915 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Aberystwyth"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135190"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1943 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Bangor"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135191"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.128 53.228)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1971 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Bangor"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Bangor"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135192"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8727"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.9375 52.994444444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1898 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Blaenau Ffestiniog"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Blaenau Ffestiniog"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Blaenau%20Ffestiniog%201898.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135193"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8633"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.196388888 51.775833333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "2010 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Blaenau Gwent County Borough"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Blaenau Gwent County Borough"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Y%20Lle%20Celf.JPG"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135194"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32987"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.994301 51.871567)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1996 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Ffairfach"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Ffair-fach"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135195"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8726"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.218 51.578)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1950 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Caerphilly"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caerphilly"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135196"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "2008 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Cardiff"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%202008%20-%20geograph.org.uk%20-%20914977%20%28cropped%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135197"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8702"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316388888 51.856944444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1911 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Carmarthen"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Carmarthen"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135198"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8620"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.633333333 53.316666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1927 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Holyhead"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Holyhead"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135199"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1960 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Cardiff"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135200"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1134"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.165544215 51.901799419)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1974 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Carmarthenshire"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Carmarthenshire"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135201"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1979 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Caernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135202"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1935 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Caernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135203"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1808"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.997777777 51.58861111)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1897 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Newport"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Newport"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135204"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1959 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Caernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135205"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36784"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.031944444 51.563611111)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "2004 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Tredegar House Country Park"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Tredegar House Country Park"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135206"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.66)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1934 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Neath"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Neath"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135207"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q13815"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.266461 51.778955)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1990 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Parc Bryn Bach"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Parc Bryn Bach"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rhymney%20Valley%20Gorsedd%20Stones.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135208"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8717"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.415711111 53.187169444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1939 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Denbigh"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Denbigh"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135209"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8669"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.0322 51.6496)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1980 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Gowerton"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gowerton"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135210"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.885555555 52.743055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1949 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Dolgellau"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Dolgellau"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135211"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8813"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2117 51.7779)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1958 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Ebbw Vale"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Ebbw Vale"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%20Genedlaethol%20Cymru%2C%20Glynebwy%2C%201958.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135212"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2639"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.991944444 53.4075)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1900 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Liverpool"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Liverpool"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135213"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.82 53.32)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1896 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llandudno"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandudno"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135214"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.82 53.32)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1963 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llandudno"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandudno"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/National%20Eisteddfod%201963%2C%20Llandudno.%20%287738638464%29.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135216"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8739"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.15 51.683333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1962 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llanelli"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanelli"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135217"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8765"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.79378 53.1371)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1951 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llanrwst"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanrwst"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135220"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1908 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llangollen"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135221"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8684"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3779499 51.747263)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1901 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Merthyr Tydfil"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Merthyr Tydfil"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135222"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8652"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.314 53.256)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1983 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llangefni"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangefni"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135223"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.81 51.66)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1994 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Neath"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Neath"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135224"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35402"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.2367 53.3)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1999 National Eisteddfod of Wales"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "national eisteddfod in Llanbedrgoch"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanbedr-goch"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138338"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8972"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39529 52.1559)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Royal Welsh Show"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "agriculture show in Europe based in Powys, Wales"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanelwedd"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.094 53.263)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris Regatta"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1832 regatta held in Beaumaris"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39086 51.94677)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon Jazz Festival"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff international poetry competition"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "poetry competition"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.385469444 52.243538888)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandrindod Wells Conventions"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "convention"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandrindod Wells"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-0.7117 51.0899)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Haslemere Festival"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Haslemere"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Haslemere"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-1.149166666 52.955)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Wesleyan Conference, 1924"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "convention in Nottingham"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Nottingham"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.0 48.0)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cambrian Archaeological Association Annual Meeting, 1889"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Brittany"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brittany"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.10414 51.5272)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in St Mellons"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "St Mellons"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Rhostryfan"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Rhostryfan"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316666666 53.066666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Llandwrog"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandwrog"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.99918 51.8841)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Plaid Cymru. Ysgol Haf, 1928"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Llandeilo"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandeilo"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.849 52.591)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Plaid Cymru. Ysgol Haf, 1926"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Machynlleth"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Machynlleth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh Calvinistic Methodist Church. Quarterly Association"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Aberystwyth"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141884"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8863"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.35 52.1167)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1922 Welsh Schoolboys Camp"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Aberedw"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberedw"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141988"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1884"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Caernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q142017"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.27 53.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1885"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Caernarfon"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Caernarfon"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q160453"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45133"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.189166666 55.953333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Edinburgh Festival Fringe"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "arts festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Edinburgh"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Edinburgh%20Fringe%20037.jpg"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
       "value": "https://snarc-llgc.wikibase.cloud/entity/Q135325"
     },
     "location": {
@@ -5933,2260 +8187,6 @@
       "xml:lang": "en",
       "type": "literal",
       "value": "Cardiff Bay"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q74074"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8736"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.307 53.246)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Eisteddfod of 1567"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "eisteddfod held in Caerwys, Flintshire, in 1567"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caerwys"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q97477"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1302"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(2.0 47.0)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Franco-Prussian War"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1870–1871 military conflict of the Second French Empire versus Prussia and its allies"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "France"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Battle-Mars-Le-Tour-large.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen International Musical Eisteddfod"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual music festival, held in Llangollen, Wales"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen International Musical Eisteddfod"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual music festival, held in Llangollen, Wales"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen International Musical Eisteddfod"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual music festival, held in Llangollen, Wales"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135173"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.80194 51.59943)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1932 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Aberavon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberafan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135174"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8956"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.80194 51.59943)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1966 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Aberavon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberafan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135175"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9426"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.445 51.713055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1861 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Aberdare"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberdare"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/1860%20National%20Eisteddfod%20Ticket.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135176"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.98041 51.9982)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1936 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Fishguard"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Fishguard"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135177"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.98041 51.9982)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1986 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Fishguard"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Fishguard"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Enjoying%20the%20view%20at%20the%20Gorsedd%20circle%2C%20Fishguard%20-%20geograph.org.uk%20-%20217410.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135178"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8825"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.37916 51.6814)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1946 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Mountain Ash"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Mountain Ash"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135179"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1926 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Swansea"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135180"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1964 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Swansea"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135181"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1907 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Swansea"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135182"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1982 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Swansea"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135183"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.657919444 52.084169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1942 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Cardigan"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardigan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135184"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8687"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.657919444 52.084169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1976 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Cardigan"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardigan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135185"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1916 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Aberystwyth"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Aberystwyth%20Castle%20-%20geograph.org.uk%20-%20243578.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135186"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1890 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Bangor"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Bangor"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Bangor%201890.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135187"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1902 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Bangor"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135188"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1931 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Bangor"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135189"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1915 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Aberystwyth"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135190"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1943 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Bangor"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135191"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1677"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.128 53.228)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1971 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Bangor"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Bangor"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135192"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8727"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.9375 52.994444444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1898 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Blaenau Ffestiniog"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Blaenau Ffestiniog"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Cofnodion%20Eisteddfod%20Genedlaethol%20Cymru%20Blaenau%20Ffestiniog%201898.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135193"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8633"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.196388888 51.775833333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "2010 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Blaenau Gwent County Borough"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Blaenau Gwent County Borough"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Y%20Lle%20Celf.JPG"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135194"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32987"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.994301 51.871567)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1996 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Ffairfach"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Ffair-fach"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135195"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8726"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.218 51.578)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1950 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Caerphilly"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caerphilly"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135196"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "2008 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Cardiff"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%202008%20-%20geograph.org.uk%20-%20914977%20%28cropped%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135197"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8702"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.316388888 51.856944444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1911 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Carmarthen"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Carmarthen"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135198"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8620"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.633333333 53.316666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1927 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Holyhead"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Holyhead"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135199"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1960 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Cardiff"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135200"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1134"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.165544215 51.901799419)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1974 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Carmarthenshire"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Carmarthenshire"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135201"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1979 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Caernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135202"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1935 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Caernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135203"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1808"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.997777777 51.58861111)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1897 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Newport"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Newport"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135204"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1959 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Caernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135205"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36784"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.031944444 51.563611111)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "2004 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Tredegar House Country Park"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Tredegar House Country Park"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135206"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.81 51.66)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1934 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Neath"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Neath"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135207"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q13815"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.266461 51.778955)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1990 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Parc Bryn Bach"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Parc Bryn Bach"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Rhymney%20Valley%20Gorsedd%20Stones.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135208"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8717"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.415711111 53.187169444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1939 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Denbigh"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Denbigh"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135209"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8669"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.0322 51.6496)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1980 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Gowerton"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gowerton"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135210"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.885555555 52.743055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1949 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Dolgellau"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Dolgellau"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135211"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8813"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.2117 51.7779)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1958 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Ebbw Vale"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Ebbw Vale"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Eisteddfod%20Genedlaethol%20Cymru%2C%20Glynebwy%2C%201958.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135212"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2639"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.991944444 53.4075)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1900 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Liverpool"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Liverpool"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135213"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.82 53.32)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1896 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llandudno"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandudno"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135214"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8744"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.82 53.32)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1963 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llandudno"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandudno"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/National%20Eisteddfod%201963%2C%20Llandudno.%20%287738638464%29.jpg"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135216"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8739"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.15 51.683333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1962 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llanelli"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanelli"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135217"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8765"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.79378 53.1371)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1951 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llanrwst"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanrwst"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135220"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1908 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llangollen"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135221"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8684"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.3779499 51.747263)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1901 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Merthyr Tydfil"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Merthyr Tydfil"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135222"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8652"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.314 53.256)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1983 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llangefni"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangefni"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135223"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8934"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.81 51.66)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1994 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Neath"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Neath"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135224"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35402"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.2367 53.3)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1999 National Eisteddfod of Wales"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "national eisteddfod in Llanbedrgoch"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanbedr-goch"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138338"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8972"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39529 52.1559)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Royal Welsh Show"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "agriculture show in Europe based in Powys, Wales"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanelwedd"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.094 53.263)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris Regatta"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1832 regatta held in Beaumaris"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39086 51.94677)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon Jazz Festival"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff international poetry competition"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "poetry competition"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.385469444 52.243538888)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandrindod Wells Conventions"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "convention"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandrindod Wells"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-0.7117 51.0899)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Haslemere Festival"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Haslemere"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Haslemere"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-1.149166666 52.955)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Wesleyan Conference, 1924"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "convention in Nottingham"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Nottingham"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.0 48.0)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cambrian Archaeological Association Annual Meeting, 1889"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Brittany"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brittany"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.10414 51.5272)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in St Mellons"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "St Mellons"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Rhostryfan"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Rhostryfan"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.316666666 53.066666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Llandwrog"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandwrog"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.99918 51.8841)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Plaid Cymru. Ysgol Haf, 1928"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Llandeilo"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandeilo"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.849 52.591)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Plaid Cymru. Ysgol Haf, 1926"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Machynlleth"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Machynlleth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh Calvinistic Methodist Church. Quarterly Association"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Aberystwyth"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141884"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8863"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.35 52.1167)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1922 Welsh Schoolboys Camp"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Aberedw"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberedw"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141988"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1884"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Caernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q142017"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8627"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.27 53.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cyfarfod Cystadleuol Ysgol Sabbothol Engedi, 1885"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Caernarfon"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Caernarfon"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q160453"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45133"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.189166666 55.953333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Edinburgh Festival Fringe"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "arts festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Edinburgh"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Edinburgh%20Fringe%20037.jpg"
     }
   },
   {
