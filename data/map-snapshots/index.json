@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-03-22T04:54:51.181Z",
+  "generatedAt": "2026-03-29T05:13:33.122Z",
   "endpoint": "https://snarc-proxy.onrender.com/query",
   "files": [
     {
@@ -10,7 +10,7 @@
     {
       "datasetKey": "settlements",
       "langPref": "en",
-      "count": 17541
+      "count": 17546
     },
     {
       "datasetKey": "regions",
@@ -20,12 +20,12 @@
     {
       "datasetKey": "buildings",
       "langPref": "en",
-      "count": 39697
+      "count": 39720
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "en",
-      "count": 21660
+      "count": 21685
     },
     {
       "datasetKey": "images",
@@ -35,7 +35,7 @@
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "en",
-      "count": 10666
+      "count": 10702
     },
     {
       "datasetKey": "events",
@@ -50,7 +50,7 @@
     {
       "datasetKey": "settlements",
       "langPref": "cy",
-      "count": 17541
+      "count": 17546
     },
     {
       "datasetKey": "regions",
@@ -60,12 +60,12 @@
     {
       "datasetKey": "buildings",
       "langPref": "cy",
-      "count": 39697
+      "count": 39720
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "cy",
-      "count": 21660
+      "count": 21685
     },
     {
       "datasetKey": "images",
@@ -75,7 +75,7 @@
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "cy",
-      "count": 10666
+      "count": 10702
     },
     {
       "datasetKey": "events",
