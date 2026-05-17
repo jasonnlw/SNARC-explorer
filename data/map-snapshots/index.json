@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-10T06:14:10.283Z",
+  "generatedAt": "2026-05-17T06:24:40.678Z",
   "endpoint": "https://snarc-proxy.onrender.com/query",
   "files": [
     {
@@ -20,12 +20,12 @@
     {
       "datasetKey": "buildings",
       "langPref": "en",
-      "count": 39720
+      "count": 39721
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "en",
-      "count": 21691
+      "count": 21692
     },
     {
       "datasetKey": "images",
@@ -35,7 +35,7 @@
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "en",
-      "count": 10702
+      "count": 10706
     },
     {
       "datasetKey": "events",
@@ -60,12 +60,12 @@
     {
       "datasetKey": "buildings",
       "langPref": "cy",
-      "count": 39720
+      "count": 39721
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "cy",
-      "count": 21691
+      "count": 21692
     },
     {
       "datasetKey": "images",
