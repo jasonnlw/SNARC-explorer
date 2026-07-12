@@ -1,11 +1,11 @@
 {
-  "generatedAt": "2026-07-05T06:42:18.923Z",
+  "generatedAt": "2026-07-12T06:06:06.574Z",
   "endpoint": "https://snarc-proxy.onrender.com/query",
   "files": [
     {
       "datasetKey": "landforms",
       "langPref": "en",
-      "count": 5256
+      "count": 5255
     },
     {
       "datasetKey": "settlements",
@@ -45,7 +45,7 @@
     {
       "datasetKey": "landforms",
       "langPref": "cy",
-      "count": 5256
+      "count": 5255
     },
     {
       "datasetKey": "settlements",
