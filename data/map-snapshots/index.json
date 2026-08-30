@@ -1,41 +1,41 @@
 {
-  "generatedAt": "2026-08-23T03:51:47.943Z",
+  "generatedAt": "2026-08-30T08:59:56.525Z",
   "endpoint": "https://snarc-proxy.onrender.com/query",
   "files": [
     {
       "datasetKey": "landforms",
       "langPref": "en",
-      "count": 5260
+      "count": 5298
     },
     {
       "datasetKey": "settlements",
       "langPref": "en",
-      "count": 17694
+      "count": 17713
     },
     {
       "datasetKey": "regions",
       "langPref": "en",
-      "count": 12672
+      "count": 12697
     },
     {
       "datasetKey": "buildings",
       "langPref": "en",
-      "count": 39816
+      "count": 39943
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "en",
-      "count": 22533
+      "count": 22542
     },
     {
       "datasetKey": "images",
       "langPref": "en",
-      "count": 22420
+      "count": 23023
     },
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "en",
-      "count": 10706
+      "count": 10711
     },
     {
       "datasetKey": "events",
@@ -45,37 +45,37 @@
     {
       "datasetKey": "landforms",
       "langPref": "cy",
-      "count": 5260
+      "count": 5298
     },
     {
       "datasetKey": "settlements",
       "langPref": "cy",
-      "count": 17694
+      "count": 17713
     },
     {
       "datasetKey": "regions",
       "langPref": "cy",
-      "count": 12672
+      "count": 12697
     },
     {
       "datasetKey": "buildings",
       "langPref": "cy",
-      "count": 39816
+      "count": 39943
     },
     {
       "datasetKey": "peoplePlaces",
       "langPref": "cy",
-      "count": 22533
+      "count": 22542
     },
     {
       "datasetKey": "images",
       "langPref": "cy",
-      "count": 22420
+      "count": 23023
     },
     {
       "datasetKey": "collectionsPlaces",
       "langPref": "cy",
-      "count": 10708
+      "count": 10711
     },
     {
       "datasetKey": "events",
