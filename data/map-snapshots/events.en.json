@@ -16639,2245 +16639,6 @@
   {
     "item": {
       "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q16329"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8904"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.07 52.62)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Capel%20Egryn%20-%20the%20scene%20of%20strange%20apparitions%20-%20geograph.org.uk%20-%20529241.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Egryn Lights"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanegryn"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32325"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8612"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.131388888 52.075833333)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Hayfestival-2016-haysign-day.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hay Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hay-on-Wye"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual literature festival held in Hay-on-Wye, Powys, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 52.97)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen International Musical Eisteddfod"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llangollen"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual music festival, held in Llangollen, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135522"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9014"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.966 53.087)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gresford%20Heath%20-%20geograph.org.uk%20-%20332449.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gresford disaster"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gresford"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "coal mining disaster in 1934 where 266 men were killed"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135522"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q33160"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-2.991111111 53.072777777)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gresford%20Heath%20-%20geograph.org.uk%20-%20332449.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gresford disaster"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gresford Colliery"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "coal mining disaster in 1934 where 266 men were killed"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135769"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q110701"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.2813 51.6114)"
-    },
-    "image": {
-      "type": "uri",
-      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Senghenydd%20pit%20disaster%201.jpg"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Senghenydd Colliery Disaster"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Universal Colliery"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Mining explosion in 1913"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q136644"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36703"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.57901 52.5884)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "2024 Talerddig collision"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Talerddig"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rail crash in Wales, United Kingdom"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.094 53.263)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris Regatta"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1832 regatta held in Beaumaris"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39086 51.94677)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon Jazz Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff international poetry competition"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "poetry competition"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.385469444 52.243538888)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandrindod Wells Conventions"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandrindod Wells"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "convention"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-0.7117 51.0899)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Haslemere Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Haslemere"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Haslemere"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-1.149166666 52.955)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Wesleyan Conference, 1924"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Nottingham"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "convention in Nottingham"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.0 48.0)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cambrian Archaeological Association Annual Meeting, 1889"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brittany"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Brittany"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.10414 51.5272)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "St Mellons"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in St Mellons"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rhostryfan"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.246186 53.096167)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rhostryfan"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Rhostryfan"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.316666666 53.066666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandwrog"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Llandwrog"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141382"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9435"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.41 52.14)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl Teulu Duw, 1986"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Builth Wells"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "literary festival in Builth Wells"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.99918 51.8841)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Plaid Cymru. Ysgol Haf, 1928"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llandeilo"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Llandeilo"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.849 52.591)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Plaid Cymru. Ysgol Haf, 1926"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Machynlleth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Machynlleth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh Calvinistic Methodist Church. Quarterly Association"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "event in Aberystwyth"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162195"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8634"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.017222222 51.833055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Evangelical Churches of Abergavenny & District. Annual Musical Festival, 1918"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Abergavenny"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Abergavenny, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162206"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8634"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.017222222 51.833055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Evangelical Churches of Abergavenny & District. 19th Annual Musical Festival, 1937"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Abergavenny"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Abergavenny, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162225"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.98041 51.9982)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberjazz Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Fishguard"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Fishguard, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162247"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8756"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.666666666 52.855)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Undeb yr Annibynwyr Cymraeg. Cyfarfodydd Blynyddol"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanuwchllyn"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "occurrence in Llanuwchllyn, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162251"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1146"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.070579002 52.255942218)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiganshire Musical Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiganshire"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Cardiganshire, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162312"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8639"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.83 53.28)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Conwy Classical Music Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Conwy"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Conwy, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162347"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Mercator Conference on Audiovisual Translation and Minority Languages"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "occurrence in Aberystwyth, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162384"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q16379"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.24928 52.8862)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Berwyn Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanarmon Dyffryn Ceiriog"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Llanarmon Dyffryn Ceiriog, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162377"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8645"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.055 52.722)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Barmouth Walking Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Barmouth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Barmouth, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162387"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1173"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.5 52.5833)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Peter Warlock Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Montgomeryshire"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Montgomeryshire, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162402"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8628"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.17 51.43)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Penarth Chamber Music Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Penarth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Penarth, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162476"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q30925"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.846 51.715)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "44th Cymanfa Gerddorol Eglwysi Annibynnol yr Alltwen"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Allt-wen"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Alltwen, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162544"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q44951"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.86284 52.2823)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl Genedlaethol Cymdeithas Cerdd Dant Cymru"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Pontrhydfendigaid"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Pontrhydfendigaid, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162583"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9429"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.699444444 51.671388888)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Tenby Arts Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Tenby"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Tenby, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162585"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1127"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.95 51.833333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Penfro Book Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Pembrokeshire"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Pembrokeshire, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162605"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Diffusion Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Cardiff, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162623"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q17042"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.936173 52.545815)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "R. S. Thomas Poetry Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Eglwys-fach"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Eglwys Fach, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162643"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Wales Festival of Architecture"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Aberystwyth, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162664"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiganshire Musical Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Aberystwyth, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162670"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9608"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.0 53.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Merseyside Welsh Heritage Society. Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Merseyside"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Merseyside, England"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162675"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q77863"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.019 52.207)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Marches Makers Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Kington"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Kington, England"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162709"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45595"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-89.5 44.5)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Wisconsin Gymanfa Ganu"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Wisconsin"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Wisconsin, United States"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162719"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.179166666 51.481666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff Book Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Cardiff, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162720"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8612"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.131388888 52.075833333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hay Music Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hay-on-Wye"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Hay, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162752"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8694"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.2667 51.4064)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cymanfa Ganu Undebol Dosbarth Barri"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Barry"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Barry, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162771"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76825"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-0.455 51.5329)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hillingdon Literary Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Hillingdon"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Hillingdon, England"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162836"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9017"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.164 51.463)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "St David's Parliamentary Prayer Breakfast"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Cardiff Bay"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "occurrence in Cardiff Bay, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162856"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9446"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.405 53.331)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Prestatyn Walking Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Prestatyn"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Prestatyn, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162959"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Tyrfe Tawe"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Swansea, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163018"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9534"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.175833333 51.569444444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gower Show"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Penrice"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Penrice, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163125"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8761"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.21 53.183)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl Y Felinheli"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Y Felinheli"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Y Felinheli, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163145"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.39086 51.94677)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon County Show"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Brecon"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Brecon, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163147"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8672"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.3 52.83)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl y Beibl"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Llanrhaeadr-ym-Mochnant"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Llanrhaeadr-ym-Mochnant, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163152"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8961"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.172878943 53.232442562)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Sioe Gymraeg Porthaethwy"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Menai Bridge"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "occurrence in Menai Bridge, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163248"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35712"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.72556 51.5628)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Penrhys Pilgrims"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Margam Country Park"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Margam Country Park, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163252"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.094 53.263)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris Town Regatta"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Beaumaris"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Beaumaris, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163262"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8856"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.08639 52.7661)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl Llên-dysilio"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Four Crosses"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Llandysilio, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163281"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1176"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.366666666 53.283333333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Anglesey Arts Weeks"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Anglesey"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Anglesey, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163308"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8761"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.21 53.183)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Port Dinorwic Regatta"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Y Felinheli"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "festival in Y Felinheli, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163336"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.95 51.61666667)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea and District Sunday School Union. Annual Singing Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Swansea"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in Swansea, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163442"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q10538"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.132168292 53.229907834)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Ara Deg"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Neuadd Ogwen"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh music festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163571"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32740"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.352222222 52.5675)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "1933 Gregynog Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gregynog Hall"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "the first music and peotry festival held at Gregynog"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163589"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8638"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.232 51.993)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Talgarth Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Talgarth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual event in Powys, Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163637"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.849 52.591)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Machynlleth Comedy Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Machynlleth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh comedy festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163638"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8793"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.1372 51.8597)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Green Man Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Crickhowell"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "major folk music festival held in Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163642"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q20426"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.121 53.146)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Eisteddfod Gadeiriol Gwaun Gynfi"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Deiniolen"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "local eisteddfod held in Deiniolen, North Wales"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163675"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76575"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.366388888 47.745833333)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Festival Interceltique de Lorient"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Lorient"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "music festival in France"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163680"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8637"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.052211111 53.01115)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Gŵyl Genedlaethol Cymdeithas Cerdd Dant Cymru, 2014"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Rhosllannerchrugog"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh cultural festival held in 2014"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163693"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-4.066666666 52.416666666)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Abertoir"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Aberystwyth"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh horror film festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163702"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8720"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.133 53.166)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Daniel Owen Festival"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Mold"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "annual bilingual literary festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163716"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q132034"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(1.025694444 51.360694444)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Whitstable Biennale"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Whitstable"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "film festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163780"
-    },
-    "location": {
-      "type": "uri",
-      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
-    },
-    "coords": {
-      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
-      "type": "literal",
-      "value": "Point(-3.885555555 52.743055555)"
-    },
-    "itemLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Sesiwn Fawr Dolgellau"
-    },
-    "locationLabel": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Dolgellau"
-    },
-    "itemDescription": {
-      "xml:lang": "en",
-      "type": "literal",
-      "value": "Welsh music festival"
-    }
-  },
-  {
-    "item": {
-      "type": "uri",
       "value": "https://snarc-llgc.wikibase.cloud/entity/Q141255"
     },
     "location": {
@@ -21645,6 +19406,2245 @@
       "xml:lang": "en",
       "type": "literal",
       "value": "Garndolbenmaen"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q16329"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8904"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.07 52.62)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Capel%20Egryn%20-%20the%20scene%20of%20strange%20apparitions%20-%20geograph.org.uk%20-%20529241.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Egryn Lights"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanegryn"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32325"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8612"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.131388888 52.075833333)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Hayfestival-2016-haysign-day.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hay Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hay-on-Wye"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual literature festival held in Hay-on-Wye, Powys, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q113528"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8648"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 52.97)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Llangollen%20International%20Musical%20Eisteddfod%20%287500016408%29.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen International Musical Eisteddfod"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llangollen"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual music festival, held in Llangollen, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135522"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9014"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.966 53.087)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gresford%20Heath%20-%20geograph.org.uk%20-%20332449.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gresford disaster"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gresford"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "coal mining disaster in 1934 where 266 men were killed"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135522"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q33160"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-2.991111111 53.072777777)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Gresford%20Heath%20-%20geograph.org.uk%20-%20332449.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gresford disaster"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gresford Colliery"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "coal mining disaster in 1934 where 266 men were killed"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q135769"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q110701"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2813 51.6114)"
+    },
+    "image": {
+      "type": "uri",
+      "value": "http://commons.wikimedia.org/wiki/Special:FilePath/Senghenydd%20pit%20disaster%201.jpg"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Senghenydd Colliery Disaster"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Universal Colliery"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Mining explosion in 1913"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q136644"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36703"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.57901 52.5884)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "2024 Talerddig collision"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Talerddig"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rail crash in Wales, United Kingdom"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138467"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.094 53.263)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris Regatta"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1832 regatta held in Beaumaris"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138558"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39086 51.94677)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon Jazz Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138590"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff international poetry competition"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "poetry competition"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q138780"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8663"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.385469444 52.243538888)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandrindod Wells Conventions"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandrindod Wells"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "convention"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139108"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q78098"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-0.7117 51.0899)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Haslemere Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Haslemere"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Haslemere"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q139379"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q2940"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-1.149166666 52.955)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Wesleyan Conference, 1924"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Nottingham"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "convention in Nottingham"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140841"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76602"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.0 48.0)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cambrian Archaeological Association Annual Meeting, 1889"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brittany"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Brittany"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140971"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q36501"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.10414 51.5272)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cyfrinfa Odyddawl Llaneurwg, 1850"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "St Mellons"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in St Mellons"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140973"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1903"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rhostryfan"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140974"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q15109"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.246186 53.096167)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol, 1935"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rhostryfan"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Rhostryfan"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q140975"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9460"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.316666666 53.066666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cylchwyl Lenyddol a Cherddorol Cesarea, 1908"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandwrog"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Llandwrog"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141382"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9435"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.41 52.14)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl Teulu Duw, 1986"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Builth Wells"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "literary festival in Builth Wells"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141660"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8950"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.99918 51.8841)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Plaid Cymru. Ysgol Haf, 1928"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llandeilo"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Llandeilo"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141661"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.849 52.591)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Plaid Cymru. Ysgol Haf, 1926"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Machynlleth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Machynlleth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q141871"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh Calvinistic Methodist Church. Quarterly Association"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "event in Aberystwyth"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162195"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8634"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.017222222 51.833055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Evangelical Churches of Abergavenny & District. Annual Musical Festival, 1918"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Abergavenny"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Abergavenny, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162206"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8634"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.017222222 51.833055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Evangelical Churches of Abergavenny & District. 19th Annual Musical Festival, 1937"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Abergavenny"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Abergavenny, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162225"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9437"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.98041 51.9982)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberjazz Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Fishguard"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Fishguard, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162247"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8756"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.666666666 52.855)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Undeb yr Annibynwyr Cymraeg. Cyfarfodydd Blynyddol"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanuwchllyn"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "occurrence in Llanuwchllyn, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162251"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1146"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.070579002 52.255942218)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiganshire Musical Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiganshire"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Cardiganshire, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162312"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8639"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.83 53.28)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Conwy Classical Music Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Conwy"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Conwy, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162347"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Mercator Conference on Audiovisual Translation and Minority Languages"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "occurrence in Aberystwyth, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162384"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q16379"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.24928 52.8862)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Berwyn Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanarmon Dyffryn Ceiriog"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Llanarmon Dyffryn Ceiriog, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162377"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8645"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.055 52.722)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Barmouth Walking Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Barmouth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Barmouth, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162387"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1173"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.5 52.5833)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Peter Warlock Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Montgomeryshire"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Montgomeryshire, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162402"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8628"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.17 51.43)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Penarth Chamber Music Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Penarth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Penarth, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162476"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q30925"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.846 51.715)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "44th Cymanfa Gerddorol Eglwysi Annibynnol yr Alltwen"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Allt-wen"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Alltwen, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162544"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q44951"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.86284 52.2823)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl Genedlaethol Cymdeithas Cerdd Dant Cymru"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Pontrhydfendigaid"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Pontrhydfendigaid, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162583"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9429"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.699444444 51.671388888)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Tenby Arts Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Tenby"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Tenby, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162585"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1127"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.95 51.833333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Penfro Book Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Pembrokeshire"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Pembrokeshire, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162605"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Diffusion Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Cardiff, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162623"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q17042"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.936173 52.545815)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "R. S. Thomas Poetry Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Eglwys-fach"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Eglwys Fach, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162643"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Wales Festival of Architecture"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Aberystwyth, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162664"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiganshire Musical Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Aberystwyth, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162670"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9608"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.0 53.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Merseyside Welsh Heritage Society. Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Merseyside"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Merseyside, England"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162675"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q77863"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.019 52.207)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Marches Makers Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Kington"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Kington, England"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162709"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q45595"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-89.5 44.5)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Wisconsin Gymanfa Ganu"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Wisconsin"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Wisconsin, United States"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162719"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1449"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.179166666 51.481666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff Book Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Cardiff, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162720"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8612"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.131388888 52.075833333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hay Music Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hay-on-Wye"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Hay, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162752"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8694"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.2667 51.4064)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cymanfa Ganu Undebol Dosbarth Barri"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Barry"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Barry, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162771"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76825"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-0.455 51.5329)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hillingdon Literary Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Hillingdon"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Hillingdon, England"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162836"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9017"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.164 51.463)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "St David's Parliamentary Prayer Breakfast"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Cardiff Bay"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "occurrence in Cardiff Bay, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162856"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9446"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.405 53.331)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Prestatyn Walking Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Prestatyn"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Prestatyn, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q162959"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Tyrfe Tawe"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Swansea, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163018"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q9534"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.175833333 51.569444444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gower Show"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Penrice"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Penrice, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163125"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8761"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.21 53.183)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl Y Felinheli"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Y Felinheli"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Y Felinheli, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163145"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8722"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.39086 51.94677)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon County Show"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Brecon"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Brecon, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163147"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8672"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.3 52.83)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl y Beibl"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Llanrhaeadr-ym-Mochnant"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Llanrhaeadr-ym-Mochnant, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163152"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8961"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.172878943 53.232442562)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Sioe Gymraeg Porthaethwy"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Menai Bridge"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "occurrence in Menai Bridge, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163248"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q35712"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.72556 51.5628)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Penrhys Pilgrims"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Margam Country Park"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Margam Country Park, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163252"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8930"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.094 53.263)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris Town Regatta"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Beaumaris"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Beaumaris, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163262"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8856"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.08639 52.7661)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl Llên-dysilio"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Four Crosses"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Llandysilio, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163281"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1176"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.366666666 53.283333333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Anglesey Arts Weeks"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Anglesey"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Anglesey, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163308"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8761"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.21 53.183)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Port Dinorwic Regatta"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Y Felinheli"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "festival in Y Felinheli, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163336"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q1583"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.95 51.61666667)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea and District Sunday School Union. Annual Singing Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Swansea"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in Swansea, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163442"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q10538"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.132168292 53.229907834)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Ara Deg"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Neuadd Ogwen"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh music festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163571"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q32740"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.352222222 52.5675)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "1933 Gregynog Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gregynog Hall"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "the first music and peotry festival held at Gregynog"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163589"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8638"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.232 51.993)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Talgarth Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Talgarth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual event in Powys, Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163637"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8655"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.849 52.591)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Machynlleth Comedy Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Machynlleth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh comedy festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163638"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8793"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.1372 51.8597)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Green Man Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Crickhowell"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "major folk music festival held in Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163642"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q20426"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.121 53.146)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Eisteddfod Gadeiriol Gwaun Gynfi"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Deiniolen"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "local eisteddfod held in Deiniolen, North Wales"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163675"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q76575"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.366388888 47.745833333)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Festival Interceltique de Lorient"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Lorient"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "music festival in France"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163680"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8637"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.052211111 53.01115)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Gŵyl Genedlaethol Cymdeithas Cerdd Dant Cymru, 2014"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Rhosllannerchrugog"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh cultural festival held in 2014"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163693"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8616"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-4.066666666 52.416666666)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Abertoir"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Aberystwyth"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh horror film festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163702"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8720"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.133 53.166)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Daniel Owen Festival"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Mold"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "annual bilingual literary festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163716"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q132034"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(1.025694444 51.360694444)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Whitstable Biennale"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Whitstable"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "film festival"
+    }
+  },
+  {
+    "item": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q163780"
+    },
+    "location": {
+      "type": "uri",
+      "value": "https://snarc-llgc.wikibase.cloud/entity/Q8718"
+    },
+    "coords": {
+      "datatype": "http://www.opengis.net/ont/geosparql#wktLiteral",
+      "type": "literal",
+      "value": "Point(-3.885555555 52.743055555)"
+    },
+    "itemLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Sesiwn Fawr Dolgellau"
+    },
+    "locationLabel": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Dolgellau"
+    },
+    "itemDescription": {
+      "xml:lang": "en",
+      "type": "literal",
+      "value": "Welsh music festival"
     }
   },
   {
